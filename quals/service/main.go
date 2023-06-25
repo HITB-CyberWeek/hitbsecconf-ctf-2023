@@ -18,6 +18,7 @@ const (
 	cookieSigName = "ctf.sig"
 	cookieTTL     = 600
 	cookieDomain  = "165.227.163.15" // FIXME
+	template      = "index.tpl"
 )
 
 type Register struct {
@@ -42,37 +43,37 @@ var (
 	mu    sync.Mutex
 )
 
-func userGet(c *gin.Context) {
+func index(c *gin.Context) {
 	cookieStr, err := c.Cookie(cookieName)
 	if err != nil || len(cookieStr) == 0 {
-		c.String(http.StatusForbidden, "Error: cookie not found")
+		c.HTML(http.StatusOK, template, gin.H{})
 		return
 	}
 
 	signatureStr, err := c.Cookie(cookieSigName)
 	if err != nil || len(signatureStr) == 0 {
-		c.String(http.StatusForbidden, "Error: signature cookie not found")
+		c.HTML(http.StatusOK, template, gin.H{"Error": "signature cookie not found"})
 		return
 	}
 
 	ok, err := verify(cookieStr, signatureStr, &key.PublicKey)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "Error: signature verification failed: "+err.Error())
+		c.HTML(http.StatusOK, template, gin.H{"Error": "signature verify: " + err.Error()})
 		return
 	}
 	if !ok {
-		c.String(http.StatusForbidden, "Error: cookie/signature mismatch")
+		c.HTML(http.StatusOK, template, gin.H{"Error": "signature mismatch"})
 		return
 	}
 
 	var cookie Cookie
 	if err := json.Unmarshal([]byte(cookieStr), &cookie); err != nil {
-		c.String(http.StatusBadRequest, "Error: json unmarshal: "+err.Error())
+		c.HTML(http.StatusOK, template, gin.H{"Error": "json unmarshal: " + err.Error()})
 		return
 	}
 
 	if time.Since(time.Unix(cookie.Timestamp, 0)) > cookieTTL*time.Second {
-		c.String(http.StatusForbidden, "Error: cookie expired")
+		c.HTML(http.StatusOK, template, gin.H{"Error": "cookie expired"})
 		return
 	}
 
@@ -81,12 +82,11 @@ func userGet(c *gin.Context) {
 
 	user, ok := users[cookie.User]
 	if !ok {
-		c.String(http.StatusNotFound, fmt.Sprintf("Error: user %q not found", cookie.User))
+		c.HTML(http.StatusOK, template, gin.H{"Error": "user '" + cookie.User + "' not found"})
 		return
 	}
 
-	msg := fmt.Sprintf("Welcome, %s! Your flag is: %s.", cookie.User, user.Flag)
-	c.String(http.StatusOK, msg)
+	c.HTML(http.StatusOK, template, gin.H{"User": user})
 }
 
 func doRegister(form Register) error {
@@ -137,28 +137,28 @@ func userPost(c *gin.Context) {
 	if len(c.PostForm("register")) > 0 {
 		var form Register
 		if err := c.ShouldBind(&form); err != nil {
-			c.String(http.StatusBadRequest, err.Error())
+			c.HTML(http.StatusOK, template, gin.H{"Error": err.Error()})
 			return
 		}
 
 		if err := doRegister(form); err != nil {
-			c.String(http.StatusInternalServerError, err.Error())
+			c.HTML(http.StatusOK, template, gin.H{"Error": err.Error()})
 			return
 		}
 
-		c.String(http.StatusOK, "OK: user registered")
+		c.HTML(http.StatusOK, template, gin.H{"Info": "User registered"})
 		return
 	}
 
 	if len(c.PostForm("login")) > 0 {
 		var form Login
 		if err := c.ShouldBind(&form); err != nil {
-			c.String(http.StatusBadRequest, err.Error())
+			c.HTML(http.StatusOK, template, gin.H{"Error": err.Error()})
 			return
 		}
 
 		if err := doLogin(form); err != nil {
-			c.String(http.StatusInternalServerError, err.Error())
+			c.HTML(http.StatusOK, template, gin.H{"Error": err.Error()})
 			return
 		}
 
@@ -168,14 +168,13 @@ func userPost(c *gin.Context) {
 		}
 		cookieStr, signatureStr, err := signCookie(cookie)
 		if err != nil {
-			c.String(http.StatusInternalServerError, err.Error())
+			c.HTML(http.StatusOK, template, gin.H{"Error": err.Error()})
 			return
 		}
 
 		c.SetCookie(cookieName, cookieStr, cookieTTL, "/", cookieDomain, false, true)
 		c.SetCookie(cookieSigName, signatureStr, cookieTTL, "/", cookieDomain, false, true)
-
-		c.Redirect(http.StatusFound, "/user/")
+		c.Redirect(http.StatusFound, "/")
 		return
 	}
 
@@ -196,11 +195,11 @@ func main() {
 
 	router := gin.Default()
 
-	router.StaticFile("/", "index.htm")
+	router.LoadHTMLFiles(template)
 
-	router.GET("/user", userGet)
-	router.POST("/user", userPost)
-	router.GET("/logout", logout)
+	router.GET("/", index)
+	router.POST("/", userPost)
+	router.POST("/logout", logout)
 
 	router.Run(":8080")
 }

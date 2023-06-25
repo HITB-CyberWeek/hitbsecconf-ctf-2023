@@ -94,7 +94,7 @@ func verify(msg string, signature64 string, key *rsa.PublicKey) (bool, error) {
 
 	signature, err := base64.StdEncoding.DecodeString(signature64)
 	if err != nil {
-		return false, fmt.Errorf("base64 decode:%w", err)
+		return false, fmt.Errorf("base64 decode: %w", err)
 	}
 
 	bytes := []byte(msg)
