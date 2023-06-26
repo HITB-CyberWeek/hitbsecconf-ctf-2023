@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"sync"
 	"time"
 
@@ -13,18 +14,21 @@ import (
 )
 
 const (
-	listen        = ":8080"
-	cookieName    = "ctf"
-	cookieSigName = "ctf.sig"
-	cookieTTL     = 600
-	cookieDomain  = "165.227.163.15" // FIXME
-	template      = "index.tpl"
+	listen          = ":8080"
+	cookieName      = "ctf"
+	cookieSigName   = "ctf.sig"
+	cookieTTL       = 600
+	cookieDomain    = "165.227.163.15" // FIXME
+	template        = "index.tpl"
+	usersFile       = "users.json"
+	usersSavePeriod = 10 * time.Second
 )
 
 type Register struct {
-	User     string `form:"user" binding:"required"`
-	Password string `form:"password" binding:"required"`
-	Flag     string `form:"flag" binding:"required"`
+	User      string `json:"user" form:"user" binding:"required"`
+	Password  string `json:"password" form:"password" binding:"required"`
+	Flag      string `json:"flag" form:"flag" binding:"required"`
+	Timestamp int64  `json:"timestamp"`
 }
 
 type Login struct {
@@ -39,8 +43,9 @@ type Cookie struct {
 
 var (
 	users map[string]Register // FIXME: sync do disk
-	key   *rsa.PrivateKey
 	mu    sync.Mutex
+
+	key *rsa.PrivateKey
 )
 
 func index(c *gin.Context) {
@@ -98,7 +103,10 @@ func doRegister(form Register) error {
 		return errors.New("user already exists")
 	}
 
+	form.Timestamp = time.Now().Unix()
 	users[form.User] = form
+
+	fmt.Printf("New user registered: %+v\n", form)
 	return nil
 }
 
@@ -115,6 +123,66 @@ func doLogin(form Login) error {
 		return errors.New("wrong password")
 	}
 
+	fmt.Printf("User logged in: %+v\n", user)
+	return nil
+}
+
+func saveUsers() error {
+	newUsersFile := usersFile + ".new"
+	f, err := os.Create(newUsersFile)
+	if err != nil {
+		return fmt.Errorf("create file: %w", err)
+	}
+	defer f.Close()
+
+	start := time.Now()
+	mu.Lock()
+
+	bytes, err := json.Marshal(users)
+	count := len(users)
+
+	mu.Unlock()
+	lockDuration := time.Since(start)
+
+	if err != nil {
+		return fmt.Errorf("json marshal: %w", err)
+	}
+
+	f.Write(bytes)
+	f.Close()
+
+	if err := os.Rename(newUsersFile, usersFile); err != nil {
+		return fmt.Errorf("rename file: %w", err)
+	}
+
+	fmt.Printf("%d users (%d bytes) have been saved to %q with %s lock\n",
+		count, len(bytes), usersFile, lockDuration)
+	return nil
+}
+
+func saveUsersLoop() {
+	for {
+		time.Sleep(usersSavePeriod)
+		if err := saveUsers(); err != nil {
+			fmt.Printf("Error saving users: %s\n", err)
+		}
+	}
+}
+
+func loadUsers() error {
+	bytes, err := os.ReadFile(usersFile)
+	if err != nil {
+		return fmt.Errorf("read file: %w", err)
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	if err := json.Unmarshal(bytes, &users); err != nil {
+		return fmt.Errorf("json unmarshal: %w", err)
+	}
+
+	fmt.Printf("%d users have been loaded from %q\n", len(users), usersFile)
 	return nil
 }
 
@@ -188,10 +256,23 @@ func logout(c *gin.Context) {
 }
 
 func main() {
-	users = make(map[string]Register)
+
+	// Set up RSA keys
 
 	generateKeyPair()
 	key = loadPrivateKey()
+
+	// Set up users database
+
+	users = make(map[string]Register)
+
+	if err := loadUsers(); err != nil {
+		fmt.Printf("Error loading users from file: %w\n", err)
+	}
+
+	go saveUsersLoop()
+
+	// Set up http server
 
 	router := gin.Default()
 
@@ -201,5 +282,5 @@ func main() {
 	router.POST("/", userPost)
 	router.POST("/logout", logout)
 
-	router.Run(":8080")
+	router.Run(listen)
 }
