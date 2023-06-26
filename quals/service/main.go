@@ -22,6 +22,9 @@ const (
 	template        = "index.tpl"
 	usersFile       = "users.json"
 	usersSavePeriod = 10 * time.Second
+	usersTTL        = 3600
+	registerDelay   = 700 * time.Millisecond
+	loginDelay      = 300 * time.Millisecond
 )
 
 type Register struct {
@@ -95,6 +98,8 @@ func index(c *gin.Context) {
 }
 
 func doRegister(form Register) error {
+	time.Sleep(registerDelay)
+
 	mu.Lock()
 	defer mu.Unlock()
 
@@ -111,6 +116,8 @@ func doRegister(form Register) error {
 }
 
 func doLogin(form Login) error {
+	time.Sleep(loginDelay)
+
 	mu.Lock()
 	defer mu.Unlock()
 
@@ -160,12 +167,31 @@ func saveUsers() error {
 	return nil
 }
 
-func saveUsersLoop() {
+func removeOldUsers() {
+	start := time.Now()
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	removed := 0
+	for k, v := range users {
+		if time.Now().Unix()-v.Timestamp > usersTTL {
+			fmt.Printf("Removing user %q as too old\n", k)
+			delete(users, k)
+			removed++
+		}
+	}
+
+	fmt.Printf("Removed %d users by TTL in %s\n", removed, time.Since(start))
+}
+
+func usersDBLoop() {
 	for {
 		time.Sleep(usersSavePeriod)
 		if err := saveUsers(); err != nil {
 			fmt.Printf("Error saving users: %s\n", err)
 		}
+		removeOldUsers()
 	}
 }
 
@@ -270,7 +296,7 @@ func main() {
 		fmt.Printf("Error loading users from file: %w\n", err)
 	}
 
-	go saveUsersLoop()
+	go usersDBLoop()
 
 	// Set up http server
 
