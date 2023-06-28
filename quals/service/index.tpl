@@ -78,7 +78,7 @@
 
 			<div>
 				<label>Flag:</label>
-				<input type="text" name="flag" size="80" maxlength="64" placeholder="required for register"/>
+				<input type="text" name="flag" size="80" maxlength="64" placeholder="only for register"/>
 			</div>
 
 			<div class="buttons">

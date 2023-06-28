@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"sync"
 	"time"
 
@@ -40,61 +41,48 @@ type Login struct {
 }
 
 type Cookie struct {
-	Timestamp int64  `json:"timestamp"`
+	Timestamp string `json:"timestamp"`
 	User      string `json:"user"`
 }
 
 var (
-	users map[string]Register // FIXME: sync do disk
+	users map[string]Register
 	mu    sync.Mutex
 
 	key *rsa.PrivateKey
 )
 
-func index(c *gin.Context) {
+func getSignedCookieData(c *gin.Context) (map[string]string, error) {
 	cookieStr, err := c.Cookie(cookieName)
 	if err != nil || len(cookieStr) == 0 {
-		c.HTML(http.StatusOK, template, gin.H{})
-		return
+		return nil, nil
 	}
 
 	signatureStr, err := c.Cookie(cookieSigName)
 	if err != nil || len(signatureStr) == 0 {
-		c.HTML(http.StatusOK, template, gin.H{"Error": "signature cookie not found"})
-		return
+		return nil, errors.New("signature not found")
 	}
 
 	ok, err := verify(cookieStr, signatureStr, &key.PublicKey)
 	if err != nil {
-		c.HTML(http.StatusOK, template, gin.H{"Error": "signature verify: " + err.Error()})
-		return
+		return nil, fmt.Errorf("verify: %w", err)
 	}
 	if !ok {
-		c.HTML(http.StatusOK, template, gin.H{"Error": "signature mismatch"})
-		return
+		return nil, fmt.Errorf("signature mismatch")
 	}
 
-	var cookie Cookie
-	if err := json.Unmarshal([]byte(cookieStr), &cookie); err != nil {
-		c.HTML(http.StatusOK, template, gin.H{"Error": "json unmarshal: " + err.Error()})
-		return
+	var result map[string]string
+	if err := json.Unmarshal([]byte(cookieStr), &result); err != nil {
+		return nil, fmt.Errorf("unmarshal: %w", err)
 	}
 
-	if time.Since(time.Unix(cookie.Timestamp, 0)) > cookieTTL*time.Second {
-		c.HTML(http.StatusOK, template, gin.H{"Error": "cookie expired"})
-		return
+	if timestamp, err := strconv.Atoi(result["timestamp"]); err != nil {
+		return nil, fmt.Errorf("bad timestamp: %w", err)
+	} else if time.Since(time.Unix(int64(timestamp), 0)) > cookieTTL*time.Second {
+		return nil, fmt.Errorf("session expired")
 	}
 
-	mu.Lock()
-	defer mu.Unlock()
-
-	user, ok := users[cookie.User]
-	if !ok {
-		c.HTML(http.StatusOK, template, gin.H{"Error": "user '" + cookie.User + "' not found"})
-		return
-	}
-
-	c.HTML(http.StatusOK, template, gin.H{"User": user})
+	return result, nil
 }
 
 func doRegister(form Register) error {
@@ -174,10 +162,10 @@ func removeOldUsers() {
 	defer mu.Unlock()
 
 	removed := 0
-	for k, v := range users {
-		if time.Now().Unix()-v.Timestamp > usersTTL {
-			fmt.Printf("Removing user %q as too old\n", k)
-			delete(users, k)
+	for u := range users {
+		if time.Now().Unix()-users[u].Timestamp > usersTTL {
+			fmt.Printf("Removing user %q as too old\n", u)
+			delete(users, u)
 			removed++
 		}
 	}
@@ -188,9 +176,11 @@ func removeOldUsers() {
 func usersDBLoop() {
 	for {
 		time.Sleep(usersSavePeriod)
+
 		if err := saveUsers(); err != nil {
 			fmt.Printf("Error saving users: %s\n", err)
 		}
+
 		removeOldUsers()
 	}
 }
@@ -227,7 +217,7 @@ func signCookie(c Cookie) (string, string, error) {
 	return cookieStr, signatureStr, nil
 }
 
-func userPost(c *gin.Context) {
+func handleUser(c *gin.Context) {
 	if len(c.PostForm("register")) > 0 {
 		var form Register
 		if err := c.ShouldBind(&form); err != nil {
@@ -257,7 +247,7 @@ func userPost(c *gin.Context) {
 		}
 
 		cookie := Cookie{
-			Timestamp: time.Now().Unix(),
+			Timestamp: strconv.FormatInt(time.Now().Unix(), 10),
 			User:      form.User,
 		}
 		cookieStr, signatureStr, err := signCookie(cookie)
@@ -272,10 +262,31 @@ func userPost(c *gin.Context) {
 		return
 	}
 
-	c.String(http.StatusBadRequest, "Error: no action specified (login/register)")
+	// No POST form data - try to show user info (if user is logged in).
+
+	cookie, err := getSignedCookieData(c)
+	if err != nil {
+		c.HTML(http.StatusOK, template, gin.H{"Error": err.Error()})
+		return
+	}
+	if cookie == nil {
+		c.HTML(http.StatusOK, template, gin.H{})
+		return
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	user, ok := users[cookie["user"]]
+	if !ok {
+		c.HTML(http.StatusOK, template, gin.H{"Error": "user '" + cookie["user"] + "' not found"})
+		return
+	}
+
+	c.HTML(http.StatusOK, template, gin.H{"User": user})
 }
 
-func logout(c *gin.Context) {
+func handleLogout(c *gin.Context) {
 	c.SetCookie(cookieName, "", 0, "/", cookieDomain, false, true)
 	c.SetCookie(cookieSigName, "", 0, "/", cookieDomain, false, true)
 	c.Redirect(http.StatusFound, "/")
@@ -304,9 +315,9 @@ func main() {
 
 	router.LoadHTMLFiles(template)
 
-	router.GET("/", index)
-	router.POST("/", userPost)
-	router.POST("/logout", logout)
+	router.GET("/", handleUser)
+	router.POST("/", handleUser)
+	router.POST("/logout", handleLogout)
 
 	router.Run(listen)
 }
