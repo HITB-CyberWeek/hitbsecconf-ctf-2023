@@ -28,34 +28,31 @@ const (
 	loginDelay      = 300 * time.Millisecond
 )
 
-type Register struct {
-	User      string `json:"user" form:"user" binding:"required"`
-	Password  string `json:"password" form:"password" binding:"required"`
-	Flag      string `json:"flag" form:"flag" binding:"required"`
+type DBUser struct {
+	User      string `json:"user"`
+	Password  string `json:"password"`
+	Flag      string `json:"flag"`
 	Timestamp int64  `json:"timestamp"`
 }
 
-type Login struct {
-	User     string `form:"user" binding:"required"`
-	Password string `form:"password" binding:"required"`
-}
-
 type Cookie struct {
-	Timestamp string `json:"timestamp"`
 	User      string `json:"user"`
+	Timestamp string `json:"timestamp"`
 }
 
 var (
-	users map[string]Register
+	users map[string]DBUser // name -> DBUser
 	mu    sync.Mutex
 
 	key *rsa.PrivateKey
 )
 
 func getSignedCookieData(c *gin.Context) (map[string]string, error) {
+	result := make(map[string]string)
+
 	cookieStr, err := c.Cookie(cookieName)
 	if err != nil || len(cookieStr) == 0 {
-		return nil, nil
+		return result, nil
 	}
 
 	signatureStr, err := c.Cookie(cookieSigName)
@@ -71,7 +68,6 @@ func getSignedCookieData(c *gin.Context) (map[string]string, error) {
 		return nil, fmt.Errorf("signature mismatch")
 	}
 
-	var result map[string]string
 	if err := json.Unmarshal([]byte(cookieStr), &result); err != nil {
 		return nil, fmt.Errorf("unmarshal: %w", err)
 	}
@@ -85,36 +81,60 @@ func getSignedCookieData(c *gin.Context) (map[string]string, error) {
 	return result, nil
 }
 
-func doRegister(form Register) error {
+func updatePostFormData(c *gin.Context, data map[string]string) {
+	for _, f := range []string{"login", "register", "user", "password", "flag"} {
+		value := c.PostForm(f)
+		if len(value) > 0 {
+			data[f] = value
+		}
+	}
+}
+
+func doRegister(data map[string]string) error {
 	time.Sleep(registerDelay)
 
 	mu.Lock()
 	defer mu.Unlock()
 
-	_, ok := users[form.User]
+	_, ok := users[data["user"]]
 	if ok {
 		return errors.New("user already exists")
 	}
 
-	form.Timestamp = time.Now().Unix()
-	users[form.User] = form
+	u := DBUser{
+		User:      data["user"],
+		Password:  data["password"],
+		Flag:      data["flag"],
+		Timestamp: time.Now().Unix(),
+	}
+	if len(u.User) < 4 || len(u.User) > 20 {
+		return errors.New("invalid user name")
+	}
+	if len(u.Password) < 4 || len(u.Password) > 20 {
+		return errors.New("invalid password")
+	}
+	if len(u.Flag) < 4 || len(u.Flag) > 40 {
+		return errors.New("invalid flag")
+	}
 
-	fmt.Printf("New user registered: %+v\n", form)
+	users[u.User] = u
+
+	fmt.Printf("New user registered: %+v\n", u)
 	return nil
 }
 
-func doLogin(form Login) error {
+func doLogin(data map[string]string) error {
 	time.Sleep(loginDelay)
 
 	mu.Lock()
 	defer mu.Unlock()
 
-	user, ok := users[form.User]
+	user, ok := users[data["user"]]
 	if !ok {
 		return errors.New("no such user")
 	}
 
-	if user.Password != form.Password {
+	if user.Password != data["password"] {
 		return errors.New("wrong password")
 	}
 
@@ -218,37 +238,34 @@ func signCookie(c Cookie) (string, string, error) {
 }
 
 func handleUser(c *gin.Context) {
-	if len(c.PostForm("register")) > 0 {
-		var form Register
-		if err := c.ShouldBind(&form); err != nil {
-			c.HTML(http.StatusOK, template, gin.H{"Error": err.Error()})
-			return
-		}
 
-		if err := doRegister(form); err != nil {
-			c.HTML(http.StatusOK, template, gin.H{"Error": err.Error()})
-			return
-		}
-
-		c.HTML(http.StatusOK, template, gin.H{"Info": "User registered"})
+	data, err := getSignedCookieData(c)
+	if err != nil {
+		c.HTML(http.StatusOK, template, gin.H{"Error": err.Error()})
 		return
 	}
 
-	if len(c.PostForm("login")) > 0 {
-		var form Login
-		if err := c.ShouldBind(&form); err != nil {
+	updatePostFormData(c, data)
+
+	if len(data["register"]) > 0 {
+		if err := doRegister(data); err != nil {
 			c.HTML(http.StatusOK, template, gin.H{"Error": err.Error()})
 			return
 		}
 
-		if err := doLogin(form); err != nil {
+		c.HTML(http.StatusOK, template, gin.H{"Info": "User registered."})
+		return
+	}
+
+	if len(data["login"]) > 0 {
+		if err := doLogin(data); err != nil {
 			c.HTML(http.StatusOK, template, gin.H{"Error": err.Error()})
 			return
 		}
 
 		cookie := Cookie{
 			Timestamp: strconv.FormatInt(time.Now().Unix(), 10),
-			User:      form.User,
+			User:      data["user"],
 		}
 		cookieStr, signatureStr, err := signCookie(cookie)
 		if err != nil {
@@ -262,14 +279,7 @@ func handleUser(c *gin.Context) {
 		return
 	}
 
-	// No POST form data - try to show user info (if user is logged in).
-
-	cookie, err := getSignedCookieData(c)
-	if err != nil {
-		c.HTML(http.StatusOK, template, gin.H{"Error": err.Error()})
-		return
-	}
-	if cookie == nil {
+	if len(data["user"]) == 0 {
 		c.HTML(http.StatusOK, template, gin.H{})
 		return
 	}
@@ -277,13 +287,13 @@ func handleUser(c *gin.Context) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	user, ok := users[cookie["user"]]
-	if !ok {
-		c.HTML(http.StatusOK, template, gin.H{"Error": "user '" + cookie["user"] + "' not found"})
+	user, ok := users[data["user"]]
+	if ok {
+		c.HTML(http.StatusOK, template, gin.H{"User": user})
 		return
 	}
 
-	c.HTML(http.StatusOK, template, gin.H{"User": user})
+	c.HTML(http.StatusOK, template, gin.H{"Error": "user '" + data["user"] + "' not found"})
 }
 
 func handleLogout(c *gin.Context) {
@@ -301,10 +311,10 @@ func main() {
 
 	// Set up users database
 
-	users = make(map[string]Register)
+	users = make(map[string]DBUser)
 
 	if err := loadUsers(); err != nil {
-		fmt.Printf("Error loading users from file: %w\n", err)
+		fmt.Printf("Error loading users from file: %s\n", err)
 	}
 
 	go usersDBLoop()
