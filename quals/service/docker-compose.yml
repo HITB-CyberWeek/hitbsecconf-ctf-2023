@@ -1,0 +1,10 @@
+version: '3'
+services:
+  quals:
+    container_name: quals
+    restart: unless-stopped
+    build: .
+    ports:
+      - 8080:8080           # Service port. Public.
+    volumes:
+      - ./:/app
