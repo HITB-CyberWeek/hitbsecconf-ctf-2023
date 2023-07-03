@@ -19,7 +19,7 @@ const (
 	cookieName      = "ctf"
 	cookieSigName   = "ctf.sig"
 	cookieTTL       = 600
-	cookieDomain    = "165.227.163.15" // FIXME
+	cookieDomain    = "localhost" // FIXME
 	template        = "index.tpl"
 	usersFile       = "users.json"
 	usersSavePeriod = 10 * time.Second
