@@ -1,0 +1,34 @@
+version: 1
+service: quals
+username: quals
+
+scripts:
+  build_inside_vm: docker compose -f /home/$USERNAME/docker-compose.yml build --pull
+  start_once: docker compose -f /home/$USERNAME/docker-compose.yml up -d
+
+files:
+  - sources:
+      - main.go
+      - rsa.go
+      - index.tpl
+      - ./go.mod
+      - ./go.sum
+      - ./Dockerfile
+      - ./docker-compose.yml
+    destination: /home/$USERNAME/
+
+proxies:
+  - name: main
+    listener:
+      protocol: tcp
+      port: 8080
+      tcp_simultaneous_connections: 5
+    upstream:
+      host_index: 1  # ?
+      port: 8080
+    limits:
+      - source: team
+        limit: 20/minute
+        burst: 20
+    dns_records:
+      - quals
