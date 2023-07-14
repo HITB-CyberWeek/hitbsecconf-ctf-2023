@@ -1,7 +1,7 @@
 version: '3'
 services:
-  quals:
-    container_name: quals
+  training:
+    container_name: training
     restart: unless-stopped
     build: .
     ports:

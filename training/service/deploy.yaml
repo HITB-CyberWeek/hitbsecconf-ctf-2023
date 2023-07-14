@@ -1,6 +1,6 @@
 version: 1
-service: quals
-username: quals
+service: training
+username: training
 
 scripts:
   build_inside_vm: docker compose -f /home/$USERNAME/docker-compose.yml build --pull
@@ -20,15 +20,13 @@ files:
 proxies:
   - name: main
     listener:
-      protocol: tcp
-      port: 8080
-      tcp_simultaneous_connections: 5
+      protocol: http
     upstream:
-      host_index: 1  # ?
+      host_index: 3
       port: 8080
     limits:
       - source: team
         limit: 20/minute
         burst: 20
     dns_records:
-      - quals
+      - training

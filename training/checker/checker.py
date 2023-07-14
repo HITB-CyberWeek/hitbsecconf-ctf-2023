@@ -47,7 +47,7 @@ def check(host):
     url = "http://{}:{}/".format(host, PORT)
     logging.debug("URL: %s", url)
 
-    title = "<h1>CTF Qualification Service</h1>"
+    title = "<h1>CTF Training Service</h1>"
 
     response = requests.get(url)
     response.raise_for_status()
