@@ -1,4 +1,5 @@
-name: Build Training Image
+name: Build Training Service Image
+on: workflow_dispatch
 jobs:
   build-image:
     runs-on: self-hosted
