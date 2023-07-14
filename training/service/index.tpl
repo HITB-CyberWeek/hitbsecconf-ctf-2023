@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>CTF Qualification Service</title>
+		<title>CTF Training Service</title>
 		<style>
 		h1 {
 			text-align: center;
@@ -43,7 +43,7 @@
 	</head>
 
 	<body>
-		<h1>CTF Qualification Service</h1>
+		<h1>CTF Training Service</h1>
 
 		{{ if .User }}
 
