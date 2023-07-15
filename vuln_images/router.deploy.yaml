@@ -16,9 +16,10 @@ files:
       - iptables
       - monitoring
     destination: /home/$USERNAME
+  # Note! Following paths are absolute and runner-specific
   - source: /etc/letsencrypt/archive/
     destination: /home/$USERNAME/certificates/
-  - source: ~/do_api_token
+  - source: /home/runner/do_api_token
     destination: /home/$USERNAME
   # Service configs
   - source: ../training/service/deploy.yaml
