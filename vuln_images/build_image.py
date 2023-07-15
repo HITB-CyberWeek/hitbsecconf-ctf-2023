@@ -29,7 +29,10 @@ def get_environment_for_shell_commands(config: DeployConfig):
     }
 
 
-def build_image(config_path: pathlib.Path, config: DeployConfig, save_packer_config: bool, packer_debug: bool, skip_updating_vulnimage_config: bool):
+def build_image(config_path: pathlib.Path, config: DeployConfig,
+                save_packer_config: bool, packer_debug: bool,
+                packer_template_file_name: str,
+                skip_updating_vulnimage_config: bool):
     config_folder = config_path.parent
 
     # Step 1 — build_outside_vm
@@ -46,7 +49,7 @@ def build_image(config_path: pathlib.Path, config: DeployConfig, save_packer_con
     else:
         typer.echo(
             typer.style("Step 1", fg=typer.colors.YELLOW, bold=True) +
-            " was ignored, because scripts.build_outside_vm not specified."
+            " has been ignored, because scripts.build_outside_vm not specified."
         )
 
     # Step 2 — build packer configuration
@@ -66,7 +69,7 @@ def build_image(config_path: pathlib.Path, config: DeployConfig, save_packer_con
         "start_once": substitute_variables(config.scripts.start_once, config),
         "mot_d_postlude": settings.MOT_D_POSTLUDE,
     }
-    template = jinja2.Template((CURRENT_FOLDER / "packer/image.pkr.hcl.jinja2").read_text())
+    template = jinja2.Template((CURRENT_FOLDER / packer_template_file_name).read_text())
     filename = tempfile.mktemp(prefix=f"packer-{config.service}-", suffix=".pkr.hcl", dir=config_folder)
     try:
         with open(filename, "w") as f:
@@ -133,14 +136,22 @@ def main(
     check: bool = typer.Option(False, "--check", help="Only check the config, don't deploy anything"),
     save_packer_config: bool = typer.Option(False, "--save-packer-config", help="Don't remove packer configuration file"),
     packer_debug: bool = typer.Option(False, "--packer-debug", help="Enable -debug option in packer"),
-    skip_updating_vulnimage_config: bool = typer.Option(False, "--skip-updating-vulnimage-config", help=f"Don't update {VULNIMAGES_CONFIG_PATH} after buildting the image")
+    skip_updating_vulnimage_config: bool = typer.Option(
+        False, "--skip-updating-vulnimage-config",
+        help=f"Don't update {VULNIMAGES_CONFIG_PATH} after building the image"
+    ),
+    packer_template: str = typer.Option(
+        "packer/image.pkr.hcl.jinja2", "--packer-template",
+        help="Path to packer's Jinja2 template. Default template should satisfy all your requirements."
+    )
 ):
     config = DeployConfigV1.parse_file(config_path.name)
     if check:
         raise typer.Exit()
 
     config_path = pathlib.Path(config_path.name)
-    build_image(config_path, config, save_packer_config, packer_debug, skip_updating_vulnimage_config)
+    build_image(config_path, config, save_packer_config, packer_debug, packer_template,
+                skip_updating_vulnimage_config)
 
 
 if __name__ == "__main__":

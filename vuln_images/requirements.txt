@@ -1,8 +1,11 @@
-typer[all]==0.6.1
-pydantic==1.9.2
+typer[all]==0.9.0
+# Be careful: pydantic 2.0 has backward uncompatible changes: https://docs.pydantic.dev/2.0/migration/
+pydantic==1.10.8
+# Be careful: pydantic_yaml 1.0 has backwaed uncmopatilbe change: https://github.com/NowanIlfideme/pydantic-yaml#breaking-changes-for-pydantic-yaml-v1
 pydantic_yaml[ruamel]==0.8.0
-colorama==0.4.5
+colorama==0.4.6
 jinja2==3.1.2
 environs==9.5.0
-asyncssh==2.12.0
+asyncssh==2.13.2
 python-digitalocean==1.17.0
+aioshutil==1.3

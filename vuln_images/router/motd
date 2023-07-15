@@ -1,0 +1,6 @@
+It's a team's router and services proxy.
+
+As a router, it has two OpenVPN connections: see /etc/openvpn.
+
+As a services proxy, it has nginx (see /etc/nginx/sites-enabled) and iptables rules (for TCP proxies).
+At any moment you can run /home/router/router/deploy_local_proxies.sh to re-deploy all proxies.
