@@ -1,3 +1,4 @@
+import glob
 import pathlib
 from typing import List, Union, Optional, Literal, Iterable
 
@@ -30,7 +31,12 @@ class FileDeployConfigV1(YamlModel):
             return
 
         # Support for glob in "source": interpreter them as "sources"
-        if len(list(config_folder.glob(self.source))) > 1:
+        if self.source.startswith("/"):
+            files = glob.glob(self.source)
+        else:
+            files = config_folder.glob(self.source)
+
+        if len(list(files)) > 1:
             yield from FileDeployConfigV1(
                 sources=[self.source],
                 destination=self.destination,

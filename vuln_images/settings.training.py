@@ -11,10 +11,10 @@ https://2023.ctf.hitb.org/hitb-ctf-singapore-2023"""
 
 CERTIFICATES_FOLDER = env.path("CERTIFICATES_FOLDER", "../../certificates")
 
-teams1_100_ctf_hitb_org = CERTIFICATES_FOLDER / "team1.ctf.hitb.org"
-teams101_200_ctf_hitb_org = CERTIFICATES_FOLDER / "team101.ctf.hitb.org"
+teams1_100_ctf_hitb_org = CERTIFICATES_FOLDER / "team1.training.ctf.hitb.org"
+teams101_200_ctf_hitb_org = CERTIFICATES_FOLDER / "team101.training.ctf.hitb.org"
 PROXY_CERTIFICATES = {
-    "wildcard.ctf.hitb.org": {
+    "wildcard.training.ctf.hitb.org": {
         tuple(range(1, 101)): (teams1_100_ctf_hitb_org / "fullchain1.pem", teams1_100_ctf_hitb_org / "privkey1.pem"),
         tuple(range(100, 201)): (teams101_200_ctf_hitb_org / "fullchain1.pem", teams101_200_ctf_hitb_org / "privkey1.pem"),
     },
@@ -26,9 +26,9 @@ PROXY_SSH_USERNAME = env.str("PROXY_SSH_USERNAME", "root")
 BASE_TEAM_NETWORK = env.str("BASE_TEAM_NETWORK", "10.60.0.0/14")
 TEAM_NETWORK_MASK = env.int("TEAM_NETWORK_MASK", 24)
 
-DNS_ZONE = env.str("DNS_ZONE", "ctf.hitb.org")
+DNS_ZONE = env.str("DNS_ZONE", "training.ctf.hitb.org")
 
-TEAMS_COUNT = 118
+TEAMS_COUNT = 200
 PROXY_HOSTS = {
     team_id: f"10.80.{team_id}.2" for team_id in range(1, TEAMS_COUNT + 1)
 }
