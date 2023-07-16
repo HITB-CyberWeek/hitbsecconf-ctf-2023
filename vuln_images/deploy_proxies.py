@@ -254,7 +254,7 @@ async def prepare_host_for_proxies(host: str, team_id: int):
         # 1. Install nginx
         typer.echo(f"[{host}]    Installing nginx, openssl and jq "
                    f"(we expect that docker and docker-compose are already installed)")
-        await ssh.run("apt-get install -y nginx openssl jq", check=True)
+        await ssh.run("apt-get install -y -o DPkg::Lock::Timeout=-1 nginx openssl jq", check=True)
 
         # 2. Generate dhparam — only once!
         typer.echo(f"[{host}]    Generating /etc/nginx/dhparam.pem if not exists")

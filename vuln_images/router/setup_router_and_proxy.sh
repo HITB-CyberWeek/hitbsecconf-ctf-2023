@@ -4,15 +4,18 @@ set -ex
 
 # Set up the router: https://github.com/HackerDom/ctf-cloud/tree/master/cloud#deploy-router-host
 
-# Wait apt-get lock
+# Wait for apt-get lock
 while ps -opid= -C apt-get > /dev/null; do sleep 1; done
 
 # These lines allow to install iptables-persistent without manual input
 echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
 echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
 
-apt-get install -y -q openvpn iptables-persistent net-tools
+apt-get install -y -q -o DPkg::Lock::Timeout=-1 openvpn iptables-persistent net-tools
+# Masquerading for outgoing internet traffic
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+# Docker on a router needs this rule: https://docs.docker.com/network/packet-filtering-firewalls/#docker-on-a-router
+iptables -I DOCKER-USER -j ACCEPT
 iptables-save > /etc/iptables/rules.v4
 
 echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf
