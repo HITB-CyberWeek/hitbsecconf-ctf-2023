@@ -3,7 +3,7 @@ service: router
 username: router
 scripts:
   build_inside_vm: /home/$USERNAME/router/setup_router_and_proxy.sh
-  start_once: /home/$USERNAME/router/deploy_local_proxies.sh
+  start_once: /home/$USERNAME/router/deploy_local_proxies.sh > /home/$USERNAME/router/deploy_local_proxies.log 2>&1
 files:
   - sources:
       - requirements.txt
