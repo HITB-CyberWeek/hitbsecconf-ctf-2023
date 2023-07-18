@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import logging
+import os
 import random
 import string
 import time
@@ -12,7 +13,11 @@ import traceback
 
 OK, CORRUPT, MUMBLE, DOWN, CHECKER_ERROR = 101, 102, 103, 104, 110
 
-PORT = 80
+SKIP_PROXY = os.getenv("SKIP_PROXY") == "1"
+
+PORT = 80 if SKIP_PROXY else 443
+PROTOCOL = "http" if SKIP_PROXY else "https"
+
 HACK_PROBABILITY = 10
 HACK_SLEEP = 3
 
@@ -44,7 +49,7 @@ def info():
 
 
 def check(host):
-    url = "http://{}:{}/".format(host, PORT)
+    url = "{}://{}:{}/".format(PROTOCOL, host, PORT)
     logging.debug("URL: %s", url)
 
     title = "<h1>CTF Training Service</h1>"
@@ -56,7 +61,7 @@ def check(host):
 
 
 def put(host, flag_id, flag, vuln):
-    url = "http://{}:{}/".format(host, PORT)
+    url = "{}://{}:{}/".format(PROTOCOL, host, PORT)
     logging.debug("URL: %s", url)
 
     user = random_str(8)
@@ -86,7 +91,7 @@ def put(host, flag_id, flag, vuln):
 
 
 def get(host, flag_id, flag, vuln):
-    url = "http://{}:{}/".format(host, PORT)
+    url = "{}://{}:{}/".format(PROTOCOL, host, PORT)
     logging.debug("URL: %s", url)
 
     json_flag_id = json.loads(flag_id)
@@ -139,7 +144,7 @@ def get(host, flag_id, flag, vuln):
 
 
 def hack(host, user):
-    url = "http://{}:{}/".format(host, PORT)
+    url = "{}://{}:{}/".format(PROTOCOL, host, PORT)
     logging.debug("URL: %s", url)
 
     logging.info("Hacking user %r ...", user)
