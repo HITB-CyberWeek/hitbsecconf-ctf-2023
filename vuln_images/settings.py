@@ -16,7 +16,7 @@ teams101_200_ctf_hitb_org = CERTIFICATES_FOLDER / "team101.ctf.hitb.org"
 PROXY_CERTIFICATES = {
     "wildcard.ctf.hitb.org": {
         tuple(range(1, 101)): (teams1_100_ctf_hitb_org / "fullchain1.pem", teams1_100_ctf_hitb_org / "privkey1.pem"),
-        tuple(range(100, 201)): (teams101_200_ctf_hitb_org / "fullchain1.pem", teams101_200_ctf_hitb_org / "privkey1.pem"),
+        tuple(range(101, 201)): (teams101_200_ctf_hitb_org / "fullchain1.pem", teams101_200_ctf_hitb_org / "privkey1.pem"),
     },
 }
 PROXY_SSH_KEY = env.path("PROXY_SSH_KEY", "../ctf-cloud/cloud/cloud_master/files/api_srv/do_deploy_key")
