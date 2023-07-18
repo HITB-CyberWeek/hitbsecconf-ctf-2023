@@ -5,6 +5,6 @@ services:
     restart: unless-stopped
     build: .
     ports:
-      - 8080:8080           # Service port. Public.
+      - 80:80           # Service port. Public.
     volumes:
       - ./:/app

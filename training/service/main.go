@@ -16,7 +16,7 @@ import (
 )
 
 const (
-    listen          = ":8080"
+    listen          = ":80"
     cookieName      = "ctf"
     cookieSigName   = "ctf.sig"
     cookieTTL       = 600
