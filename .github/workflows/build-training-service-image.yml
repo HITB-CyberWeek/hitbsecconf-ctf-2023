@@ -21,4 +21,4 @@ jobs:
         run: python3 build_image.py --skip-updating-vulnimage-config ../training/service/deploy.yaml
         working-directory: "${{ github.workspace }}/vuln_images/"
         env:
-          DO_API_TOKEN: ${{ secrets.DO_API_TOKEN }}
+          DO_API_TOKEN: ${{ secrets.DO_API_TOKEN_TOKEN }}
