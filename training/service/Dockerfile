@@ -5,9 +5,11 @@ WORKDIR /app
 COPY go.mod .
 COPY go.sum .
 COPY main.go .
+COPY rsa.go .
 
 RUN go get .
+RUN go build .
 
-RUN rm go.mod go.sum main.go
+RUN rm go.mod go.sum main.go rsa.go
 
 CMD ["go", "run", "."]
