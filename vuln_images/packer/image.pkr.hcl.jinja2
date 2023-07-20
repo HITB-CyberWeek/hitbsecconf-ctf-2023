@@ -73,7 +73,7 @@ cat << EOF
 
 $(tput setaf 2)Welcome to the "{{ service }}" instance!$(tput setaf 7)
 
-Service is located on $(tput bold)/home/{{ username }}/$(tput sgr0)
+Service is located in $(tput bold)/home/{{ username }}/$(tput sgr0)
 
 View logs: $(tput bold)docker compose logs -f$(tput sgr0)
 Rebuild service: $(tput bold)docker compose build$(tput sgr0)
