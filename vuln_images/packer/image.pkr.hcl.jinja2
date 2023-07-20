@@ -50,7 +50,7 @@ build {
       # Install haveged, otherwise docker-compose may hang: https://stackoverflow.com/a/68172225/1494610
       "apt-get install -y -q -o DPkg::Lock::Timeout=-1 haveged",
 
-      "systemctl disable rpcbind.service",
+      "if systemctl --all --type service | grep -q rpcbind; then systemctl disable rpcbind.service; fi",
     ]
   }
 
