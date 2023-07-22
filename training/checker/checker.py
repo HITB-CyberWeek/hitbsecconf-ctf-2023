@@ -5,6 +5,9 @@ import os
 import random
 import string
 import time
+import re
+from typing import Optional, Tuple
+import copy
 
 import requests
 
@@ -29,6 +32,72 @@ CHARSET = string.ascii_lowercase + string.digits
 
 def random_str(length):
     return ''.join(random.choice(CHARSET) for i in range(length))
+
+
+PLATFORM_API_ENDPOINT = os.getenv("PLATFORM_API_ENDPOINT") or "https://ctf.hackerdom.ru/api/"
+PLATFORM_EVENT_SLUG = os.getenv("PLATFORM_EVENT_SLUG") or "hitb-ctf-phuket-2023"
+PLATFORM_USERNAME = os.getenv("PLATFORM_USERNAME") or "admin"
+PLATFORM_PASSWORD = os.getenv("PLATFORM_PASSWORD") or "admin"
+
+
+def add_training_tag(team_host: str, tag: str):
+    """
+    Special method for HITB CTF Training: it makes a request to https://ctf.hackerdom.ru and 
+    adds "tag" (as an attribute) to the team.
+    """
+    for retry in range(3):
+        try:
+            _add_training_tag(team_host, tag)
+            break
+        except Exception as e:
+            logging.warning(f"[{retry + 1}/3] Can not add tag to the team: {e}", exc_info=e)
+
+
+def _add_training_tag(team_host: str, tag: str):
+    registration_id, attributes = _find_registration_by_team_host(team_host)
+    if registration_id is None:
+        logging.error(f"Did not found a registration for team with host {team_host}")
+        return
+
+    logging.info(f"Found registration for team with host {team_host}: #{registration_id}")
+
+    current_attributes = copy.deepcopy(attributes)
+    if "training" not in attributes:
+        attributes["training"] = []
+    attributes["training"].append(tag)
+
+    url = f"{PLATFORM_API_ENDPOINT}registrations/{PLATFORM_EVENT_SLUG}/{registration_id}/attributes/"
+    data = {"current_attributes": current_attributes, "new_attributes": attributes}
+    logging.info(f"Sending request to {url} with following content: {data}")
+    r = requests.post(url, json=data, auth=(PLATFORM_USERNAME, PLATFORM_PASSWORD))
+    r.raise_for_status()
+
+
+
+def _find_registration_by_team_host(team_host: str) -> Tuple[Optional[int], dict]:
+    m = re.search(r"team(\d+)", team_host)
+    if not m:
+        return None, {}
+    team_id = int(m.group(1))
+
+    url = f"{PLATFORM_API_ENDPOINT}registrations/{PLATFORM_EVENT_SLUG}/"
+    logging.info(f"Requesting registrations list from {url}")
+    r = requests.get(url)
+    r.raise_for_status()
+    try:
+        result = r.json()
+    except requests.exceptions.JSONDecodeError:
+        logging.info(f"Response from the server: {r.text}")
+        raise
+    if ("status" not in result or result["status"] != "ok" or 
+        "registrations" not in result or not isinstance(result["registrations"], list)):
+        raise ValueError(f"Invalid response from {url}: result")
+
+    if team_id - 1 >= len(result["registrations"]):
+        return None, {}
+    
+    registration = result["registrations"][team_id - 1]
+    return int(registration["id"]), registration["attributes"]
 
 
 def verdict(exit_code, public="", private=""):
@@ -57,7 +126,10 @@ def check(host):
     response = requests.get(url)
     response.raise_for_status()
 
-    verdict(OK if title in response.text else MUMBLE)
+    outcome = OK if title in response.text else MUMBLE
+    if outcome == OK:
+        add_training_tag(host, "started-service")
+    verdict(outcome)
 
 
 def put(host, flag_id, flag, vuln):
@@ -152,10 +224,7 @@ def hack(host, user):
     data = {
         "user": user,
     }
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US) AppleWebKit/537.36",
-    }
-    response = requests.post(url, data, headers=headers)
+    response = requests.post(url, data)
     if response.status_code != 200:
         logging.info("Hack response code %r. Service is NOT vulnerable.", response.status_code)
         return
@@ -168,7 +237,9 @@ def hack(host, user):
         if flag:
             logging.info("Found flag: %r! Service is vulnerable.", line.strip())
             return
-
+        
+            
+    add_training_tag(host, "successfully-protected")
     logging.info("Flag not found. Service is NOT vulnerable.")
 
 
