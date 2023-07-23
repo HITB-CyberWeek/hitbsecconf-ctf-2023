@@ -7,7 +7,7 @@ env.read_env()  # read .env file, if it exists
 DO_API_TOKEN = env.str("DO_API_TOKEN")
 
 MOT_D_POSTLUDE = """HITB SECCONF CTF 2023, ctf@hitb.org
-https://2023.ctf.hitb.org/hitb-ctf-singapore-2023"""
+https://2023.ctf.hitb.org/hitb-ctf-phuket-2023"""
 
 CERTIFICATES_FOLDER = env.path("CERTIFICATES_FOLDER", "../../certificates")
 
