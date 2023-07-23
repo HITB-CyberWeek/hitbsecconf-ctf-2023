@@ -242,7 +242,7 @@ def hack(host, user):
             return
         
             
-    add_training_tag(host, "successfully-protected")
+    add_training_tag(host, "defended")
     logging.info("Flag not found. Service is NOT vulnerable.")
 
 
