@@ -23,6 +23,7 @@ PROTOCOL = "http" if SKIP_PROXY else "https"
 
 HACK_PROBABILITY = 5
 HACK_SLEEP = 3
+SUBMIT_FLAG_PROBABILITY = 3
 
 MAIN_COOKIE = "ctf"
 SIGN_COOKIE = "ctf.sig"
@@ -38,6 +39,9 @@ PLATFORM_API_ENDPOINT = os.getenv("PLATFORM_API_ENDPOINT") or "https://ctf.hacke
 PLATFORM_EVENT_SLUG = os.getenv("PLATFORM_EVENT_SLUG") or "hitb-ctf-phuket-2023"
 PLATFORM_USERNAME = os.getenv("PLATFORM_USERNAME") or "admin"
 PLATFORM_PASSWORD = os.getenv("PLATFORM_PASSWORD") or "admin"
+
+CHECKSYSTEM_FLAGS_ENDPOINT = os.getenv("CHECKSYSTEM_FLAGS_ENDPOINT") or "https://training.ctf.hitb.org/flags"
+CHECKSYSTEM_TOKEN = os.getenv("CHECKSYSTEM_TOKEN") or "<unknown-token>"
 
 
 def add_training_tag(team_host: str, tag: str):
@@ -101,6 +105,16 @@ def _find_registration_by_team_host(team_host: str) -> Tuple[Optional[int], dict
     
     registration = result["registrations"][team_id - 1]
     return int(registration["id"]), registration["attributes"]
+
+
+def send_flag_to_checksystem(flag: str):
+    if not CHECKSYSTEM_TOKEN:
+        return
+    try:
+        logging.info(f"Trying to submit flag {flag} to the checksystem {CHECKSYSTEM_FLAGS_ENDPOINT}")
+        requests.put(CHECKSYSTEM_FLAGS_ENDPOINT, headers={"X-Team-Token": CHECKSYSTEM_TOKEN}, json=[flag])
+    except Exception as e:
+        logging.warning(f"Can not submit flag to the checksystem: {e}", exc_info=e)
 
 
 def verdict(exit_code, public="", private=""):
@@ -174,10 +188,6 @@ def get(host, flag_id, flag, vuln):
     user = json_flag_id["public_flag_id"]
     password = json_flag_id["password"]
 
-    if random.randint(0, HACK_PROBABILITY) == 0:
-        hack(host, user, flag)
-        time.sleep(HACK_SLEEP)
-
     data = {
         "user": user,
         "password": password,
@@ -213,6 +223,11 @@ def get(host, flag_id, flag, vuln):
 
     if flag in response.text:
         verdict(OK, "Flag found")
+
+        # After successful "get" we can try to hack this team: probably flag is available even without authentication?
+        if random.randint(0, HACK_PROBABILITY) == 0:
+            time.sleep(random.random() * HACK_SLEEP)
+            hack(host, user, flag)
     else:
         logging.debug("Response text: %r", response.text)
         verdict(CORRUPT, "Flag not found")
@@ -235,6 +250,8 @@ def hack(host, user, flag):
     for line in response.text.split("\n"):
         if flag in line:
             logging.info("Found flag: %r! Service is vulnerable.", line.strip())
+            if random.randint(0, SUBMIT_FLAG_PROBABILITY) == 0:
+                send_flag_to_checksystem(flag)
             return        
             
     add_training_tag(host, "defended")
