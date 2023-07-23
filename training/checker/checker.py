@@ -21,7 +21,7 @@ SKIP_PROXY = os.getenv("SKIP_PROXY") == "1"
 PORT = 80 if SKIP_PROXY else 443
 PROTOCOL = "http" if SKIP_PROXY else "https"
 
-HACK_PROBABILITY = 10
+HACK_PROBABILITY = 5
 HACK_SLEEP = 3
 
 MAIN_COOKIE = "ctf"
@@ -175,8 +175,8 @@ def get(host, flag_id, flag, vuln):
     password = json_flag_id["password"]
 
     if random.randint(0, HACK_PROBABILITY) == 0:
-        hack(host, user)
-        time.sleep(3)
+        hack(host, user, flag)
+        time.sleep(HACK_SLEEP)
 
     data = {
         "user": user,
@@ -218,7 +218,7 @@ def get(host, flag_id, flag, vuln):
         verdict(CORRUPT, "Flag not found")
 
 
-def hack(host, user):
+def hack(host, user, flag):
     url = "{}://{}:{}/".format(PROTOCOL, host, PORT)
     logging.debug("URL: %s", url)
 
@@ -232,15 +232,10 @@ def hack(host, user):
         logging.info("Hack response code %r. Service is NOT vulnerable.", response.status_code)
         return
 
-    flag = False
     for line in response.text.split("\n"):
-        if "Flag:" in line:
-            flag = True
-            continue
-        if flag:
+        if flag in line:
             logging.info("Found flag: %r! Service is vulnerable.", line.strip())
-            return
-        
+            return        
             
     add_training_tag(host, "defended")
     logging.info("Flag not found. Service is NOT vulnerable.")
@@ -254,7 +249,7 @@ def main(args):
         "check":    (check, 1),
         "put":      (put, 4),
         "get":      (get, 4),
-        "hack":     (hack, 2),
+        "hack":     (hack, 3),
     }
 
     if not args:
