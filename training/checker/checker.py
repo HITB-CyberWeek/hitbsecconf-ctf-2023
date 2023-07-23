@@ -56,19 +56,22 @@ def add_training_tag(team_host: str, tag: str):
 def _add_training_tag(team_host: str, tag: str):
     registration_id, attributes = _find_registration_by_team_host(team_host)
     if registration_id is None:
-        logging.error(f"Did not found a registration for team with host {team_host}")
+        logging.error(f"Did not found a registration for team with host {team_host!r}")
         return
 
-    logging.info(f"Found registration for team with host {team_host}: #{registration_id}")
+    logging.info(f"Found registration for team with host {team_host!r}: #{registration_id}")
 
     current_attributes = copy.deepcopy(attributes)
     if "training" not in attributes:
         attributes["training"] = []
+    if tag in attributes["training"]:
+        logging.info(f"Team already has the tag {tag!r}, don't add it again")
+        return
     attributes["training"].append(tag)
 
     url = f"{PLATFORM_API_ENDPOINT}registrations/{PLATFORM_EVENT_SLUG}/{registration_id}/attributes/"
     data = {"current_attributes": current_attributes, "new_attributes": attributes}
-    logging.info(f"Sending request to {url} with following content: {data}")
+    logging.info(f"Sending request to {url} with following content: {data!r}")
     r = requests.post(url, json=data, auth=(PLATFORM_USERNAME, PLATFORM_PASSWORD))
     r.raise_for_status()
 
