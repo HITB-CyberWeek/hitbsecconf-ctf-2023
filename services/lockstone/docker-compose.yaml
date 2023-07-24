@@ -1,0 +1,9 @@
+version: '2.0'
+services:
+  lockstone:
+    build: .
+    network_mode: host
+    volumes:
+      - ./:/home/lockstone
+    restart: unless-stopped
+    mem_limit: 2000m
