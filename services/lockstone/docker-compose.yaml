@@ -5,5 +5,26 @@ services:
     network_mode: host
     volumes:
       - ./:/home/lockstone
+      - pg-volume:/var/run/postgresql      
     restart: unless-stopped
     mem_limit: 2000m
+  postgres:
+    image: postgres:15.3-alpine3.18
+    network_mode: "none"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - pg-volume:/var/run/postgresql
+    restart: on-failure
+    mem_limit: 2048m
+    command:
+      ["postgres", "-c", "listen_addresses="]
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "10"
+            max-size: "10m"
+
+volumes:
+  pg-volume:
