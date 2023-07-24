@@ -1,0 +1,34 @@
+version: 1
+service: passmgr
+username: passmgr
+
+scripts:
+  build_inside_vm: docker compose -f /home/$USERNAME/docker-compose.yml build --pull
+  start_once: docker compose -f /home/$USERNAME/docker-compose.yml up -d
+
+files:
+  - sources:
+      - main.go
+      - db.go
+      - index.tpl
+      - ./go.mod
+      - ./go.sum
+      - ./Dockerfile
+      - ./docker-compose.yml
+    destination: /home/$USERNAME/
+
+proxies:
+  - name: main
+    listener:
+      protocol: http
+      certificate: wildcard.training.ctf.hitb.org
+    upstream:
+      host_index: 3
+      port: 80
+    limits:
+      - source: team
+        location: /
+        limit: 20r/m
+        burst: 20
+    dns_records:
+      - training

@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>CTF Training Service</title>
+		<title>CTF Password Manager Service</title>
 		<style>
 		h1 {
 			text-align: center;
@@ -43,27 +43,7 @@
 	</head>
 
 	<body>
-		<h1>CTF Training Service</h1>
-
-		{{ if .User }}
-
-		<form action="/logout" method="POST">
-			<div>
-				<label>Username:</label>
-				<b>{{ .User.User }}</b>
-			</div>
-
-			<div>
-				<label>Flag:</label>
-				<b>{{ .User.Flag }}</b>
-			</div>
-
-			<div class="buttons">
-				<input type="submit" name="logout" value="Logout" />
-			</div>
-		</form>
-
-		{{ else }}
+		<h1>CTF Password Manager Service</h1>
 
 		<form action="/" method="POST">
 			<div>
@@ -76,18 +56,11 @@
 				<input type="password" name="password" maxlength="20" placeholder="required"/>
 			</div>
 
-			<div>
-				<label>Flag:</label>
-				<input type="text" name="flag" size="80" maxlength="64" placeholder="only for register"/>
-			</div>
-
 			<div class="buttons">
 				<input type="submit" name="login"    value="Login" />
 				<input type="submit" name="register" value="Register" />
 			</div>
 		</form>
-
-		{{ end }}
 
 		{{ if .Error }}
 

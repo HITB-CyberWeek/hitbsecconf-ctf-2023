@@ -1,0 +1,33 @@
+version: '3'
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    environment:
+      DB_HOST: "db"
+      DB_PORT: "5432"
+      DB_NAME: "postgres"
+      DB_USER: "postgres"
+      DB_PASS: "NzU5ZmM0OTYtZj"
+    ports:
+      - "80:80"           # Service port. Public.
+    volumes:
+      - ./:/app
+    networks:
+      - internal
+  db:
+    image: postgres:15.3
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: "NzU5ZmM0OTYtZj"
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - internal
+
+volumes:
+  data:
+
+networks:
+  internal:
+    driver: bridge
