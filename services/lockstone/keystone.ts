@@ -7,8 +7,8 @@ import { withAuth, session } from './keystone/auth';
 export default withAuth(
   config({
     db: {
-      provider: 'sqlite',
-      url: `file:${process.cwd()}/keystone.db`,
+      provider: 'postgresql',
+      url: `postgres://postgres:postgres@localhost/lockstone?host=/var/run/postgresql`,
     },
     lists,
     session,
