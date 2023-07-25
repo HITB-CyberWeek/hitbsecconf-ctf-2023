@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"net/http"
-	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -12,26 +13,53 @@ import (
 const (
 	listen     = ":80"
 	cookieName = "ctf"
-	template   = "index.tpl"
+	template   = "index.go.html"
+	sessionTTL = 600
 )
 
 var (
 	db *gorm.DB
 )
 
-func cookieDomain(c *gin.Context) string {
-	host := strings.Split(c.Request.Host, ":")[0]
-	if host == "localhost" {
-		return ""
-	}
-	return host
-}
-
 func handleGet(c *gin.Context) {
-	var count int64
-	db.Model(&Record{}).Count(&count)
+	var stats Stats
+	db.Model(&Record{}).Count(&stats.Users)
+	db.Model(&Session{}).Count(&stats.Sessions)
+
+	cookieValue, err := c.Cookie(cookieName)
+	if err != nil || len(cookieValue) == 0 {
+		c.HTML(http.StatusOK, template, gin.H{
+			"Stats": stats,
+		})
+		return
+	}
+
+	var session Session
+	result := db.Where("cookie = ?", cookieValue).Find(&session)
+	if result.Error != nil || result.RowsAffected == 0 {
+		c.HTML(http.StatusOK, template, gin.H{
+			"Stats": stats,
+		})
+		return
+	}
+
+	var records []Record
+	var sites []Site
+	db.Where("user_ref = ?", session.User).Find(&records)
+	for _, r := range records {
+		sites = append(sites, Site{
+			Address: r.Site,
+			User:    r.User,
+			Pass:    r.Pass,
+		})
+	}
+
 	c.HTML(http.StatusOK, template, gin.H{
-		"Info": fmt.Sprintf("There are %d records in the database.", count),
+		"User": User{
+			Name: session.User,
+		},
+		"Stats": stats,
+		"Sites": sites,
 	})
 }
 
@@ -53,7 +81,7 @@ func handleLogin(c *gin.Context) {
 	}
 
 	var record Record
-	result := db.Where("user = ? AND pass = ?", user, password).Find(&record)
+	result := db.Where("\"user\" = ? AND pass = ? AND user_ref = ''", user, password).Find(&record)
 
 	if result.Error != nil {
 		c.HTML(http.StatusOK, template, gin.H{
@@ -63,15 +91,18 @@ func handleLogin(c *gin.Context) {
 	}
 	if result.RowsAffected == 0 {
 		c.HTML(http.StatusOK, template, gin.H{
-			"Error": "User not found",
+			"Error": "Invalid credentials",
 		})
 		return
 	}
 
-	c.HTML(http.StatusOK, template, gin.H{
-		"Info": fmt.Sprintf("Welcome, user %s [%d]!", record.User, record.ID),
+	cookieValue := randomString(32)
+	db.Create(&Session{
+		Cookie: cookieValue,
+		User:   user,
 	})
-	return
+	c.SetCookie(cookieName, cookieValue, sessionTTL, "/", cookieDomain(c), false, true)
+	c.Redirect(http.StatusFound, "/")
 }
 
 func handleRegister(c *gin.Context) {
@@ -91,13 +122,22 @@ func handleRegister(c *gin.Context) {
 		return
 	}
 
+	var record Record
+	result := db.Where("\"user\" = ? AND user_ref = ''", user).Find(&record)
+	if result.RowsAffected > 0 {
+		c.HTML(http.StatusOK, template, gin.H{
+			"Error": "User already exists",
+		})
+		return
+	}
+
 	db.Create(&Record{
 		User: user,
 		Pass: password,
 	})
 
 	c.HTML(http.StatusOK, template, gin.H{
-		"Info": "You have successfully registered!",
+		"Info": "You have successfully registered! Now you may log in.",
 	})
 }
 
@@ -111,12 +151,71 @@ func handlePost(c *gin.Context) {
 	}
 }
 
+func handleAdd(c *gin.Context) {
+	address := c.PostForm("address")
+	if address == "" {
+		c.HTML(http.StatusOK, template, gin.H{
+			"Error": fmt.Sprintf("Address not specified"),
+		})
+		return
+	}
+
+	user := c.PostForm("user")
+	if user == "" {
+		c.HTML(http.StatusOK, template, gin.H{
+			"Error": fmt.Sprintf("User not specified"),
+		})
+		return
+	}
+
+	password := c.PostForm("password")
+	if password == "" {
+		c.HTML(http.StatusOK, template, gin.H{
+			"Error": fmt.Sprintf("Password not specified"),
+		})
+		return
+	}
+
+	cookieValue, err := c.Cookie(cookieName)
+	if err != nil || len(cookieValue) == 0 {
+		c.Redirect(http.StatusFound, "/")
+		return
+	}
+
+	var session Session
+	db.Where("cookie = ?", cookieValue).Find(&session)
+	db.Create(&Record{
+		User:    user,
+		Pass:    password,
+		Site:    address,
+		UserRef: session.User,
+	})
+
+	c.Redirect(http.StatusFound, "/")
+}
+
 func handleLogout(c *gin.Context) {
+	cookieValue, err := c.Cookie(cookieName)
+	if err == nil && len(cookieValue) > 0 {
+		db.Where("cookie = ?", cookieValue).Delete(&Session{})
+	}
+
 	c.SetCookie(cookieName, "", 0, "/", cookieDomain(c), false, true)
 	c.Redirect(http.StatusFound, "/")
 }
 
+func sessionCleaner() {
+	for {
+		db.Where("created_at < ?", time.Now().Add(-time.Second*sessionTTL)).Delete(&Session{})
+		time.Sleep(60 * time.Second)
+	}
+}
+
 func main() {
+
+	// Init random number generator
+
+	rand.Seed(time.Now().UnixNano())
 
 	// Open db connection
 
@@ -124,6 +223,10 @@ func main() {
 	if db, err = Connect(); err != nil {
 		panic(err)
 	}
+
+	// Start up session cleaner
+
+	go sessionCleaner()
 
 	// Set up http server
 
@@ -133,6 +236,7 @@ func main() {
 
 	router.GET("/", handleGet)
 	router.POST("/", handlePost)
+	router.POST("/add", handleAdd)
 	router.POST("/logout", handleLogout)
 
 	router.Run(listen)

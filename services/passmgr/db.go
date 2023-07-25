@@ -2,18 +2,34 @@ package main
 
 import (
 	"fmt"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"log"
 	"os"
 	"strconv"
+	"time"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
-func mustGetEnv(key string) string {
-	value := os.Getenv(key)
-	if value == "" {
-		panic(fmt.Sprintf("environment variable %q must be set", key))
-	}
-	return value
+type Record struct {
+	ID        uint `gorm:"primarykey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+
+	User    string `gorm:"index"`
+	Pass    string
+	Site    string
+	UserRef string
+}
+
+type Session struct {
+	ID        uint `gorm:"primarykey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+
+	Cookie string `gorm:"index"`
+	User   string
 }
 
 func MakeConnectionString() (string, error) {
@@ -38,7 +54,20 @@ func Connect() (*gorm.DB, error) {
 		return nil, fmt.Errorf("make connection string: %w", err)
 	}
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	verboseLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logger.Config{
+			SlowThreshold:             time.Second, // Slow SQL threshold
+			LogLevel:                  logger.Info, // Log level
+			IgnoreRecordNotFoundError: false,       // Ignore ErrRecordNotFound error for logger
+			ParameterizedQueries:      false,       // Don't include params in the SQL log
+			Colorful:                  true,        // Disable color
+		},
+	)
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: verboseLogger,
+	})
 	if err != nil {
 		return nil, fmt.Errorf("open db: %w", err)
 	}
@@ -51,18 +80,10 @@ func Connect() (*gorm.DB, error) {
 	return db, nil
 }
 
-type Record struct {
-	gorm.Model
-	User    string
-	Pass    string
-	Site    string
-	UserRef string
-}
-
 func AutoMigrate(db *gorm.DB) error {
 	// https://gorm.io/docs/migration.html
 	// AutoMigrate will create tables, missing foreign keys, constraints,
 	// columns and indexes. It will change existing column’s type if its size,
 	// precision, nullable changed. It WON’T delete unused columns to protect your data.
-	return db.AutoMigrate(&Record{})
+	return db.AutoMigrate(&Record{}, &Session{})
 }
