@@ -11,10 +11,13 @@ import (
 )
 
 const (
-	listen     = ":80"
-	cookieName = "ctf"
-	template   = "index.go.html"
-	sessionTTL = 600
+	listen        = ":80"
+	cookieName    = "ctf"
+	template      = "index.go.html"
+	sessionTTL    = 600
+	registerDelay = 700 * time.Millisecond
+	loginDelay    = 300 * time.Millisecond
+	addDelay      = 500 * time.Millisecond
 )
 
 var (
@@ -64,6 +67,8 @@ func handleGet(c *gin.Context) {
 }
 
 func handleLogin(c *gin.Context) {
+	time.Sleep(loginDelay)
+
 	user := c.PostForm("user")
 	if user == "" {
 		c.HTML(http.StatusOK, template, gin.H{
@@ -106,6 +111,8 @@ func handleLogin(c *gin.Context) {
 }
 
 func handleRegister(c *gin.Context) {
+	time.Sleep(registerDelay)
+
 	user := c.PostForm("user")
 	if user == "" {
 		c.HTML(http.StatusOK, template, gin.H{
@@ -152,6 +159,8 @@ func handlePost(c *gin.Context) {
 }
 
 func handleAdd(c *gin.Context) {
+	time.Sleep(addDelay)
+
 	address := c.PostForm("address")
 	if address == "" {
 		c.HTML(http.StatusOK, template, gin.H{
@@ -183,7 +192,12 @@ func handleAdd(c *gin.Context) {
 	}
 
 	var session Session
-	db.Where("cookie = ?", cookieValue).Find(&session)
+	result := db.Where("cookie = ?", cookieValue).Find(&session)
+	if result.Error != nil {
+		c.HTML(http.StatusOK, template, gin.H{})
+		return
+	}
+
 	db.Create(&Record{
 		User:    user,
 		Pass:    password,
