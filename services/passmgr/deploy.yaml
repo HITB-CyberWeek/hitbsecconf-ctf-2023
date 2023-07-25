@@ -10,7 +10,9 @@ files:
   - sources:
       - main.go
       - db.go
-      - index.tpl
+      - util.go
+      - index.go
+      - index.go.html
       - ./go.mod
       - ./go.sum
       - ./Dockerfile
@@ -31,4 +33,4 @@ proxies:
         limit: 20r/m
         burst: 20
     dns_records:
-      - training
+      - passmgr
