@@ -10,7 +10,7 @@ files:
   - sources:
       - main.go
       - rsa.go
-      - index.tpl
+      - index.go.html
       - ./go.mod
       - ./go.sum
       - ./Dockerfile
