@@ -1,0 +1,18 @@
+{
+  "name": "lockstone",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "keystone dev",
+    "build": "keystone build",
+    "start": "keystone start",
+    "migrate": "keystone prisma migrate dev",
+    "migrate_apply": "keystone prisma migrate deploy",
+    "postinstall": "keystone postinstall"
+  },
+  "dependencies": {
+    "@keystone-6/auth": "^7.0.0",
+    "@keystone-6/core": "^5.0.0",
+    "typescript": "^4.9.5"
+  }
+}
