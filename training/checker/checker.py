@@ -40,8 +40,12 @@ PLATFORM_EVENT_SLUG = os.getenv("PLATFORM_EVENT_SLUG") or "hitb-ctf-phuket-2023"
 PLATFORM_USERNAME = os.getenv("PLATFORM_USERNAME") or "admin"
 PLATFORM_PASSWORD = os.getenv("PLATFORM_PASSWORD") or "admin"
 
+PLATFORM_TIMEOUT = 5 # seconds
+
 CHECKSYSTEM_FLAGS_ENDPOINT = os.getenv("CHECKSYSTEM_FLAGS_ENDPOINT") or "https://training.ctf.hitb.org/flags"
 CHECKSYSTEM_TOKEN = os.getenv("CHECKSYSTEM_TOKEN") or "<unknown-token>"
+
+CHECKSYSTEM_TIMEOUT = 5 # seconds
 
 
 def add_training_tag(team_host: str, tag: str):
@@ -76,7 +80,7 @@ def _add_training_tag(team_host: str, tag: str):
     url = f"{PLATFORM_API_ENDPOINT}registrations/{PLATFORM_EVENT_SLUG}/{registration_id}/attributes/"
     data = {"current_attributes": current_attributes, "new_attributes": attributes}
     logging.info(f"Sending request to {url} with following content: {data!r}")
-    r = requests.post(url, json=data, auth=(PLATFORM_USERNAME, PLATFORM_PASSWORD))
+    r = requests.post(url, json=data, auth=(PLATFORM_USERNAME, PLATFORM_PASSWORD), timeout=PLATFORM_TIMEOUT)
     r.raise_for_status()
 
 
@@ -89,7 +93,7 @@ def _find_registration_by_team_host(team_host: str) -> Tuple[Optional[int], dict
 
     url = f"{PLATFORM_API_ENDPOINT}registrations/{PLATFORM_EVENT_SLUG}/"
     logging.info(f"Requesting registrations list from {url}")
-    r = requests.get(url)
+    r = requests.get(url, timeout=PLATFORM_TIMEOUT)
     r.raise_for_status()
     try:
         result = r.json()
@@ -112,7 +116,7 @@ def send_flag_to_checksystem(flag: str):
         return
     try:
         logging.info(f"Trying to submit flag {flag} to the checksystem {CHECKSYSTEM_FLAGS_ENDPOINT}")
-        requests.put(CHECKSYSTEM_FLAGS_ENDPOINT, headers={"X-Team-Token": CHECKSYSTEM_TOKEN}, json=[flag])
+        requests.put(CHECKSYSTEM_FLAGS_ENDPOINT, headers={"X-Team-Token": CHECKSYSTEM_TOKEN}, json=[flag], timeout=CHECKSYSTEM_TIMEOUT)
     except Exception as e:
         logging.warning(f"Can not submit flag to the checksystem: {e}", exc_info=e)
 
