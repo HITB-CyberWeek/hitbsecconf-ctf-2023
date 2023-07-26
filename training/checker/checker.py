@@ -226,12 +226,12 @@ def get(host, flag_id, flag, vuln):
     response.raise_for_status()
 
     if flag in response.text:
-        verdict(OK, "Flag found")
-
         # After successful "get" we can try to hack this team: probably flag is available even without authentication?
         if random.randint(0, HACK_PROBABILITY) == 0:
             time.sleep(random.random() * HACK_SLEEP)
             hack(host, user, flag)
+
+        verdict(OK, "Flag found")
     else:
         logging.debug("Response text: %r", response.text)
         verdict(CORRUPT, "Flag not found")
