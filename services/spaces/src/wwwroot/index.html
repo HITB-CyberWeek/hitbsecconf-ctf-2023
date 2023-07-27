@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>spaces — anonymous chat bins</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" type="text/css"/>
+  <link href="styles.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="stars-container">
+  <div id="stars1"></div>
+  <div id="stars2"></div>
+  <div id="stars3"></div>
+  <div id="title">spaces</div>
+</div>
+<input type="button" id="join" value="Join Space"/>
+<input type="button" id="room" value="Enter Room"/>
+<input type="button" id="generate" value="Gen Profile"/>
+<input type="button" id="msg" value="Send Message"/>
+<input type="button" id="close" value="Close Space"/>
+<span id="space"></span>
+<div id="chat-container">
+  <table id="chat" cellspacing="10px"></table>
+</div>
+<template id="msg-template">
+  <tr>
+    <td title="avatar" class="msg-avatar"><img class="avatar" width="32" height="32"/></td>
+    <td title="avatar" class="msg-content">
+      <div class="msg-name"></div>
+      <div class="msg-date"></div>
+      <div class="msg-text"></div>
+    </td>
+  </tr>
+</template>
+<script src="scripts.js"></script>
+</body>
+</html>
