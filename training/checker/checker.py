@@ -216,10 +216,10 @@ def get(host, flag_id, flag, vuln):
     logging.debug("Response cookies: %s ...", dict(cookies))
 
     if MAIN_COOKIE not in response.cookies:
-        verdict(MUMBLE, "Cookie %r not set".format(MAIN_COOKIE))
+        verdict(MUMBLE, "Cookie {!r} not set".format(MAIN_COOKIE))
 
     if SIGN_COOKIE not in response.cookies:
-        verdict(MUMBLE, "Cookie %r not set".format(SIGN_COOKIE))
+        verdict(MUMBLE, "Cookie {!r} not set".format(SIGN_COOKIE))
 
     logging.info("Getting user data ...")
     response = requests.get(url, cookies=cookies)
@@ -232,9 +232,9 @@ def get(host, flag_id, flag, vuln):
             hack(host, user, flag)
 
         verdict(OK, "Flag found")
-    else:
-        logging.debug("Response text: %r", response.text)
-        verdict(CORRUPT, "Flag not found")
+
+    logging.debug("Response text: %r", response.text)
+    verdict(CORRUPT, "Flag not found")
 
 
 def hack(host, user, flag):
@@ -290,10 +290,7 @@ def main(args):
     except ConnectionRefusedError as E:
         verdict(DOWN, "Connect refused", "Connect refused: %s" % E)
     except ConnectionError as E:
-        if RECEIVED_SOMETHING:
-            verdict(MUMBLE, "Connection aborted", "Connection aborted: %s" % E)
-        else:
-            verdict(DOWN, "Connection aborted (no data received)", "Connection aborted (no data received): %s" % E)
+        verdict(MUMBLE, "Connection aborted", "Connection aborted: %s" % E)
     except OSError as E:
         verdict(DOWN, "Connect error", "Connect error: %s" % E)
     except Exception as E:
