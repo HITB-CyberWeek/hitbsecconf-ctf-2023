@@ -49,7 +49,7 @@ def verdict(exit_code, public="", private=""):
 def info():
     verdict(OK, "\n".join([
         "vulns: 1",
-        "public_flag_description: Flag ID is 'Username', flag is 'Flag'."
+        "public_flag_description: Flag ID is 'Username', flag is a password for some web-site."
     ]))
 
 
