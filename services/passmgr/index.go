@@ -1,4 +1,4 @@
-// Modes for index.go.html
+// Models for index.go.html
 
 package main
 

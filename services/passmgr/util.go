@@ -1,8 +1,9 @@
 package main
 
 import (
+	"crypto/rand"
 	"fmt"
-	"math/rand"
+	"math/big"
 	"os"
 	"strings"
 
@@ -11,12 +12,16 @@ import (
 
 var charset = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
-func randomString(length int) string {
+func randomString(length int) (string, error) {
 	b := make([]rune, length)
 	for i := range b {
-		b[i] = charset[rand.Intn(len(charset))]
+		idx, err := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
+		if err != nil {
+			return "", err
+		}
+		b[i] = charset[idx.Int64()]
 	}
-	return string(b)
+	return string(b), nil
 }
 
 func cookieDomain(c *gin.Context) string {
