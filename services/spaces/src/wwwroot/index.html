@@ -13,14 +13,23 @@
   <div id="stars3"></div>
   <div id="title">spaces</div>
 </div>
-<input type="button" id="join" value="Join Space"/>
-<input type="button" id="room" value="Enter Room"/>
-<input type="button" id="generate" value="Gen Profile"/>
-<input type="button" id="msg" value="Send Message"/>
-<input type="button" id="close" value="Close Space"/>
-<span id="space"></span>
-<div id="chat-container">
-  <table id="chat" cellspacing="10px"></table>
+<div class="grid">
+  <div class="head1">
+    <button id="join"><span>Join Space</span></button>
+    <button id="room"><span>Enter Room</span></button>
+    <button id="generate"><span>Gen Profile</span></button>
+    <button id="close"><span>Close Space</span></button>
+  </div>
+  <div class="head2" id="space-id"></div>
+  <div class="center" id="chat-container">
+    <table id="chat" cellspacing="10px"></table>
+  </div>
+  <div class="foot1">
+    <textarea class="text" maxlength="1024" disabled></textarea>
+  </div>
+  <div class="foot2">
+    <button id="msg" disabled><span>Send Message</span></button>
+  </div>
 </div>
 <template id="msg-template">
   <tr>

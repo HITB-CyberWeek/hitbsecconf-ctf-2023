@@ -1,13 +1,20 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using spaces;
 
 var builder = WebApplication
     .CreateBuilder(args);
 
 builder.WebHost
-    .UseKestrel(options => { options.ListenLocalhost(5000); })
-    .UseShutdownTimeout(TimeSpan.FromSeconds(3));
+    .UseKestrel(options =>
+    {
+        options.ListenLocalhost(5000);
+        options.Limits.MaxRequestBodySize = 0L;
+        options.Limits.MaxRequestHeadersTotalSize = 8192;
+        options.Limits.MinRequestBodyDataRate = new MinDataRate(1024.0, TimeSpan.FromSeconds(3));
+    })
+    .UseShutdownTimeout(TimeSpan.FromSeconds(5));
 
 builder.Services
     .AddDataProtection()
@@ -22,6 +29,8 @@ builder.Services
     });
 
 var app = builder.Build();
+
+app.Lifetime.ApplicationStopping.Register(WsHandler.CloseConnections);
 
 app
     .UseDefaultFiles()
@@ -39,7 +48,7 @@ app.Map("/ws", async ctx =>
     }
 
     using var webSocket = await ctx.WebSockets.AcceptWebSocketAsync();
-    await WebSocketHandler.MessageLoopAsync(webSocket, ctx.User.FindUserId(), ctx.RequestAborted);
+    await WsHandler.MessageLoopAsync(webSocket, ctx.User.FindUserId(), ctx.RequestAborted);
 });
 
 app.Run();

@@ -6,8 +6,14 @@ using CommunityToolkit.HighPerformance.Buffers;
 
 namespace spaces;
 
-internal static class WebSocketHandler
+internal static class WsHandler
 {
+    public static void CloseConnections() => Task.WhenAll(Connections.Select(async conn =>
+    {
+        try { await conn.Key.CloseAsync(WebSocketCloseStatus.NormalClosure, null, CancellationToken.None); }
+        catch { /* ignored */ }
+    })).Wait(TimeSpan.FromSeconds(3));
+
     public static async Task MessageLoopAsync(WebSocket ws, Guid userId, CancellationToken cancel)
     {
         var conn = new Connection(ws, userId);
@@ -34,15 +40,8 @@ internal static class WebSocketHandler
                     continue;
                 continuation = true;
             }
-            catch
-            {
-                break;
-            }
-            finally
-            {
-                if(!continuation)
-                    buffer.Dispose();
-            }
+            catch { break; }
+            finally { if(!continuation) buffer.Dispose(); }
 
             _ = Task.Run(async () =>
             {
@@ -53,14 +52,8 @@ internal static class WebSocketHandler
                         return;
                     await conn.ExecuteCommandAsync(cmd, cancel);
                 }
-                catch
-                {
-                    await conn.TrySendErrorAsync("Failed to process command", cancel);
-                }
-                finally
-                {
-                    buffer.Dispose();
-                }
+                catch { await conn.TrySendErrorAsync("Failed to process command", cancel); }
+                finally { buffer.Dispose(); }
             }, cancel);
         }
 
