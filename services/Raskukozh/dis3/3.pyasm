@@ -1,0 +1,209 @@
+# pydisasm version 6.0.5
+# Python bytecode 3.8.0 (3413)
+# Disassembled from Python 3.8.17 (default, Jul  4 2023, 06:27:59) 
+# [GCC 12.2.0]
+# Timestamp in code: 1690905941 (2023-08-01 16:05:41)
+# Source code size mod 2**32: 320 bytes
+
+# Method Name:       five
+# Filename:          1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  0
+# Stack size:        1
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        1
+# Constants:
+#    0: None
+#    1: 5
+  2:
+            LOAD_CONST           1 (5)
+            RETURN_VALUE
+
+
+# Method Name:       BBB
+# Filename:          1.py
+# Argument count:    3
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  5
+# Stack size:        3
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        4
+# Constants:
+#    0: None
+#    1: 10
+#    2: 5
+#    3: 1
+#    4: 3
+#    5: 100
+#    6: 0
+# Names:
+#    0: print
+#    1: five
+#    2: range
+# Varnames:
+#	a, s, b, c, i
+# Positional arguments:
+#	a, s, b
+# Local variables:
+#    3: c
+#    4: i
+  5:
+            LOAD_GLOBAL          0 (print)
+            LOAD_GLOBAL          1 (five)
+            CALL_FUNCTION        0
+            CALL_FUNCTION        1
+            POP_TOP
+
+  6:
+            LOAD_CONST           1 (10)
+            STORE_FAST           0 (a)
+
+  7:
+            LOAD_FAST            0 (a)
+            LOAD_CONST           2 (5)
+            BINARY_SUBTRACT
+            STORE_FAST           0 (a)
+
+  8:
+            LOAD_FAST            0 (a)
+            LOAD_CONST           2 (5)
+            BINARY_MULTIPLY
+            STORE_FAST           0 (a)
+
+  9:
+            LOAD_GLOBAL          0 (print)
+            LOAD_FAST            0 (a)
+            CALL_FUNCTION        1
+            POP_TOP
+
+ 11:
+            LOAD_CONST           3 (1)
+            STORE_FAST           0 (a)
+
+ 12:
+            LOAD_CONST           4 (3)
+            STORE_FAST           3 (c)
+
+ 13:
+            LOAD_GLOBAL          2 (range)
+            LOAD_CONST           1 (10)
+            CALL_FUNCTION        1
+            GET_ITER
+L54:
+            FOR_ITER             L68 (to 68)
+            STORE_FAST           4 (i)
+
+ 14:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            4 (i)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+            JUMP_ABSOLUTE        L54 (to 54)
+
+L68:
+  16:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           5 (100)
+            COMPARE_OP           0 (<)
+            POP_JUMP_IF_FALSE    L94 (to 94)
+
+ 17:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 18:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+            JUMP_ABSOLUTE        L68 (to 68)
+
+L94:
+  19:
+            LOAD_FAST            0 (a)
+            LOAD_CONST           6 (0)
+            COMPARE_OP           5 (>=)
+            POP_JUMP_IF_FALSE    L118 (to 118)
+            LOAD_FAST            3 (c)
+            LOAD_CONST           4 (3)
+            COMPARE_OP           2 (==)
+            POP_JUMP_IF_FALSE    L118 (to 118)
+
+ 20:
+            LOAD_FAST            0 (a)
+            STORE_FAST           2 (b)
+
+ 21:
+            LOAD_CONST           0 (None)
+            RETURN_VALUE
+
+L118:
+  23:
+            LOAD_FAST            0 (a)
+            UNARY_NEGATIVE
+            STORE_FAST           2 (b)
+
+ 24:
+            LOAD_CONST           0 (None)
+            RETURN_VALUE
+
+
+# Method Name:       <module>
+# Filename:          1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  0
+# Stack size:        2
+# Flags:             0x00000040 (NOFREE)
+# First Line:        1
+# Constants:
+#    0: <Code38 code object five at 0x7fa5d36048e0, file 1.py>, line 1
+#    1: 'five'
+#    2: <Code38 code object BBB at 0x7fa5d3604a00, file 1.py>, line 4
+#    3: 'BBB'
+#    4: 'a'
+#    5: 'b'
+#    6: None
+# Names:
+#    0: five
+#    1: BBB
+#    2: print
+#    3: b
+  1:
+            LOAD_CONST           0 (<Code38 code object five at 0x7fa5d36048e0, file 1.py>, line 1)
+            LOAD_CONST           1 ('five')
+            MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
+            STORE_NAME           0 (five)
+
+  4:
+            LOAD_CONST           2 (<Code38 code object BBB at 0x7fa5d3604a00, file 1.py>, line 4)
+            LOAD_CONST           3 ('BBB')
+            MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
+            STORE_NAME           1 (BBB)
+
+ 25:
+            LOAD_NAME            2 (print)
+            LOAD_NAME            3 (b)
+            CALL_FUNCTION        1
+            POP_TOP
+
+ 26:
+            LOAD_NAME            2 (print)
+            LOAD_CONST           4 ('a')
+            CALL_FUNCTION        1
+            POP_TOP
+
+ 27:
+            LOAD_NAME            2 (print)
+            LOAD_CONST           5 ('b')
+            CALL_FUNCTION        1
+            POP_TOP
+            LOAD_CONST           6 (None)
+            RETURN_VALUE
+
