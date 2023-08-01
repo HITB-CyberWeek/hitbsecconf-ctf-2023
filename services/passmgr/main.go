@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"net/http"
 	"time"
 
@@ -101,7 +100,14 @@ func handleLogin(c *gin.Context) {
 		return
 	}
 
-	cookieValue := randomString(32)
+	cookieValue, err := randomString(32)
+	if err != nil {
+		c.HTML(http.StatusOK, template, gin.H{
+			"Error": "Session generation error",
+		})
+		return
+	}
+
 	db.Create(&Session{
 		Cookie: cookieValue,
 		User:   user,
@@ -226,10 +232,6 @@ func sessionCleaner() {
 }
 
 func main() {
-
-	// Init random number generator
-
-	rand.Seed(time.Now().UnixNano())
 
 	// Open db connection
 
