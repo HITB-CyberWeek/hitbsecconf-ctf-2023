@@ -14,6 +14,84 @@ body {
   font-weight: 300;
 }
 
+textarea:disabled, button:disabled {
+  opacity: 0.3;
+}
+
+textarea, button {
+  color: #fff;
+  border: 1px solid #777;
+  border-radius: 6px;
+  padding: 4px 8px 4px 8px;
+  font-size: 1.4em;
+  font-family: 'lato', sans-serif;
+  font-weight: 300;
+}
+textarea {
+  background: #282c31;
+  box-shadow: #abb7c3 0 0 15px;
+}
+button {
+  background:linear-gradient(to bottom, #282c31 5%, #393f47 100%);
+  box-shadow: #858f99 2px 2px 8px;
+}
+button:active {
+  box-shadow: #abb7c3 0 0 15px;
+}
+button:active span {
+  top: 1px;
+  left: 1px;
+  position: relative;
+}
+
+.grid {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template:
+    "head1 head2" 50px
+    "center center" auto
+    "foot1 foot2" 100px / auto 250px;
+  column-gap: 10px;
+  row-gap: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.head1 {
+  grid-area: head1;
+}
+.head2 {
+  grid-area: head2;
+  justify-self: right;
+}
+.center {
+  grid-area: center;
+}
+.foot1 {
+  grid-area: foot1;
+}
+.foot2 {
+  grid-area: foot2;
+  justify-self: right;
+  width: 100%;
+}
+
+.text {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#space-id {
+  margin-right: 10px;
+  float:right;
+  font-size: 32px;
+  background: linear-gradient(white, #435669);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 #stars-container {
   z-index: -1000;
   position: absolute;
@@ -80,13 +158,13 @@ body {
   top: 50%;
   left: 0;
   right: 0;
-  color: #FFF;
+  color: #fff;
   text-align: center;
   font-family: "lato", sans-serif;
   font-weight: 300;
-  font-size: 60px;
+  font-size: 80px;
   letter-spacing: 10px;
-  margin-top: -60px;
+  margin-top: -50px;
   padding-left: 10px;
   pointer-events: none;
   z-index: -100;
@@ -118,9 +196,16 @@ img {
 }
 
 .msg-content {
-  background: #22222299;
+  background: #4f453099;
   border-radius: 6px;
   padding: 4px 8px 6px 8px;
+  width: 100%;
+}
+.msg-content.system {
+  color: #f77;
+}
+.msg-content.aux {
+  color: #dd7;
 }
 
 .msg-date {
@@ -161,4 +246,9 @@ img {
   border: 3px solid transparent;
   background-clip: content-box;
   background-color: #7777;
+}
+
+button#msg {
+  width:100%;
+  height: 100%;
 }

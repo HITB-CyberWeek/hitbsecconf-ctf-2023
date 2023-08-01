@@ -5,18 +5,32 @@ Map.prototype.getOrAdd = function(key, promise) {
   return !value ? promise.then(val => this[key] = val) : Promise.resolve(value);
 }
 
+const $space = document.getElementById('space-id');
+const $msg = document.querySelector('button#msg');
+const $text = document.querySelector('textarea');
+
 document.getElementById('generate').onclick = () => ws.send(JSON.stringify({type: 'generate'}));
 document.getElementById('join').onclick = () => ws.send(JSON.stringify({type: 'join', data: prompt("Enter space id")}));
 document.getElementById('room').onclick = () => ws.send(JSON.stringify({type: 'room', data: prompt("Enter room name")}));
-document.getElementById('msg').onclick = () => ws.send(JSON.stringify({type: 'msg', data: prompt("Enter text")}));
+document.getElementById('msg').onclick = () => {
+  if(!!$text.value?.length) {
+    ws.send(JSON.stringify({type: 'msg', data: $text.value}));
+    $text.value = "";
+  }
+}
 document.getElementById('close').onclick = () => ws.send(JSON.stringify({type: 'close'}));
 
-const chat = document.getElementById('chat');
+const $container = document.getElementById('chat-container');
+const $chat = document.getElementById('chat');
 const add = (msg) => {
   if(!msg) return;
 
-  if(msg.type === 'join')
-    document.getElementById('space').textContent = msg.context || '';
+  if(msg.type === 'join' && msg.context?.length) {
+    $chat.replaceChildren();
+    $space.textContent = msg.context;
+    $text.disabled = false;
+    $msg.disabled = false;
+  }
 
   const avatar = msg.avatar;
   (!avatar ? Promise.resolve() : avatars.getOrAdd(avatar, toBlob(avatar).then(blob => URL.createObjectURL(blob)))).then(url => {
@@ -30,8 +44,11 @@ const add = (msg) => {
     template.querySelector('.msg-name').textContent = msg.author;
     template.querySelector('.msg-text').textContent = msg.text;
     template.querySelector('.avatar').src = url || 'default.png';
-    const clone = document.importNode(template, true);
-    chat.prepend(clone); // TODO: bin search + order by time
+    template.querySelector('.msg-content').classList[msg.type === 'error' ? "add" : "remove"]('system');
+    template.querySelector('.msg-content').classList[msg.type !== 'msg' && msg.type !== 'error' ? "add" : "remove"]('aux');
+    const $clone = document.importNode(template, true);
+    $chat.append($clone); // TODO: bin search + order by time
+    $container.scrollTop = $container.scrollHeight;
   });
 }
 
