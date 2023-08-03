@@ -18,7 +18,7 @@ fi
 export CERTIFICATES_FOLDER=/home/router/certificates
 export DO_API_TOKEN="$(cat /home/router/do_api_token)"
 
-# I didn't find a better way to find the team id: just look on OpenVPN config,
+# I didn't find a better way to find the team id: just look at OpenVPN config,
 # if it's called /etc/openvpn/game_network_team152.conf, then it's a router of Team 152.
 team_id=$(find /etc/openvpn/game_network_team*.conf | sed -e s/[^0-9]//g)
 
