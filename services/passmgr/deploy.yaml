@@ -23,7 +23,7 @@ proxies:
   - name: main
     listener:
       protocol: http
-      certificate: wildcard.training.ctf.hitb.org
+      certificate: wildcard.ctf.hitb.org
     upstream:
       host_index: 3
       port: 80

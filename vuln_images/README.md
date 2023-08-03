@@ -178,4 +178,15 @@ don't forget to commit and deploy it.
    - `PROXY_SSH_KEY` — path to SSH key for connecting to proxies
    - `PROXY_CERTIFICATES` — list of TLS certificates (see example)
    - Other variables if their default values are wrong
-4. Run `python3 deploy_proxies.py [--skip-preparation] ../services/<service-name>/deploy.yaml`
+4. Get the API Token for Digital Ocean: https://cloud.digitalocean.com/settings/applications
+5. Export environment variable `$DO_API_TOKEN` or put it into `.env` file:
+```dotenv
+DO_API_TOKEN=<...>
+```
+6. Run `python3 deploy_proxies.py [--skip-preparation] ../services/<service-name>/deploy.yaml`
+
+You can also deploy proxies on current machine, not remote one. In this case:
+1. Ignore option `PROXY_SSH_KEY` in `settings.py`, because we will not use SSH for connection to the proxy machine
+2. Run `python3 deploy_proxies.py [--skip-preparation] --local --team-id <TEAM_ID> ../services/<service-name>/deploy.yaml`
+
+_See routes/deploy_local_proxies.sh as an example how we deploy all proxies to the local machine._

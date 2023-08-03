@@ -14,7 +14,7 @@ class LocalConnection:
     Syntax is the same as with asyncssh.create_connection(), look:
 
     async with asyncssh.create_connection() as connection:
-        await connection.ssh("rm -rf /", check=True)
+        await connection.run("rm -rf /", check=True)
 
     async with LocalConnection() as connection:
         await connection.run("rm -rf /", check=True)
