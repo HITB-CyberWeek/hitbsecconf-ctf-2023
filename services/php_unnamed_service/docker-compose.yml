@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+    keys:
+      restart: unless-stopped
+      build: ./keys
+      expose:
+        - "9000:9000"
+
+    nginx:
+      restart: unless-stopped
+      build: ./nginx
+      ports:
+        - "8000:80"
+      links:
+        - keys
