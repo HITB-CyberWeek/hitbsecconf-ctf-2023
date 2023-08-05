@@ -1,4 +1,4 @@
-name: Check kv service
+name: Check keys service
 on: [push, pull_request]
 jobs:
   run_tests:
