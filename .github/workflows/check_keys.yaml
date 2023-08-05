@@ -1,0 +1,24 @@
+name: Check kv service
+on: [push, pull_request]
+jobs:
+  run_tests:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+    - name: Build and run service
+      run: |
+          cd services/php_unnamed_service
+          docker compose build
+          docker compose up -d
+    - name: Install checker reqirements
+      run: |
+          cd checkers/keys
+          pip3 install -r requirements.txt
+    - name: Check service
+      run: |
+          cd checkers/keys
+          ./check_check.sh 100

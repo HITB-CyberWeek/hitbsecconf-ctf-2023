@@ -1,0 +1,3 @@
+# Requirements for keys service checker
+
+requests==2.31.0
