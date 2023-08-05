@@ -53,6 +53,7 @@ def check(args):
 
 @checker_action
 def put(args):
+    flag_id = args[1]
     verdict(OK, flag_id)
 
 
