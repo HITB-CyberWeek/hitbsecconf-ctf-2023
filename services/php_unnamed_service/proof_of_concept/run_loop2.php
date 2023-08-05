@@ -2,15 +2,18 @@
 <?php
 
 $PRIVATE_PREFIX_HEX = "308204be020100300d06092a864886f70d0101010500048204a8308204a402010002820101";
-$HEX_CHARS = ['e','0','4','1','2','3','5','6','7','8','9','a','b','c','d','f'];
+$A = ['d', 'c', 'e', 'f', 'b', 'a'];
+$B = ['7', '6', '8', '9', '5', '4'];
+$C = ['3'];
+$D = ['0'];
+$E = ['3', '2', '4', '5', '1', '0'];
 $ITERATIONS = 1000;
 
 
-function fake_private_keys($public_key, $private_key, &$stat) {
+function fake_private_key($public_key, $private_key) {
     global $PRIVATE_PREFIX_HEX;
     global $HEX_CHARS;
-
-    $hash = password_hash($private_key, PASSWORD_DEFAULT);
+    global $A, $B, $C, $D, $E;
 
     $public_key = str_replace('-----BEGIN PUBLIC KEY-----', '', $public_key);
     $public_key = str_replace('-----END PUBLIC KEY-----', '', $public_key);
@@ -30,17 +33,17 @@ function fake_private_keys($public_key, $private_key, &$stat) {
     $fake_private_key = $private_prefix_hex . $modulus;
     $hex_chars = $HEX_CHARS;
     //shuffle($hex_chars); // I'm lucky!
-    foreach($hex_chars as $a) {
+    foreach($A as $a) {
         $fake_private_key[7] = $a;
         // echo "|";
-        foreach($hex_chars as $b) {
+        foreach($B as $b) {
             $fake_private_key[51] = $b;
-            foreach($hex_chars as $c) {
+            foreach($C as $c) {
                 $fake_private_key[52] = $c;
                 // echo "/";
-                foreach($hex_chars as $d) {
+                foreach($D as $d) {
                     $fake_private_key[53] = $d;
-                    foreach($hex_chars as $e) {
+                    foreach($E as $e) {
                         $fake_private_key[59] = $e;
 
                         // print ">>>>>>>>>\n";
@@ -50,9 +53,7 @@ function fake_private_keys($public_key, $private_key, &$stat) {
                         // array_push($res, $fake_private_key);
 
                         if (substr($private_key, 0, 72) == substr($fake_private_key_pem, 0, 72)) {
-                            $key = implode('_', [$a, $b, $c, $d, $e]);
-                            $stat[$key] = ($stat[$key] ?? 0) + 1;
-                            return;
+                            return $fake_private_key_pem;
                         }
 
                         // if (password_verify($fake_private_key_pem, $hash)) {
@@ -67,10 +68,10 @@ function fake_private_keys($public_key, $private_key, &$stat) {
         }
     }
 
-    $stat['not_found'] = ($stat['not_found'] ?? 0) + 1;
-
     unpack_key($private_key);
     unpack_key($fake_private_key_pem);
+
+    return NULL;
 
     // $fake_private_key = $PRIVATE_PREFIX_HEX . $modulus;
     // print ">>>>>>>>>\n";
@@ -106,19 +107,30 @@ function main() {
 
     // unpack_key($private_key_pem);
 
-    $stat = [];
-    for ($i = 0; $i < $ITERATIONS; $i++) {
+    $i = 0;
+    while (TRUE) {
         $private_key = openssl_pkey_new($config);
         openssl_pkey_export($private_key, $private_key_pem);
         $public_key_pem = openssl_pkey_get_details($private_key)['key'];
 
         echo "ITERATION: $i\n";
         flush();
+        $i++;
 
-        fake_private_keys($public_key_pem, $private_key_pem, $stat);
+        $fake_private_key_pem = fake_private_key($public_key_pem, $private_key_pem);
+        if (is_null($fake_private_key_pem)) {
+            break;
+        }
+
+        // CHECK ONE MORE TIME
+
+        $hash = password_hash($private_key_pem, PASSWORD_DEFAULT);
+        if (!password_verify($fake_private_key_pem, $hash)) {
+            echo "ALARM!!!11";
+            break;
+        }
+
     }
-
-    print_r($stat);
 
     // $found = FALSE;
     // $count = 0;
