@@ -4,26 +4,6 @@ namespace spaces;
 
 internal static class AvatarGen
 {
-    private static readonly byte[,] Mask16 =
-    {
-        { 0, 0, 0, 0, 0, 0, 0, 0 },
-        { 0, 0, 0, 0, 4, 4, 4, 4 },
-        { 0, 0, 0, 1, 1, 1, 4, 4 },
-        { 0, 0, 1, 1, 1, 1, 1, 1 },
-        { 0, 0, 1, 1, 1, 1, 1, 1 },
-        { 0, 0, 1, 1, 2, 2, 1, 1 },
-        { 0, 0, 1, 1, 2, 2, 1, 1 },
-        { 0, 1, 1, 1, 1, 1, 1, 1 },
-        { 0, 1, 1, 1, 1, 1, 1, 1 },
-        { 0, 1, 1, 1, 1, 1, 1, 1 },
-        { 0, 0, 1, 1, 1, 3, 3, 3 },
-        { 0, 0, 1, 1, 1, 3, 3, 3 },
-        { 0, 0, 1, 1, 1, 1, 1, 1 },
-        { 0, 0, 0, 1, 1, 1, 5, 5 },
-        { 0, 0, 0, 0, 0, 5, 5, 5 },
-        { 0, 0, 0, 0, 0, 0, 0, 0 },
-    };
-
     private static readonly byte[,] Mask8 =
     {
         { 0, 0, 0, 0 },
@@ -34,6 +14,37 @@ internal static class AvatarGen
         { 0, 1, 1, 1 },
         { 0, 0, 1, 5 },
         { 0, 0, 0, 0 },
+    };
+
+    private static readonly Dictionary<char, string> ColorNames = new()
+    {
+        {'0', "White"},
+        {'A', "Amethyst"},
+        {'B', "Blue"},
+        {'C', "Caramel"},
+        {'D', "Damson"},
+        {'E', "Ebony"},
+        {'F', "Forest"},
+        {'G', "Green"},
+        {'H', "Honeydew"},
+        {'I', "Iron"},
+        {'J', "Jade"},
+        {'K', "Khaki"},
+        {'L', "Lime"},
+        {'M', "Mallow"},
+        {'N', "Navy"},
+        {'O', "Orpiment"},
+        {'P', "Pink"},
+        {'Q', "Quagmire"},
+        {'R', "Red"},
+        {'S', "Sky"},
+        {'T', "Turquoise"},
+        {'U', "Uranium"},
+        {'V', "Violet"},
+        {'W', "Wine"},
+        {'X', "Xanthin"},
+        {'Y', "Yellow"},
+        {'Z', "Zinnia"},
     };
 
     private static readonly byte[,] Mask = Mask8;
@@ -49,14 +60,14 @@ internal static class AvatarGen
     private static readonly char[] Colors = Enumerable.Range(0, 26).Select(c => (char)(c + 'A')).Where(c => c != Black).ToArray();
 
     public const string SystemName = "System";
-    public static readonly string SystemAvatar = new Random(31337).CreateAvatar();
+    public static readonly string SystemAvatar = new Random(31337).CreateAvatar(out _);
 
-    public static string CreateAvatar(this Random rnd)
+    public static string CreateAvatar(this Random rnd, out string color)
     {
         var buffer = ArrayPool<char>.Shared.Rent(Size * Size);
         try
         {
-            rnd.FillAvatar(buffer);
+            rnd.FillAvatar(buffer, out color);
             return new string(buffer);
         }
         finally
@@ -65,9 +76,10 @@ internal static class AvatarGen
         }
     }
 
-    private static void FillAvatar(this Random rnd, char[] array)
+    private static void FillAvatar(this Random rnd, char[] array, out string baseColor)
     {
         var palette = rnd.GetItems(Colors, 6);
+        baseColor = ColorNames[palette[1]];
         palette[0] = White;
 
         for(int y = 0; y < MaskHeight; y++)

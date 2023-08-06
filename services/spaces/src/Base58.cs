@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace spaces;
+﻿namespace spaces;
 
 internal static class Base58
 {
@@ -13,7 +11,7 @@ internal static class Base58
 
     public static string ToBase58(this ulong value)
     {
-        Span<char> buffer = stackalloc char[UInt64MaxLength];
+        Span<char> buffer = stackalloc char[11];
 
         int index = 0;
         while(value > 0)
@@ -28,10 +26,10 @@ internal static class Base58
     public static bool TryDecodeUInt64(string value, out ulong result)
     {
         result = 0UL;
-        if(string.IsNullOrEmpty(value) || value.Length > UInt64MaxLength)
+        if(string.IsNullOrEmpty(value))
             return false;
 
-        ulong tmp = 0UL;
+        ulong tmp = 0UL, mul = 1UL;
         for(int i = 0; i < value.Length; i++)
         {
             var c = value[i];
@@ -40,17 +38,19 @@ internal static class Base58
             if(digit == ulong.MaxValue)
                 return false;
 
-            try { checked { tmp += digit * Multipliers[i]; } }
-            catch(OverflowException) { return false; }
+            tmp += digit * mul;
+            mul *= Base;
         }
 
         result = tmp;
         return true;
     }
 
-    private const int UInt64MaxLength = 11;
+    public static bool IsBase58Alphabet(this string value)
+        => value.All(Alphabet.Contains);
+
     private static readonly char[] Digits = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".ToCharArray();
+    private static readonly HashSet<char> Alphabet = new(Digits);
     private static readonly ulong[] Values = new ulong[Digits.Max() + 1];
     private static readonly ulong Base = (ulong)Digits.Length;
-    private static readonly ulong[] Multipliers = Enumerable.Range(0, UInt64MaxLength).Select(idx => (ulong)BigInteger.Pow(Base, idx)).ToArray();
 }

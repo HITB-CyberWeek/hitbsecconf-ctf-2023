@@ -8,17 +8,27 @@ Map.prototype.getOrAdd = function(key, promise) {
 const $space = document.getElementById('space-id');
 const $msg = document.querySelector('button#msg');
 const $text = document.querySelector('textarea');
+const $gen = document.getElementById('generate');
+const $join = document.getElementById('join');
+const $room = document.getElementById('room');
+const $close = document.getElementById('close');
 
-document.getElementById('generate').onclick = () => ws.send(JSON.stringify({type: 'generate'}));
-document.getElementById('join').onclick = () => ws.send(JSON.stringify({type: 'join', data: prompt("Enter space id")}));
-document.getElementById('room').onclick = () => ws.send(JSON.stringify({type: 'room', data: prompt("Enter room name")}));
-document.getElementById('msg').onclick = () => {
+$gen.onclick = () => ws.send(JSON.stringify({type: 'generate'}));
+$join.onclick = () => {
+  $chat.replaceChildren();
+  ws.send(JSON.stringify({type: 'join', data: prompt("Enter space id")}));
+}
+$room.onclick = () => {
+  $chat.replaceChildren();
+  ws.send(JSON.stringify({type: 'room', data: prompt("Enter room name")}));
+}
+$msg.onclick = () => {
   if(!!$text.value?.length) {
     ws.send(JSON.stringify({type: 'msg', data: $text.value}));
     $text.value = "";
   }
 }
-document.getElementById('close').onclick = () => ws.send(JSON.stringify({type: 'close'}));
+$close.onclick = () => ws.send(JSON.stringify({type: 'close'}));
 
 const $container = document.getElementById('chat-container');
 const $chat = document.getElementById('chat');
@@ -26,10 +36,11 @@ const add = (msg) => {
   if(!msg) return;
 
   if(msg.type === 'join' && msg.context?.length) {
-    $chat.replaceChildren();
+    //$chat.replaceChildren();
     $space.textContent = msg.context;
     $text.disabled = false;
     $msg.disabled = false;
+    $gen.disabled = true;
   }
 
   const avatar = msg.avatar;
@@ -52,7 +63,7 @@ const add = (msg) => {
   });
 }
 
-var ws = new WebSocket(`ws://${location.host}/ws`);
+let ws = new WebSocket(`ws://${location.host}/ws`);
 ws.onmessage = msg => add(JSON.parse(msg.data));
 
 // Colour Alphabet: https://eleanormaclure.files.wordpress.com/2011/03/colour-coding.pdf

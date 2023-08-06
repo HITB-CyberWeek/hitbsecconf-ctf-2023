@@ -8,7 +8,6 @@ internal enum MsgType
     Generate,
     Close,
     Join,
-    Leave,
     Room,
     Msg
 }
