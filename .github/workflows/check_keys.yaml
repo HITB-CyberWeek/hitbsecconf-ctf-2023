@@ -22,3 +22,11 @@ jobs:
       run: |
           cd checkers/keys
           ./check_check.sh 100
+    - name: Prepare to hack service
+      run: |
+          sudo apt-get update
+          sudo apt-get install -y php-cli
+    - name: Hack service
+      run: |
+          cd sploits/keys
+          ./hack_hack.sh 100
