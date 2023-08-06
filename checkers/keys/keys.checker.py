@@ -58,14 +58,15 @@ def put(args):
     if len(args) != 4:
         verdict(CHECKER_ERROR, "Checker error", "Wrong args count for put()")
     host, flag_id, flag, vuln = args
+    login = get_random_string(10, 20)
 
     url = url_prefix(host)
     url = f'{url}/generate.php'
 
-    trace(f"put0({url}, {flag_id}, {flag}, {vuln})")
+    trace(f"put0({url}, {flag_id}, {flag}, {vuln}, {login})")
 
     form_data = {
-        'login': flag_id,
+        'login': login,
         'comment': flag,
     }
 
@@ -83,9 +84,10 @@ def put(args):
     public_key = m.group(1)
 
     ret = json.dumps({
-        "public_flag_id": flag_id,
+        "public_flag_id": login,
         "public_key": public_key,
         "private_key": private_key,
+        "orig_flag_id": flag_id,
     })
 
     verdict(OK, ret)
