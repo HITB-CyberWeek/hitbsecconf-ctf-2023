@@ -45,6 +45,35 @@ internal static class EnumerableHelper
     {
         yield return item;
     }
+
+    public static async IAsyncEnumerable<T> TakeHeadAndTail<T>(this IAsyncEnumerable<T> enumerable, int first, int last, Func<int, IEnumerable<T>> replace)
+    {
+        int count = 0, skipped = 0;
+        var queue = new Queue<T>(last);
+        await foreach(var item in enumerable)
+        {
+            if(++count <= first)
+                yield return item;
+            else
+            {
+                if(queue.Count == last)
+                {
+                    queue.Dequeue();
+                    skipped++;
+                }
+                queue.Enqueue(item);
+            }
+        }
+
+        if(skipped > 0)
+        {
+            foreach(var item in replace(skipped))
+                yield return item;
+        }
+
+        foreach(var item in queue)
+            yield return item;
+    }
 }
 
 internal static class StringHelper

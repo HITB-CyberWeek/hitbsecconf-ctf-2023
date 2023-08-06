@@ -28,7 +28,7 @@ internal static class WsHandler
         conn.State = state;
         Connections[ws] = conn;
 
-        await conn.JoinAsync(state, cancel);
+        await conn.JoinAsync(state, true, cancel);
 
         while(!cancel.IsCancellationRequested && ws.State == WebSocketState.Open)
         {
@@ -147,48 +147,32 @@ internal static class WsHandler
 
         ulong space;
         if(value == null)
+            Storage.CreateSpace((space = conn.RndSpace()).ToBase58());
+        else if(!ContextHelper.TryParseSpace(value, out space) || !Storage.IsSpaceExists(value) || !Storage.HasAccess(value, conn.UserId))
         {
-            space = conn.RndSpace();
-            Storage.CreateSpace(space.ToBase58());
-        }
-        else
-        {
-            if(!ContextHelper.TryParseSpace(value, out space))
-            {
-                await conn.TrySendErrorAsync("Invalid space", cancel);
-                return;
-            }
-
-            if(!Storage.IsSpaceExists(value))
-            {
-                await conn.TrySendErrorAsync("Space not exists", cancel);
-                return;
-            }
-
-            if(!Storage.HasAccess(value, conn.UserId))
-            {
-                await conn.TrySendErrorAsync("Space is closed", cancel);
-                return;
-            }
+            await conn.TrySendErrorAsync("Space not exists or invalid or closed", cancel);
+            return;
         }
 
         var user = await Storage.FindUserAsync(conn.UserId, space.ToBase58(), cancel);
         if(user == null)
             await Storage.AddUserToSpaceAsync(space.ToBase58(), conn.UserId, user = conn.State?.User ?? throw new InvalidOperationException(), cancel);
 
-        var ctx = new Context(space, null);
-        var state = new State(ctx, user);
-        conn.State = state;
-
-        await Storage.SaveContextAsync(conn.UserId, ctx, cancel);
-        await conn.JoinAsync(state, cancel);
+        var state = new State(new Context(space, null), user);
+        await conn.JoinAsync(state, false, cancel);
     }
 
-    private static async Task JoinAsync(this Connection conn, State state, CancellationToken cancel)
+    private static async Task JoinAsync(this Connection conn, State state, bool init, CancellationToken cancel)
     {
         var ctx = state.Context;
         if(ctx == null)
             return;
+
+        var old = conn.State?.Context;
+        if(old != ctx)
+            await Storage.SaveContextAsync(conn.UserId, ctx, cancel);
+
+        conn.State = state;
 
         var space = ctx.Space.ToBase58();
         if(ctx.Room != null)
@@ -197,11 +181,8 @@ internal static class WsHandler
         await foreach(var msg in Storage.TryReadMessages(space, ctx.Room, cancel))
             await conn.TrySendMessageAsync(msg, cancel);
 
-        await BroadcastAsync(state, MsgType.Join, $"Joined space '{space}'", cancel);
-        if(ctx.Room == null)
-            return;
-
-        await GetSpaceConnections(ctx.Space).BroadcastAsync(state, MsgType.Room, string.IsNullOrEmpty(ctx.Room) ? $"Returned back to space '{space}' root" : $"Entered room '{ctx.Room}' in space '{space}'", cancel);
+        await GetSpaceConnections(ctx.Space).Where(c => c == conn && init || old?.Space != ctx.Space).BroadcastAsync(state, MsgType.Join, $"Joined space '{space}'", cancel);
+        await GetSpaceConnections(ctx.Space).Where(c => c == conn && init && ctx.Room != null || old?.Room != ctx.Room).BroadcastAsync(state, MsgType.Room, string.IsNullOrEmpty(ctx.Room) ? "Returned back to space root" : $"Entered room '{ctx.Room}'", cancel);
     }
 
     private static async Task JoinRoomAsync(this Connection conn, string? room, CancellationToken cancel)
@@ -210,23 +191,16 @@ internal static class WsHandler
         if(state?.Context == null)
             return;
 
-        room = room?.Trim().NullIfEmpty();
+        room = room?.Trim().ToLower().NullIfEmpty();
         if(!ContextHelper.IsRoomValid(room))
         {
-            await conn.TrySendErrorAsync("Invalid room", cancel);
+            await conn.TrySendErrorAsync("Invalid room, only ascii letters allowed", cancel);
             return;
         }
 
-        var ctx = state.Context with { Room = room };
-        state = state with { Context = ctx };
-        conn.State = state;
-
-        await Storage.SaveContextAsync(conn.UserId, ctx, cancel);
-        await conn.JoinAsync(state, cancel);
+        state = state with { Context = state.Context with { Room = room } };
+        await conn.JoinAsync(state, false, cancel);
     }
-
-    private static async Task BroadcastAsync(State state, MsgType type, string text, CancellationToken cancel)
-        => await GetSpaceConnections(state.Context).BroadcastAsync(state, type, text, cancel);
 
     private static Task BroadcastAsync(this IEnumerable<Connection> connections, State state, MsgType type, string text, CancellationToken cancel) => connections.BroadcastAsync(new Message
     {
@@ -239,9 +213,8 @@ internal static class WsHandler
 
     private static IEnumerable<Connection> GetSpaceConnections(Context? ctx)
         => ctx == null ? Enumerable.Empty<Connection>() : Connections.Select(pair => pair.Value).Where(c => c.State?.Context == ctx);
-
-    private static IEnumerable<Connection> GetSpaceConnections(ulong space)
-        => Connections.Select(pair => pair.Value).Where(c => c.State?.Context?.Space == space);
+    private static IEnumerable<Connection> GetSpaceConnections(ulong? space)
+        => space > 0UL ? Connections.Select(pair => pair.Value).Where(c => c.State?.Context?.Space == space) : Enumerable.Empty<Connection>();
 
     private static Task TrySendErrorAsync(this Connection conn, string text, CancellationToken cancel) => conn.TrySendMessageAsync(new Message
     {
