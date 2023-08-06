@@ -75,12 +75,12 @@ def put(args):
 
     m = PRIVATE_KEY_RE.search(resp.text)
     if not m:
-        verdict(MUMBLE, "No private key", f"Cant find private key in resp:{resp.text}")
+        verdict(MUMBLE, "No private key", f"Cant find private key login:{login}, resp:{resp.text}")
     private_key = m.group(1)
 
     m = PUBLIC_KEY_RE.search(resp.text)
     if not m:
-        verdict(MUMBLE, "No public key", f"Cant find public key in resp:{resp.text}")
+        verdict(MUMBLE, "No public key", f"Cant find public key login:{login}, resp:{resp.text}")
     public_key = m.group(1)
 
     ret = json.dumps({
@@ -114,11 +114,11 @@ def get(args):
 
     m = PUBLIC_KEY_RE.search(resp.text)
     if not m:
-        verdict(MUMBLE, "No public key", f"Cant find public key in resp:{resp.text}")
+        verdict(MUMBLE, "No public key", f"Cant find public key login:{login}, resp:{resp.text}")
     public_key_from_service = m.group(1).strip()
 
     if public_key != public_key_from_service:
-        verdict(CORRUPT, "Cant find public key", f"Cant find public key in resp:{resp.text}")
+        verdict(MUMBLE, "Cant find public key", f"Cant find public key login:{login}, resp:{resp.text}")
 
     url = f'{_url_prefix}/check.php'
     trace("get1(%s, %s, %s, %s)" % (url, flag_id, flag_data, vuln))
