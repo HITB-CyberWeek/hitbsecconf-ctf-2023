@@ -132,10 +132,6 @@ function get_flag($url_prefix, $login, $private_key) {
 
     $flag = $matches[1];
     return $flag;
-
-
-    print($result);
-    return TRUE;
 }
 
 function main($argv) {
