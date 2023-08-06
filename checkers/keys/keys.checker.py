@@ -84,7 +84,8 @@ def put(args):
     public_key = m.group(1)
 
     ret = json.dumps({
-        "public_flag_id": login,
+        "login": login,
+        "public_flag_id": f"login: {login}",
         "public_key": public_key,
         "private_key": private_key,
         "orig_flag_id": flag_id,
@@ -98,16 +99,33 @@ def get(args):
     if len(args) != 4:
         verdict(CHECKER_ERROR, "Checker error", "Wrong args count for get()")
     host, flag_id, flag_data, vuln = args
-
-    url = url_prefix(host)
-    url = f'{url}/check.php'
-    trace("get(%s, %s, %s, %s)" % (url, flag_id, flag_data, vuln))
-
     data = json.loads(flag_id)
+    login = data['login']
+    public_key = data['public_key']
+    private_key = data['private_key']
+
+    _url_prefix = url_prefix(host)
+
+    url = f'{_url_prefix}/key.php'
+    trace("get0(%s, %s, %s, %s)" % (url, flag_id, flag_data, vuln))
+
+    resp = requests.get(url, {'login' : login})
+    resp.raise_for_status()
+
+    m = PUBLIC_KEY_RE.search(resp.text)
+    if not m:
+        verdict(MUMBLE, "No public key", f"Cant find public key in resp:{resp.text}")
+    public_key_from_service = m.group(1).strip()
+
+    if public_key != public_key_from_service:
+        verdict(CORRUPT, "Cant find public key", f"Cant find public key in resp:{resp.text}")
+
+    url = f'{_url_prefix}/check.php'
+    trace("get1(%s, %s, %s, %s)" % (url, flag_id, flag_data, vuln))
 
     form_data = {
-        'login': data['public_flag_id'],
-        'private_key': data['private_key']
+        'login': login,
+        'private_key': private_key,
     }
 
     resp = requests.post(url, form_data)
