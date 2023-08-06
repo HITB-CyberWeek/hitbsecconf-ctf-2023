@@ -10,7 +10,7 @@ function head() {
 echo <<< END
 <html>
 <head>
-    <title>Generate new key!</title>
+    <title>Check saved key!</title>
 </head>
 <body>
 END;
