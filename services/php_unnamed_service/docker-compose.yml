@@ -6,6 +6,8 @@ services:
       build: ./keys
       expose:
         - "9000:9000"
+      links:
+        - redis
 
     nginx:
       restart: unless-stopped
@@ -14,3 +16,10 @@ services:
         - "3000:80"
       links:
         - keys
+
+    redis:
+      command: redis-server --save 60 1
+      restart: unless-stopped
+      image: redis:7.0.12-alpine
+      expose:
+        - "6379"
