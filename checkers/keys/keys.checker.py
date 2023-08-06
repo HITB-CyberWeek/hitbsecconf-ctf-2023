@@ -16,6 +16,8 @@ PORT = 3000
 TIMEOUT = 30
 CHECKER_DIRECT_CONNECT = os.environ.get("CHECKER_DIRECT_CONNECT")
 # KEYS_COUNT_RE = re.compile(r'Currently stored keys: (\d+)')
+PRIVATE_KEY_RE = re.compile(r'(-----BEGIN PRIVATE KEY-----.*?-----END PRIVATE KEY-----)', re.MULTILINE | re.DOTALL)
+PUBLIC_KEY_RE = re.compile(r'(-----BEGIN PUBLIC KEY-----.*?-----END PUBLIC KEY-----)', re.MULTILINE | re.DOTALL)
 
 
 def info():
@@ -53,13 +55,66 @@ def check(args):
 
 @checker_action
 def put(args):
-    flag_id = args[1]
-    verdict(OK, flag_id)
+    if len(args) != 4:
+        verdict(CHECKER_ERROR, "Checker error", "Wrong args count for put()")
+    host, flag_id, flag, vuln = args
+
+    url = url_prefix(host)
+    url = f'{url}/generate.php'
+
+    trace(f"put0({url}, {flag_id}, {flag}, {vuln})")
+
+    form_data = {
+        'login': flag_id,
+        'comment': flag,
+    }
+
+    resp = requests.post(url, form_data)
+    resp.raise_for_status()
+
+    m = PRIVATE_KEY_RE.search(resp.text)
+    if not m:
+        verdict(MUMBLE, "No private key", f"Cant find private key in resp:{resp.text}")
+    private_key = m.group(1)
+
+    m = PUBLIC_KEY_RE.search(resp.text)
+    if not m:
+        verdict(MUMBLE, "No public key", f"Cant find public key in resp:{resp.text}")
+    public_key = m.group(1)
+
+    ret = json.dumps({
+        "public_flag_id": flag_id,
+        "public_key": public_key,
+        "private_key": private_key,
+    })
+
+    verdict(OK, ret)
 
 
 @checker_action
 def get(args):
+    if len(args) != 4:
+        verdict(CHECKER_ERROR, "Checker error", "Wrong args count for get()")
+    host, flag_id, flag_data, vuln = args
+
+    url = url_prefix(host)
+    url = f'{url}/check.php'
+    trace("get(%s, %s, %s, %s)" % (url, flag_id, flag_data, vuln))
+
+    data = json.loads(flag_id)
+
+    form_data = {
+        'login': data['public_flag_id'],
+        'private_key': data['private_key']
+    }
+
+    resp = requests.post(url, form_data)
+    resp.raise_for_status()
+
+    if flag_data not in resp.text:
+        verdict(CORRUPT, "Wrong flag", f"'{flag_data}' NOT IN '{resp.text}'")
     verdict(OK)
+
 
 def main(args):
     if len(args) == 0:
