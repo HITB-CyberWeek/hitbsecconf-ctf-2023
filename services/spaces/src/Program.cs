@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+
 using spaces;
 
 var builder = WebApplication
@@ -18,7 +19,8 @@ builder.WebHost
 
 builder.Services
     .AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo("settings")).SetApplicationName(nameof(spaces));
+    .PersistKeysToFileSystem(new DirectoryInfo("settings"))
+    .SetApplicationName(nameof(spaces));
 
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

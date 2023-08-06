@@ -19,9 +19,13 @@ internal static class WsHandler
         var conn = new Connection(ws, userId);
 
         var state = await Storage.TryLoadStateAsync(userId, cancel);
-        state = state?.User != null ? state : new State(null, conn.GenUser());
-        conn.State = state;
+        if(state?.User == null)
+        {
+            state = new State(null, conn.GenUser());
+            await conn.SendProfileGeneratedAsync(state.User, cancel);
+        }
 
+        conn.State = state;
         Connections[ws] = conn;
 
         await conn.JoinAsync(state, cancel);
@@ -57,24 +61,19 @@ internal static class WsHandler
             }, cancel);
         }
 
-        Connections.TryRemove(ws, out var removed);
+        Connections.TryRemove(ws, out _);
 
         try { await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, cancel); }
         catch { /* ignored */ }
-
-        if(removed?.State?.Context == null)
-            return;
-
-        await BroadcastAsync(removed.State, MsgType.Leave, "Left", cancel);
     }
 
     private static Task ExecuteCommandAsync(this Connection conn, Command cmd, CancellationToken cancel) => cmd.Type switch
     {
-        MsgType.Close => conn.CtxLimit.WithRpmLimit(conn.CloseSpace, () => conn.TrySendErrorAsync("Space ops limit exceeded, wait 1 min", cancel), 6),
-        MsgType.Join => conn.CtxLimit.WithRpmLimit(() => conn.JoinAsync(cmd.Data, cancel), () => conn.TrySendErrorAsync("Space ops limit exceeded, wait 1 min", cancel), 6),
-        MsgType.Room => conn.CtxLimit.WithRpmLimit(() => conn.JoinRoomAsync(cmd.Data, cancel), () => conn.TrySendErrorAsync("Space ops limit exceeded, wait 1 min", cancel), 6),
-        MsgType.Msg => conn.MsgLimit.WithRpmLimit(() => conn.SendMessage(cmd.Data, cancel), () => conn.TrySendErrorAsync("Messages limit exceeded, wait 1 min", cancel), 60),
-        MsgType.Generate => conn.ProfileLimit.WithRpmLimit(() => conn.GenProfile(cancel), () => conn.TrySendErrorAsync("Profile limit exceeded, wait 1 min", cancel), 600),
+        MsgType.Close => conn.CtxLimit.WithRpmLimit(conn.CloseSpace, () => conn.TrySendErrorAsync("Space ops limit exceeded, wait 1 min", cancel), 5),
+        MsgType.Join => conn.CtxLimit.WithRpmLimit(() => conn.JoinAsync(cmd.Data, cancel), () => conn.TrySendErrorAsync("Space ops limit exceeded, wait 1 min", cancel), 5),
+        MsgType.Room => conn.CtxLimit.WithRpmLimit(() => conn.JoinRoomAsync(cmd.Data, cancel), () => conn.TrySendErrorAsync("Space ops limit exceeded, wait 1 min", cancel), 5),
+        MsgType.Msg => conn.MsgLimit.WithRpmLimit(() => conn.SendMessage(cmd.Data, cancel), () => conn.TrySendErrorAsync("Messages limit exceeded, wait 1 min", cancel), 50),
+        MsgType.Generate => conn.ProfileLimit.WithRpmLimit(() => conn.GenProfile(cancel), () => conn.TrySendErrorAsync("Profile limit exceeded, wait 1 min", cancel), 500),
         _ => throw new Exception()
     };
 
@@ -84,11 +83,15 @@ internal static class WsHandler
         if(space == 0UL)
             return;
 
-        await Storage.CloseSpace(space);
+        await Storage.CloseSpace(space.ToBase58());
     }
 
     private static User GenUser(this Connection conn)
-        => new(Names.Humanoids[conn.Random.Value.Next(Names.Humanoids.Length)], conn.Random.Value.CreateAvatar());
+    {
+        var humanoid = Names.Humanoids[conn.Random.Value.Next(Names.Humanoids.Length)];
+        var avatar = conn.Random.Value.CreateAvatar(out var color);
+        return new($"{color} {humanoid}", avatar);
+    }
 
     private static async Task GenProfile(this Connection conn, CancellationToken cancel)
     {
@@ -96,12 +99,20 @@ internal static class WsHandler
         if(state?.Context != null)
             return;
 
-        conn.State = state = new State(null, conn.GenUser());
+        var user = conn.GenUser();
+        conn.State = new State(null, user);
+
+        await conn.SendProfileGeneratedAsync(user, cancel);
+    }
+
+    private static async Task SendProfileGeneratedAsync(this Connection conn, User user, CancellationToken cancel)
+    {
         await conn.TrySendMessageAsync(new Message
         {
             Type = MsgType.Generate,
-            Author = state.User.Name,
-            Avatar = state.User.Avatar
+            Text = "Generated new anonymous profile",
+            Author = user.Name,
+            Avatar = user.Avatar
         }, cancel);
     }
 
@@ -126,42 +137,71 @@ internal static class WsHandler
             Text = text
         };
 
-        await Storage.SaveMessage(msg, ctx, cancel);
+        await Storage.SaveMessageAsync(ctx.Space.ToBase58(), ctx.Room, msg, cancel);
         await GetSpaceConnections(ctx).BroadcastAsync(msg, cancel);
     }
 
     private static async Task JoinAsync(this Connection conn, string? value, CancellationToken cancel)
     {
-        if(ContextHelper.TryParseContext(value, out var ctx) && !Storage.IsSpaceExists(ctx!.Space))
+        value = value?.Trim().NullIfEmpty();
+
+        ulong space;
+        if(value == null)
         {
-            await conn.TrySendErrorAsync("Space not exists", cancel);
-            return;
+            space = conn.RndSpace();
+            Storage.CreateSpace(space.ToBase58());
+        }
+        else
+        {
+            if(!ContextHelper.TryParseSpace(value, out space))
+            {
+                await conn.TrySendErrorAsync("Invalid space", cancel);
+                return;
+            }
+
+            if(!Storage.IsSpaceExists(value))
+            {
+                await conn.TrySendErrorAsync("Space not exists", cancel);
+                return;
+            }
+
+            if(!Storage.HasAccess(value, conn.UserId))
+            {
+                await conn.TrySendErrorAsync("Space is closed", cancel);
+                return;
+            }
         }
 
-        ctx ??= new Context(conn.RndSpace(), null);
-
-        var user = await Storage.TryJoinOrCreateAsync(conn.UserId, ctx, conn.State?.User ?? throw new InvalidOperationException(), cancel);
+        var user = await Storage.FindUserAsync(conn.UserId, space.ToBase58(), cancel);
         if(user == null)
-        {
-            await conn.TrySendErrorAsync("Space is closed", cancel);
-            return;
-        }
+            await Storage.AddUserToSpaceAsync(space.ToBase58(), conn.UserId, user = conn.State?.User ?? throw new InvalidOperationException(), cancel);
 
+        var ctx = new Context(space, null);
         var state = new State(ctx, user);
         conn.State = state;
 
+        await Storage.SaveContextAsync(conn.UserId, ctx, cancel);
         await conn.JoinAsync(state, cancel);
     }
 
     private static async Task JoinAsync(this Connection conn, State state, CancellationToken cancel)
     {
-        if(state.Context == null)
+        var ctx = state.Context;
+        if(ctx == null)
             return;
 
-        await foreach(var msg in Storage.TryReadMessages(state.Context, cancel))
+        var space = ctx.Space.ToBase58();
+        if(ctx.Room != null)
+            Storage.CreateRoom(space, ctx.Room);
+
+        await foreach(var msg in Storage.TryReadMessages(space, ctx.Room, cancel))
             await conn.TrySendMessageAsync(msg, cancel);
 
-        await BroadcastAsync(state, MsgType.Join, "Joined", cancel);
+        await BroadcastAsync(state, MsgType.Join, $"Joined space '{space}'", cancel);
+        if(ctx.Room == null)
+            return;
+
+        await GetSpaceConnections(ctx.Space).BroadcastAsync(state, MsgType.Room, string.IsNullOrEmpty(ctx.Room) ? $"Returned back to space '{space}' root" : $"Entered room '{ctx.Room}' in space '{space}'", cancel);
     }
 
     private static async Task JoinRoomAsync(this Connection conn, string? room, CancellationToken cancel)
@@ -171,22 +211,18 @@ internal static class WsHandler
             return;
 
         room = room?.Trim().NullIfEmpty();
-        if(state.Context.Room == room)
-            return;
-
         if(!ContextHelper.IsRoomValid(room))
+        {
+            await conn.TrySendErrorAsync("Invalid room", cancel);
             return;
+        }
 
         var ctx = state.Context with { Room = room };
         state = state with { Context = ctx };
         conn.State = state;
 
-        Storage.CreateRoom(ctx);
-
-        await foreach(var msg in Storage.TryReadMessages(ctx, cancel))
-            await conn.TrySendMessageAsync(msg, cancel);
-
-        await GetSpaceConnections(ctx.Space).BroadcastAsync(state, MsgType.Room, string.IsNullOrEmpty(room) ? "Returned back to space root" : $"Entered room '{room}'", cancel);
+        await Storage.SaveContextAsync(conn.UserId, ctx, cancel);
+        await conn.JoinAsync(state, cancel);
     }
 
     private static async Task BroadcastAsync(State state, MsgType type, string text, CancellationToken cancel)
@@ -245,7 +281,7 @@ internal static class WsHandler
         => unchecked((ulong)conn.Random.Value.NextInt64());
 
     private static readonly ConcurrentDictionary<WebSocket, Connection> Connections = new();
-    private const int MaxMessageSize = 4096;
+    private const int MaxMessageSize = 1024;
 }
 
 internal class Connection

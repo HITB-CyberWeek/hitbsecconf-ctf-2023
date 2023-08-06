@@ -4,65 +4,45 @@ namespace spaces;
 
 internal static class Storage
 {
-    public static async Task<User?> TryJoinOrCreateAsync(Guid userId, Context ctx, User user, CancellationToken cancel)
-    {
-        var saved = await FindUser(userId, ctx.Space, cancel);
-        if(saved == null && IsSpaceClosed(ctx.Space))
-            return null;
-
-        Directory.CreateDirectory(GetSpaceDirPath(ctx.Space, ctx.Room));
-
-        await WriteAsync(ctx, null, userId, CtxFileExt, true, cancel);
-        if(saved != null)
-            return saved;
-
-        await WriteAsync(user, ctx, userId, UsrFileExt, false, cancel);
-        return user;
-    }
-
-    public static void CreateRoom(Context ctx)
-        => Directory.CreateDirectory(GetSpaceDirPath(ctx.Space, ctx.Room));
-
     public static async Task<State?> TryLoadStateAsync(Guid userId, CancellationToken cancel)
     {
-        var ctx = await TryReadAsync<Context>(GetContextFilePath(userId), cancel);
-        return ctx == null ? null : new State(ctx, await FindUser(userId, ctx.Space, cancel) ?? throw new InvalidOperationException());
+        try
+        {
+            var ctx = await TryReadAsync<Context>(GetContextFilePath(userId), cancel);
+            return ctx == null ? null : new State(ctx, await FindUserAsync(userId, ctx.Space.ToBase58(), cancel) ?? throw new InvalidOperationException());
+        }
+        catch { return default; }
     }
 
-    public static ValueTask CloseSpace(ulong space)
+    public static async Task SaveContextAsync(Guid userId, Context ctx, CancellationToken cancel)
+        => await WriteAsync(ctx, GetContextFilePath(userId), true, cancel);
+
+    public static Task AddUserToSpaceAsync(string space, Guid userId, User user, CancellationToken cancel)
+        => WriteAsync(user, GetUserFilePath(space, userId), false, cancel);
+    public static async Task<User?> FindUserAsync(Guid userId, string space, CancellationToken cancel)
+        => await TryReadAsync<User>(GetUserFilePath(space, userId), cancel);
+
+    public static void CreateSpace(string space)
+        => Directory.CreateDirectory(GetSpaceDirPath(space));
+    public static void CreateRoom(string space, string room)
+        => Directory.CreateDirectory(GetRoomDirPath(space, room));
+    public static ValueTask CloseSpace(string space)
         => TouchFile(GetCloseFilePath(space));
 
-    public static Task SaveMessage(Message message, Context ctx, CancellationToken cancel)
-        => WriteAsync(message, ctx, Guid.NewGuid(), MsgFileExt, false, cancel);
+    public static Task SaveMessageAsync(string space, string? room, Message message, CancellationToken cancel)
+        => WriteAsync(message, GetMessageFilePath(space, room, Guid.NewGuid()), false, cancel);
 
-    public static IAsyncEnumerable<Message> TryReadMessages(Context ctx, CancellationToken cancel)
+    public static IAsyncEnumerable<Message> TryReadMessages(string space, string? room, CancellationToken cancel)
     {
-        try { return ReadMessages(ctx, cancel); }
+        try { return ReadMessages(space, room, cancel); }
         catch(DirectoryNotFoundException) { return AsyncEnumerable.Empty<Message>(); }
     }
 
-    private static async Task<User?> FindUser(Guid userId, ulong space, CancellationToken cancel)
-        => await TryReadAsync<User>(GetUserFilePath(space, userId), cancel);
-
-    private static ValueTask TouchFile(string file)
-        => File.Create(file).DisposeAsync();
-
-    private static IAsyncEnumerable<Message> ReadMessages(Context ctx, CancellationToken cancel)
-        => Directory.EnumerateFiles(Path.Combine(DataPath, ctx.Space.ToBase58(), ctx.Room ?? string.Empty), '*' + MsgFileExt, SearchOption.TopDirectoryOnly)
+    private static IAsyncEnumerable<Message> ReadMessages(string space, string? room, CancellationToken cancel)
+        => Directory.EnumerateFiles(GetRoomDirPath(space, room), '*' + MsgFileExt, SearchOption.TopDirectoryOnly)
             .ToAsyncEnumerable()
             .SelectAwait(async file => await TryReadAsync<Message>(file, cancel))
             .Where(msg => msg != null)!;
-
-    private static async Task<T?> WriteAsync<T>(T item, Context? ctx, Guid id, string ext, bool overwrite, CancellationToken cancel)
-    {
-        var path = Path.Combine(DataPath, ctx?.Space.ToBase58() ?? string.Empty, ctx?.Room ?? string.Empty, id.ToString("N") + ext);
-        await using var stream = new FileStream(path, overwrite ? FileMode.Create : FileMode.CreateNew, FileAccess.Write, FileShare.None, BufferSize, FileOptions.Asynchronous);
-        await JsonSerializer.SerializeAsync(stream, item, JsonHelper.SerializerOptions, cancel);
-        return item;
-    }
-
-    private static Task<T?> TryReadAsync<T>(ulong space, string? room, Guid id, string ext, CancellationToken cancel)
-        => TryReadAsync<T>(Path.Combine(DataPath, space.ToBase58(), room ?? string.Empty, id.ToString("N") + ext), cancel);
 
     private static async Task<T?> TryReadAsync<T>(string filepath, CancellationToken cancel)
     {
@@ -75,28 +55,40 @@ internal static class Storage
         catch(FileNotFoundException) { return default; }
     }
 
-    public static bool IsSpaceExists(ulong space)
+    private static async Task<T?> WriteAsync<T>(T item, string filepath, bool overwrite, CancellationToken cancel)
+    {
+        await using var stream = new FileStream(filepath, overwrite ? FileMode.Create : FileMode.CreateNew, FileAccess.Write, FileShare.None, BufferSize, FileOptions.Asynchronous);
+        await JsonSerializer.SerializeAsync(stream, item, JsonHelper.SerializerOptions, cancel);
+        return item;
+    }
+
+    private static ValueTask TouchFile(string file)
+        => File.Create(file).DisposeAsync();
+
+    public static bool IsSpaceExists(string space)
         => Directory.Exists(GetSpaceDirPath(space));
-
-    private static bool IsSpaceClosed(ulong space)
+    private static bool IsSpaceClosed(string space)
         => File.Exists(GetCloseFilePath(space));
-
-    private static string GetSpaceDirPath(ulong space, string? room = null)
-        => Path.Combine(DataPath, space.ToBase58(), room ?? string.Empty);
-
-    private static string GetCloseFilePath(ulong space)
-        => Path.Combine(DataPath, space.ToBase58(), SpaceClosed);
-
-    private static string GetUserFilePath(ulong space, Guid userId)
-        => Path.Combine(DataPath, space.ToBase58(), userId.ToString("N") + UsrFileExt);
+    public static bool HasAccess(string space, Guid userId)
+        => !IsSpaceClosed(space) || File.Exists(GetUserFilePath(space, userId));
 
     private static string GetContextFilePath(Guid userId)
         => Path.Combine(DataPath, userId.ToString("N") + CtxFileExt);
+    private static string GetSpaceDirPath(string space)
+        => Path.Combine(DataPath, space);
+    private static string GetRoomDirPath(string space, string? room)
+        => Path.Combine(DataPath, space, room ?? string.Empty);
+    private static string GetCloseFilePath(string space)
+        => Path.Combine(DataPath, space, SpaceClosed);
+    private static string GetUserFilePath(string space, Guid userId)
+        => Path.Combine(DataPath, space, userId.ToString("N") + UsrFileExt);
+    private static string GetMessageFilePath(string space, string? room, Guid msgId)
+        => Path.Combine(DataPath, space, room ?? string.Empty, msgId.ToString("N") + MsgFileExt);
 
-    private const int BufferSize = 4096;
+    private const int BufferSize = 1024;
 
     private const string DataPath = "data/";
-    private const string SpaceClosed = ".lck";
+    private const string SpaceClosed = ".lock";
     private const string CtxFileExt = ".ctx";
     private const string MsgFileExt = ".msg";
     private const string UsrFileExt = ".usr";
