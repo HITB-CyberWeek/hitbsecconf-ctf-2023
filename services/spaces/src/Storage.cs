@@ -29,8 +29,9 @@ internal static class Storage
     public static ValueTask CloseSpace(string space)
         => TouchFile(GetCloseFilePath(space));
 
+    private static long writtenCount;
     public static Task SaveMessageAsync(string space, string? room, Message message, CancellationToken cancel)
-        => WriteAsync(message, GetMessageFilePath(space, room, Guid.NewGuid()), false, cancel);
+        => WriteAsync(message, GetMessageFilePath(space, room, message.Time.Ticks.ToString("x16") + Interlocked.Increment(ref writtenCount).ToString("x16")), false, cancel);
 
     public static IAsyncEnumerable<Message> TryReadMessages(string space, string? room, CancellationToken cancel)
     {
@@ -41,8 +42,10 @@ internal static class Storage
     private static IAsyncEnumerable<Message> ReadMessages(string space, string? room, CancellationToken cancel)
         => Directory.EnumerateFiles(GetRoomDirPath(space, room), '*' + MsgFileExt, SearchOption.TopDirectoryOnly)
             .ToAsyncEnumerable()
+            .OrderBy(file => file, StringComparer.OrdinalIgnoreCase)
             .SelectAwait(async file => await TryReadAsync<Message>(file, cancel))
-            .Where(msg => msg != null)!;
+            .Where(msg => msg != null)!
+            .TakeHeadAndTail<Message>(3, 3, skipped => EnumerableHelper.Yield(new Message { Type = MsgType.Error, Author = AvatarGen.SystemName, Avatar = AvatarGen.SystemAvatar, Text = $"... {skipped} messages skipped ..." }));
 
     private static async Task<T?> TryReadAsync<T>(string filepath, CancellationToken cancel)
     {
@@ -82,8 +85,8 @@ internal static class Storage
         => Path.Combine(DataPath, space, SpaceClosed);
     private static string GetUserFilePath(string space, Guid userId)
         => Path.Combine(DataPath, space, userId.ToString("N") + UsrFileExt);
-    private static string GetMessageFilePath(string space, string? room, Guid msgId)
-        => Path.Combine(DataPath, space, room ?? string.Empty, msgId.ToString("N") + MsgFileExt);
+    private static string GetMessageFilePath(string space, string? room, string msgId)
+        => Path.Combine(DataPath, space, room ?? string.Empty, msgId + MsgFileExt);
 
     private const int BufferSize = 1024;
 

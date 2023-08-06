@@ -29,6 +29,13 @@ $msg.onclick = () => {
   }
 }
 $close.onclick = () => ws.send(JSON.stringify({type: 'close'}));
+$text.onkeydown = e => {
+  if(e.ctrlKey && e.key === 'Enter')
+  {
+    e.preventDefault();
+    $msg.click();
+  }
+}
 
 const $container = document.getElementById('chat-container');
 const $chat = document.getElementById('chat');
@@ -38,8 +45,10 @@ const add = (msg) => {
   if(msg.type === 'join' && msg.context?.length) {
     //$chat.replaceChildren();
     $space.textContent = msg.context;
+    $room.disabled = false;
     $text.disabled = false;
     $msg.disabled = false;
+    $close.disabled = false;
     $gen.disabled = true;
   }
 
