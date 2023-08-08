@@ -6,3 +6,6 @@ RUN gem install sinatra -v 3.0.6 && \
     gem install redis -v 5.0.6
 
 WORKDIR /app
+COPY . /app
+
+CMD ["./api.rb", "-s", "Puma", "-o", "0.0.0.0"]

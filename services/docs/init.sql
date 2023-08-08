@@ -1,13 +1,16 @@
--- roles
 create role docs_user;
+
+create database docs;
+
+\connect docs;
 
 -- users
 create table users (
     id      serial primary key,
     created timestamptz not null default now(),
-    login   text not null check (length(login) between 1 and 12) unique,
-    pass    text not null check (length(pass) > 0),
-    org     text not null check (length(org) between 1 and 12)
+    login   text not null check (length(login) between 1 and 12 and login ~* '^\w+$') unique,
+    pass    text not null check (length(pass) between 1 and 12 and pass ~* '^\w+$'),
+    org     text not null check (length(org) between 1 and 12 and org ~* '^\w+$')
 );
 
 create index on users (login);

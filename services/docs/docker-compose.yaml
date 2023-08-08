@@ -1,7 +1,18 @@
 services:
-  # auth:
-  #   image: docs/auth:latest
-  #   build: auth
+  auth:
+    image: docs/auth:latest
+    build: auth
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./auth:/app"
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
+    environment:
+      - POSTGRES_PASSWORD
+      - REDIS_URI
+
   api:
     image: docs/api:latest
     build: api
@@ -12,18 +23,18 @@ services:
     stdin_open: true
     tty: true
     command: ["/bin/bash"]
-    # ruby api.rb -s Puma -o 0.0.0.0
-    # APP_ENV=production
     environment:
       WEB_CONCURRENCY: 2
       REDIS_URI: redis://redis:6379
+      # APP_ENV: production
 
   pg:
     image: postgres:15.3
     volumes:
       - "pg-data:/var/lib/postgresql/data"
+      - "./init.sql:/docker-entrypoint-initdb.d/init.sql:ro"
     environment:
-      POSTGRES_PASSWORD: qwer
+      - POSTGRES_PASSWORD
 
   redis:
     image: redis:7.0.12
@@ -33,6 +44,9 @@ services:
       - redis-server
       - --save 60 1
       - --loglevel warning
+
+  # web:
+  #   image: nginx
 
 volumes:
   pg-data: {}
