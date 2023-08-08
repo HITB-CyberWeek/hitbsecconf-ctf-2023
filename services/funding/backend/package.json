@@ -1,0 +1,46 @@
+{
+  "name": "funding-backend",
+  "version": "1.0.0",
+  "description": "Backend for Web3 Crowdfunding platform",
+  "main": "app.ts",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "npm run build:ts && tsc -p test/tsconfig.json && tap --ts \"test/**/*.test.ts\"",
+    "start": "npm run build:ts && fastify start --log-level info --options dist/backend/src/app.js",
+    "generate-key": "npx --yes @fastify/secure-session > dist/backend/src/.cookie.key",
+    "build:ts": "tsc",
+    "watch:ts": "tsc -w",
+    "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch:ts\" \"npm:dev:start\"",
+    "dev:start": "fastify start --ignore-watch=.ts$ --watch --log-level debug --pretty-logs --options --port 3001 dist/backend/src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/autoload": "^5.0.0",
+    "@fastify/cookie": "^9.0.4",
+    "@fastify/postgres": "^5.2.0",
+    "@fastify/secure-session": "^6.2.0",
+    "@fastify/sensible": "^5.0.0",
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.0.0",
+    "fastify-cli": "^5.8.0",
+    "fastify-plugin": "^4.0.0",
+    "pg-promise": "^11.5.3",
+    "web3": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/node": "^20.4.4",
+    "@types/pg": "^8.10.2",
+    "@types/tap": "^15.0.5",
+    "concurrently": "^7.0.0",
+    "fastify-tsconfig": "^1.0.1",
+    "tap": "^16.1.0",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.9.5"
+  }
+}
