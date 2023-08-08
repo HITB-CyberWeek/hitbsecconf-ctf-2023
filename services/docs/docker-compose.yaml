@@ -1,0 +1,39 @@
+services:
+  # auth:
+  #   image: docs/auth:latest
+  #   build: auth
+  api:
+    image: docs/api:latest
+    build: api
+    ports:
+      - "4567:4567"
+    volumes:
+      - "./api:/app"
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
+    # ruby api.rb -s Puma -o 0.0.0.0
+    # APP_ENV=production
+    environment:
+      WEB_CONCURRENCY: 2
+      REDIS_URI: redis://redis:6379
+
+  pg:
+    image: postgres:15.3
+    volumes:
+      - "pg-data:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_PASSWORD: qwer
+
+  redis:
+    image: redis:7.0.12
+    volumes:
+      - "redis-data:/data"
+    command:
+      - redis-server
+      - --save 60 1
+      - --loglevel warning
+
+volumes:
+  pg-data: {}
+  redis-data: {}
