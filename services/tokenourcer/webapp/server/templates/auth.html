@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Page</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <!-- Custom CSS -->
+  <style>
+    .container {
+      max-width: 400px;
+      margin: 50px auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>{{ action }}</h2>
+    <form id="registrationForm">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" class="form-control" id="username" placeholder="Enter username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+      </div>
+      <button type="submit" class="btn btn-primary">{{ action }}</button>
+    </form>
+  </div>
+
+  <!-- jQuery and Bootstrap JS -->
+  <script src="/assets/js/jquery-3.7.0.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="/assets/js/auth.js"></script>
+
+  <script>
+    // Attach form submission event listener
+    document.getElementById('registrationForm').addEventListener('submit', {{ action.lower() }});
+  </script>
+</body>
+</html>

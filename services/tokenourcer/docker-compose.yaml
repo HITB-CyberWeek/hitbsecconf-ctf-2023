@@ -26,12 +26,16 @@ services:
 
   flask:
     build: webapp/server
+    environment:
+      ENV: "PROD"
     volumes:
       - ./webapp/logs:/flask/logs
     depends_on:
       - redis
+      - postgres
     networks:
       - internal
+    restart: always
 
   redis:
     image: redis
