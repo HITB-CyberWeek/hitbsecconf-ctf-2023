@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'json'
+require 'openssl'
 require 'pg'
 require 'redis'
 require 'sinatra'
@@ -13,7 +14,13 @@ helpers do
   end
 
   def user_name(req)
-    req.cookies["user_name"]
+    docs_session = req.cookies["docs_session"]
+    user_name, split, origin_sign = docs_session.rpartition("--")
+    sign = OpenSSL::HMAC.hexdigest("sha1", ENV["DOCS_SECRET"], user_name)
+    if origin_sign != sign
+      raise "Invalid session"
+    end
+    user_name
   end
 end
 
