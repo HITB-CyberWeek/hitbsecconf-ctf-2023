@@ -2,119 +2,503 @@
 # Python bytecode 3.8.0 (3413)
 # Disassembled from Python 3.8.17 (default, Jul  4 2023, 06:27:59)
 # [GCC 12.2.0]
-# Timestamp in code: 1690294256 (2023-07-25 14:10:56)
-# Source code size mod 2**32: 151 bytes
-# Method Name:       five
+# Timestamp in code: 1691506048 (2023-08-08 14:47:28)
+# Source code size mod 2**32: 1173 bytes
+# Method Name:       BBB
 # Filename:          1.py
-# Argument count:    0
+# Argument count:    3
 # Position-only argument count: 0
 # Keyword-only arguments: 0
-# Number of locals:  0
-# Stack size:        1
+# Number of locals:  5
+# Stack size:        3
 # Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
-# First Line:        1
+# First Line:        2
 # Constants:
 #    0: None
-#    1: 5
-LOAD_CONST           1 (5)
-RETURN_VALUE
+#    1: 10
+#    2: 5
+#    3: 1
+#    4: 3
+#    5: 100
+#    6: 2
+# Names:
+#    0: print
+#    1: range
+# Varnames:
+#	a, s, b, c, i
+# Positional arguments:
+#	a, s, b
+# Local variables:
+#    3: c
+#    4: i
+NOP
+JUMP_ABSOLUTE 86 # L_0
+L_27:
+	STORE_FAST           0 (a)			# 4
+	LOAD_FAST            2 (b)			# 6
+		NOP			# 8
+	JUMP_ABSOLUTE 214  # L_26			# 10
+L_18:
+		NOP			# 12
+	POP_JUMP_IF_FALSE 142 # L412			# 14
+	EXTENDED_ARG 2			# 16
+	JUMP_ABSOLUTE 34 # L_7			# 18
+L_36:
+	STORE_FAST           0 (a)			# 20
+	LOAD_FAST            2 (b)			# 22
+	LOAD_CONST           3 (1)			# 24
+	EXTENDED_ARG 2			# 26
+	JUMP_ABSOLUTE 78 # L_38			# 28
+L_67:
+	STORE_FAST           2 (b)			# 30
+	LOAD_FAST            0 (a)			# 32
+	LOAD_FAST            2 (b)			# 34
+	INPLACE_ADD			# 36
+	EXTENDED_ARG 2			# 38
+	JUMP_ABSOLUTE 24 # L_66			# 40
+L_57:
+	LOAD_FAST            2 (b)			# 42
+	INPLACE_ADD			# 44
+	STORE_FAST           0 (a)			# 46
+	LOAD_FAST            2 (b)			# 48
+		NOP			# 50
+	JUMP_ABSOLUTE 106  # L_46			# 52
+L_3:
+L60:
+	LOAD_FAST            4 (i)			# 54
+	LOAD_CONST           4 (3)			# 56
+	COMPARE_OP           4 (>)			# 58
+	EXTENDED_ARG 2			# 60
+	JUMP_ABSOLUTE 172 # L_17			# 62
+L_39:
+	INPLACE_ADD			# 64
+	STORE_FAST           2 (b)			# 66
+	LOAD_FAST            0 (a)			# 68
+	LOAD_FAST            2 (b)			# 70
+		NOP			# 72
+	JUMP_ABSOLUTE 254  # L_34			# 74
+L_23:
+	INPLACE_ADD			# 76
+	STORE_FAST           0 (a)			# 78
+	LOAD_FAST            2 (b)			# 80
+	EXTENDED_ARG 1			# 82
+	JUMP_ABSOLUTE 195 # L_25			# 84
+L_0:
+	LOAD_CONST           1 (10)			# 86
+	STORE_FAST           0 (a)			# 88
+	LOAD_FAST            0 (a)			# 90
+	LOAD_CONST           2 (5)			# 92
+	EXTENDED_ARG 1			# 94
+	JUMP_ABSOLUTE 11 # L_12			# 96
+L_53:
+	LOAD_FAST            2 (b)			# 98
+	LOAD_CONST           3 (1)			# 100
+	EXTENDED_ARG 2			# 102
+	JUMP_ABSOLUTE 66 # L_52			# 104
+L_46:
+	LOAD_CONST           3 (1)			# 106
+	INPLACE_ADD			# 108
+	STORE_FAST           2 (b)			# 110
+	LOAD_FAST            0 (a)			# 112
+		NOP			# 114
+	JUMP_ABSOLUTE 246  # L_62			# 116
+L_44:
+	LOAD_FAST            2 (b)			# 118
+	INPLACE_ADD			# 120
+	STORE_FAST           0 (a)			# 122
+	LOAD_FAST            2 (b)			# 124
+	EXTENDED_ARG 2			# 126
+	JUMP_ABSOLUTE 180 # L_19			# 128
+L_5:
+L70:
+	LOAD_FAST            0 (a)			# 130
+	LOAD_FAST            4 (i)			# 132
+	INPLACE_ADD			# 134
+	STORE_FAST           0 (a)			# 136
+	EXTENDED_ARG 2			# 138
+	JUMP_ABSOLUTE 128 # L36			# 140
+L_8:
+L412:
+	LOAD_FAST            0 (a)			# 142
+	RETURN_VALUE			# 144
+L_69:
+	LOAD_FAST            0 (a)			# 146
+	LOAD_FAST            2 (b)			# 148
+	INPLACE_ADD			# 150
+	STORE_FAST           0 (a)			# 152
+	EXTENDED_ARG 2			# 154
+	JUMP_ABSOLUTE 110 # L80			# 156
+L_61:
+	STORE_FAST           0 (a)			# 158
+	LOAD_FAST            2 (b)			# 160
+	LOAD_CONST           3 (1)			# 162
+	EXTENDED_ARG 1			# 164
+	JUMP_ABSOLUTE 79 # L_63			# 166
+L_14:
+	STORE_FAST           3 (c)			# 168
+	LOAD_GLOBAL          1 (range)			# 170
+		NOP			# 172
+	JUMP_ABSOLUTE 176  # L_13			# 174
+L_13:
+	LOAD_CONST           1 (10)			# 176
+	CALL_FUNCTION        1			# 178
+	GET_ITER			# 180
+	EXTENDED_ARG 2			# 182
+	JUMP_ABSOLUTE 128 # L36			# 184
+L_51:
+	INPLACE_ADD			# 186
+	STORE_FAST           2 (b)			# 188
+	EXTENDED_ARG 1			# 190
+	JUMP_ABSOLUTE 231 # L_48			# 192
+L_54:
+	LOAD_FAST            2 (b)			# 194
+	LOAD_CONST           3 (1)			# 196
+	INPLACE_ADD			# 198
+	EXTENDED_ARG 2			# 200
+	JUMP_ABSOLUTE 46 # L_58			# 202
+L_60:
+	LOAD_FAST            0 (a)			# 204
+	LOAD_FAST            2 (b)			# 206
+	INPLACE_ADD			# 208
+	EXTENDED_ARG 2			# 210
+	JUMP_ABSOLUTE 54 # L_65			# 212
+L_26:
+	LOAD_CONST           3 (1)			# 214
+	INPLACE_ADD			# 216
+	STORE_FAST           2 (b)			# 218
+	LOAD_FAST            0 (a)			# 220
+	EXTENDED_ARG 2			# 222
+	JUMP_ABSOLUTE 12 # L_21			# 224
+L_40:
+	LOAD_FAST            2 (b)			# 226
+	LOAD_CONST           3 (1)			# 228
+		NOP			# 230
+	JUMP_ABSOLUTE 64  # L_39			# 232
+L_15:
+	LOAD_CONST           2 (5)			# 234
+	COMPARE_OP           4 (>)			# 236
+		NOP			# 238
+	POP_JUMP_IF_FALSE 54 # L60			# 240
+	EXTENDED_ARG 2			# 242
+	JUMP_ABSOLUTE 154 # L_2			# 244
+L_62:
+	LOAD_FAST            2 (b)			# 246
+	INPLACE_ADD			# 248
+		NOP			# 250
+	JUMP_ABSOLUTE 158  # L_61			# 252
+L_34:
+	INPLACE_ADD			# 254
+	STORE_FAST           0 (a)			# 256
+	LOAD_FAST            2 (b)			# 258
+	LOAD_CONST           3 (1)			# 260
+	EXTENDED_ARG 1			# 262
+	JUMP_ABSOLUTE 87 # L_43			# 264
+L_12:
+	BINARY_MULTIPLY			# 266
+	STORE_FAST           0 (a)			# 268
+	EXTENDED_ARG 1			# 270
+	JUMP_ABSOLUTE 39 # L_11			# 272
+L_16:
+	POP_TOP			# 274
+	LOAD_FAST            4 (i)			# 276
+		NOP			# 278
+	JUMP_ABSOLUTE 234  # L_15			# 280
+L_32:
+	LOAD_FAST            2 (b)			# 282
+	INPLACE_ADD			# 284
+	STORE_FAST           0 (a)			# 286
+	LOAD_FAST            2 (b)			# 288
+	EXTENDED_ARG 2			# 290
+	JUMP_ABSOLUTE 160 # L_20			# 292
+L_11:
+	LOAD_GLOBAL          0 (print)			# 294
+	LOAD_FAST            0 (a)			# 296
+	CALL_FUNCTION        1			# 298
+	POP_TOP			# 300
+	EXTENDED_ARG 1			# 302
+	JUMP_ABSOLUTE 69 # L_10			# 304
+L_41:
+	LOAD_FAST            2 (b)			# 306
+	LOAD_CONST           3 (1)			# 308
+	INPLACE_ADD			# 310
+	EXTENDED_ARG 1			# 312
+	JUMP_ABSOLUTE 95 # L_45			# 314
+L_50:
+	LOAD_FAST            2 (b)			# 316
+	INPLACE_ADD			# 318
+	EXTENDED_ARG 1			# 320
+	JUMP_ABSOLUTE 115 # L_49			# 322
+L_10:
+	LOAD_CONST           3 (1)			# 324
+	STORE_FAST           0 (a)			# 326
+	LOAD_CONST           4 (3)			# 328
+		NOP			# 330
+	JUMP_ABSOLUTE 168  # L_14			# 332
+L_63:
+	INPLACE_ADD			# 334
+	STORE_FAST           2 (b)			# 336
+		NOP			# 338
+	JUMP_ABSOLUTE 204  # L_60			# 340
+L_43:
+	INPLACE_ADD			# 342
+	STORE_FAST           2 (b)			# 344
+	EXTENDED_ARG 1			# 346
+	JUMP_ABSOLUTE 159 # L_42			# 348
+L_45:
+	STORE_FAST           2 (b)			# 350
+	LOAD_FAST            0 (a)			# 352
+		NOP			# 354
+	JUMP_ABSOLUTE 118  # L_44			# 356
+L_64:
+	LOAD_CONST           3 (1)			# 358
+	INPLACE_ADD			# 360
+	STORE_FAST           2 (b)			# 362
+	LOAD_FAST            0 (a)			# 364
+	EXTENDED_ARG 1			# 366
+	JUMP_ABSOLUTE 243 # L_59			# 368
+L_49:
+	STORE_FAST           0 (a)			# 370
+	LOAD_FAST            2 (b)			# 372
+	LOAD_CONST           3 (1)			# 374
+		NOP			# 376
+	JUMP_ABSOLUTE 186  # L_51			# 378
+L_24:
+	LOAD_FAST            0 (a)			# 380
+	LOAD_FAST            2 (b)			# 382
+		NOP			# 384
+	JUMP_ABSOLUTE 76  # L_23			# 386
+L_37:
+	LOAD_FAST            2 (b)			# 388
+	INPLACE_ADD			# 390
+		NOP			# 392
+	JUMP_ABSOLUTE 20  # L_36			# 394
+L_29:
+	STORE_FAST           2 (b)			# 396
+	LOAD_FAST            0 (a)			# 398
+	LOAD_FAST            2 (b)			# 400
+	EXTENDED_ARG 2			# 402
+	JUMP_ABSOLUTE 120 # L_31			# 404
+L_30:
+	LOAD_CONST           3 (1)			# 406
+	INPLACE_ADD			# 408
+	EXTENDED_ARG 1			# 410
+	JUMP_ABSOLUTE 141 # L_29			# 412
+L_42:
+	LOAD_FAST            0 (a)			# 414
+	LOAD_FAST            2 (b)			# 416
+	INPLACE_ADD			# 418
+	STORE_FAST           0 (a)			# 420
+	EXTENDED_ARG 1			# 422
+	JUMP_ABSOLUTE 51 # L_41			# 424
+L_35:
+	LOAD_FAST            0 (a)			# 426
+	LOAD_FAST            2 (b)			# 428
+	INPLACE_ADD			# 430
+	STORE_FAST           0 (a)			# 432
+		NOP			# 434
+	JUMP_ABSOLUTE 226  # L_40			# 436
+L_1:
+	STORE_FAST           4 (i)			# 438
+	LOAD_GLOBAL          0 (print)			# 440
+	LOAD_CONST           3 (1)			# 442
+	CALL_FUNCTION        1			# 444
+	EXTENDED_ARG 1			# 446
+	JUMP_ABSOLUTE 19 # L_16			# 448
+L_25:
+	LOAD_CONST           3 (1)			# 450
+	INPLACE_ADD			# 452
+	EXTENDED_ARG 2			# 454
+	JUMP_ABSOLUTE 86 # L_22			# 456
+L_33:
+	STORE_FAST           2 (b)			# 458
+	LOAD_FAST            0 (a)			# 460
+	EXTENDED_ARG 1			# 462
+	JUMP_ABSOLUTE 27 # L_32			# 464
+L_47:
+	INPLACE_ADD			# 466
+	STORE_FAST           0 (a)			# 468
+	LOAD_FAST            2 (b)			# 470
+	LOAD_CONST           3 (1)			# 472
+	EXTENDED_ARG 2			# 474
+	JUMP_ABSOLUTE 146 # L_56			# 476
+L_70:
+	INPLACE_ADD			# 478
+	STORE_FAST           2 (b)			# 480
+		NOP			# 482
+	JUMP_ABSOLUTE 146  # L_69			# 484
+L_48:
+	LOAD_FAST            0 (a)			# 486
+	LOAD_FAST            2 (b)			# 488
+	INPLACE_ADD			# 490
+	STORE_FAST           0 (a)			# 492
+		NOP			# 494
+	JUMP_ABSOLUTE 98  # L_53			# 496
+L_59:
+	LOAD_FAST            2 (b)			# 498
+	INPLACE_ADD			# 500
+	STORE_FAST           0 (a)			# 502
+	LOAD_FAST            2 (b)			# 504
+	EXTENDED_ARG 2			# 506
+	JUMP_ABSOLUTE 138 # L_68			# 508
+L_28:
+	NOP			# 510
+	LOAD_FAST            2 (b)			# 512
+	LOAD_CONST           3 (1)			# 514
+	INPLACE_ADD			# 516
+	EXTENDED_ARG 1			# 518
+	JUMP_ABSOLUTE 203 # L_33			# 520
+L_21:
+	LOAD_FAST            2 (b)			# 522
+	INPLACE_ADD			# 524
+	STORE_FAST           0 (a)			# 526
+	LOAD_FAST            2 (b)			# 528
+	EXTENDED_ARG 1			# 530
+	JUMP_ABSOLUTE 151 # L_30			# 532
+L_66:
+	STORE_FAST           0 (a)			# 534
+	LOAD_FAST            2 (b)			# 536
+	LOAD_CONST           3 (1)			# 538
+	EXTENDED_ARG 1			# 540
+	JUMP_ABSOLUTE 223 # L_70			# 542
+L_7:
+	LOAD_GLOBAL          0 (print)			# 544
+	LOAD_CONST           6 (2)			# 546
+	CALL_FUNCTION        1			# 548
+	POP_TOP			# 550
+	EXTENDED_ARG 1			# 552
+	JUMP_ABSOLUTE 125 # L_24			# 554
+L_58:
+	STORE_FAST           2 (b)			# 556
+	LOAD_FAST            0 (a)			# 558
+		NOP			# 560
+	JUMP_ABSOLUTE 42  # L_57			# 562
+L_65:
+	STORE_FAST           0 (a)			# 564
+	LOAD_FAST            2 (b)			# 566
+	EXTENDED_ARG 1			# 568
+	JUMP_ABSOLUTE 103 # L_64			# 570
+L_4:
+	EXTENDED_ARG 2			# 572
+	JUMP_ABSOLUTE 128 # L36			# 574
+L_52:
+	INPLACE_ADD			# 576
+	STORE_FAST           2 (b)			# 578
+	LOAD_FAST            0 (a)			# 580
+	LOAD_FAST            2 (b)			# 582
+	EXTENDED_ARG 1			# 584
+	JUMP_ABSOLUTE 211 # L_47			# 586
+L_38:
+	INPLACE_ADD			# 588
+	STORE_FAST           2 (b)			# 590
+	EXTENDED_ARG 1			# 592
+	JUMP_ABSOLUTE 171 # L_35			# 594
+L_22:
+	STORE_FAST           2 (b)			# 596
+	LOAD_FAST            0 (a)			# 598
+	LOAD_FAST            2 (b)			# 600
+	INPLACE_ADD			# 602
+		NOP			# 604
+	JUMP_ABSOLUTE 4  # L_27			# 606
+L_55:
+	LOAD_FAST            0 (a)			# 608
+	LOAD_FAST            2 (b)			# 610
+	INPLACE_ADD			# 612
+	STORE_FAST           0 (a)			# 614
+		NOP			# 616
+	JUMP_ABSOLUTE 194  # L_54			# 618
+L_6:
+L80:
+	LOAD_FAST            2 (b)			# 620
+	LOAD_CONST           5 (100)			# 622
+	COMPARE_OP           0 (<)			# 624
+		NOP			# 626
+	JUMP_ABSOLUTE 12  # L_18			# 628
+L_31:
+	INPLACE_ADD			# 630
+	STORE_FAST           0 (a)			# 632
+	EXTENDED_ARG 2			# 634
+	JUMP_ABSOLUTE 2 # L_28			# 636
+L36:
+		FOR_ITER 4			# 638
+	EXTENDED_ARG 1			# 640
+	JUMP_ABSOLUTE 183 # L_1			# 642
+	EXTENDED_ARG 2			# 644
+	JUMP_ABSOLUTE 110 # L80			# 646
+L_68:
+	LOAD_CONST           3 (1)			# 648
+	INPLACE_ADD			# 650
+		NOP			# 652
+	JUMP_ABSOLUTE 30  # L_67			# 654
+L_56:
+	INPLACE_ADD			# 656
+	STORE_FAST           2 (b)			# 658
+	EXTENDED_ARG 2			# 660
+	JUMP_ABSOLUTE 98 # L_55			# 662
+L_2:
+	POP_TOP			# 664
+	EXTENDED_ARG 2			# 666
+	JUMP_ABSOLUTE 110 # L80			# 668
+L_20:
+	LOAD_CONST           3 (1)			# 670
+	INPLACE_ADD			# 672
+	STORE_FAST           2 (b)			# 674
+	LOAD_FAST            0 (a)			# 676
+	EXTENDED_ARG 1			# 678
+	JUMP_ABSOLUTE 133 # L_37			# 680
+L_17:
+		NOP			# 682
+	POP_JUMP_IF_FALSE 130 # L70			# 684
+	EXTENDED_ARG 2			# 686
+	JUMP_ABSOLUTE 62 # L_4			# 688
+L_19:
+	LOAD_CONST           3 (1)			# 690
+	INPLACE_ADD			# 692
+	STORE_FAST           2 (b)			# 694
+	LOAD_FAST            0 (a)			# 696
+	EXTENDED_ARG 1			# 698
+	JUMP_ABSOLUTE 61 # L_50			# 700
 # Method Name:       <module>
 # Filename:          1.py
 # Argument count:    0
 # Position-only argument count: 0
 # Keyword-only arguments: 0
 # Number of locals:  0
-# Stack size:        2
+# Stack size:        5
 # Flags:             0x00000040 (NOFREE)
-# First Line:        1
+# First Line:        2
 # Constants:
-#    0: <Code38 code object five at 0x7f42673239d0, file 1.py>, line 1
-#    1: 'five'
-#    2: 10
-#    3: 5
-#    4: 1
-#    5: 3
-#    6: 0
-#    7: 'a'
-#    8: 'b'
-#    9: None
+#    0: <Code38 code object BBB at 0x7fbe40d26a00, file 1.py>, line 2
+#    1: 'BBB'
+#    2: 11
+#    3: 2
+#    4: 3
+#    5: None
 # Names:
-#    0: five
+#    0: BBB
 #    1: print
-#    2: a
-#    3: c
-#    4: b
-LOAD_CONST           0 (<Code38 code object five at 0x7f42673239d0, file 1.py>, line 1)
-LOAD_CONST           1 ('five')
-MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
-STORE_NAME           0 (five)
-3:
-LOAD_NAME            1 (print)
-LOAD_NAME            0 (five)
-CALL_FUNCTION        0
-CALL_FUNCTION        1
-POP_TOP
-4:
-LOAD_CONST           2 (10)
-STORE_NAME           2 (a)
-5:
-LOAD_NAME            2 (a)
-LOAD_CONST           3 (5)
-BINARY_SUBTRACT
-STORE_NAME           2 (a)
-6:
-LOAD_NAME            2 (a)
-LOAD_CONST           3 (5)
-BINARY_MULTIPLY
-STORE_NAME           2 (a)
-7:
-LOAD_NAME            1 (print)
-LOAD_NAME            2 (a)
-CALL_FUNCTION        1
-POP_TOP
-9:
-LOAD_CONST           4 (1)
-STORE_NAME           2 (a)
-10:
-LOAD_CONST           5 (3)
-STORE_NAME           3 (c)
-11:
-LOAD_NAME            2 (a)
-LOAD_CONST           6 (0)
-COMPARE_OP           5 (>=)
-POP_JUMP_IF_FALSE    L76 (to 76)
-LOAD_NAME            3 (c)
-LOAD_CONST           5 (3)
-COMPARE_OP           2 (==)
-POP_JUMP_IF_FALSE    L76 (to 76)
-12:
-LOAD_NAME            2 (a)
-STORE_NAME           4 (b)
-JUMP_FORWARD         L82 (to 82)
-L76:
-14:
-LOAD_NAME            2 (a)
-UNARY_NEGATIVE
-STORE_NAME           4 (b)
-L82:
-16:
-LOAD_NAME            1 (print)
-LOAD_NAME            4 (b)
-CALL_FUNCTION        1
-POP_TOP
-JUMP_ABSOLUTE        LAB1
-17:
-LOAD_NAME            1 (print)
-LOAD_CONST           7 ('a')
-CALL_FUNCTION        1
-POP_TOP
-LAB2:
-18:
-LOAD_NAME            1 (print)
-LOAD_CONST           8 ('b')
-CALL_FUNCTION        1
-POP_TOP
-LOAD_CONST           9 (None)
-RETURN_VALUE
-LAB1:
-JUMP_ABSOLUTE LAB2
+NOP
+JUMP_ABSOLUTE 24 # L_9
+L_71:
+	LOAD_CONST           3 (2)			# 4
+	LOAD_CONST           4 (3)			# 6
+	CALL_FUNCTION        3			# 8
+		NOP			# 10
+	JUMP_ABSOLUTE 36  # L_73			# 12
+L_72:
+	LOAD_NAME            1 (print)			# 14
+	LOAD_NAME            0 (BBB)			# 16
+	LOAD_CONST           2 (11)			# 18
+		NOP			# 20
+	JUMP_ABSOLUTE 4  # L_71			# 22
+L_9:
+	LOAD_CONST           0 (<Code38 code object BBB at 0x7fbe40d26a00, file 1.py>, line 2)			# 24
+	LOAD_CONST           1 ('BBB')			# 26
+	MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)			# 28
+	STORE_NAME           0 (BBB)			# 30
+		NOP			# 32
+	JUMP_ABSOLUTE 14  # L_72			# 34
+L_73:
+	CALL_FUNCTION        1			# 36
+	POP_TOP			# 38
+	LOAD_CONST           5 (None)			# 40
+	RETURN_VALUE			# 42

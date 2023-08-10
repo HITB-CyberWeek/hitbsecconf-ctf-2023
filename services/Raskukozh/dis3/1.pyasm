@@ -2,24 +2,357 @@
 # Python bytecode 3.8.0 (3413)
 # Disassembled from Python 3.8.17 (default, Jul  4 2023, 06:27:59) 
 # [GCC 12.2.0]
-# Timestamp in code: 1690294256 (2023-07-25 14:10:56)
-# Source code size mod 2**32: 151 bytes
+# Timestamp in code: 1691506048 (2023-08-08 14:47:28)
+# Source code size mod 2**32: 1173 bytes
 
-# Method Name:       five
+# Method Name:       BBB
 # Filename:          1.py
-# Argument count:    0
+# Argument count:    3
 # Position-only argument count: 0
 # Keyword-only arguments: 0
-# Number of locals:  0
-# Stack size:        1
+# Number of locals:  5
+# Stack size:        3
 # Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
-# First Line:        1
+# First Line:        2
 # Constants:
 #    0: None
-#    1: 5
-  2:
-            LOAD_CONST           1 (5)
+#    1: 10
+#    2: 5
+#    3: 1
+#    4: 3
+#    5: 100
+#    6: 2
+# Names:
+#    0: print
+#    1: range
+# Varnames:
+#	a, s, b, c, i
+# Positional arguments:
+#	a, s, b
+# Local variables:
+#    3: c
+#    4: i
+  3:
+            LOAD_CONST           1 (10)
+            STORE_FAST           0 (a)
+
+  4:
+            LOAD_FAST            0 (a)
+            LOAD_CONST           2 (5)
+            BINARY_MULTIPLY
+            STORE_FAST           0 (a)
+
+  5:
+            LOAD_GLOBAL          0 (print)
+            LOAD_FAST            0 (a)
+            CALL_FUNCTION        1
+            POP_TOP
+
+  6:
+            LOAD_CONST           3 (1)
+            STORE_FAST           0 (a)
+
+  7:
+            LOAD_CONST           4 (3)
+            STORE_FAST           3 (c)
+
+  8:
+            LOAD_GLOBAL          1 (range)
+            LOAD_CONST           1 (10)
+            CALL_FUNCTION        1
+            GET_ITER
+L36:
+            FOR_ITER             L80 (to 80)
+            STORE_FAST           4 (i)
+
+  9:
+            LOAD_GLOBAL          0 (print)
+            LOAD_CONST           3 (1)
+            CALL_FUNCTION        1
+            POP_TOP
+
+ 10:
+            LOAD_FAST            4 (i)
+            LOAD_CONST           2 (5)
+            COMPARE_OP           4 (>)
+            POP_JUMP_IF_FALSE    L60 (to 60)
+
+ 11:
+            POP_TOP
+            JUMP_ABSOLUTE        L80 (to 80)
+
+L60:
+  12:
+            LOAD_FAST            4 (i)
+            LOAD_CONST           4 (3)
+            COMPARE_OP           4 (>)
+            POP_JUMP_IF_FALSE    L70 (to 70)
+
+ 13:
+            JUMP_ABSOLUTE        L36 (to 36)
+
+L70:
+  14:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            4 (i)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+            JUMP_ABSOLUTE        L36 (to 36)
+
+L80:
+  15:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           5 (100)
+            COMPARE_OP           0 (<)
+            EXTENDED_ARG         1 (256)
+            POP_JUMP_IF_FALSE    L412 (to 412)
+
+ 16:
+            LOAD_GLOBAL          0 (print)
+            LOAD_CONST           6 (2)
+            CALL_FUNCTION        1
+            POP_TOP
+
+ 17:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 18:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 19:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 20:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 21:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 22:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 24:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 25:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 26:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 27:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 28:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 29:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 30:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 31:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 32:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 33:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 34:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 35:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 36:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 37:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 38:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 39:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 40:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 41:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 42:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 43:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 44:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 45:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 46:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 47:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 48:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 49:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 50:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 51:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 52:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 53:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 54:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+
+ 55:
+            LOAD_FAST            2 (b)
+            LOAD_CONST           3 (1)
+            INPLACE_ADD
+            STORE_FAST           2 (b)
+
+ 56:
+            LOAD_FAST            0 (a)
+            LOAD_FAST            2 (b)
+            INPLACE_ADD
+            STORE_FAST           0 (a)
+            JUMP_ABSOLUTE        L80 (to 80)
+
+L412:
+  58:
+            LOAD_FAST            0 (a)
             RETURN_VALUE
+
 
 # Method Name:       <module>
 # Filename:          1.py
@@ -27,110 +360,34 @@
 # Position-only argument count: 0
 # Keyword-only arguments: 0
 # Number of locals:  0
-# Stack size:        2
+# Stack size:        5
 # Flags:             0x00000040 (NOFREE)
-# First Line:        1
+# First Line:        2
 # Constants:
-#    0: <Code38 code object five at 0x7f42673239d0, file 1.py>, line 1
-#    1: 'five'
-#    2: 10
-#    3: 5
-#    4: 1
-#    5: 3
-#    6: 0
-#    7: 'a'
-#    8: 'b'
-#    9: None
+#    0: <Code38 code object BBB at 0x7fbe40d26a00, file 1.py>, line 2
+#    1: 'BBB'
+#    2: 11
+#    3: 2
+#    4: 3
+#    5: None
 # Names:
-#    0: five
+#    0: BBB
 #    1: print
-#    2: a
-#    3: c
-#    4: b
-  1:
-            LOAD_CONST           0 (<Code38 code object five at 0x7f42673239d0, file 1.py>, line 1)
-            LOAD_CONST           1 ('five')
+  2:
+            LOAD_CONST           0 (<Code38 code object BBB at 0x7fbe40d26a00, file 1.py>, line 2)
+            LOAD_CONST           1 ('BBB')
             MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
-            STORE_NAME           0 (five)
+            STORE_NAME           0 (BBB)
 
-  3:
+ 59:
             LOAD_NAME            1 (print)
-            LOAD_NAME            0 (five)
-            CALL_FUNCTION        0
+            LOAD_NAME            0 (BBB)
+            LOAD_CONST           2 (11)
+            LOAD_CONST           3 (2)
+            LOAD_CONST           4 (3)
+            CALL_FUNCTION        3
             CALL_FUNCTION        1
             POP_TOP
-
-  4:
-            LOAD_CONST           2 (10)
-            STORE_NAME           2 (a)
-
-  5:
-            LOAD_NAME            2 (a)
-            LOAD_CONST           3 (5)
-            BINARY_SUBTRACT
-            STORE_NAME           2 (a)
-
-  6:
-            LOAD_NAME            2 (a)
-            LOAD_CONST           3 (5)
-            BINARY_MULTIPLY
-            STORE_NAME           2 (a)
-
-  7:
-            LOAD_NAME            1 (print)
-            LOAD_NAME            2 (a)
-            CALL_FUNCTION        1
-            POP_TOP
-
-  9:
-            LOAD_CONST           4 (1)
-            STORE_NAME           2 (a)
-
- 10:
-            LOAD_CONST           5 (3)
-            STORE_NAME           3 (c)
-
- 11:
-            LOAD_NAME            2 (a)
-            LOAD_CONST           6 (0)
-            COMPARE_OP           5 (>=)
-            POP_JUMP_IF_FALSE    L76 (to 76)
-            LOAD_NAME            3 (c)
-            LOAD_CONST           5 (3)
-            COMPARE_OP           2 (==)
-            POP_JUMP_IF_FALSE    L76 (to 76)
-
- 12:
-            LOAD_NAME            2 (a)
-            STORE_NAME           4 (b)
-            JUMP_FORWARD         L82 (to 82)
-
-L76:
-  14:
-            LOAD_NAME            2 (a)
-            UNARY_NEGATIVE
-            STORE_NAME           4 (b)
-
-L82:
-  16:
-            LOAD_NAME            1 (print)
-            LOAD_NAME            4 (b)
-            CALL_FUNCTION        1
-            POP_TOP
-            JUMP_ABSOLUTE        LAB1
- 17:
-            LOAD_NAME            1 (print)
-            LOAD_CONST           7 ('a')
-            CALL_FUNCTION        1
-            POP_TOP
-LAB2:
- 18:
-            LOAD_NAME            1 (print)
-            LOAD_CONST           8 ('b')
-            CALL_FUNCTION        1
-            POP_TOP
-            LOAD_CONST           9 (None)
+            LOAD_CONST           5 (None)
             RETURN_VALUE
 
-LAB1:
-            JUMP_ABSOLUTE LAB2
