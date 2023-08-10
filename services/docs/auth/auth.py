@@ -1,10 +1,12 @@
 from fastapi import FastAPI, Response
 from pydantic import BaseModel
 
+import hmac
+import hashlib
+import os
 import psycopg
 from psycopg import sql
 import redis
-import os
 
 db = psycopg.connect(
     host="pg",
@@ -40,12 +42,36 @@ def register(ri: RegisterInfo, response: Response):
             response.status_code = 400
             return {"error": str(e)}
 
-    return {"status": "OK"}
+    return {"login": ri.login}
 
 @app.post("/login")
-def login():
-    pass
+def login(li: RegisterInfo, response: Response):
+    with db.cursor() as cursor:
+        try:
+            cursor.execute(
+                "select id from users where login = %(login)s and pass = %(password)s",
+                li.model_dump()
+            )
+            (user_id) = cursor.fetchone()
+            if user_id:
+                sign = hmac.new(
+                    os.getenv('DOCS_SECRET').encode("UTF-8"),
+                    li.login.encode("UTF-8"),
+                    hashlib.sha1
+                ).hexdigest()
+                response.set_cookie(
+                    key="docs_session",
+                    value=li.login + "--" + sign,
+                    httponly=True
+                )
+                return {"status": "OK"}
+        except Exception as e:
+            db.rollback()
+        finally:
+            db.rollback()
+    return {"status": "FAIL"}
 
 @app.post("/logout")
-def logout():
-    pass
+def logout(response: Response):
+    response.delete_cookie("docs_session")
+    return {"status": "OK"}
