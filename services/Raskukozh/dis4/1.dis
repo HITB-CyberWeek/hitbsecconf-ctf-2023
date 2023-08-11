@@ -1,0 +1,1980 @@
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+# decompyle3 version 3.9.0
+# Python bytecode version base 3.8.0 (3413)
+# Decompiled from: Python 3.8.17 (default, Jul  4 2023, 06:27:59) 
+# [GCC 12.2.0]
+# Embedded file name: 1.py
+# Compiled at: 2023-08-08 00:30:45
+[{'end': 31, 'start': 0, 'type': 'root'}]
+
+ L.   2         0  LOAD_CODE                <code_object BBB>
+                2  LOAD_STR                 'BBB'
+                4  MAKE_FUNCTION_0          'Neither defaults, keyword-only args, annotations, nor closures'
+                6  STORE_NAME               BBB
+
+ L.  21         8  LOAD_CODE                <code_object CCC>
+               10  LOAD_STR                 'CCC'
+               12  MAKE_FUNCTION_0          'Neither defaults, keyword-only args, annotations, nor closures'
+               14  STORE_NAME               CCC
+
+ L. 131        16  LOAD_NAME                BBB
+               18  LOAD_CONST               1
+               20  LOAD_CONST               2
+               22  LOAD_CONST               3
+               24  CALL_FUNCTION         3  ''
+               26  POP_TOP          
+               28  LOAD_CONST               None
+               30  RETURN_VALUE     
+
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+[{'end': 117, 'start': 0, 'type': 'root'}]
+
+ L.   3         0  LOAD_CONST               10
+                2  STORE_FAST               'a'
+
+ L.   4         4  LOAD_FAST                'a'
+                6  LOAD_CONST               5
+                8  BINARY_SUBTRACT  
+               10  STORE_FAST               'a'
+
+ L.   5        12  LOAD_FAST                'a'
+               14  LOAD_CONST               5
+               16  BINARY_MULTIPLY  
+               18  STORE_FAST               'a'
+
+ L.   6        20  LOAD_GLOBAL              print
+               22  LOAD_FAST                'a'
+               24  CALL_FUNCTION         1  ''
+               26  POP_TOP          
+
+ L.   8        28  LOAD_CONST               1
+               30  STORE_FAST               'a'
+
+ L.   9        32  LOAD_CONST               3
+               34  STORE_FAST               'c'
+
+ L.  10        36  LOAD_GLOBAL              range
+               38  LOAD_CONST               10
+               40  CALL_FUNCTION         1  ''
+               42  GET_ITER         
+             44_0  COME_FROM            56  '56'
+               44  FOR_ITER             58  'to 58'
+               46  STORE_FAST               'i'
+
+ L.  11        48  LOAD_FAST                'a'
+               50  LOAD_FAST                'i'
+               52  INPLACE_ADD      
+               54  STORE_FAST               'a'
+               56  JUMP_LOOP            44  'to 44'
+             58_0  COME_FROM            82  '82'
+             58_1  COME_FROM            44  '44'
+
+ L.  13        58  LOAD_FAST                'b'
+               60  LOAD_CONST               100
+               62  COMPARE_OP               <
+               64  POP_JUMP_IF_FALSE    84  'to 84'
+
+ L.  14        66  LOAD_FAST                'b'
+               68  LOAD_CONST               1
+               70  INPLACE_ADD      
+               72  STORE_FAST               'b'
+
+ L.  15        74  LOAD_FAST                'a'
+               76  LOAD_FAST                'b'
+               78  INPLACE_ADD      
+               80  STORE_FAST               'a'
+               82  JUMP_LOOP            58  'to 58'
+             84_0  COME_FROM            64  '64'
+
+ L.  16        84  LOAD_FAST                'a'
+               86  LOAD_CONST               0
+               88  COMPARE_OP               >=
+               90  POP_JUMP_IF_FALSE   108  'to 108'
+               92  LOAD_FAST                'c'
+               94  LOAD_CONST               3
+               96  COMPARE_OP               ==
+               98  POP_JUMP_IF_FALSE   108  'to 108'
+
+ L.  17       100  LOAD_FAST                'a'
+              102  STORE_FAST               'b'
+
+ L.  18       104  LOAD_CONST               None
+              106  RETURN_VALUE     
+            108_0  COME_FROM            98  '98'
+            108_1  COME_FROM            90  '90'
+
+ L.  20       108  LOAD_FAST                'a'
+              110  UNARY_NEGATIVE   
+              112  STORE_FAST               'b'
+
+ L.  21       114  LOAD_CONST               None
+              116  RETURN_VALUE     
+
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+I don't know about Python version '3.8.17' yet.
+xdis might need to be informed about version '3.8.17'
+[{'end': 2899, 'start': 0, 'type': 'root'}]
+
+ L.  23         0  LOAD_FAST                'a'
+              2_4  POP_JUMP_IF_FALSE  2888  'to 2888'
+
+ L.  24         6  LOAD_FAST                'a'
+                8  LOAD_FAST                'c'
+               10  BINARY_ADD       
+               12  STORE_FAST               'a'
+
+ L.  25        14  LOAD_FAST                'b'
+               16  LOAD_CONST               1
+               18  BINARY_ADD       
+               20  STORE_FAST               'b'
+
+ L.  26        22  LOAD_FAST                'a'
+               24  LOAD_FAST                'c'
+               26  BINARY_ADD       
+               28  STORE_FAST               'a'
+
+ L.  27        30  LOAD_FAST                'b'
+               32  LOAD_CONST               1
+               34  BINARY_ADD       
+               36  STORE_FAST               'b'
+
+ L.  28        38  LOAD_FAST                'a'
+               40  LOAD_FAST                'c'
+               42  BINARY_ADD       
+               44  STORE_FAST               'a'
+
+ L.  29        46  LOAD_FAST                'b'
+               48  LOAD_CONST               1
+               50  BINARY_ADD       
+               52  STORE_FAST               'b'
+
+ L.  30        54  LOAD_FAST                'a'
+               56  LOAD_FAST                'c'
+               58  BINARY_ADD       
+               60  STORE_FAST               'a'
+
+ L.  31        62  LOAD_FAST                'b'
+               64  LOAD_CONST               1
+               66  BINARY_ADD       
+               68  STORE_FAST               'b'
+
+ L.  32        70  LOAD_FAST                'a'
+               72  LOAD_FAST                'c'
+               74  BINARY_ADD       
+               76  STORE_FAST               'a'
+
+ L.  33        78  LOAD_FAST                'b'
+               80  LOAD_CONST               1
+               82  BINARY_ADD       
+               84  STORE_FAST               'b'
+
+ L.  34        86  LOAD_FAST                'a'
+               88  LOAD_FAST                'c'
+               90  BINARY_ADD       
+               92  STORE_FAST               'a'
+
+ L.  35        94  LOAD_FAST                'b'
+               96  LOAD_CONST               1
+               98  BINARY_ADD       
+              100  STORE_FAST               'b'
+
+ L.  36       102  LOAD_FAST                'a'
+              104  LOAD_FAST                'c'
+              106  BINARY_ADD       
+              108  STORE_FAST               'a'
+
+ L.  37       110  LOAD_FAST                'b'
+              112  LOAD_CONST               1
+              114  BINARY_ADD       
+              116  STORE_FAST               'b'
+
+ L.  38       118  LOAD_FAST                'a'
+              120  LOAD_FAST                'c'
+              122  BINARY_ADD       
+              124  STORE_FAST               'a'
+
+ L.  39       126  LOAD_FAST                'b'
+              128  LOAD_CONST               1
+              130  BINARY_ADD       
+              132  STORE_FAST               'b'
+
+ L.  40       134  LOAD_FAST                'a'
+              136  LOAD_FAST                'c'
+              138  BINARY_ADD       
+              140  STORE_FAST               'a'
+
+ L.  41       142  LOAD_FAST                'b'
+              144  LOAD_CONST               1
+              146  BINARY_ADD       
+              148  STORE_FAST               'b'
+
+ L.  42       150  LOAD_FAST                'a'
+              152  LOAD_FAST                'c'
+              154  BINARY_ADD       
+              156  STORE_FAST               'a'
+
+ L.  43       158  LOAD_FAST                'b'
+              160  LOAD_CONST               1
+              162  BINARY_ADD       
+              164  STORE_FAST               'b'
+
+ L.  44       166  LOAD_FAST                'a'
+              168  LOAD_FAST                'c'
+              170  BINARY_ADD       
+              172  STORE_FAST               'a'
+
+ L.  45       174  LOAD_FAST                'b'
+              176  LOAD_CONST               1
+              178  BINARY_ADD       
+              180  STORE_FAST               'b'
+
+ L.  46       182  LOAD_FAST                'a'
+              184  LOAD_FAST                'c'
+              186  BINARY_ADD       
+              188  STORE_FAST               'a'
+
+ L.  47       190  LOAD_FAST                'b'
+              192  LOAD_CONST               1
+              194  BINARY_ADD       
+              196  STORE_FAST               'b'
+
+ L.  48       198  LOAD_FAST                'a'
+              200  LOAD_FAST                'c'
+              202  BINARY_ADD       
+              204  STORE_FAST               'a'
+
+ L.  49       206  LOAD_FAST                'b'
+              208  LOAD_CONST               1
+              210  BINARY_ADD       
+              212  STORE_FAST               'b'
+
+ L.  50       214  LOAD_FAST                'a'
+              216  LOAD_FAST                'c'
+              218  BINARY_ADD       
+              220  STORE_FAST               'a'
+
+ L.  51       222  LOAD_FAST                'b'
+              224  LOAD_CONST               1
+              226  BINARY_ADD       
+              228  STORE_FAST               'b'
+
+ L.  52       230  LOAD_FAST                'a'
+              232  LOAD_FAST                'c'
+              234  BINARY_ADD       
+              236  STORE_FAST               'a'
+
+ L.  53       238  LOAD_FAST                'b'
+              240  LOAD_CONST               1
+              242  BINARY_ADD       
+              244  STORE_FAST               'b'
+
+ L.  54       246  LOAD_FAST                'a'
+              248  LOAD_FAST                'c'
+              250  BINARY_ADD       
+              252  STORE_FAST               'a'
+
+ L.  55       254  LOAD_FAST                'b'
+              256  LOAD_CONST               1
+              258  BINARY_ADD       
+              260  STORE_FAST               'b'
+
+ L.  56       262  LOAD_FAST                'a'
+              264  LOAD_FAST                'c'
+              266  BINARY_ADD       
+              268  STORE_FAST               'a'
+
+ L.  57       270  LOAD_FAST                'b'
+              272  LOAD_CONST               1
+              274  BINARY_ADD       
+              276  STORE_FAST               'b'
+
+ L.  58       278  LOAD_FAST                'a'
+              280  LOAD_FAST                'c'
+              282  BINARY_ADD       
+              284  STORE_FAST               'a'
+
+ L.  59       286  LOAD_FAST                'b'
+              288  LOAD_CONST               1
+              290  BINARY_ADD       
+              292  STORE_FAST               'b'
+
+ L.  60       294  LOAD_FAST                'a'
+              296  LOAD_FAST                'c'
+              298  BINARY_ADD       
+              300  STORE_FAST               'a'
+
+ L.  61       302  LOAD_FAST                'b'
+              304  LOAD_CONST               1
+              306  BINARY_ADD       
+              308  STORE_FAST               'b'
+
+ L.  62       310  LOAD_FAST                'a'
+              312  LOAD_FAST                'c'
+              314  BINARY_ADD       
+              316  STORE_FAST               'a'
+
+ L.  63       318  LOAD_FAST                'b'
+              320  LOAD_CONST               1
+              322  BINARY_ADD       
+              324  STORE_FAST               'b'
+
+ L.  64       326  LOAD_FAST                'a'
+              328  LOAD_FAST                'c'
+              330  BINARY_ADD       
+              332  STORE_FAST               'a'
+
+ L.  65       334  LOAD_FAST                'b'
+              336  LOAD_CONST               1
+              338  BINARY_ADD       
+              340  STORE_FAST               'b'
+
+ L.  66       342  LOAD_FAST                'a'
+              344  LOAD_FAST                'c'
+              346  BINARY_ADD       
+              348  STORE_FAST               'a'
+
+ L.  67       350  LOAD_FAST                'b'
+              352  LOAD_CONST               1
+              354  BINARY_ADD       
+              356  STORE_FAST               'b'
+
+ L.  68       358  LOAD_FAST                'a'
+              360  LOAD_FAST                'c'
+              362  BINARY_ADD       
+              364  STORE_FAST               'a'
+
+ L.  69       366  LOAD_FAST                'b'
+              368  LOAD_CONST               1
+              370  BINARY_ADD       
+              372  STORE_FAST               'b'
+
+ L.  70       374  LOAD_FAST                'a'
+              376  LOAD_FAST                'c'
+              378  BINARY_ADD       
+              380  STORE_FAST               'a'
+
+ L.  71       382  LOAD_FAST                'b'
+              384  LOAD_CONST               1
+              386  BINARY_ADD       
+              388  STORE_FAST               'b'
+
+ L.  72       390  LOAD_FAST                'a'
+              392  LOAD_FAST                'c'
+              394  BINARY_ADD       
+              396  STORE_FAST               'a'
+
+ L.  73       398  LOAD_FAST                'b'
+              400  LOAD_CONST               1
+              402  BINARY_ADD       
+              404  STORE_FAST               'b'
+
+ L.  74       406  LOAD_FAST                'a'
+              408  LOAD_FAST                'c'
+              410  BINARY_ADD       
+              412  STORE_FAST               'a'
+
+ L.  75       414  LOAD_FAST                'b'
+              416  LOAD_CONST               1
+              418  BINARY_ADD       
+              420  STORE_FAST               'b'
+
+ L.  76       422  LOAD_FAST                'a'
+              424  LOAD_FAST                'c'
+              426  BINARY_ADD       
+              428  STORE_FAST               'a'
+
+ L.  77       430  LOAD_FAST                'b'
+              432  LOAD_CONST               1
+              434  BINARY_ADD       
+              436  STORE_FAST               'b'
+
+ L.  78       438  LOAD_FAST                'a'
+              440  LOAD_FAST                'c'
+              442  BINARY_ADD       
+              444  STORE_FAST               'a'
+
+ L.  79       446  LOAD_FAST                'b'
+              448  LOAD_CONST               1
+              450  BINARY_ADD       
+              452  STORE_FAST               'b'
+
+ L.  80       454  LOAD_FAST                'a'
+              456  LOAD_FAST                'c'
+              458  BINARY_ADD       
+              460  STORE_FAST               'a'
+
+ L.  81       462  LOAD_FAST                'b'
+              464  LOAD_CONST               1
+              466  BINARY_ADD       
+              468  STORE_FAST               'b'
+
+ L.  82       470  LOAD_FAST                'a'
+              472  LOAD_FAST                'c'
+              474  BINARY_ADD       
+              476  STORE_FAST               'a'
+
+ L.  83       478  LOAD_FAST                'b'
+              480  LOAD_CONST               1
+              482  BINARY_ADD       
+              484  STORE_FAST               'b'
+
+ L.  84       486  LOAD_FAST                'a'
+              488  LOAD_FAST                'c'
+              490  BINARY_ADD       
+              492  STORE_FAST               'a'
+
+ L.  85       494  LOAD_FAST                'b'
+              496  LOAD_CONST               1
+              498  BINARY_ADD       
+              500  STORE_FAST               'b'
+
+ L.  86       502  LOAD_FAST                'a'
+              504  LOAD_FAST                'c'
+              506  BINARY_ADD       
+              508  STORE_FAST               'a'
+
+ L.  87       510  LOAD_FAST                'b'
+              512  LOAD_CONST               1
+              514  BINARY_ADD       
+              516  STORE_FAST               'b'
+
+ L.  88       518  LOAD_FAST                'a'
+              520  LOAD_FAST                'c'
+              522  BINARY_ADD       
+              524  STORE_FAST               'a'
+
+ L.  89       526  LOAD_FAST                'b'
+              528  LOAD_CONST               1
+              530  BINARY_ADD       
+              532  STORE_FAST               'b'
+
+ L.  90       534  LOAD_FAST                'a'
+              536  LOAD_FAST                'c'
+              538  BINARY_ADD       
+              540  STORE_FAST               'a'
+
+ L.  91       542  LOAD_FAST                'b'
+              544  LOAD_CONST               1
+              546  BINARY_ADD       
+              548  STORE_FAST               'b'
+
+ L.  92       550  LOAD_FAST                'a'
+              552  LOAD_FAST                'c'
+              554  BINARY_ADD       
+              556  STORE_FAST               'a'
+
+ L.  93       558  LOAD_FAST                'b'
+              560  LOAD_CONST               1
+              562  BINARY_ADD       
+              564  STORE_FAST               'b'
+
+ L.  94       566  LOAD_FAST                'a'
+              568  LOAD_FAST                'c'
+              570  BINARY_ADD       
+              572  STORE_FAST               'a'
+
+ L.  95       574  LOAD_FAST                'b'
+              576  LOAD_CONST               1
+              578  BINARY_ADD       
+              580  STORE_FAST               'b'
+
+ L.  96       582  LOAD_FAST                'a'
+              584  LOAD_FAST                'c'
+              586  BINARY_ADD       
+              588  STORE_FAST               'a'
+
+ L.  97       590  LOAD_FAST                'b'
+              592  LOAD_CONST               1
+              594  BINARY_ADD       
+              596  STORE_FAST               'b'
+
+ L.  98       598  LOAD_FAST                'a'
+              600  LOAD_FAST                'c'
+              602  BINARY_ADD       
+              604  STORE_FAST               'a'
+
+ L.  99       606  LOAD_FAST                'b'
+              608  LOAD_CONST               1
+              610  BINARY_ADD       
+              612  STORE_FAST               'b'
+
+ L. 100       614  LOAD_FAST                'a'
+              616  LOAD_FAST                'c'
+              618  BINARY_ADD       
+              620  STORE_FAST               'a'
+
+ L. 101       622  LOAD_FAST                'b'
+              624  LOAD_CONST               1
+              626  BINARY_ADD       
+              628  STORE_FAST               'b'
+
+ L. 102       630  LOAD_FAST                'a'
+              632  LOAD_FAST                'c'
+              634  BINARY_ADD       
+              636  STORE_FAST               'a'
+
+ L. 103       638  LOAD_FAST                'b'
+              640  LOAD_CONST               1
+              642  BINARY_ADD       
+              644  STORE_FAST               'b'
+
+ L. 104       646  LOAD_FAST                'a'
+              648  LOAD_FAST                'c'
+              650  BINARY_ADD       
+              652  STORE_FAST               'a'
+
+ L. 105       654  LOAD_FAST                'b'
+              656  LOAD_CONST               1
+              658  BINARY_ADD       
+              660  STORE_FAST               'b'
+
+ L. 106       662  LOAD_FAST                'a'
+              664  LOAD_FAST                'c'
+              666  BINARY_ADD       
+              668  STORE_FAST               'a'
+
+ L. 107       670  LOAD_FAST                'b'
+              672  LOAD_CONST               1
+              674  BINARY_ADD       
+              676  STORE_FAST               'b'
+
+ L. 108       678  LOAD_FAST                'a'
+              680  LOAD_FAST                'c'
+              682  BINARY_ADD       
+              684  STORE_FAST               'a'
+
+ L. 109       686  LOAD_FAST                'b'
+              688  LOAD_CONST               1
+              690  BINARY_ADD       
+              692  STORE_FAST               'b'
+
+ L. 110       694  LOAD_FAST                'a'
+              696  LOAD_FAST                'c'
+              698  BINARY_ADD       
+              700  STORE_FAST               'a'
+
+ L. 111       702  LOAD_FAST                'b'
+              704  LOAD_CONST               1
+              706  BINARY_ADD       
+              708  STORE_FAST               'b'
+
+ L. 112       710  LOAD_FAST                'a'
+              712  LOAD_FAST                'c'
+              714  BINARY_ADD       
+              716  STORE_FAST               'a'
+
+ L. 113       718  LOAD_FAST                'b'
+              720  LOAD_CONST               1
+              722  BINARY_ADD       
+              724  STORE_FAST               'b'
+
+ L. 114       726  LOAD_FAST                'a'
+              728  LOAD_FAST                'c'
+              730  BINARY_ADD       
+              732  STORE_FAST               'a'
+
+ L. 115       734  LOAD_FAST                'b'
+              736  LOAD_CONST               1
+              738  BINARY_ADD       
+              740  STORE_FAST               'b'
+
+ L. 116       742  LOAD_FAST                'a'
+              744  LOAD_FAST                'c'
+              746  BINARY_ADD       
+              748  STORE_FAST               'a'
+
+ L. 117       750  LOAD_FAST                'b'
+              752  LOAD_CONST               1
+              754  BINARY_ADD       
+              756  STORE_FAST               'b'
+
+ L. 118       758  LOAD_FAST                'a'
+              760  LOAD_FAST                'c'
+              762  BINARY_ADD       
+              764  STORE_FAST               'a'
+
+ L. 119       766  LOAD_FAST                'b'
+              768  LOAD_CONST               1
+              770  BINARY_ADD       
+              772  STORE_FAST               'b'
+
+ L. 120       774  LOAD_FAST                'a'
+              776  LOAD_FAST                'c'
+              778  BINARY_ADD       
+              780  STORE_FAST               'a'
+
+ L. 121       782  LOAD_FAST                'b'
+              784  LOAD_CONST               1
+              786  BINARY_ADD       
+              788  STORE_FAST               'b'
+
+ L. 122       790  LOAD_FAST                'a'
+              792  LOAD_FAST                'c'
+              794  BINARY_ADD       
+              796  STORE_FAST               'a'
+
+ L. 123       798  LOAD_FAST                'b'
+              800  LOAD_CONST               1
+              802  BINARY_ADD       
+              804  STORE_FAST               'b'
+
+ L. 124       806  LOAD_FAST                'a'
+              808  LOAD_FAST                'c'
+              810  BINARY_ADD       
+              812  STORE_FAST               'a'
+
+ L. 125       814  LOAD_FAST                'b'
+              816  LOAD_CONST               1
+              818  BINARY_ADD       
+              820  STORE_FAST               'b'
+
+ L. 126       822  LOAD_FAST                'a'
+              824  LOAD_FAST                'c'
+              826  BINARY_ADD       
+              828  STORE_FAST               'a'
+
+ L. 127       830  LOAD_FAST                'b'
+              832  LOAD_CONST               1
+              834  BINARY_ADD       
+              836  STORE_FAST               'b'
+
+ L. 128       838  LOAD_FAST                'a'
+              840  LOAD_FAST                'c'
+              842  BINARY_ADD       
+              844  STORE_FAST               'a'
+
+ L. 129       846  LOAD_FAST                'b'
+              848  LOAD_CONST               1
+              850  BINARY_ADD       
+              852  STORE_FAST               'b'
+
+ L. 130       854  LOAD_FAST                'a'
+              856  LOAD_FAST                'c'
+              858  BINARY_ADD       
+              860  STORE_FAST               'a'
+
+ L. 131       862  LOAD_FAST                'b'
+              864  LOAD_CONST               1
+              866  BINARY_ADD       
+              868  STORE_FAST               'b'
+
+ L. 132       870  LOAD_FAST                'a'
+              872  LOAD_FAST                'c'
+              874  BINARY_ADD       
+              876  STORE_FAST               'a'
+
+ L. 133       878  LOAD_FAST                'b'
+              880  LOAD_CONST               1
+              882  BINARY_ADD       
+              884  STORE_FAST               'b'
+
+ L. 134       886  LOAD_FAST                'a'
+              888  LOAD_FAST                'c'
+              890  BINARY_ADD       
+              892  STORE_FAST               'a'
+
+ L. 135       894  LOAD_FAST                'b'
+              896  LOAD_CONST               1
+              898  BINARY_ADD       
+              900  STORE_FAST               'b'
+
+ L. 136       902  LOAD_FAST                'a'
+              904  LOAD_FAST                'c'
+              906  BINARY_ADD       
+              908  STORE_FAST               'a'
+
+ L. 137       910  LOAD_FAST                'b'
+              912  LOAD_CONST               1
+              914  BINARY_ADD       
+              916  STORE_FAST               'b'
+
+ L. 138       918  LOAD_FAST                'a'
+              920  LOAD_FAST                'c'
+              922  BINARY_ADD       
+              924  STORE_FAST               'a'
+
+ L. 139       926  LOAD_FAST                'b'
+              928  LOAD_CONST               1
+              930  BINARY_ADD       
+              932  STORE_FAST               'b'
+
+ L. 140       934  LOAD_FAST                'a'
+              936  LOAD_FAST                'c'
+              938  BINARY_ADD       
+              940  STORE_FAST               'a'
+
+ L. 141       942  LOAD_FAST                'b'
+              944  LOAD_CONST               1
+              946  BINARY_ADD       
+              948  STORE_FAST               'b'
+
+ L. 142       950  LOAD_FAST                'a'
+              952  LOAD_FAST                'c'
+              954  BINARY_ADD       
+              956  STORE_FAST               'a'
+
+ L. 143       958  LOAD_FAST                'b'
+              960  LOAD_CONST               1
+              962  BINARY_ADD       
+              964  STORE_FAST               'b'
+
+ L. 144       966  LOAD_FAST                'a'
+              968  LOAD_FAST                'c'
+              970  BINARY_ADD       
+              972  STORE_FAST               'a'
+
+ L. 145       974  LOAD_FAST                'b'
+              976  LOAD_CONST               1
+              978  BINARY_ADD       
+              980  STORE_FAST               'b'
+
+ L. 146       982  LOAD_FAST                'a'
+              984  LOAD_FAST                'c'
+              986  BINARY_ADD       
+              988  STORE_FAST               'a'
+
+ L. 147       990  LOAD_FAST                'b'
+              992  LOAD_CONST               1
+              994  BINARY_ADD       
+              996  STORE_FAST               'b'
+
+ L. 148       998  LOAD_FAST                'a'
+             1000  LOAD_FAST                'c'
+             1002  BINARY_ADD       
+             1004  STORE_FAST               'a'
+
+ L. 149      1006  LOAD_FAST                'b'
+             1008  LOAD_CONST               1
+             1010  BINARY_ADD       
+             1012  STORE_FAST               'b'
+
+ L. 150      1014  LOAD_FAST                'a'
+             1016  LOAD_FAST                'c'
+             1018  BINARY_ADD       
+             1020  STORE_FAST               'a'
+
+ L. 151      1022  LOAD_FAST                'b'
+             1024  LOAD_CONST               1
+             1026  BINARY_ADD       
+             1028  STORE_FAST               'b'
+
+ L. 152      1030  LOAD_FAST                'a'
+             1032  LOAD_FAST                'c'
+             1034  BINARY_ADD       
+             1036  STORE_FAST               'a'
+
+ L. 153      1038  LOAD_FAST                'b'
+             1040  LOAD_CONST               1
+             1042  BINARY_ADD       
+             1044  STORE_FAST               'b'
+
+ L. 154      1046  LOAD_FAST                'a'
+             1048  LOAD_FAST                'c'
+             1050  BINARY_ADD       
+             1052  STORE_FAST               'a'
+
+ L. 155      1054  LOAD_FAST                'b'
+             1056  LOAD_CONST               1
+             1058  BINARY_ADD       
+             1060  STORE_FAST               'b'
+
+ L. 156      1062  LOAD_FAST                'a'
+             1064  LOAD_FAST                'c'
+             1066  BINARY_ADD       
+             1068  STORE_FAST               'a'
+
+ L. 157      1070  LOAD_FAST                'b'
+             1072  LOAD_CONST               1
+             1074  BINARY_ADD       
+             1076  STORE_FAST               'b'
+
+ L. 158      1078  LOAD_FAST                'a'
+             1080  LOAD_FAST                'c'
+             1082  BINARY_ADD       
+             1084  STORE_FAST               'a'
+
+ L. 159      1086  LOAD_FAST                'b'
+             1088  LOAD_CONST               1
+             1090  BINARY_ADD       
+             1092  STORE_FAST               'b'
+
+ L. 160      1094  LOAD_FAST                'a'
+             1096  LOAD_FAST                'c'
+             1098  BINARY_ADD       
+             1100  STORE_FAST               'a'
+
+ L. 161      1102  LOAD_FAST                'b'
+             1104  LOAD_CONST               1
+             1106  BINARY_ADD       
+             1108  STORE_FAST               'b'
+
+ L. 162      1110  LOAD_FAST                'a'
+             1112  LOAD_FAST                'c'
+             1114  BINARY_ADD       
+             1116  STORE_FAST               'a'
+
+ L. 163      1118  LOAD_FAST                'b'
+             1120  LOAD_CONST               1
+             1122  BINARY_ADD       
+             1124  STORE_FAST               'b'
+
+ L. 164      1126  LOAD_FAST                'a'
+             1128  LOAD_FAST                'c'
+             1130  BINARY_ADD       
+             1132  STORE_FAST               'a'
+
+ L. 165      1134  LOAD_FAST                'b'
+             1136  LOAD_CONST               1
+             1138  BINARY_ADD       
+             1140  STORE_FAST               'b'
+
+ L. 166      1142  LOAD_FAST                'a'
+             1144  LOAD_FAST                'c'
+             1146  BINARY_ADD       
+             1148  STORE_FAST               'a'
+
+ L. 167      1150  LOAD_FAST                'b'
+             1152  LOAD_CONST               1
+             1154  BINARY_ADD       
+             1156  STORE_FAST               'b'
+
+ L. 168      1158  LOAD_FAST                'a'
+             1160  LOAD_FAST                'c'
+             1162  BINARY_ADD       
+             1164  STORE_FAST               'a'
+
+ L. 169      1166  LOAD_FAST                'b'
+             1168  LOAD_CONST               1
+             1170  BINARY_ADD       
+             1172  STORE_FAST               'b'
+
+ L. 170      1174  LOAD_FAST                'a'
+             1176  LOAD_FAST                'c'
+             1178  BINARY_ADD       
+             1180  STORE_FAST               'a'
+
+ L. 171      1182  LOAD_FAST                'b'
+             1184  LOAD_CONST               1
+             1186  BINARY_ADD       
+             1188  STORE_FAST               'b'
+
+ L. 172      1190  LOAD_FAST                'a'
+             1192  LOAD_FAST                'c'
+             1194  BINARY_ADD       
+             1196  STORE_FAST               'a'
+
+ L. 173      1198  LOAD_FAST                'b'
+             1200  LOAD_CONST               1
+             1202  BINARY_ADD       
+             1204  STORE_FAST               'b'
+
+ L. 174      1206  LOAD_FAST                'a'
+             1208  LOAD_FAST                'c'
+             1210  BINARY_ADD       
+             1212  STORE_FAST               'a'
+
+ L. 175      1214  LOAD_FAST                'b'
+             1216  LOAD_CONST               1
+             1218  BINARY_ADD       
+             1220  STORE_FAST               'b'
+
+ L. 176      1222  LOAD_FAST                'a'
+             1224  LOAD_FAST                'c'
+             1226  BINARY_ADD       
+             1228  STORE_FAST               'a'
+
+ L. 177      1230  LOAD_FAST                'b'
+             1232  LOAD_CONST               1
+             1234  BINARY_ADD       
+             1236  STORE_FAST               'b'
+
+ L. 178      1238  LOAD_FAST                'a'
+             1240  LOAD_FAST                'c'
+             1242  BINARY_ADD       
+             1244  STORE_FAST               'a'
+
+ L. 179      1246  LOAD_FAST                'b'
+             1248  LOAD_CONST               1
+             1250  BINARY_ADD       
+             1252  STORE_FAST               'b'
+
+ L. 180      1254  LOAD_FAST                'a'
+             1256  LOAD_FAST                'c'
+             1258  BINARY_ADD       
+             1260  STORE_FAST               'a'
+
+ L. 181      1262  LOAD_FAST                'b'
+             1264  LOAD_CONST               1
+             1266  BINARY_ADD       
+             1268  STORE_FAST               'b'
+
+ L. 182      1270  LOAD_FAST                'a'
+             1272  LOAD_FAST                'c'
+             1274  BINARY_ADD       
+             1276  STORE_FAST               'a'
+
+ L. 183      1278  LOAD_FAST                'b'
+             1280  LOAD_CONST               1
+             1282  BINARY_ADD       
+             1284  STORE_FAST               'b'
+
+ L. 184      1286  LOAD_FAST                'a'
+             1288  LOAD_FAST                'c'
+             1290  BINARY_ADD       
+             1292  STORE_FAST               'a'
+
+ L. 185      1294  LOAD_FAST                'b'
+             1296  LOAD_CONST               1
+             1298  BINARY_ADD       
+             1300  STORE_FAST               'b'
+
+ L. 186      1302  LOAD_FAST                'a'
+             1304  LOAD_FAST                'c'
+             1306  BINARY_ADD       
+             1308  STORE_FAST               'a'
+
+ L. 187      1310  LOAD_FAST                'b'
+             1312  LOAD_CONST               1
+             1314  BINARY_ADD       
+             1316  STORE_FAST               'b'
+
+ L. 188      1318  LOAD_FAST                'a'
+             1320  LOAD_FAST                'c'
+             1322  BINARY_ADD       
+             1324  STORE_FAST               'a'
+
+ L. 189      1326  LOAD_FAST                'b'
+             1328  LOAD_CONST               1
+             1330  BINARY_ADD       
+             1332  STORE_FAST               'b'
+
+ L. 190      1334  LOAD_FAST                'a'
+             1336  LOAD_FAST                'c'
+             1338  BINARY_ADD       
+             1340  STORE_FAST               'a'
+
+ L. 191      1342  LOAD_FAST                'b'
+             1344  LOAD_CONST               1
+             1346  BINARY_ADD       
+             1348  STORE_FAST               'b'
+
+ L. 192      1350  LOAD_FAST                'a'
+             1352  LOAD_FAST                'c'
+             1354  BINARY_ADD       
+             1356  STORE_FAST               'a'
+
+ L. 193      1358  LOAD_FAST                'b'
+             1360  LOAD_CONST               1
+             1362  BINARY_ADD       
+             1364  STORE_FAST               'b'
+
+ L. 194      1366  LOAD_FAST                'a'
+             1368  LOAD_FAST                'c'
+             1370  BINARY_ADD       
+             1372  STORE_FAST               'a'
+
+ L. 195      1374  LOAD_FAST                'b'
+             1376  LOAD_CONST               1
+             1378  BINARY_ADD       
+             1380  STORE_FAST               'b'
+
+ L. 196      1382  LOAD_FAST                'a'
+             1384  LOAD_FAST                'c'
+             1386  BINARY_ADD       
+             1388  STORE_FAST               'a'
+
+ L. 197      1390  LOAD_FAST                'b'
+             1392  LOAD_CONST               1
+             1394  BINARY_ADD       
+             1396  STORE_FAST               'b'
+
+ L. 198      1398  LOAD_FAST                'a'
+             1400  LOAD_FAST                'c'
+             1402  BINARY_ADD       
+             1404  STORE_FAST               'a'
+
+ L. 199      1406  LOAD_FAST                'b'
+             1408  LOAD_CONST               1
+             1410  BINARY_ADD       
+             1412  STORE_FAST               'b'
+
+ L. 200      1414  LOAD_FAST                'a'
+             1416  LOAD_FAST                'c'
+             1418  BINARY_ADD       
+             1420  STORE_FAST               'a'
+
+ L. 201      1422  LOAD_FAST                'b'
+             1424  LOAD_CONST               1
+             1426  BINARY_ADD       
+             1428  STORE_FAST               'b'
+
+ L. 202      1430  LOAD_FAST                'a'
+             1432  LOAD_FAST                'c'
+             1434  BINARY_ADD       
+             1436  STORE_FAST               'a'
+
+ L. 203      1438  LOAD_FAST                'b'
+             1440  LOAD_CONST               1
+             1442  BINARY_ADD       
+             1444  STORE_FAST               'b'
+
+ L. 204      1446  LOAD_FAST                'a'
+             1448  LOAD_FAST                'c'
+             1450  BINARY_ADD       
+             1452  STORE_FAST               'a'
+
+ L. 205      1454  LOAD_FAST                'b'
+             1456  LOAD_CONST               1
+             1458  BINARY_ADD       
+             1460  STORE_FAST               'b'
+
+ L. 206      1462  LOAD_FAST                'a'
+             1464  LOAD_FAST                'c'
+             1466  BINARY_ADD       
+             1468  STORE_FAST               'a'
+
+ L. 207      1470  LOAD_FAST                'b'
+             1472  LOAD_CONST               1
+             1474  BINARY_ADD       
+             1476  STORE_FAST               'b'
+
+ L. 208      1478  LOAD_FAST                'a'
+             1480  LOAD_FAST                'c'
+             1482  BINARY_ADD       
+             1484  STORE_FAST               'a'
+
+ L. 209      1486  LOAD_FAST                'b'
+             1488  LOAD_CONST               1
+             1490  BINARY_ADD       
+             1492  STORE_FAST               'b'
+
+ L. 210      1494  LOAD_FAST                'a'
+             1496  LOAD_FAST                'c'
+             1498  BINARY_ADD       
+             1500  STORE_FAST               'a'
+
+ L. 211      1502  LOAD_FAST                'b'
+             1504  LOAD_CONST               1
+             1506  BINARY_ADD       
+             1508  STORE_FAST               'b'
+
+ L. 212      1510  LOAD_FAST                'a'
+             1512  LOAD_FAST                'c'
+             1514  BINARY_ADD       
+             1516  STORE_FAST               'a'
+
+ L. 213      1518  LOAD_FAST                'b'
+             1520  LOAD_CONST               1
+             1522  BINARY_ADD       
+             1524  STORE_FAST               'b'
+
+ L. 214      1526  LOAD_FAST                'a'
+             1528  LOAD_FAST                'c'
+             1530  BINARY_ADD       
+             1532  STORE_FAST               'a'
+
+ L. 215      1534  LOAD_FAST                'b'
+             1536  LOAD_CONST               1
+             1538  BINARY_ADD       
+             1540  STORE_FAST               'b'
+
+ L. 216      1542  LOAD_FAST                'a'
+             1544  LOAD_FAST                'c'
+             1546  BINARY_ADD       
+             1548  STORE_FAST               'a'
+
+ L. 217      1550  LOAD_FAST                'b'
+             1552  LOAD_CONST               1
+             1554  BINARY_ADD       
+             1556  STORE_FAST               'b'
+
+ L. 218      1558  LOAD_FAST                'a'
+             1560  LOAD_FAST                'c'
+             1562  BINARY_ADD       
+             1564  STORE_FAST               'a'
+
+ L. 219      1566  LOAD_FAST                'b'
+             1568  LOAD_CONST               1
+             1570  BINARY_ADD       
+             1572  STORE_FAST               'b'
+
+ L. 220      1574  LOAD_FAST                'a'
+             1576  LOAD_FAST                'c'
+             1578  BINARY_ADD       
+             1580  STORE_FAST               'a'
+
+ L. 221      1582  LOAD_FAST                'b'
+             1584  LOAD_CONST               1
+             1586  BINARY_ADD       
+             1588  STORE_FAST               'b'
+
+ L. 222      1590  LOAD_FAST                'a'
+             1592  LOAD_FAST                'c'
+             1594  BINARY_ADD       
+             1596  STORE_FAST               'a'
+
+ L. 223      1598  LOAD_FAST                'b'
+             1600  LOAD_CONST               1
+             1602  BINARY_ADD       
+             1604  STORE_FAST               'b'
+
+ L. 224      1606  LOAD_FAST                'a'
+             1608  LOAD_FAST                'c'
+             1610  BINARY_ADD       
+             1612  STORE_FAST               'a'
+
+ L. 225      1614  LOAD_FAST                'b'
+             1616  LOAD_CONST               1
+             1618  BINARY_ADD       
+             1620  STORE_FAST               'b'
+
+ L. 226      1622  LOAD_FAST                'a'
+             1624  LOAD_FAST                'c'
+             1626  BINARY_ADD       
+             1628  STORE_FAST               'a'
+
+ L. 227      1630  LOAD_FAST                'b'
+             1632  LOAD_CONST               1
+             1634  BINARY_ADD       
+             1636  STORE_FAST               'b'
+
+ L. 228      1638  LOAD_FAST                'a'
+             1640  LOAD_FAST                'c'
+             1642  BINARY_ADD       
+             1644  STORE_FAST               'a'
+
+ L. 229      1646  LOAD_FAST                'b'
+             1648  LOAD_CONST               1
+             1650  BINARY_ADD       
+             1652  STORE_FAST               'b'
+
+ L. 230      1654  LOAD_FAST                'a'
+             1656  LOAD_FAST                'c'
+             1658  BINARY_ADD       
+             1660  STORE_FAST               'a'
+
+ L. 231      1662  LOAD_FAST                'b'
+             1664  LOAD_CONST               1
+             1666  BINARY_ADD       
+             1668  STORE_FAST               'b'
+
+ L. 232      1670  LOAD_FAST                'a'
+             1672  LOAD_FAST                'c'
+             1674  BINARY_ADD       
+             1676  STORE_FAST               'a'
+
+ L. 233      1678  LOAD_FAST                'b'
+             1680  LOAD_CONST               1
+             1682  BINARY_ADD       
+             1684  STORE_FAST               'b'
+
+ L. 234      1686  LOAD_FAST                'a'
+             1688  LOAD_FAST                'c'
+             1690  BINARY_ADD       
+             1692  STORE_FAST               'a'
+
+ L. 235      1694  LOAD_FAST                'b'
+             1696  LOAD_CONST               1
+             1698  BINARY_ADD       
+             1700  STORE_FAST               'b'
+
+ L. 236      1702  LOAD_FAST                'a'
+             1704  LOAD_FAST                'c'
+             1706  BINARY_ADD       
+             1708  STORE_FAST               'a'
+
+ L. 237      1710  LOAD_FAST                'b'
+             1712  LOAD_CONST               1
+             1714  BINARY_ADD       
+             1716  STORE_FAST               'b'
+
+ L. 238      1718  LOAD_FAST                'a'
+             1720  LOAD_FAST                'c'
+             1722  BINARY_ADD       
+             1724  STORE_FAST               'a'
+
+ L. 239      1726  LOAD_FAST                'b'
+             1728  LOAD_CONST               1
+             1730  BINARY_ADD       
+             1732  STORE_FAST               'b'
+
+ L. 240      1734  LOAD_FAST                'a'
+             1736  LOAD_FAST                'c'
+             1738  BINARY_ADD       
+             1740  STORE_FAST               'a'
+
+ L. 241      1742  LOAD_FAST                'b'
+             1744  LOAD_CONST               1
+             1746  BINARY_ADD       
+             1748  STORE_FAST               'b'
+
+ L. 242      1750  LOAD_FAST                'a'
+             1752  LOAD_FAST                'c'
+             1754  BINARY_ADD       
+             1756  STORE_FAST               'a'
+
+ L. 243      1758  LOAD_FAST                'b'
+             1760  LOAD_CONST               1
+             1762  BINARY_ADD       
+             1764  STORE_FAST               'b'
+
+ L. 244      1766  LOAD_FAST                'a'
+             1768  LOAD_FAST                'c'
+             1770  BINARY_ADD       
+             1772  STORE_FAST               'a'
+
+ L. 245      1774  LOAD_FAST                'b'
+             1776  LOAD_CONST               1
+             1778  BINARY_ADD       
+             1780  STORE_FAST               'b'
+
+ L. 246      1782  LOAD_FAST                'a'
+             1784  LOAD_FAST                'c'
+             1786  BINARY_ADD       
+             1788  STORE_FAST               'a'
+
+ L. 247      1790  LOAD_FAST                'b'
+             1792  LOAD_CONST               1
+             1794  BINARY_ADD       
+             1796  STORE_FAST               'b'
+
+ L. 248      1798  LOAD_FAST                'a'
+             1800  LOAD_FAST                'c'
+             1802  BINARY_ADD       
+             1804  STORE_FAST               'a'
+
+ L. 249      1806  LOAD_FAST                'b'
+             1808  LOAD_CONST               1
+             1810  BINARY_ADD       
+             1812  STORE_FAST               'b'
+
+ L. 250      1814  LOAD_FAST                'a'
+             1816  LOAD_FAST                'c'
+             1818  BINARY_ADD       
+             1820  STORE_FAST               'a'
+
+ L. 251      1822  LOAD_FAST                'b'
+             1824  LOAD_CONST               1
+             1826  BINARY_ADD       
+             1828  STORE_FAST               'b'
+
+ L. 252      1830  LOAD_FAST                'a'
+             1832  LOAD_FAST                'c'
+             1834  BINARY_ADD       
+             1836  STORE_FAST               'a'
+
+ L. 253      1838  LOAD_FAST                'b'
+             1840  LOAD_CONST               1
+             1842  BINARY_ADD       
+             1844  STORE_FAST               'b'
+
+ L. 254      1846  LOAD_FAST                'a'
+             1848  LOAD_FAST                'c'
+             1850  BINARY_ADD       
+             1852  STORE_FAST               'a'
+
+ L. 255      1854  LOAD_FAST                'b'
+             1856  LOAD_CONST               1
+             1858  BINARY_ADD       
+             1860  STORE_FAST               'b'
+
+ L. 256      1862  LOAD_FAST                'a'
+             1864  LOAD_FAST                'c'
+             1866  BINARY_ADD       
+             1868  STORE_FAST               'a'
+
+ L. 257      1870  LOAD_FAST                'b'
+             1872  LOAD_CONST               1
+             1874  BINARY_ADD       
+             1876  STORE_FAST               'b'
+
+ L. 258      1878  LOAD_FAST                'a'
+             1880  LOAD_FAST                'c'
+             1882  BINARY_ADD       
+             1884  STORE_FAST               'a'
+
+ L. 259      1886  LOAD_FAST                'b'
+             1888  LOAD_CONST               1
+             1890  BINARY_ADD       
+             1892  STORE_FAST               'b'
+
+ L. 260      1894  LOAD_FAST                'a'
+             1896  LOAD_FAST                'c'
+             1898  BINARY_ADD       
+             1900  STORE_FAST               'a'
+
+ L. 261      1902  LOAD_FAST                'b'
+             1904  LOAD_CONST               1
+             1906  BINARY_ADD       
+             1908  STORE_FAST               'b'
+
+ L. 262      1910  LOAD_FAST                'a'
+             1912  LOAD_FAST                'c'
+             1914  BINARY_ADD       
+             1916  STORE_FAST               'a'
+
+ L. 263      1918  LOAD_FAST                'b'
+             1920  LOAD_CONST               1
+             1922  BINARY_ADD       
+             1924  STORE_FAST               'b'
+
+ L. 264      1926  LOAD_FAST                'a'
+             1928  LOAD_FAST                'c'
+             1930  BINARY_ADD       
+             1932  STORE_FAST               'a'
+
+ L. 265      1934  LOAD_FAST                'b'
+             1936  LOAD_CONST               1
+             1938  BINARY_ADD       
+             1940  STORE_FAST               'b'
+
+ L. 266      1942  LOAD_FAST                'a'
+             1944  LOAD_FAST                'c'
+             1946  BINARY_ADD       
+             1948  STORE_FAST               'a'
+
+ L. 267      1950  LOAD_FAST                'b'
+             1952  LOAD_CONST               1
+             1954  BINARY_ADD       
+             1956  STORE_FAST               'b'
+
+ L. 268      1958  LOAD_FAST                'a'
+             1960  LOAD_FAST                'c'
+             1962  BINARY_ADD       
+             1964  STORE_FAST               'a'
+
+ L. 269      1966  LOAD_FAST                'b'
+             1968  LOAD_CONST               1
+             1970  BINARY_ADD       
+             1972  STORE_FAST               'b'
+
+ L. 270      1974  LOAD_FAST                'a'
+             1976  LOAD_FAST                'c'
+             1978  BINARY_ADD       
+             1980  STORE_FAST               'a'
+
+ L. 271      1982  LOAD_FAST                'b'
+             1984  LOAD_CONST               1
+             1986  BINARY_ADD       
+             1988  STORE_FAST               'b'
+
+ L. 272      1990  LOAD_FAST                'a'
+             1992  LOAD_FAST                'c'
+             1994  BINARY_ADD       
+             1996  STORE_FAST               'a'
+
+ L. 273      1998  LOAD_FAST                'b'
+             2000  LOAD_CONST               1
+             2002  BINARY_ADD       
+             2004  STORE_FAST               'b'
+
+ L. 274      2006  LOAD_FAST                'a'
+             2008  LOAD_FAST                'c'
+             2010  BINARY_ADD       
+             2012  STORE_FAST               'a'
+
+ L. 275      2014  LOAD_FAST                'b'
+             2016  LOAD_CONST               1
+             2018  BINARY_ADD       
+             2020  STORE_FAST               'b'
+
+ L. 276      2022  LOAD_FAST                'a'
+             2024  LOAD_FAST                'c'
+             2026  BINARY_ADD       
+             2028  STORE_FAST               'a'
+
+ L. 277      2030  LOAD_FAST                'b'
+             2032  LOAD_CONST               1
+             2034  BINARY_ADD       
+             2036  STORE_FAST               'b'
+
+ L. 278      2038  LOAD_FAST                'a'
+             2040  LOAD_FAST                'c'
+             2042  BINARY_ADD       
+             2044  STORE_FAST               'a'
+
+ L. 279      2046  LOAD_FAST                'b'
+             2048  LOAD_CONST               1
+             2050  BINARY_ADD       
+             2052  STORE_FAST               'b'
+
+ L. 280      2054  LOAD_FAST                'a'
+             2056  LOAD_FAST                'c'
+             2058  BINARY_ADD       
+             2060  STORE_FAST               'a'
+
+ L. 281      2062  LOAD_FAST                'b'
+             2064  LOAD_CONST               1
+             2066  BINARY_ADD       
+             2068  STORE_FAST               'b'
+
+ L. 282      2070  LOAD_FAST                'a'
+             2072  LOAD_FAST                'c'
+             2074  BINARY_ADD       
+             2076  STORE_FAST               'a'
+
+ L. 283      2078  LOAD_FAST                'b'
+             2080  LOAD_CONST               1
+             2082  BINARY_ADD       
+             2084  STORE_FAST               'b'
+
+ L. 284      2086  LOAD_FAST                'a'
+             2088  LOAD_FAST                'c'
+             2090  BINARY_ADD       
+             2092  STORE_FAST               'a'
+
+ L. 285      2094  LOAD_FAST                'b'
+             2096  LOAD_CONST               1
+             2098  BINARY_ADD       
+             2100  STORE_FAST               'b'
+
+ L. 286      2102  LOAD_FAST                'a'
+             2104  LOAD_FAST                'c'
+             2106  BINARY_ADD       
+             2108  STORE_FAST               'a'
+
+ L. 287      2110  LOAD_FAST                'b'
+             2112  LOAD_CONST               1
+             2114  BINARY_ADD       
+             2116  STORE_FAST               'b'
+
+ L. 288      2118  LOAD_FAST                'a'
+             2120  LOAD_FAST                'c'
+             2122  BINARY_ADD       
+             2124  STORE_FAST               'a'
+
+ L. 289      2126  LOAD_FAST                'b'
+             2128  LOAD_CONST               1
+             2130  BINARY_ADD       
+             2132  STORE_FAST               'b'
+
+ L. 290      2134  LOAD_FAST                'a'
+             2136  LOAD_FAST                'c'
+             2138  BINARY_ADD       
+             2140  STORE_FAST               'a'
+
+ L. 291      2142  LOAD_FAST                'b'
+             2144  LOAD_CONST               1
+             2146  BINARY_ADD       
+             2148  STORE_FAST               'b'
+
+ L. 292      2150  LOAD_FAST                'a'
+             2152  LOAD_FAST                'c'
+             2154  BINARY_ADD       
+             2156  STORE_FAST               'a'
+
+ L. 293      2158  LOAD_FAST                'b'
+             2160  LOAD_CONST               1
+             2162  BINARY_ADD       
+             2164  STORE_FAST               'b'
+
+ L. 294      2166  LOAD_FAST                'a'
+             2168  LOAD_FAST                'c'
+             2170  BINARY_ADD       
+             2172  STORE_FAST               'a'
+
+ L. 295      2174  LOAD_FAST                'b'
+             2176  LOAD_CONST               1
+             2178  BINARY_ADD       
+             2180  STORE_FAST               'b'
+
+ L. 296      2182  LOAD_FAST                'a'
+             2184  LOAD_FAST                'c'
+             2186  BINARY_ADD       
+             2188  STORE_FAST               'a'
+
+ L. 297      2190  LOAD_FAST                'b'
+             2192  LOAD_CONST               1
+             2194  BINARY_ADD       
+             2196  STORE_FAST               'b'
+
+ L. 298      2198  LOAD_FAST                'a'
+             2200  LOAD_FAST                'c'
+             2202  BINARY_ADD       
+             2204  STORE_FAST               'a'
+
+ L. 299      2206  LOAD_FAST                'b'
+             2208  LOAD_CONST               1
+             2210  BINARY_ADD       
+             2212  STORE_FAST               'b'
+
+ L. 300      2214  LOAD_FAST                'a'
+             2216  LOAD_FAST                'c'
+             2218  BINARY_ADD       
+             2220  STORE_FAST               'a'
+
+ L. 301      2222  LOAD_FAST                'b'
+             2224  LOAD_CONST               1
+             2226  BINARY_ADD       
+             2228  STORE_FAST               'b'
+
+ L. 302      2230  LOAD_FAST                'a'
+             2232  LOAD_FAST                'c'
+             2234  BINARY_ADD       
+             2236  STORE_FAST               'a'
+
+ L. 303      2238  LOAD_FAST                'b'
+             2240  LOAD_CONST               1
+             2242  BINARY_ADD       
+             2244  STORE_FAST               'b'
+
+ L. 304      2246  LOAD_FAST                'a'
+             2248  LOAD_FAST                'c'
+             2250  BINARY_ADD       
+             2252  STORE_FAST               'a'
+
+ L. 305      2254  LOAD_FAST                'b'
+             2256  LOAD_CONST               1
+             2258  BINARY_ADD       
+             2260  STORE_FAST               'b'
+
+ L. 306      2262  LOAD_FAST                'a'
+             2264  LOAD_FAST                'c'
+             2266  BINARY_ADD       
+             2268  STORE_FAST               'a'
+
+ L. 307      2270  LOAD_FAST                'b'
+             2272  LOAD_CONST               1
+             2274  BINARY_ADD       
+             2276  STORE_FAST               'b'
+
+ L. 308      2278  LOAD_FAST                'a'
+             2280  LOAD_FAST                'c'
+             2282  BINARY_ADD       
+             2284  STORE_FAST               'a'
+
+ L. 309      2286  LOAD_FAST                'b'
+             2288  LOAD_CONST               1
+             2290  BINARY_ADD       
+             2292  STORE_FAST               'b'
+
+ L. 310      2294  LOAD_FAST                'a'
+             2296  LOAD_FAST                'c'
+             2298  BINARY_ADD       
+             2300  STORE_FAST               'a'
+
+ L. 311      2302  LOAD_FAST                'b'
+             2304  LOAD_CONST               1
+             2306  BINARY_ADD       
+             2308  STORE_FAST               'b'
+
+ L. 312      2310  LOAD_FAST                'a'
+             2312  LOAD_FAST                'c'
+             2314  BINARY_ADD       
+             2316  STORE_FAST               'a'
+
+ L. 313      2318  LOAD_FAST                'b'
+             2320  LOAD_CONST               1
+             2322  BINARY_ADD       
+             2324  STORE_FAST               'b'
+
+ L. 314      2326  LOAD_FAST                'a'
+             2328  LOAD_FAST                'c'
+             2330  BINARY_ADD       
+             2332  STORE_FAST               'a'
+
+ L. 315      2334  LOAD_FAST                'b'
+             2336  LOAD_CONST               1
+             2338  BINARY_ADD       
+             2340  STORE_FAST               'b'
+
+ L. 316      2342  LOAD_FAST                'a'
+             2344  LOAD_FAST                'c'
+             2346  BINARY_ADD       
+             2348  STORE_FAST               'a'
+
+ L. 317      2350  LOAD_FAST                'b'
+             2352  LOAD_CONST               1
+             2354  BINARY_ADD       
+             2356  STORE_FAST               'b'
+
+ L. 318      2358  LOAD_FAST                'a'
+             2360  LOAD_FAST                'c'
+             2362  BINARY_ADD       
+             2364  STORE_FAST               'a'
+
+ L. 319      2366  LOAD_FAST                'b'
+             2368  LOAD_CONST               1
+             2370  BINARY_ADD       
+             2372  STORE_FAST               'b'
+
+ L. 320      2374  LOAD_FAST                'a'
+             2376  LOAD_FAST                'c'
+             2378  BINARY_ADD       
+             2380  STORE_FAST               'a'
+
+ L. 321      2382  LOAD_FAST                'b'
+             2384  LOAD_CONST               1
+             2386  BINARY_ADD       
+             2388  STORE_FAST               'b'
+
+ L. 322      2390  LOAD_FAST                'a'
+             2392  LOAD_FAST                'c'
+             2394  BINARY_ADD       
+             2396  STORE_FAST               'a'
+
+ L. 323      2398  LOAD_FAST                'b'
+             2400  LOAD_CONST               1
+             2402  BINARY_ADD       
+             2404  STORE_FAST               'b'
+
+ L. 324      2406  LOAD_FAST                'a'
+             2408  LOAD_FAST                'c'
+             2410  BINARY_ADD       
+             2412  STORE_FAST               'a'
+
+ L. 325      2414  LOAD_FAST                'b'
+             2416  LOAD_CONST               1
+             2418  BINARY_ADD       
+             2420  STORE_FAST               'b'
+
+ L. 326      2422  LOAD_FAST                'a'
+             2424  LOAD_FAST                'c'
+             2426  BINARY_ADD       
+             2428  STORE_FAST               'a'
+
+ L. 327      2430  LOAD_FAST                'b'
+             2432  LOAD_CONST               1
+             2434  BINARY_ADD       
+             2436  STORE_FAST               'b'
+
+ L. 328      2438  LOAD_FAST                'a'
+             2440  LOAD_FAST                'c'
+             2442  BINARY_ADD       
+             2444  STORE_FAST               'a'
+
+ L. 329      2446  LOAD_FAST                'b'
+             2448  LOAD_CONST               1
+             2450  BINARY_ADD       
+             2452  STORE_FAST               'b'
+
+ L. 330      2454  LOAD_FAST                'a'
+             2456  LOAD_FAST                'c'
+             2458  BINARY_ADD       
+             2460  STORE_FAST               'a'
+
+ L. 331      2462  LOAD_FAST                'b'
+             2464  LOAD_CONST               1
+             2466  BINARY_ADD       
+             2468  STORE_FAST               'b'
+
+ L. 332      2470  LOAD_FAST                'a'
+             2472  LOAD_FAST                'c'
+             2474  BINARY_ADD       
+             2476  STORE_FAST               'a'
+
+ L. 333      2478  LOAD_FAST                'b'
+             2480  LOAD_CONST               1
+             2482  BINARY_ADD       
+             2484  STORE_FAST               'b'
+
+ L. 334      2486  LOAD_FAST                'a'
+             2488  LOAD_FAST                'c'
+             2490  BINARY_ADD       
+             2492  STORE_FAST               'a'
+
+ L. 335      2494  LOAD_FAST                'b'
+             2496  LOAD_CONST               1
+             2498  BINARY_ADD       
+             2500  STORE_FAST               'b'
+
+ L. 336      2502  LOAD_FAST                'a'
+             2504  LOAD_FAST                'c'
+             2506  BINARY_ADD       
+             2508  STORE_FAST               'a'
+
+ L. 337      2510  LOAD_FAST                'b'
+             2512  LOAD_CONST               1
+             2514  BINARY_ADD       
+             2516  STORE_FAST               'b'
+
+ L. 338      2518  LOAD_FAST                'a'
+             2520  LOAD_FAST                'c'
+             2522  BINARY_ADD       
+             2524  STORE_FAST               'a'
+
+ L. 339      2526  LOAD_FAST                'b'
+             2528  LOAD_CONST               1
+             2530  BINARY_ADD       
+             2532  STORE_FAST               'b'
+
+ L. 340      2534  LOAD_FAST                'a'
+             2536  LOAD_FAST                'c'
+             2538  BINARY_ADD       
+             2540  STORE_FAST               'a'
+
+ L. 341      2542  LOAD_FAST                'b'
+             2544  LOAD_CONST               1
+             2546  BINARY_ADD       
+             2548  STORE_FAST               'b'
+
+ L. 342      2550  LOAD_FAST                'a'
+             2552  LOAD_FAST                'c'
+             2554  BINARY_ADD       
+             2556  STORE_FAST               'a'
+
+ L. 343      2558  LOAD_FAST                'b'
+             2560  LOAD_CONST               1
+             2562  BINARY_ADD       
+             2564  STORE_FAST               'b'
+
+ L. 344      2566  LOAD_FAST                'a'
+             2568  LOAD_FAST                'c'
+             2570  BINARY_ADD       
+             2572  STORE_FAST               'a'
+
+ L. 345      2574  LOAD_FAST                'b'
+             2576  LOAD_CONST               1
+             2578  BINARY_ADD       
+             2580  STORE_FAST               'b'
+
+ L. 346      2582  LOAD_FAST                'a'
+             2584  LOAD_FAST                'c'
+             2586  BINARY_ADD       
+             2588  STORE_FAST               'a'
+
+ L. 347      2590  LOAD_FAST                'b'
+             2592  LOAD_CONST               1
+             2594  BINARY_ADD       
+             2596  STORE_FAST               'b'
+
+ L. 348      2598  LOAD_FAST                'a'
+             2600  LOAD_FAST                'c'
+             2602  BINARY_ADD       
+             2604  STORE_FAST               'a'
+
+ L. 349      2606  LOAD_FAST                'b'
+             2608  LOAD_CONST               1
+             2610  BINARY_ADD       
+             2612  STORE_FAST               'b'
+
+ L. 350      2614  LOAD_FAST                'a'
+             2616  LOAD_FAST                'c'
+             2618  BINARY_ADD       
+             2620  STORE_FAST               'a'
+
+ L. 351      2622  LOAD_FAST                'b'
+             2624  LOAD_CONST               1
+             2626  BINARY_ADD       
+             2628  STORE_FAST               'b'
+
+ L. 352      2630  LOAD_FAST                'a'
+             2632  LOAD_FAST                'c'
+             2634  BINARY_ADD       
+             2636  STORE_FAST               'a'
+
+ L. 353      2638  LOAD_FAST                'b'
+             2640  LOAD_CONST               1
+             2642  BINARY_ADD       
+             2644  STORE_FAST               'b'
+
+ L. 354      2646  LOAD_FAST                'a'
+             2648  LOAD_FAST                'c'
+             2650  BINARY_ADD       
+             2652  STORE_FAST               'a'
+
+ L. 355      2654  LOAD_FAST                'b'
+             2656  LOAD_CONST               1
+             2658  BINARY_ADD       
+             2660  STORE_FAST               'b'
+
+ L. 356      2662  LOAD_FAST                'a'
+             2664  LOAD_FAST                'c'
+             2666  BINARY_ADD       
+             2668  STORE_FAST               'a'
+
+ L. 357      2670  LOAD_FAST                'b'
+             2672  LOAD_CONST               1
+             2674  BINARY_ADD       
+             2676  STORE_FAST               'b'
+
+ L. 358      2678  LOAD_FAST                'a'
+             2680  LOAD_FAST                'c'
+             2682  BINARY_ADD       
+             2684  STORE_FAST               'a'
+
+ L. 359      2686  LOAD_FAST                'b'
+             2688  LOAD_CONST               1
+             2690  BINARY_ADD       
+             2692  STORE_FAST               'b'
+
+ L. 360      2694  LOAD_FAST                'a'
+             2696  LOAD_FAST                'c'
+             2698  BINARY_ADD       
+             2700  STORE_FAST               'a'
+
+ L. 361      2702  LOAD_FAST                'b'
+             2704  LOAD_CONST               1
+             2706  BINARY_ADD       
+             2708  STORE_FAST               'b'
+
+ L. 362      2710  LOAD_FAST                'a'
+             2712  LOAD_FAST                'c'
+             2714  BINARY_ADD       
+             2716  STORE_FAST               'a'
+
+ L. 363      2718  LOAD_FAST                'b'
+             2720  LOAD_CONST               1
+             2722  BINARY_ADD       
+             2724  STORE_FAST               'b'
+
+ L. 364      2726  LOAD_FAST                'a'
+             2728  LOAD_FAST                'c'
+             2730  BINARY_ADD       
+             2732  STORE_FAST               'a'
+
+ L. 365      2734  LOAD_FAST                'b'
+             2736  LOAD_CONST               1
+             2738  BINARY_ADD       
+             2740  STORE_FAST               'b'
+
+ L. 366      2742  LOAD_FAST                'a'
+             2744  LOAD_FAST                'c'
+             2746  BINARY_ADD       
+             2748  STORE_FAST               'a'
+
+ L. 367      2750  LOAD_FAST                'b'
+             2752  LOAD_CONST               1
+             2754  BINARY_ADD       
+             2756  STORE_FAST               'b'
+
+ L. 368      2758  LOAD_FAST                'a'
+             2760  LOAD_FAST                'c'
+             2762  BINARY_ADD       
+             2764  STORE_FAST               'a'
+
+ L. 369      2766  LOAD_FAST                'b'
+             2768  LOAD_CONST               1
+             2770  BINARY_ADD       
+             2772  STORE_FAST               'b'
+
+ L. 370      2774  LOAD_FAST                'a'
+             2776  LOAD_FAST                'c'
+             2778  BINARY_ADD       
+             2780  STORE_FAST               'a'
+
+ L. 371      2782  LOAD_FAST                'b'
+             2784  LOAD_CONST               1
+             2786  BINARY_ADD       
+             2788  STORE_FAST               'b'
+
+ L. 372      2790  LOAD_FAST                'a'
+             2792  LOAD_FAST                'c'
+             2794  BINARY_ADD       
+             2796  STORE_FAST               'a'
+
+ L. 373      2798  LOAD_FAST                'b'
+             2800  LOAD_CONST               1
+             2802  BINARY_ADD       
+             2804  STORE_FAST               'b'
+
+ L. 374      2806  LOAD_FAST                'a'
+             2808  LOAD_FAST                'c'
+             2810  BINARY_ADD       
+             2812  STORE_FAST               'a'
+
+ L. 375      2814  LOAD_FAST                'b'
+             2816  LOAD_CONST               1
+             2818  BINARY_ADD       
+             2820  STORE_FAST               'b'
+
+ L. 376      2822  LOAD_FAST                'a'
+             2824  LOAD_FAST                'c'
+             2826  BINARY_ADD       
+             2828  STORE_FAST               'a'
+
+ L. 377      2830  LOAD_FAST                'b'
+             2832  LOAD_CONST               1
+             2834  BINARY_ADD       
+             2836  STORE_FAST               'b'
+
+ L. 378      2838  LOAD_FAST                'a'
+             2840  LOAD_FAST                'c'
+             2842  BINARY_ADD       
+             2844  STORE_FAST               'a'
+
+ L. 379      2846  LOAD_FAST                'b'
+             2848  LOAD_CONST               1
+             2850  BINARY_ADD       
+             2852  STORE_FAST               'b'
+
+ L. 380      2854  LOAD_FAST                'a'
+             2856  LOAD_FAST                'c'
+             2858  BINARY_ADD       
+             2860  STORE_FAST               'a'
+
+ L. 381      2862  LOAD_FAST                'b'
+             2864  LOAD_CONST               1
+             2866  BINARY_ADD       
+             2868  STORE_FAST               'b'
+
+ L. 382      2870  LOAD_FAST                'a'
+             2872  LOAD_FAST                'c'
+             2874  BINARY_ADD       
+             2876  STORE_FAST               'a'
+
+ L. 383      2878  LOAD_FAST                'b'
+             2880  LOAD_CONST               1
+             2882  BINARY_ADD       
+             2884  STORE_FAST               'b'
+             2886  JUMP_FORWARD       2896  'to 2896'
+           2888_0  COME_FROM             2  '2'
+
+ L. 385      2888  LOAD_FAST                'c'
+             2890  LOAD_FAST                'a'
+             2892  BINARY_ADD       
+             2894  STORE_FAST               'c'
+           2896_0  COME_FROM          2886  '2886'
+             2896  LOAD_CONST               None
+             2898  RETURN_VALUE     
+
+
