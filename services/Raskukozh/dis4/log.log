@@ -1,0 +1,21 @@
+2023-08-10 23:20:40,581 [+] pydumpck is a multi-threads tool for decompile exe,elf,pyz,pyc packed by python which is base on pycdc and uncompyle6.sometimes its py-file result not exactly right ,maybe could use uncompyle6.
+--------------------
+pydumpck initilizing with 1.16.2 :pyinstaller_dump.py:115-20  /usr/local/lib/python3.8/site-packages/pydumpck/pyinstaller_dump.py on(pyinstaller_dump.run) at 852@MainThread  
+2023-08-10 23:20:40,583 [*] plugins loaded with ['pycdc'] :__init__.py:147-10  /usr/local/lib/python3.8/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.load_plugins) at 852@MainThread  
+2023-08-10 23:20:40,583 [*] target file input:2.pyc
+to:output_1064318 :__init__.py:182-10  /usr/local/lib/python3.8/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.main) at 852@MainThread  
+2023-08-10 23:20:40,584 [*] start dump target file. type:TYPE_UNKNOWN :__init__.py:195-10  /usr/local/lib/python3.8/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.main) at 852@MainThread  
+2023-08-10 23:20:43,586 [+] completed,cost 3004ms with result:unkonwn file-type:2.pyc :__init__.py:159-20  /usr/local/lib/python3.8/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.statistics_status) at 852@MainThread  
+2023-08-10 23:21:02,724 [+] pydumpck is a multi-threads tool for decompile exe,elf,pyz,pyc packed by python which is base on pycdc and uncompyle6.sometimes its py-file result not exactly right ,maybe could use uncompyle6.
+--------------------
+pydumpck initilizing with 1.16.2 :pyinstaller_dump.py:115-20  /usr/local/lib/python3.8/site-packages/pydumpck/pyinstaller_dump.py on(pyinstaller_dump.run) at 857@MainThread  
+2023-08-10 23:21:02,725 [*] plugins loaded with ['pycdc'] :__init__.py:147-10  /usr/local/lib/python3.8/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.load_plugins) at 857@MainThread  
+2023-08-10 23:21:02,726 [-] target_file is required :__init__.py:180-40  /usr/local/lib/python3.8/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.main) at 857@MainThread  
+2023-08-10 23:21:38,998 [+] pydumpck is a multi-threads tool for decompile exe,elf,pyz,pyc packed by python which is base on pycdc and uncompyle6.sometimes its py-file result not exactly right ,maybe could use uncompyle6.
+--------------------
+pydumpck initilizing with 1.16.2 :pyinstaller_dump.py:115-20  /usr/local/lib/python3.8/site-packages/pydumpck/pyinstaller_dump.py on(pyinstaller_dump.run) at 862@MainThread  
+2023-08-10 23:21:38,998 [*] plugins loaded with ['pycdc'] :__init__.py:147-10  /usr/local/lib/python3.8/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.load_plugins) at 862@MainThread  
+2023-08-10 23:21:38,999 [*] target file input:2.pyc
+to:output_7514749 :__init__.py:182-10  /usr/local/lib/python3.8/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.main) at 862@MainThread  
+2023-08-10 23:21:38,999 [*] start dump target file. type:TYPE_UNKNOWN :__init__.py:195-10  /usr/local/lib/python3.8/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.main) at 862@MainThread  
+2023-08-10 23:21:42,000 [+] completed,cost 3002ms with result:unkonwn file-type:2.pyc :__init__.py:159-20  /usr/local/lib/python3.8/site-packages/pydumpck/py_common_dump/__init__.py on(__init__.statistics_status) at 862@MainThread  
