@@ -5,8 +5,9 @@ import redis
 
 import util
 from storage_api import StorageApi
+from config import get_config
 
-storage_api = StorageApi(redis.Redis())
+storage_api = StorageApi(redis.Redis(host=get_config().redis_host))
 
 
 app = Flask(__name__)
