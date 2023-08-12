@@ -58,6 +58,14 @@ func main() {
 			SigningKey:    JwtSecret,
 			SigningMethod: jwt.SigningMethodHS256.Name,
 			TokenLookup:   "cookie:" + AuthCookieName,
+			ContextKey:    TokenCtxName,
+			ErrorHandler: func(c echo.Context, err error) error {
+				if c.Path() != "/api/auth" {
+					return c.String(http.StatusUnauthorized, "token not found or invalid")
+				}
+				c.Set(UserIdCtxName, uuid.Nil)
+				return nil
+			},
 			SuccessHandler: func(c echo.Context) {
 				if subject, err := c.Get(TokenCtxName).(*jwt.Token).Claims.(jwt.MapClaims).GetSubject(); err == nil {
 					if userId, err := uuid.Parse(subject); err == nil {
@@ -65,18 +73,17 @@ func main() {
 						return
 					}
 				}
-				c.Set(UserIdCtxName, uuid.UUID{})
+				c.Set(UserIdCtxName, uuid.Nil)
 			},
-			ContextKey: TokenCtxName,
+			ContinueOnIgnoredError: true,
 		}))
 
+		r.GET("/auth", auth)
 		r.PUT("/place", put)
 		r.PUT("/place/:id", put)
 		r.GET("/place/:id", get)
 		r.POST("/route", route)
 	}
-
-	e.PUT("/user", login)
 
 	if err := e.Start("127.0.0.1:8080"); !errors.Is(err, http.ErrServerClosed) {
 		panic(err)
@@ -97,16 +104,16 @@ func get(c echo.Context) error {
 	}
 
 	userId := c.Get(UserIdCtxName).(uuid.UUID)
-	info := toPlaceInfo(userId, placeId, data)
+	place := toPlace(userId, placeId, data)
 
-	return c.JSON(http.StatusOK, info)
+	return c.JSON(http.StatusOK, place)
 }
 
 func put(c echo.Context) error {
-	var info PlaceInfo
+	var place Place
 
-	if err := (&echo.DefaultBinder{}).BindBody(c, &info); err != nil {
-		return c.String(http.StatusBadRequest, "failed to parse place info")
+	if err := (&echo.DefaultBinder{}).BindBody(c, &place); err != nil {
+		return c.String(http.StatusBadRequest, "failed to parse place")
 	}
 
 	userId := c.Get(UserIdCtxName).(uuid.UUID)
@@ -119,22 +126,22 @@ func put(c echo.Context) error {
 		}
 
 		if placeId.UserId != userId {
-			return c.String(http.StatusForbidden, "you can only change your places")
+			return c.String(http.StatusForbidden, "you can only change your own places")
 		}
 
-		info.Long = placeId.Long
-		info.Lat = placeId.Lat
+		place.Long = placeId.Long
+		place.Lat = placeId.Lat
 	}
 
-	id, err := PlaceId{UserId: userId, Long: info.Long, Lat: info.Lat}.toString(key)
+	id, err := PlaceId{UserId: userId, Long: place.Long, Lat: place.Lat}.toString(key)
 	if err != nil {
 		return err
 	}
 
 	db.Clauses(clause.OnConflict{UpdateAll: true}).Create(&PlaceData{
 		Id:      id,
-		Public:  info.Public,
-		Secret:  info.Secret,
+		Public:  place.Public,
+		Secret:  place.Secret,
 		Updated: time.Now(),
 	})
 
@@ -192,17 +199,17 @@ func route(c echo.Context) error {
 	c.Response().WriteHeader(http.StatusOK)
 	enc := json.NewEncoder(c.Response())
 
-	linq.From(route).ZipT(linq.From(saved), func(placeId PlaceId, data PlaceData) PlaceInfo {
-		return toPlaceInfo(userId, placeId, data)
-	}).ForEachT(func(item PlaceInfo) {
+	linq.From(route).ZipT(linq.From(saved), func(placeId PlaceId, data PlaceData) Place {
+		return toPlace(userId, placeId, data)
+	}).ForEachT(func(item Place) {
 		enc.Encode(item)
 	})
 
 	return nil
 }
 
-func toPlaceInfo(userId uuid.UUID, placeId PlaceId, data PlaceData) PlaceInfo {
-	return PlaceInfo{
+func toPlace(userId uuid.UUID, placeId PlaceId, data PlaceData) Place {
+	return Place{
 		Lat:    placeId.Lat,
 		Long:   placeId.Long,
 		Public: data.Public,
@@ -217,27 +224,45 @@ func getSecretIfOwned(userId uuid.UUID, placeId PlaceId, secret string) string {
 	return ""
 }
 
-func login(c echo.Context) error {
-	userId := uuid.New()
-	signed, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{Subject: userId.String()}).SignedString(JwtSecret)
+func auth(c echo.Context) error {
+	userId := c.Get(UserIdCtxName).(uuid.UUID)
+	if userId == uuid.Nil {
+		userId = uuid.New()
+		signed, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{Subject: userId.String()}).SignedString(JwtSecret)
+		if err != nil {
+			return err
+		}
+
+		cookie := new(http.Cookie)
+		cookie.Name = AuthCookieName
+		cookie.Value = signed
+		cookie.HttpOnly = true
+		cookie.SameSite = http.SameSiteStrictMode
+		c.SetCookie(cookie)
+	}
+
+	var coords Coords
+	if err := c.Bind(&coords); err != nil {
+		coords = Coords{}
+	}
+
+	placeId := PlaceId{UserId: userId, Lat: coords.Lat, Long: coords.Long}
+	id, err := placeId.toString(key)
 	if err != nil {
 		return err
 	}
 
-	cookie := new(http.Cookie)
-	cookie.Name = AuthCookieName
-	cookie.Value = signed
-	cookie.Expires = time.Now().Add(48 * time.Hour)
-	cookie.HttpOnly = true
-	cookie.SameSite = http.SameSiteStrictMode
-	c.SetCookie(cookie)
-
-	return c.JSON(http.StatusOK, "signed in")
+	return c.String(http.StatusOK, id)
 }
 
-type PlaceInfo struct {
-	Long   float64
-	Lat    float64
-	Public string
-	Secret string
+type Coords struct {
+	Lat  float64 `query:"lat"`
+	Long float64 `query:"long"`
+}
+
+type Place struct {
+	Long   float64 `json:"long"`
+	Lat    float64 `json:"lat"`
+	Public string  `json:"public"`
+	Secret string  `json:"secret"`
 }
