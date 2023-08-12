@@ -7,8 +7,12 @@ import string
 ALP = string.ascii_letters + string.digits
 
 
-def gen_str(a=0, b=20):
-    return ''.join(random.choice(ALP) for _ in range(a, b))
+def gen_str(length):
+    return ''.join(random.choice(ALP) for _ in range(length))
+
+
+def gen_token_secret():
+    return 'TOKEN_' + gen_str(32)
 
 
 def get_hex_hash(data):
