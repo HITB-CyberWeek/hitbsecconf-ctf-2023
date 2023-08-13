@@ -1,0 +1,14 @@
+{% extends "base.twig" %}
+
+{% block title %}{{ language.HOME }}{% endblock %}
+
+{% block content %}
+    <h1>{{ language.HOME }}</h1>
+    <p class="important">
+        {% if user %}
+            {{ language.WELCOME }} {{ user.username }}.
+        {% else %}
+            {{ language.WELCOME }}!
+        {% endif %}
+    </p>
+{% endblock %}
