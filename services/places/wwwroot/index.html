@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>places &ndash; favorite places/routes on the map</title>
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" type="text/css"/>
+	<link href="/styles.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="content">
+	<div id="title">🗺&nbsp;places</div>
+	<canvas width="1280" height="800"></canvas>
+	<div id="side">
+		<div id="place">
+			<div id="side-title">place</div>
+			<dl>
+				<dt>ID:</dt><dd id="id"></dd>
+				<dt>Latitude:</dt><dd id="lat"></dd>
+				<dt>Longitude:</dt><dd id="long"></dd>
+				<dt>public info:</dt><dd><textarea id="public" maxlength="128" rows="4"></textarea></dd>
+				<dt>secret info:</dt><dd><textarea id="secret" maxlength="128" rows="4"></textarea></dd>
+			</dl>
+			<div id="note"></div>
+			<div><button id="save">Save place</button></div>
+			<div class="side-bottom">
+				<button id="route-add">Add to route</button>
+				<button id="route-build">Build route ⛐</button>
+				<span id="route-count">0</span>
+				<button href="#" id="route-clean">Reset</button>
+			</div>
+		</div>
+		<div id="route">
+			<div id="side-title">route</div>
+			<div id="text"></div>
+			<div class="side-bottom">
+				<button id="route-close">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="/d3-7.8.5.min.js"></script>
+<script src="/scripts.js"></script>
+</body>
+</html>
