@@ -25,7 +25,7 @@ create policy p1 on users to docs_user using (true) with check (login = current_
 create table docs (
     id      serial primary key,
     created timestamptz not null default now(),
-    title   text not null check (length(title) between 1 and 32),
+    title   text not null check (length(title) between 1 and 32) unique,
     owner   integer not null references users(id),
     shares  integer[] not null default array[]::integer[]
 );
@@ -41,7 +41,7 @@ create trigger set_owner before insert on docs
     for each row execute function set_owner();
 
 grant select on docs to docs_user;
-grant update (title, shares) on docs to docs_user;
+grant update (shares) on docs to docs_user;
 grant insert (title, shares) on docs to docs_user;
 grant usage on docs_id_seq to docs_user;
 

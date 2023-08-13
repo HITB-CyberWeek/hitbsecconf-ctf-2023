@@ -16,7 +16,7 @@ db = psycopg.connect(
 )
 r = redis.from_url("redis://redis:6379")
 
-class RegisterInfo(BaseModel):
+class UserInfo(BaseModel):
     login: str
     password: str
     org: str
@@ -24,13 +24,16 @@ class RegisterInfo(BaseModel):
 app = FastAPI()
 
 @app.post("/register")
-def register(ri: RegisterInfo, response: Response):
+def register(ri: UserInfo, response: Response):
     with db.cursor() as cursor:
         try:
             cursor.execute(
-                "insert into users (login, pass, org) values (%(login)s, %(password)s, %(org)s)",
+                """insert into users (login, pass, org)
+                values (%(login)s, %(password)s, %(org)s)
+                returning id""",
                 ri.model_dump()
             )
+            user_id = cursor.fetchone()
             cursor.execute(
                 sql.SQL("create role {} with login password {} in role docs_user").
                 format(sql.Identifier(ri.login), ri.password)
@@ -42,18 +45,18 @@ def register(ri: RegisterInfo, response: Response):
             response.status_code = 400
             return {"error": str(e)}
 
-    return {"login": ri.login}
+    return {"login": ri.login, "user_id": user_id[0]}
 
 @app.post("/login")
-def login(li: RegisterInfo, response: Response):
+def login(li: UserInfo, response: Response):
     with db.cursor() as cursor:
         try:
             cursor.execute(
                 "select id from users where login = %(login)s and pass = %(password)s",
                 li.model_dump()
             )
-            (user_id) = cursor.fetchone()
-            if user_id:
+            user_id = cursor.fetchone()
+            if user_id[0]:
                 sign = hmac.new(
                     os.getenv('DOCS_SECRET').encode("UTF-8"),
                     li.login.encode("UTF-8"),
@@ -64,14 +67,17 @@ def login(li: RegisterInfo, response: Response):
                     value=li.login + "--" + sign,
                     httponly=True
                 )
-                return {"status": "OK"}
+                response.status_code = 204
+                return
         except Exception as e:
             db.rollback()
         finally:
             db.rollback()
-    return {"status": "FAIL"}
+    response.status_code = 400
+    return
 
 @app.post("/logout")
 def logout(response: Response):
     response.delete_cookie("docs_session")
-    return {"status": "OK"}
+    response.status_code = 204
+    return
