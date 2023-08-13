@@ -1,0 +1,17 @@
+{
+  "name": "funding-checker",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Checker for the \"funding\" service",
+  "main": "funding.checker.js",
+  "scripts": {},
+  "author": "Andrey Gein <andgein@hackerdom.ru>",
+  "license": "MIT",
+  "dependencies": {
+    "@faker-js/faker": "^8.0.2",
+    "console-stamp": "^3.1.1",
+    "node-fetch": "^3.3.2",
+    "node-fetch-cookies": "^2.0.4",
+    "web3": "^4.0.3"
+  }
+}
