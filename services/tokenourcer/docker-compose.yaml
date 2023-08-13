@@ -13,25 +13,17 @@ services:
       - ./webapp/logs:/var/log/nginx
     depends_on:
       - flask
-  postgres:
-    image: postgres:13.3
-    environment:
-      POSTGRES_DB: "postgres"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "mysecretpassword"
-    volumes:
-      - data:/var/lib/postgresql/data
-    networks:
-      - internal
-
   flask:
     build: webapp/server
+    environment:
+      ENV: "PROD"
     volumes:
       - ./webapp/logs:/flask/logs
     depends_on:
       - redis
     networks:
       - internal
+    restart: always
 
   redis:
     image: redis

@@ -34,6 +34,6 @@ export default fastifyPlugin<FastifyInstance>(
 
 declare module 'fastify' {
     export interface FastifyInstance {
-        database: pgPromise.IDatabase<{ }>
+        database: pgPromise.IDatabase<{}>
     }
 }

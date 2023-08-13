@@ -9,20 +9,6 @@ $CURL_OPTS = [
 ];
 $PRIVATE_PREFIX_HEX = "308204be020100300d06092a864886f70d0101010500048204a8308204a402010002820101";
 
-function generate_random_string($length = 10) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[random_int(0, $charactersLength - 1)];
-    }
-    return $randomString;
-}
-
-function generate_flag() {
-    return "TEAM1_" . generate_random_string(31) . '=';
-}
-
 function url_prefix($host) {
     global $PORT;
 
@@ -30,29 +16,6 @@ function url_prefix($host) {
         return "http://$host:$PORT";
     }
     return "https://$host";
-}
-
-function generate_new_key($url_prefix, $login, $flag) {
-    global $CURL_OPTS;
-
-    $url = "$url_prefix/generate.php";
-    $headers = array(
-        "Content-Type: application/x-www-form-urlencoded",
-    );
-    $data = "login=$login&comment=$flag";
-
-    $ch = curl_init($url);
-    curl_setopt_array($ch, $CURL_OPTS);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    curl_setopt($ch, CURLOPT_POST, TRUE);
-
-    $result = curl_exec($ch);
-    $err = curl_error($ch);
-    curl_close($ch);
-    if ($err) {
-        throw new Exception("Cant generate new key for '$login' : '$err' : $result");
-    }
 }
 
 function get_public_key($url_prefix, $login) {
@@ -136,27 +99,24 @@ function get_flag($url_prefix, $login, $private_key) {
 
 function main($argv) {
     $host = $argv[1];
+    $flag_id = $argv[2];  # See public_flag_id checksystem API
     $url_prefix = url_prefix($host);
 
-    $login = generate_random_string();
-    $flag_generated = generate_flag();
-    generate_new_key($url_prefix, $login, $flag_generated);
-
-    $public_key_pem = get_public_key($url_prefix, $login);
+    $public_key_pem = get_public_key($url_prefix, $flag_id);
 
     $flag_from_service = '';
     foreach (generate_fake_private_keys($public_key_pem) as $fake_private_key_pem) {
-        $flag_from_service = get_flag($url_prefix, $login, $fake_private_key_pem);
+        $flag_from_service = get_flag($url_prefix, $flag_id, $fake_private_key_pem);
         if ($flag_from_service) {
             break;
         }
     }
 
-    if ($flag_from_service != $flag_generated) {
-        throw new Exception("WRONG FLAG: login:$login, flag_generated:$flag_generated, flag_from_service:$flag_from_service; So sad :(");
+    if (!$flag_from_service) {
+        throw new Exception("CANT GET FLAG: login:$$flag_id, flag_from_service:$flag_from_service; So sad :(");
     }
 
-    print("login:$login, flag_generated:$flag_generated, flag_from_service:$flag_from_service; HACKED!\n");
+    print("$flag_from_service\n");
 }
 
 main($argv);

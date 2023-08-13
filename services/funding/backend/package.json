@@ -3,11 +3,7 @@
   "version": "1.0.0",
   "description": "Backend for Web3 Crowdfunding platform",
   "main": "app.ts",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
-    "test": "npm run build:ts && tsc -p test/tsconfig.json && tap --ts \"test/**/*.test.ts\"",
     "start": "npm run build:ts && fastify start --log-level info --options dist/backend/src/app.js",
     "generate-key": "npx --yes @fastify/secure-session > dist/backend/src/.cookie.key",
     "build:ts": "tsc",
@@ -16,8 +12,8 @@
     "dev:start": "fastify start --ignore-watch=.ts$ --watch --log-level debug --pretty-logs --options --port 3001 dist/backend/src/app.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Hackerdom team for HITB CTF",
+  "license": "MIT",
   "dependencies": {
     "@fastify/autoload": "^5.0.0",
     "@fastify/cookie": "^9.0.4",
