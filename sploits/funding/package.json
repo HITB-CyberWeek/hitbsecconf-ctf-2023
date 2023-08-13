@@ -1,0 +1,15 @@
+{
+  "name": "funding-exploit",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Exploit for the funding service",
+  "main": "funding.sploit.js",
+  "scripts": {},
+  "author": "Andrey Gein <andgein@hackerdom.ru>",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "node-fetch-cookies": "^2.0.4",
+    "web3": "^4.0.3"
+  }
+}
