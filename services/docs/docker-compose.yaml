@@ -2,16 +2,9 @@ services:
   auth:
     image: docs/auth:latest
     build: auth
-    ports:
-      - "8000:8000"
     depends_on:
       - pg
       - redis
-    volumes:
-      - "./auth:/app"
-    stdin_open: true
-    tty: true
-    command: ["/bin/bash"]
     environment:
       - POSTGRES_PASSWORD
       - REDIS_URI
@@ -20,21 +13,14 @@ services:
   api:
     image: docs/api:latest
     build: api
-    ports:
-      - "4567:4567"
     depends_on:
       - pg
       - redis
-    volumes:
-      - "./api:/app"
-    stdin_open: true
-    tty: true
-    command: ["/bin/bash"]
     environment:
       - WEB_CONCURRENCY=2
       - REDIS_URI
       - DOCS_SECRET
-      # APP_ENV: production
+      - APP_ENV=production
 
   pg:
     image: postgres:15.3

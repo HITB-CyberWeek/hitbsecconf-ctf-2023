@@ -28,9 +28,10 @@ get '/users' do
   begin
     db = db(user_name(request))
     res = db.exec("select id, login, org from users")
-    res.to_a.to_json
+    {:users => res.to_a}.to_json
   rescue => e
-    e.message.to_json
+    status 400
+    {:error => e.message}.to_json
   end
 end
 
@@ -45,9 +46,10 @@ put '/users/:id' do |user_id|
       where id = '#{user_id}' \
       returning id, login, org"
     )
-    res.to_a.to_json
+    status 204
   rescue => e
-    e.message.to_json
+    status 400
+    {:error => e.message}.to_json
   end
 end
 
@@ -59,9 +61,10 @@ get '/docs' do
         *, (select login || '@' || org as owner_login from users where id = owner) \
       from docs"
     )
-    res.to_a.to_json
+    {:docs => res.to_a}.to_json
   rescue => e
-    e.message.to_json
+    status 400
+    {:error => e.message}.to_json
   end
 end
 
@@ -73,29 +76,13 @@ post '/docs' do
     res = db.exec(
       "insert into docs (title, shares) values \
       ('#{data["title"]}', '{#{data["shares"].join(",")}}') \
-      returning *"
+      returning id"
     )
-    res.to_a.to_json
+    status 201
+    {:id => res[0]["id"]}.to_json
   rescue => e
-    e.message.to_json
-  end
-end
-
-put '/docs/:id' do |doc_id|
-  begin
-    db = db(user_name(request))
-    data = JSON.parse request.body.read
-
-    res = db.exec(
-      "update docs set \
-        title = '#{data["title"]}', \
-        shares = '{#{data["shares"].join(",")}}' \
-      where id = '#{doc_id}'
-      returning *"
-    )
-    res.to_a.to_json
-  rescue => e
-    e.message.to_json
+    status 400
+    {:error => e.message}.to_json
   end
 end
 
@@ -103,13 +90,14 @@ get '/contents/:id' do |doc_id|
   begin
     db = db(user_name(request))
     res = db.exec(
-      "select *
+      "select data
       from contents
       where doc_id = '#{doc_id}'"
     )
-    res.to_a.to_json
+    res[0]["data"]
   rescue => e
-    e.message.to_json
+    status 400
+    {:error => e.message}.to_json
   end
 end
 
@@ -121,10 +109,12 @@ post '/contents' do
     res = db.exec(
       "insert into contents (doc_id, data) values \
       ('#{data["doc_id"]}', '#{data["data"]}') \
-      returning *"
+      returning id"
     )
-    res.to_a.to_json
+    status 201
+    {:id => res[0]["id"]}.to_json
   rescue => e
-    e.message.to_json
+    status 400
+    {:error => e.message}.to_json
   end
 end
