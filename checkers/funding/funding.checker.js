@@ -250,6 +250,7 @@ async function info() {
 }
 
 async function check(url) {
+    await getPlatformAddress(url);
     exitWithStatus(STATUS_OK);
 }
 
