@@ -1,4 +1,4 @@
-import {FastifyInstance, FastifyPluginAsync} from 'fastify';
+import { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import * as ProjectContract from '../../../../ethereum/artifacts/contracts/Project.sol/Project.json'
 
 interface IProjectRequest {
@@ -49,9 +49,9 @@ const projects: FastifyPluginAsync = async function (fastify: FastifyInstance, o
         async (request, reply) => {
             let { address, award } = request.body;
             fastify.assert(address, 400, 'Address can not be empty');
+            fastify.assert(address.startsWith("0x"), 400, 'Address must start with 0x');
+            fastify.assert(address.length == 42, 400, 'Address must have 40 hex digits preceding by 0x');
             fastify.assert(award, 400, 'Award can not be empty');
-
-            // TODO: check address format
 
             const project = await fastify.database.one(
                 'INSERT INTO projects (address, award) VALUES ($1, $2) RETURNING id, address',
@@ -66,7 +66,7 @@ const projects: FastifyPluginAsync = async function (fastify: FastifyInstance, o
         async (request, reply) => {
             const projects = await fastify.database.manyOrNone('SELECT id, address FROM projects ORDER BY id DESC LIMIT 20');
             // TODO: add paging
-            const projectDetails = await Promise.all(projects.map(project => getProjectInfo(fastify, project)))
+            const projectDetails = await Promise.all(projects.map(project => getProjectInfo(fastify, project)));
             reply.send({projects: projectDetails});
         }
     );
@@ -89,28 +89,28 @@ const projects: FastifyPluginAsync = async function (fastify: FastifyInstance, o
             const user = await fastify.database.one('SELECT address FROM users WHERE id = $1', [request.session.userId]);
 
             const {projectId, blockNumber} = request.params;
-            const project = await fastify.database.oneOrNone('SELECT id, address, award FROM projects WHERE id = $1', [projectId])
+            const project = await fastify.database.oneOrNone('SELECT id, address, award FROM projects WHERE id = $1', [projectId]);
             fastify.assert(project, 404, `Project ${projectId} not found`);
 
             const contract = new fastify.web3.eth.Contract(ProjectContract.abi, project.address);
 
-            const isFinished: boolean = await contract.methods.isFinished().call({}, blockNumber || 'latest')
+            const isFinished: boolean = await contract.methods.isFinished().call({}, blockNumber || 'latest');
             fastify.assert(isFinished, 404, `Owner of the contract ${project.address} hasn't withdrawn his money yet`);
 
-            const lastBaker: string = await contract.methods.getLastBaker().call({}, blockNumber || 'latest')
+            const lastBaker: string = await contract.methods.getLastBaker().call({}, blockNumber || 'latest');
             fastify.assert(
                 lastBaker != '0x0000000000000000000000000000000000000000',
                 404,
-                `Nobody has donated contract ${project.address} yet`
-            )
+                `Nobody has donated to contract ${project.address} yet`
+            );
 
             fastify.assert(
                 lastBaker.toLowerCase() == user.address,
                 404,
                 `Only last baker of the project can receive the award`
-            )
+            );
 
-            reply.send({award: project.award})
+            reply.send({award: project.award});
         }
     );
 }

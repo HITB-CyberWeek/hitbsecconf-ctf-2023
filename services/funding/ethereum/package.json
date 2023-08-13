@@ -7,7 +7,7 @@
     "compile": "npx --yes hardhat compile",
     "deploy": "npx --yes hardhat run scripts/deploy.js --network hitb"
   },
-  "author": "Andrey Gein <andgein@hackerdom.ru>",
+  "author": "Hackerdom team for HITB CTF",
   "license": "MIT",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.3",

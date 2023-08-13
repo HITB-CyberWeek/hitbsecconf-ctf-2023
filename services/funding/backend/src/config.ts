@@ -16,5 +16,6 @@ function loadEnvironmentVariable(variableName: string, defaultValue?: string): s
 
 export default {
     databaseUrl: loadEnvironmentVariable('DATABASE_URL'),
-    ethereumNodeUrl: loadEnvironmentVariable('ETHEREUM_NODE_URL')
+    ethereumNodeUrl: loadEnvironmentVariable('ETHEREUM_NODE_URL'),
+    crowdfundingPlatformAddress: loadEnvironmentVariable('CROWDFUNDING_PLATFORM_ADDRESS'),
 }
