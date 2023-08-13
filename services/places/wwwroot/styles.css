@@ -1,0 +1,77 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	font-family: 'Lato','Helvetica','Segoe UI Light','Arial';
+	font-weight: 300;
+	color: #222;
+}
+body {
+	padding:0;
+	margin:0;
+}
+
+#title {
+	position: absolute;
+	top: 0px;
+	left: 20px;
+	z-index: 100;
+	font-size: min(5vw, 7vh);
+	pointer-events: none;
+}
+
+#side {
+	position: absolute;
+	height: 100%;
+	width: 400px;
+	top: 0;
+	right: 0;
+	z-index: 1000;
+	border-left: 1px dotted gray;
+	padding: 10px 20px;
+	font-size: min(2vw, 3vh);
+	background-color: #fff;
+}
+#side dd {
+	font-size: min(min(1.5vw, 3vh), 20px);
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+#note {
+	font-size: min(min(1.5vw, 3vh), 20px);
+	font-style: italic;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	margin-bottom: 20px;
+	color: orange;
+}
+.side-bottom {
+	position: fixed;
+	padding-bottom: 20px;
+	bottom: 0;
+}
+
+textarea, button {
+	font-family: 'Lato','Helvetica','Segoe UI Light','Arial';
+	font-size: min(min(1.5vw, 3vh), 20px);
+	font-weight: 300;
+	line-height: 1.2;
+}
+textarea {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+#route-clean {
+	right: 20px;
+	position: fixed;
+	bottom: 20px;
+}
+#text {
+	margin-top: 20px;
+	white-space: pre-wrap;
+	font-size: min(min(1.5vw, 3vh), 16px);
+	overflow-y: auto;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+}

@@ -6,5 +6,5 @@ type PlaceData struct {
 	Id      string `gorm:"primarykey;size:64"`
 	Public  string
 	Secret  string
-	Updated time.Time
+	Updated time.Time `gorm:"index:,sort:desc"`
 }

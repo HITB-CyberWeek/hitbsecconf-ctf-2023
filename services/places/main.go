@@ -17,11 +17,13 @@ import (
 )
 
 const (
-	DbFile = "data.db"
+	DbFile = "data.db?_pragma=journal_mode(WAL)&_pragma=_synchronous(NORMAL)"
 
 	AuthCookieName = "auth"
 	TokenCtxName   = "token"
 	UserIdCtxName  = "userId"
+
+	ListTake = 30
 )
 
 var key = []byte(`1234567890abcdef`)
@@ -79,6 +81,7 @@ func main() {
 		}))
 
 		r.GET("/auth", auth)
+		r.GET("/list", list)
 		r.PUT("/place", put)
 		r.PUT("/place/:id", put)
 		r.GET("/place/:id", get)
@@ -88,6 +91,32 @@ func main() {
 	if err := e.Start("127.0.0.1:8080"); !errors.Is(err, http.ErrServerClosed) {
 		panic(err)
 	}
+}
+
+func list(c echo.Context) error {
+	var places [ListTake]string
+	if result := db.Model(&PlaceData{}).Select("Id").Limit(ListTake).Order("Updated desc").Find(&places); result.Error != nil {
+		return result.Error
+	}
+
+	c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	c.Response().WriteHeader(http.StatusOK)
+	enc := json.NewEncoder(c.Response())
+
+	linq.From(places).WhereT(func(place string) bool {
+		return place != ""
+	}).SelectT(func(id string) CoordsWithId {
+		if placeId, err := placeFromString(id, key); err == nil {
+			return CoordsWithId{Id: id, Lat: placeId.Lat, Long: placeId.Long}
+		}
+		return CoordsWithId{}
+	}).WhereT(func(coords CoordsWithId) bool {
+		return coords.Id != ""
+	}).ForEachT(func(coords CoordsWithId) {
+		enc.Encode(coords)
+	})
+
+	return nil
 }
 
 func get(c echo.Context) error {
@@ -112,8 +141,8 @@ func get(c echo.Context) error {
 func put(c echo.Context) error {
 	var place Place
 
-	if err := (&echo.DefaultBinder{}).BindBody(c, &place); err != nil {
-		return c.String(http.StatusBadRequest, "failed to parse place")
+	if err := c.Bind(&place); err != nil || place.Lat < -90 || place.Lat > 90 || place.Long < -180 || place.Long > 180 {
+		return c.String(http.StatusBadRequest, "invalid place")
 	}
 
 	userId := c.Get(UserIdCtxName).(uuid.UUID)
@@ -260,9 +289,15 @@ type Coords struct {
 	Long float64 `query:"long"`
 }
 
+type CoordsWithId struct {
+	Id   string  `json:"id"`
+	Lat  float64 `json:"lat"`
+	Long float64 `json:"long"`
+}
+
 type Place struct {
-	Long   float64 `json:"long"`
 	Lat    float64 `json:"lat"`
+	Long   float64 `json:"long"`
 	Public string  `json:"public"`
 	Secret string  `json:"secret"`
 }
