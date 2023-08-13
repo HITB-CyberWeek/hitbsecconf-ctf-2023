@@ -1,156 +1,158 @@
-import redis
-from flask import Flask, request, make_response
+import functools
 
-import db_api
-from session_manager import SessionManager
+from flask import Flask, request, make_response
+import redis
+
+import util
+from storage_api import StorageApi
+from config import get_config
+
+storage_api = StorageApi(redis.Redis(host=get_config().redis_host))
+
 
 app = Flask(__name__)
-redis_conn = redis.Redis(host='redis')
-sm = SessionManager(redis_conn)
 
 
-@app.post('/register')
-def register_handler():
+def handler_wrapper(handler):
+    @functools.wraps(handler)
+    def wrapped_handler(*args, **kwargs):
+        try:
+            return handler(*args, **kwargs)
+        except ParamError:
+            return make_response("invalid params", 400)
+    return wrapped_handler
+
+
+def with_auth_token(handler):
+    @functools.wraps(handler)
+    def wrapped_handler(*args, **kwargs):
+        if not request.authorization:
+            return make_response('', 401)
+
+        if not storage_api.is_token_secret_exist(request.authorization.token):
+            return make_response('', 404)
+
+        return handler(request.authorization.token, *args, **kwargs)
+    return wrapped_handler
+
+
+class ParamError(Exception):
+    pass
+
+
+def get_json_param(name):
     data = request.get_json()
-    username = data['username']
-    password = data['password']
-
-    user = db_api.create_user(username, password)
-    secret = sm.create(username)
-
-    response = make_response('{}')
-    response.set_cookie('secret', secret)
-    response.set_cookie('username', username)
-    return response
+    if name not in data:
+        raise ParamError
+    return data[name]
 
 
-@app.post('/login')
-def login_handler():
-    data = request.get_json()
-    username = data['username']
-    password = data['password']
-
-    is_valid_user_pair = db_api.validate_user_pair(username, password)
-    if is_valid_user_pair:
-        secret = sm.create(username)
-
-        response = make_response('{}')
-        response.set_cookie('secret', secret)
-        response.set_cookie('username', username)
-        return response
-    else:
-        response = make_response('invalid user pair')
-        response.status_code = 400
-        return response
+def get_query_param(name):
+    data = request.args
+    if name not in data:
+        raise ParamError
+    return data[name]
 
 
 @app.post('/issue_token')
-def issue_token_handler():
-    username = request.cookies.get('username')
-    secret = request.cookies.get('secret')
-    if not username or not secret:
-        return make_response('invalid cookies', 401)
+@handler_wrapper
+def issue_token():
+    token_name = get_json_param('token_name')
+    if storage_api.is_token_exist(token_name):
+        return make_response("token name is already exist", 400)
 
-    if not sm.validate(username, secret):
-        return make_response('invalid cookies', 401)
+    token_secret = util.gen_token_secret()
+    storage_api.add_token(token_name, token_secret)
 
-    token = db_api.issue_token(username)
-    return make_response({'token': token})
+    return {
+        'token_secret': token_secret
+    }
 
 
 @app.post('/create_resource')
-def create_resource_handler():
-    username = request.cookies.get('username')
-    secret = request.cookies.get('secret')
-    if not username or not secret:
-        return make_response('invalid cookies', 401)
+@handler_wrapper
+@with_auth_token
+def create_resource(token_secret):
+    blob = get_json_param('blob')
+    resource_id = storage_api.add_resource(blob)
 
-    if not sm.validate(username, secret):
-        return make_response('invalid cookies', 401)
+    storage_api.add_resource_to_token(resource_id, token_secret)
 
-    data = request.get_json()
-    token = data['token']
-    blob = data['blob']
+    storage_api.add_token_to_resource(token_secret, resource_id)
 
-    if not db_api.validate_user_token(username, token):
-        return make_response('token not found', 404)
+    storage_api.create_counter(token_secret, resource_id)
 
-    resource_id = db_api.create_resource(username, token, blob)
-    return make_response({'resource_id': resource_id})
+    return {
+        'resource_id': resource_id
+    }
 
 
-@app.get('/get_resource')
-def get_resource_handler():
-    username = request.args.get('username')
-    token = request.args.get('token')
-    resource_id = request.args.get('resource_id')
-
-    resource_data = db_api.get_resource(username, token, resource_id)
-    if not resource_data:
-        return make_response('resource not found', 404)
-
-    return make_response({
-        'blob': bytes(resource_data).decode()
-    })
+# def check_owner(token_name, resource_id):
+#     token_secret = get_token_secret(token_name)
+#     assert storage_api.get_tokens_by_resource_id(resource_id)[0] != token_secret, 'forbidden'
+#     return token_secret
 
 
 @app.post('/grant_access')
-def grant_access_handler():
-    username = request.cookies.get('username')
-    secret = request.cookies.get('secret')
-    if not username or not secret:
-        return make_response('invalid cookies', 401)
+@handler_wrapper
+@with_auth_token
+def grant_access(owner_token_secret):
+    resource_id = get_json_param('resource_id')
+    token_name = get_json_param('token_name')
 
-    if not sm.validate(username, secret):
-        return make_response('invalid cookies', 401)
-
-    data = request.get_json()
-    username = username or data['username']
-    token = data['token']
-    resource_id = data['resource_id']
-
-    db_api.grant_access(username, token, resource_id)
-
-    return make_response({})
-
-
-@app.post('/remove_resource')
-def remove_resource_handler():
-    username = request.cookies.get('username')
-    secret = request.cookies.get('secret')
-    if not username or not secret:
-        return make_response('invalid cookies', 401)
-
-    if not sm.validate(username, secret):
-        return make_response('invalid cookies', 401)
-
-    data = request.get_json()
-    username = data['username']
-    token = data['token']
-    resource_id = data['resource_id']
-
-    resource_data = db_api.get_resource(username, token, resource_id)
-    if not resource_data:
+    access_tokens = storage_api.get_tokens_by_resource_id
+    if not access_tokens or access_tokens(resource_id)[0] != owner_token_secret:
         return make_response('resource not found', 404)
 
-    db_api.remove_resource(username, resource_id)
+    token_secret = storage_api.get_token_secret(token_name)
+    if not token_secret:
+        return make_response('token not found', 404)
 
-    return make_response({})
+    storage_api.add_resource_to_token(resource_id, token_secret)
+    storage_api.add_token_to_resource(token_secret, resource_id)
+
+    storage_api.create_counter(token_secret, resource_id)
+    return {}
 
 
-@app.get('/list_resources')
-def list_resources_handler():
-    username = request.cookies.get('username')
-    secret = request.cookies.get('secret')
-    if not username or not secret:
-        return make_response('invalid cookies', 401)
+@app.post('/revoke_access')
+@handler_wrapper
+@with_auth_token
+def revoke_access(owner_token_secret):
+    token_name = get_json_param('token_name')
+    resource_id = get_json_param('resource_id')
 
-    if not sm.validate(username, secret):
-        return make_response('invalid cookies', 401)
+    access_tokens = storage_api.get_tokens_by_resource_id(resource_id)
+    if not access_tokens or access_tokens[0] != owner_token_secret:
+        return make_response('resource not found', 404)
 
-    resources = db_api.list_resources(username)
+    token_secret = storage_api.get_token_secret(token_name)
+    if not token_secret:
+        return make_response('token not found', 404)
 
-    return make_response({'resources': resources})
+    if token_secret not in storage_api.get_tokens_by_resource_id(resource_id):
+        return make_response('access is already absent', 400)
+
+    storage_api.remove_resource_to_token(resource_id, token_secret)
+    storage_api.remove_token_to_resource(token_secret, resource_id)
+    return {}
+
+
+@app.get('/get_resource')
+@handler_wrapper
+@with_auth_token
+def get_resource(token_secret):
+    resource_id = get_query_param('resource_id')
+    if token_secret not in storage_api.get_tokens_by_resource_id(resource_id):
+        return make_response('resource not found', 404)
+
+    storage_api.inc_counter(token_secret, resource_id)
+    resource = storage_api.get_resource(resource_id)
+    if not resource:
+        return make_response('resource not found', 404)
+    return {
+        'blob': resource
+    }
 
 
 if __name__ == '__main__':

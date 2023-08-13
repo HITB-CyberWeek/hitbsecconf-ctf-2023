@@ -1,4 +1,4 @@
-import {FastifyInstance, FastifyPluginAsync} from 'fastify';
+import { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import * as bcrypt from 'bcrypt'
 
 interface IUserRequest {
@@ -29,7 +29,7 @@ const users: FastifyPluginAsync = async function (fastify: FastifyInstance, opts
                 fastify.assert(await bcrypt.compare(password, user.password_hash), 401, 'Wrong password');
 
                 request.session.userId = user.id;
-                reply.send({user_id: user.id, address})
+                reply.send({user_id: user.id, address});
                 return;
             }
 
@@ -42,7 +42,7 @@ const users: FastifyPluginAsync = async function (fastify: FastifyInstance, opts
                 );
 
                 request.session.userId = user.id;
-                reply.code(201).send({user_id: user.id, address})
+                reply.code(201).send({user_id: user.id, address});
             } catch (e) {
                 reply.conflict('This address is already registered');
             }
@@ -57,7 +57,7 @@ const users: FastifyPluginAsync = async function (fastify: FastifyInstance, opts
             const user = await fastify.database.oneOrNone('SELECT address FROM users WHERE id = $1', [request.session.userId]);
             fastify.assert(user, 404, 'Invalid cookie, please authenticate again');
 
-            reply.send({user_id: request.session.userId, address: user.address})
+            reply.send({user_id: request.session.userId, address: user.address});
         }
     )
 
@@ -65,8 +65,9 @@ const users: FastifyPluginAsync = async function (fastify: FastifyInstance, opts
         '/logout/', {},
         async (request, reply) => {
             fastify.assert(request.session.userId, 401, 'You are not authenticated');
+
             request.session.delete();
-            reply.send({message: 'Successfully log out'})
+            reply.send({message: 'Successfully log out'});
         }
     )
 }

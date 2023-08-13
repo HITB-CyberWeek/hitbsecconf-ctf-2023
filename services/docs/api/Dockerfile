@@ -8,4 +8,4 @@ RUN gem install sinatra -v 3.0.6 && \
 WORKDIR /app
 COPY . /app
 
-CMD ["./api.rb", "-s", "Puma", "-o", "0.0.0.0"]
+CMD ["ruby", "api.rb", "-s", "Puma", "-o", "0.0.0.0"]

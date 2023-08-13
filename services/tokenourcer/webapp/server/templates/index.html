@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <style>
+    .table-btns {
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .table-btns .btn {
+      margin-left: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link">My Resources</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2>Resources</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Hex Hash</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for resource in resources %}
+        <tr>
+          <td>{{ resource.id }}</td>
+          <td>{{ resource.hex_hash }}</td>
+          <td class="table-btns">
+            <div class="btn-group" role="group" aria-label="Share and Delete buttons">
+              <button id="dwn-btn-{{ resource.id }}" data-resource-id="{{ resource.id }}" class="btn btn-sm dwn-btn btn-primary">Download</button>
+              <button id="shr-btn-{{ resource.id }}" data-resource-id="{{ resource.id }}" class="btn btn-sm shr-btn btn-secondary">Share</button>
+              <button id="dlt-btn-{{ resource.id }}" data-resource-id="{{ resource.id }}" class="btn btn-sm dlt-btn btn-danger">Delete</button>
+            </div>
+          </td>
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>

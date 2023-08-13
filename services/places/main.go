@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/ahmetb/go-linq/v3"
 	"github.com/glebarez/sqlite"
@@ -15,16 +16,25 @@ import (
 	"time"
 )
 
-const dbfile string = "data.db"
+const (
+	DbFile = "data.db?_pragma=journal_mode(WAL)&_pragma=_synchronous(NORMAL)"
+
+	AuthCookieName = "auth"
+	TokenCtxName   = "token"
+	UserIdCtxName  = "userId"
+
+	ListTake = 30
+)
 
 var key = []byte(`1234567890abcdef`)
+var JwtSecret = []byte("secret")
 
 var db *gorm.DB
 
 func main() {
 	var err error
 
-	db, err = gorm.Open(sqlite.Open(dbfile), &gorm.Config{})
+	db, err = gorm.Open(sqlite.Open(DbFile), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
@@ -47,34 +57,66 @@ func main() {
 	r := e.Group("/api")
 	{
 		r.Use(echojwt.WithConfig(echojwt.Config{
-			SigningKey:    []byte("secret"),
+			SigningKey:    JwtSecret,
 			SigningMethod: jwt.SigningMethodHS256.Name,
-			TokenLookup:   "cookie:auth",
-			SuccessHandler: func(c echo.Context) {
-				var userId uuid.UUID
-				subject, err := c.Get("token").(*jwt.Token).Claims.(jwt.MapClaims).GetSubject()
-				if err != nil {
-					userId = uuid.UUID{}
+			TokenLookup:   "cookie:" + AuthCookieName,
+			ContextKey:    TokenCtxName,
+			ErrorHandler: func(c echo.Context, err error) error {
+				if c.Path() != "/api/auth" {
+					return c.String(http.StatusUnauthorized, "token not found or invalid")
 				}
-				userId, err = uuid.Parse(subject)
-				if err != nil {
-					userId = uuid.UUID{}
-				}
-				c.Set("userId", userId)
+				c.Set(UserIdCtxName, uuid.Nil)
+				return nil
 			},
-			ContextKey: "token",
+			SuccessHandler: func(c echo.Context) {
+				if subject, err := c.Get(TokenCtxName).(*jwt.Token).Claims.(jwt.MapClaims).GetSubject(); err == nil {
+					if userId, err := uuid.Parse(subject); err == nil {
+						c.Set(UserIdCtxName, userId)
+						return
+					}
+				}
+				c.Set(UserIdCtxName, uuid.Nil)
+			},
+			ContinueOnIgnoredError: true,
 		}))
 
+		r.GET("/auth", auth)
+		r.GET("/list", list)
 		r.PUT("/place", put)
+		r.PUT("/place/:id", put)
 		r.GET("/place/:id", get)
 		r.POST("/route", route)
 	}
 
-	e.PUT("/user", login)
-
 	if err := e.Start("127.0.0.1:8080"); !errors.Is(err, http.ErrServerClosed) {
 		panic(err)
 	}
+}
+
+func list(c echo.Context) error {
+	var places [ListTake]string
+	if result := db.Model(&PlaceData{}).Select("Id").Limit(ListTake).Order("Updated desc").Find(&places); result.Error != nil {
+		return result.Error
+	}
+
+	c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	c.Response().WriteHeader(http.StatusOK)
+	enc := json.NewEncoder(c.Response())
+
+	linq.From(places).WhereT(func(place string) bool {
+		return place != ""
+	}).SelectT(func(id string) CoordsWithId {
+		if placeId, err := placeFromString(id, key); err == nil {
+			return CoordsWithId{Id: id, Lat: placeId.Lat, Long: placeId.Long}
+		}
+		return CoordsWithId{}
+	}).WhereT(func(coords CoordsWithId) bool {
+		return coords.Id != ""
+	}).ForEachT(func(coords CoordsWithId) {
+		enc.Encode(coords)
+	})
+
+	return nil
 }
 
 func get(c echo.Context) error {
@@ -86,44 +128,53 @@ func get(c echo.Context) error {
 	}
 
 	data := PlaceData{Id: id}
-	result := db.Limit(1).Find(&data)
-	if result.Error != nil {
+	if result := db.Find(&data); result.Error != nil {
 		return err
 	}
 
-	userId := c.Get("userId")
-	info := PlaceInfo{Lat: placeId.Lat, Long: placeId.Long, Public: data.Public}
-	if placeId.UserId == userId {
-		info.Secret = data.Secret
-	}
+	userId := c.Get(UserIdCtxName).(uuid.UUID)
+	place := toPlace(userId, placeId, data)
 
-	return c.JSON(http.StatusOK, info)
+	return c.JSON(http.StatusOK, place)
 }
 
 func put(c echo.Context) error {
-	var data PlaceInfo
+	var place Place
 
-	if err := (&echo.DefaultBinder{}).BindBody(c, &data); err != nil || data.Public == "" {
-		return c.String(http.StatusBadRequest, "failed to parse place info")
+	if err := c.Bind(&place); err != nil || place.Lat < -90 || place.Lat > 90 || place.Long < -180 || place.Long > 180 {
+		return c.String(http.StatusBadRequest, "invalid place")
 	}
 
-	result, err := PlaceId{
-		UserId: c.Get("userId").(uuid.UUID),
-		Long:   data.Long,
-		Lat:    data.Lat,
-	}.toString(key)
+	userId := c.Get(UserIdCtxName).(uuid.UUID)
+
+	id := c.Param("id")
+	if id != "" {
+		placeId, err := placeFromString(id, key)
+		if err != nil {
+			return c.String(http.StatusBadRequest, "invalid place")
+		}
+
+		if placeId.UserId != userId {
+			return c.String(http.StatusForbidden, "you can only change your own places")
+		}
+
+		place.Long = placeId.Long
+		place.Lat = placeId.Lat
+	}
+
+	id, err := PlaceId{UserId: userId, Long: place.Long, Lat: place.Lat}.toString(key)
 	if err != nil {
 		return err
 	}
 
 	db.Clauses(clause.OnConflict{UpdateAll: true}).Create(&PlaceData{
-		Id:        result,
-		CreatedAt: time.Now(),
-		Public:    data.Public,
-		Secret:    data.Secret,
+		Id:      id,
+		Public:  place.Public,
+		Secret:  place.Secret,
+		Updated: time.Now(),
 	})
 
-	return c.String(http.StatusOK, result)
+	return c.String(http.StatusOK, id)
 }
 
 func route(c echo.Context) error {
@@ -132,13 +183,15 @@ func route(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "failed to parse route")
 	}
 
+	var err error
+
 	var route []PlaceId
 	linq.From(places).
 		OrderByT(func(item string) string { return item }).
 		SelectT(func(item string) PlaceId {
-			placeId, err := placeFromString(item, key)
-			if err != nil {
-				return PlaceId{}
+			placeId, e := placeFromString(item, key)
+			if e != nil {
+				err = e
 			}
 			return placeId
 		}).
@@ -147,64 +200,104 @@ func route(c echo.Context) error {
 		}).
 		Distinct().
 		ToSlice(&route)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "invalid route")
+	}
 
-	//var saved []PlaceData
-	//result := db.Order("Id asc").Find(&saved, places)
-	//if result.RowsAffected != int64(len(route)) {
-	//	return c.String(http.StatusBadRequest, "invalid route")
-	//}
-	var err error
-	saved := make([]PlaceData, len(route))
+	var saved []PlaceData
+	result := db.Order("Id asc").Find(&saved, places)
+	if result.RowsAffected != int64(linq.From(places).Distinct().Count()) || len(saved) != len(route) {
+		return c.String(http.StatusBadRequest, "invalid route")
+	}
+
+	/*saved := make([]PlaceData, len(route))
 	linq.From(places).OrderByT(func(item string) string { return item }).SelectT(func(item string) PlaceData {
 		data := PlaceData{Id: item}
-		result := db.Take(&data)
-		if result.Error != nil {
+		if result := db.Take(&data); result.Error != nil {
 			err = result.Error
 		}
 		return data
 	}).ToSlice(&saved)
 	if err != nil {
 		return c.String(http.StatusBadRequest, "invalid route")
-	}
+	}*/
 
-	var response []PlaceInfo
-	linq.From(route).ZipT(linq.From(saved), func(id PlaceId, data PlaceData) PlaceInfo {
-		secret := ""
-		if id.UserId == c.Get("userId") {
-			secret = data.Secret
-		}
-		return PlaceInfo{
-			Long:   id.Long,
-			Lat:    id.Lat,
-			Public: data.Public,
-			Secret: secret,
-		}
-	}).ToSlice(&response)
+	userId := c.Get(UserIdCtxName).(uuid.UUID)
 
-	return c.JSON(http.StatusOK, response)
+	c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	c.Response().WriteHeader(http.StatusOK)
+	enc := json.NewEncoder(c.Response())
+
+	linq.From(route).ZipT(linq.From(saved), func(placeId PlaceId, data PlaceData) Place {
+		return toPlace(userId, placeId, data)
+	}).ForEachT(func(item Place) {
+		enc.Encode(item)
+	})
+
+	return nil
 }
 
-func login(c echo.Context) error {
-	userId := uuid.New()
-	signed, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{Subject: userId.String()}).SignedString([]byte("secret"))
+func toPlace(userId uuid.UUID, placeId PlaceId, data PlaceData) Place {
+	return Place{
+		Lat:    placeId.Lat,
+		Long:   placeId.Long,
+		Public: data.Public,
+		Secret: getSecretIfOwned(userId, placeId, data.Secret),
+	}
+}
+
+func getSecretIfOwned(userId uuid.UUID, placeId PlaceId, secret string) string {
+	if placeId.UserId == userId {
+		return secret
+	}
+	return ""
+}
+
+func auth(c echo.Context) error {
+	userId := c.Get(UserIdCtxName).(uuid.UUID)
+	if userId == uuid.Nil {
+		userId = uuid.New()
+		signed, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{Subject: userId.String()}).SignedString(JwtSecret)
+		if err != nil {
+			return err
+		}
+
+		cookie := new(http.Cookie)
+		cookie.Name = AuthCookieName
+		cookie.Value = signed
+		cookie.HttpOnly = true
+		cookie.SameSite = http.SameSiteStrictMode
+		c.SetCookie(cookie)
+	}
+
+	var coords Coords
+	if err := c.Bind(&coords); err != nil {
+		coords = Coords{}
+	}
+
+	placeId := PlaceId{UserId: userId, Lat: coords.Lat, Long: coords.Long}
+	id, err := placeId.toString(key)
 	if err != nil {
 		return err
 	}
 
-	cookie := new(http.Cookie)
-	cookie.Name = "auth"
-	cookie.Value = signed
-	cookie.Expires = time.Now().Add(48 * time.Hour)
-	cookie.HttpOnly = true
-	cookie.SameSite = http.SameSiteStrictMode
-	c.SetCookie(cookie)
-
-	return c.JSON(http.StatusOK, "signed in")
+	return c.String(http.StatusOK, id)
 }
 
-type PlaceInfo struct {
-	Long   float64
-	Lat    float64
-	Public string
-	Secret string
+type Coords struct {
+	Lat  float64 `query:"lat"`
+	Long float64 `query:"long"`
+}
+
+type CoordsWithId struct {
+	Id   string  `json:"id"`
+	Lat  float64 `json:"lat"`
+	Long float64 `json:"long"`
+}
+
+type Place struct {
+	Lat    float64 `json:"lat"`
+	Long   float64 `json:"long"`
+	Public string  `json:"public"`
+	Secret string  `json:"secret"`
 }

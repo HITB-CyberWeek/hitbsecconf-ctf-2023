@@ -11,7 +11,7 @@ jobs:
         python-version: '3.11'
     - name: Build and run service
       run: |
-          cd services/php_unnamed_service
+          cd services/keys
           docker compose build
           docker compose up -d
     - name: Install checker reqirements

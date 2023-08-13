@@ -17,7 +17,7 @@ function check_verdict () {
 for i in $(seq 1 $n)
 do
     echo "RUN:$i"
-    ./hack.php $HOST
+    ./hack_hack.py $HOST
     check_verdict
 
 done

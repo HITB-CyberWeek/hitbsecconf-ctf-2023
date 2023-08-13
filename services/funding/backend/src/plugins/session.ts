@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify'
 import fastifyPlugin from 'fastify-plugin'
 import fastifyCookie from '@fastify/cookie';
-import fastifySession, {SecureSessionPluginOptions} from '@fastify/secure-session';
+import fastifySession, { SecureSessionPluginOptions } from '@fastify/secure-session';
 import * as fs from 'fs';
 import * as path from 'path';
 

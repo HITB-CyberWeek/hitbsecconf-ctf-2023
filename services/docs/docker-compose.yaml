@@ -2,31 +2,25 @@ services:
   auth:
     image: docs/auth:latest
     build: auth
-    ports:
-      - "8000:8000"
-    volumes:
-      - "./auth:/app"
-    stdin_open: true
-    tty: true
-    command: ["/bin/bash"]
+    depends_on:
+      - pg
+      - redis
     environment:
       - POSTGRES_PASSWORD
       - REDIS_URI
+      - DOCS_SECRET
 
   api:
     image: docs/api:latest
     build: api
-    ports:
-      - "4567:4567"
-    volumes:
-      - "./api:/app"
-    stdin_open: true
-    tty: true
-    command: ["/bin/bash"]
+    depends_on:
+      - pg
+      - redis
     environment:
-      WEB_CONCURRENCY: 2
-      REDIS_URI: redis://redis:6379
-      # APP_ENV: production
+      - WEB_CONCURRENCY=2
+      - REDIS_URI
+      - DOCS_SECRET
+      - APP_ENV=production
 
   pg:
     image: postgres:15.3
@@ -45,8 +39,15 @@ services:
       - --save 60 1
       - --loglevel warning
 
-  # web:
-  #   image: nginx
+  nginx:
+    image: nginx:1.24
+    volumes:
+      - "./nginx.conf:/etc/nginx/nginx.conf"
+    ports:
+      - "80:80"
+    depends_on:
+      - auth
+      - api
 
 volumes:
   pg-data: {}

@@ -3,8 +3,8 @@ package main
 import "time"
 
 type PlaceData struct {
-	Id        string `gorm:"primarykey;size:64"`
-	CreatedAt time.Time
-	Public    string
-	Secret    string
+	Id      string `gorm:"primarykey;size:64"`
+	Public  string
+	Secret  string
+	Updated time.Time `gorm:"index:,sort:desc"`
 }
