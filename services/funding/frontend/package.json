@@ -2,6 +2,8 @@
   "name": "funding-frontend",
   "version": "1.0.0",
   "private": true,
+  "author": "Hackerdom team for HITB CTF",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
