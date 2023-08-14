@@ -1,0 +1,8 @@
+version: "2.0"
+services:
+    mysite2:
+        build: .
+        volumes:
+            - ./container:/home/task
+        ports:
+            - "8080:5555"
