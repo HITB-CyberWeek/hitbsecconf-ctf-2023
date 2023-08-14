@@ -1,11 +1,11 @@
-//SPDX-License-Identifier: Unlicense
+//SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
 contract Project {
-    address payable public owner;
+    address payable private owner;
     uint256 private totalDonations;
     address private lastBaker;
-    string public title;
+    string private title;
 
     constructor(string memory _title) {
         owner = payable(tx.origin);
@@ -14,7 +14,7 @@ contract Project {
     }
 
     function donate() external payable {
-        require(msg.value == 0.05 ether, "Every donation should be 0.05 CTF"); // TODO: calculate amount
+        require(msg.value >= 0.0001 ether, "Every donation should be at least 0.0001 ETH");
         totalDonations = address(this).balance;
         lastBaker = msg.sender;
     }
@@ -38,5 +38,13 @@ contract Project {
 
     function getLastBaker() external view returns (address) {
         return lastBaker;
+    }
+
+    function getOwner() external view returns (address) {
+        return owner;
+    }
+
+    function getTitle() external view returns (string memory) {
+        return title;
     }
 }

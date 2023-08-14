@@ -16,7 +16,7 @@ export default function Projects() {
         <div className="card lg:w-5/12 h-fit my-4">
             <NewProjectForm/>
         </div>
-        <div className="lg:w-7/12 my-2 lg:my-0 lg:mx-2">
+        <div className="lg:w-7/12 my-4 lg:mx-2">
             {projects && projects.map((project, i) => <ProjectCard project={project} key={i}/>)}
             {projects.length == 0 && <h1 className="text-2xl font-bold text-gray-500 text-center font-sans">There are no projects yet</h1>}
         </div>
