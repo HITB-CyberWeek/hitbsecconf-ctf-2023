@@ -31,6 +31,12 @@ body {
 	padding: 10px 20px;
 	font-size: min(2vw, 3vh);
 	background-color: #fff;
+	overflow-y: auto;
+	box-sizing: border-box;
+	padding-bottom: 60px;
+}
+#side-title {
+	font-weight: bold;
 }
 #side dd {
 	font-size: min(min(1.5vw, 3vh), 20px);
@@ -71,7 +77,6 @@ textarea {
 	margin-top: 20px;
 	white-space: pre-wrap;
 	font-size: min(min(1.5vw, 3vh), 16px);
-	overflow-y: auto;
-	overflow-x: hidden;
+	overflow: hidden;
 	text-overflow: ellipsis;
 }
