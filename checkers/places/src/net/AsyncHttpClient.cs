@@ -20,14 +20,14 @@ internal class AsyncHttpClient
 		Cookies = cookies ? new CookieContainer(4, 4, 4096) : null;
 	}
 
-	public async Task<HttpResult> DoRequestAsync(HttpMethod method, string relative, Dictionary<string, string> headers = null, byte[] data = null, int timeout = 10000, int maxBodySize = 64 * 1024)
+	public async Task<HttpResult> DoRequestAsync(HttpMethod method, string relative, Dictionary<string, string> headers = null, ReadOnlyMemory<byte> data = default, int timeout = 10000, int maxBodySize = 64 * 1024)
 	{
 		HttpResult result;
 		var stopwatch = new Stopwatch();
 		try
 		{
 			using var client = CreateHttpClient(TimeSpan.FromMilliseconds(timeout), maxBodySize);
-			var message = new HttpRequestMessage(method, relative) {Version = HttpVersion, Method = method, Content = data == null ? null : new ByteArrayContent(data)};
+			var message = new HttpRequestMessage(method, relative) {Version = HttpVersion, Method = method, Content = data.IsEmpty ? null : new ReadOnlyMemoryContent(data)};
 
 			if(randomDefaultHeaders != null)
 			{
@@ -44,7 +44,7 @@ internal class AsyncHttpClient
 				}
 			}
 
-			await Console.Error.WriteLineAsync($"{method.ToString().ToLowerInvariant()} {relative}, send {data?.Length ?? 0} bytes").ConfigureAwait(false);
+			await Console.Error.WriteLineAsync($"{method.ToString().ToLowerInvariant()} {relative}, send {data.Length} bytes").ConfigureAwait(false);
 
 			stopwatch.Start();
 
