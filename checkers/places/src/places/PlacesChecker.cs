@@ -21,7 +21,7 @@ namespace checker.places;
 internal class PlacesChecker : IChecker
 {
 	public Task<string> Info()
-		=> Task.FromResult("vulns: 1\npublic_flag_description: Flag ID is space ID, flag is inside message text in this space\n");
+		=> Task.FromResult("vulns: 1\npublic_flag_description: Flag ID is place ID, flag is inside secret field in this place\n");
 
 	public async Task Check(string host)
 	{
@@ -47,6 +47,24 @@ internal class PlacesChecker : IChecker
 
 	public async Task<PutResult> Put(string host, string flagId, string flag, int vuln)
 	{
+		var (cookieWithoutFlag, placesWithoutFlag) = await PutInternal(host, null).ConfigureAwait(false);
+		var (cookieWithFlag, placesWithFlag) = await PutInternal(host, flag).ConfigureAwait(false);
+
+		var places = placesWithFlag.Concat(placesWithoutFlag).ToList();
+		return new PutResult
+		{
+			Route = places.Select(place => place.Id).RandomOrder().ToArray(),
+			PublicHash = Convert.ToBase64String(places.Select(place => place.Public).OrderBy(s => s).ComputeSha256()),
+			SecretHash = Convert.ToBase64String(placesWithFlag.Select(place => place.Secret).OrderBy(s => s).ComputeSha256()),
+			CookieWithFlag = Convert.ToBase64String(cookieWithFlag),
+			CookieWithoutFlag = Convert.ToBase64String(cookieWithoutFlag),
+
+			PublicFlagId = places.FirstOrDefault(place => place.Secret == flag)!.Id
+		};
+	}
+
+	private async Task<(byte[] Cookie, Place[] Places)> PutInternal(string host, string flag)
+	{
 		var baseUri = GetBaseUri(host);
 
 		int slept = 0;
@@ -62,23 +80,28 @@ internal class PlacesChecker : IChecker
 		await Console.Error.WriteLineAsync($"auth for lat={lat.ToString(NumberFormatInfo.InvariantInfo)} and long={lon.ToString(NumberFormatInfo.InvariantInfo)}, got place id '{id}'").ConfigureAwait(false);
 		await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
 
-		if(RndUtil.Bool())
+		if(flag != null)
 		{
-			var place = await GetPlaceAsync(client, id).ConfigureAwait(false);
-			if(Math.Abs(place.Lat - lat) > FloatingPointTolerance || Math.Abs(place.Long - lon) > FloatingPointTolerance)
-				throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiPlaceById} response: invalid place returned");
+			if(RndUtil.Bool())
+			{
+				var place = await GetPlaceAsync(client, id).ConfigureAwait(false);
+				if(Math.Abs(place.Lat - lat) > FloatingPointTolerance || Math.Abs(place.Long - lon) > FloatingPointTolerance)
+					throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiPlaceById} response: invalid place returned");
 
-			await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
-		}
+				await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
+			}
 
-		if(RndUtil.GetDouble() > 0.9)
-		{
-			await ListAsync(client).ConfigureAwait(false);
-			await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
+			if(RndUtil.GetDouble() > 0.9)
+			{
+				await ListAsync(client).ConfigureAwait(false);
+				await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
+			}
 		}
 
 		var places = Enumerable.Range(0, RndUtil.GetInt(1, 4)).Select(_ => RndPlace.Place()).ToArray();
-		places[RndUtil.GetInt(0, places.Length)].Secret = flag;
+
+		if(flag != null)
+			places[RndUtil.GetInt(0, places.Length)].Secret = flag;
 
 		foreach(var place in places)
 		{
@@ -86,8 +109,10 @@ internal class PlacesChecker : IChecker
 			await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
 		}
 
+		await Console.Error.WriteLineAsync($"total sleep: {slept} msec").ConfigureAwait(false);
+
 		var cookie = string.Join("; ", client.Cookies?.GetAllCookies().Select(c => $"{c.Name}={c.Value}") ?? Enumerable.Empty<string>());
-		await Console.Error.WriteLineAsync($"cookie '{cookie.ShortenLog(MaxCookieSize)}' with length '{cookie?.Length ?? 0}'").ConfigureAwait(false);
+		await Console.Error.WriteLineAsync($"cookie '{cookie.ShortenLog(MaxCookieSize)}' with length '{cookie.Length}'").ConfigureAwait(false);
 
 		if(string.IsNullOrEmpty(cookie) || cookie.Length > MaxCookieSize)
 			throw new CheckerException(ExitCode.MUMBLE, "too large or invalid cookies");
@@ -96,17 +121,7 @@ internal class PlacesChecker : IChecker
 		if(bytes == null || bytes.Length > MaxCookieSize)
 			throw new CheckerException(ExitCode.MUMBLE, "too large or invalid cookies");
 
-		await Console.Error.WriteLineAsync($"total sleep: {slept} msec").ConfigureAwait(false);
-
-		return new PutResult
-		{
-			PublicHash = Convert.ToBase64String(places.Select(place => place.Public).OrderBy(s => s).ComputeSha256()),
-			SecretHash = Convert.ToBase64String(places.Select(place => place.Secret).OrderBy(s => s).ComputeSha256()),
-			Route = places.Select(place => place.Id).RandomOrder().ToArray(),
-			Cookie = Convert.ToBase64String(bytes),
-
-			PublicFlagId = places.FirstOrDefault(place => place.Secret == flag)?.Id
-		};
+		return (bytes, places);
 	}
 
 	public async Task Get(string host, PutResult put, string flag, int vuln)
@@ -118,7 +133,8 @@ internal class PlacesChecker : IChecker
 		var route = put.Route;
 		var publicHash = Convert.FromBase64String(put.PublicHash);
 		var secretHash = Convert.FromBase64String(put.SecretHash);
-		var cookie = Encoding.UTF8.GetString(Convert.FromBase64String(put.Cookie));
+		var cookieWithFlag = Encoding.UTF8.GetString(Convert.FromBase64String(put.CookieWithFlag));
+		var cookieWithoutFlag = Encoding.UTF8.GetString(Convert.FromBase64String(put.CookieWithoutFlag));
 
 		int slept = 0;
 		await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
@@ -127,8 +143,8 @@ internal class PlacesChecker : IChecker
 		await Console.Error.WriteLineAsync($"random headers '{JsonSerializer.Serialize(new FakeDictionary<string, string>(randomDefaultHeaders))}'").ConfigureAwait(false);
 		var client = new AsyncHttpClient(baseUri, randomDefaultHeaders, cookies: true);
 
-		await Console.Error.WriteLineAsync($"use saved cookie '{cookie}'").ConfigureAwait(false);
-		client.Cookies.SetCookies(baseUri, cookie);
+		await Console.Error.WriteLineAsync($"use saved cookie '{cookieWithFlag}'").ConfigureAwait(false);
+		client.Cookies.SetCookies(baseUri, cookieWithFlag);
 
 		if(RndUtil.Bool())
 		{
@@ -154,6 +170,20 @@ internal class PlacesChecker : IChecker
 			if(!CryptographicOperations.FixedTimeEquals(publicHash, places.Select(place => place.Public).OrderBy(s => s).ComputeSha256()))
 				throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiRoute} response: places info not match");
 			if(!CryptographicOperations.FixedTimeEquals(secretHash, places.Select(place => place.Secret).OrderBy(s => s).ComputeSha256()))
+				throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiRoute} response: places info not match");
+		}
+
+		if(RndUtil.Bool())
+		{
+			randomDefaultHeaders = RndHttp.RndDefaultHeaders(baseUri);
+			await Console.Error.WriteLineAsync($"random headers '{JsonSerializer.Serialize(new FakeDictionary<string, string>(randomDefaultHeaders))}'").ConfigureAwait(false);
+			client = new AsyncHttpClient(baseUri, randomDefaultHeaders, cookies: true);
+
+			await Console.Error.WriteLineAsync($"use saved cookie (without flag) '{cookieWithoutFlag}'").ConfigureAwait(false);
+			client.Cookies.SetCookies(baseUri, cookieWithoutFlag);
+
+			var places = await RouteAsync(client, route).ConfigureAwait(false);
+			if(!CryptographicOperations.FixedTimeEquals(publicHash, places.Select(place => place.Public).OrderBy(s => s).ComputeSha256()))
 				throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiRoute} response: places info not match");
 		}
 

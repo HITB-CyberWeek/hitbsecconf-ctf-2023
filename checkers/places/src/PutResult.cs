@@ -9,5 +9,6 @@ internal class PutResult
 	[JsonPropertyName("public")] public string PublicHash { get; set; }
 	[JsonPropertyName("secret")] public string SecretHash { get; set; }
 	[JsonPropertyName("route")] public string[] Route { get; set; }
-	[JsonPropertyName("cookie")] public string Cookie { get; set; }
+	[JsonPropertyName("cookie_with_flag")] public string CookieWithFlag { get; set; }
+	[JsonPropertyName("cookie_without_flag")] public string CookieWithoutFlag { get; set; }
 }
