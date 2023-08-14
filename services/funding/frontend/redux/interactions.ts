@@ -12,7 +12,6 @@ export async function loadWeb3(dispatch: AppDispatch) {
 
 export async function loadUserAddress(web3: Web3, dispatch: AppDispatch) {
     const accounts = await web3.eth.getAccounts();
-    // const network = await web3.eth.net.getId();
 
     if (accounts) {
         dispatch(web3Slice.actions.setUserAddress(accounts[0]));
@@ -28,6 +27,13 @@ export async function loadProjects(dispatch: AppDispatch) {
     if (json.projects) {
         dispatch(projectsSlice.actions.set(json.projects));
     }
+}
+
+export async function loadProject(projectId: number) {
+    const response = await fetch(`/api/projects/${projectId}`);
+    const json = await response.json();
+
+    return json.project;
 }
 
 export async function loadPlatformAddress(dispatch: AppDispatch) {
@@ -112,4 +118,11 @@ export async function withdraw(web3: Web3, userAddress: string, projectAddress: 
     const contract = new web3.eth.Contract(ProjectContract.abi, projectAddress);
     // @ts-ignore
     await contract.methods.withdraw(amount).send({from: userAddress});
+}
+
+export async function getAward(projectId: number) {
+    const response = await fetch(`/api/projects/${projectId}/award/`);
+    const json = await response.json();
+
+    return json.award;
 }

@@ -19,8 +19,8 @@ async function getProjectInfo<RawServer>(fastify: FastifyInstance, project: {id:
     try {
         const contract = new fastify.web3.eth.Contract(ProjectContract.abi, project.address);
 
-        const owner: string = await contract.methods.owner().call();
-        const title: string = await contract.methods.title().call();
+        const owner: string = await contract.methods.getOwner().call();
+        const title: string = await contract.methods.getTitle().call();
         const totalDonations: number = await contract.methods.getTotalDonations().call();
         const lastBaker: string = await contract.methods.getLastBaker().call();
         const isFinished: boolean = await contract.methods.isFinished().call();
