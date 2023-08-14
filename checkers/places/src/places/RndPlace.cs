@@ -15,8 +15,8 @@ public static class RndPlace
 		{
 			Lat = lat,
 			Long = lon,
-			Public = RndText.RandomText(RndUtil.GetInt(20, 64)),
-			Secret = RndText.RandomText(RndUtil.GetInt(20, 64))
+			Public = RndUtil.Bool() ? RndText.RandomWord(RndUtil.GetInt(5, 16)) : RndText.RandomText(RndUtil.GetInt(20, 64)),
+			Secret = RndUtil.Bool() ? RndText.RandomWord(RndUtil.GetInt(5, 16)) : RndText.RandomText(RndUtil.GetInt(20, 64)),
 		};
 	}
 }
