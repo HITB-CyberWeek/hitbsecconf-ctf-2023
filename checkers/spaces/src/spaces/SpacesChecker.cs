@@ -93,10 +93,10 @@ internal class SpacesChecker : IChecker
 		if(awaited == null)
 			throw new CheckerException(ExitCode.MUMBLE, "failed to await all messages");
 
-		var cookie = client.Cookies?.GetCookieHeader(baseUri);
+        var cookie = string.Join("; ", client.Cookies?.GetAllCookies().Select(c => $"{c.Name}={c.Value}") ?? Enumerable.Empty<string>());
 		await Console.Error.WriteLineAsync($"cookie '{cookie.ShortenLog(MaxCookieSize)}' with length '{cookie?.Length ?? 0}'").ConfigureAwait(false);
 
-		if(cookie == null || cookie.Length > MaxCookieSize)
+		if(string.IsNullOrEmpty(cookie) || cookie.Length > MaxCookieSize)
 			throw new CheckerException(ExitCode.MUMBLE, "too large or invalid cookies");
 
 		var bytes = DoIt.TryOrDefault(() => Encoding.UTF8.GetBytes(cookie));
