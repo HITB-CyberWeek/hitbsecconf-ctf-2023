@@ -12,7 +12,6 @@ export async function loadWeb3(dispatch: AppDispatch) {
 
 export async function loadUserAddress(web3: Web3, dispatch: AppDispatch) {
     const accounts = await web3.eth.getAccounts();
-    // const network = await web3.eth.net.getId();
 
     if (accounts) {
         dispatch(web3Slice.actions.setUserAddress(accounts[0]));
@@ -28,6 +27,13 @@ export async function loadProjects(dispatch: AppDispatch) {
     if (json.projects) {
         dispatch(projectsSlice.actions.set(json.projects));
     }
+}
+
+export async function loadProject(projectId: number) {
+    const response = await fetch(`/api/projects/${projectId}`);
+    const json = await response.json();
+
+    return json.project;
 }
 
 export async function loadPlatformAddress(dispatch: AppDispatch) {
@@ -92,10 +98,10 @@ export async function createProjectContract(web3: Web3, userAddress: string, pla
     return parsedLog._address as string;
 }
 
-export async function createProjectInApi(address: string, award: string, dispatch: AppDispatch) {
+export async function createProjectInApi(address: string, reward: string, dispatch: AppDispatch) {
     let request = new Request(
         "/api/projects/",
-        <RequestInit>{method: "POST", body: JSON.stringify({address, award}), headers: {"Content-Type": "application/json"}}
+        <RequestInit>{method: "POST", body: JSON.stringify({address, reward}), headers: {"Content-Type": "application/json"}}
     );
     const response = await fetch(request);
     const json = await response.json();
@@ -112,4 +118,11 @@ export async function withdraw(web3: Web3, userAddress: string, projectAddress: 
     const contract = new web3.eth.Contract(ProjectContract.abi, projectAddress);
     // @ts-ignore
     await contract.methods.withdraw(amount).send({from: userAddress});
+}
+
+export async function getReward(projectId: number) {
+    const response = await fetch(`/api/projects/${projectId}/reward/`);
+    const json = await response.json();
+
+    return json.reward;
 }

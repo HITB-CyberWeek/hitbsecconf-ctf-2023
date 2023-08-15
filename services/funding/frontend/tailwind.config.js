@@ -5,4 +5,5 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   plugins: [],
+  darkMode: "class", // alternative: "media"
 }

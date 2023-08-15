@@ -1,7 +1,7 @@
-import {useAppDispatch, useAppSelector} from "@/redux/store";
-import {FormEvent, useEffect, useState} from "react";
-import {toastError, toastSuccess} from "@/app/toasts";
-import {createProjectContract, createProjectInApi, loadPlatformAddress} from "@/redux/interactions";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { FormEvent, useEffect, useState } from "react";
+import { toastError, toastSuccess } from "@/app/toasts";
+import { createProjectContract, createProjectInApi, loadPlatformAddress } from "@/redux/interactions";
 
 export default function NewProjectForm() {
     const web3 = useAppSelector(state=> state.web3.connection);
@@ -10,35 +10,35 @@ export default function NewProjectForm() {
 
     const dispatch = useAppDispatch()
 
-    const [title,setTitle] = useState("");
-    const [award,setAward] = useState("");
-    const [btnLoading,setBtnLoading] = useState(false);
+    const [title, setTitle] = useState("");
+    const [reward, setReward] = useState("");
+    const [btnLoading, setBtnLoading] = useState(false);
 
     useEffect(() => {
         loadPlatformAddress(dispatch).catch();
     }, [dispatch]);
 
 
-    const startProject = async (e: FormEvent) =>{
+    const startProject = async (e: FormEvent) => {
         e.preventDefault();
-        setBtnLoading(true)
+        setBtnLoading(true);
 
-        const onSuccess = (address: string) =>{
+        const onSuccess = (address: string) => {
             setBtnLoading(false);
+            toastSuccess(<span>New project <b>{title}</b> added at address <b>{address}</b> 🎉</span>);
             setTitle("");
-            setAward("");
-            toastSuccess(`New project added at address ${address} 🎉`);
+            setReward("");
         }
 
         try {
             const address = await createProjectContract(web3, userAddress, platformAddress, title);
             if (!address)
                 throw new Error('Can not create a smart contract, sorry.')
-            console.log(`Created a contract at ${address}`);
-            await createProjectInApi(address, award, dispatch);
+            await createProjectInApi(address, reward, dispatch);
             onSuccess(address);
         } catch (e) {
             setBtnLoading(false);
+            console.log(e);
             toastError(e instanceof Error ? e.message : e as string);
         }
 
@@ -46,28 +46,29 @@ export default function NewProjectForm() {
 
     return (
         <form className="space-y-6" onSubmit={startProject}>
-            <h5 className="text-xl font-medium text-gray-900 dark:text-white">Start a new project</h5>
-            <div>
-                <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
-                <input type="text" name="title" id="title"
-                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                       placeholder="Amazing CTF"
-                       value={title} onChange={e => setTitle(e.target.value)}
-                       required/>
+            <h5 className="text-xl font-medium text-gray-900 dark:text-white">Start donation project</h5>
+            <div className="relative z-0">
+                <input type="text" id="title" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required value={title} onChange={e => setTitle(e.target.value)}/>
+                <label htmlFor="title" className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Title</label>
             </div>
-            <div>
-                <label htmlFor="award" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Award</label>
-                <input type="text" name="award" id="award"
-                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                       placeholder="Award for the latest baker"
-                       value={award} onChange={e => setAward(e.target.value)}
-                       required/>
+            <div className="relative z-0">
+                <input type="text" id="reward" aria-describedby="reward_helper_text" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required value={reward} onChange={e => setReward(e.target.value)}/>
+                <label htmlFor="reward" className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Reward for last baker</label>
+                <p id="reward_helper_text" className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    The individual who donates to this project before you withdraw the funds will be eligible for this reward.
+                </p>
             </div>
-            <button type="submit"
-                    disabled={btnLoading}
-                    className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Add project
-            </button>
+
+            <div>
+                <button type="submit" disabled={btnLoading}
+                        className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    Add project
+                </button>
+                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    By clicking this button, you will create a smart contract. 
+                    Others can donate money to this contract, and you can withdraw the donated funds at any time.
+                </p>
+            </div>
         </form>
     )
 }

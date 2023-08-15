@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 
 
-export const toastSuccess = (msg: string) =>{
+export const toastSuccess = (msg: string|React.ReactNode) =>{
     toast.success(msg, {
         position: "top-right",
         autoClose: 5000,

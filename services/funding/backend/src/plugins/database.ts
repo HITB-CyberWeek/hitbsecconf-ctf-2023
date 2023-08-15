@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS projects (
     id SERIAL PRIMARY KEY,
     address VARCHAR(42) NOT NULL,
-    award TEXT NOT NULL
+    reward TEXT NOT NULL
 )
 `
 ]

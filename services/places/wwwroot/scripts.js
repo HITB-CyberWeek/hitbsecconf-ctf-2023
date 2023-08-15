@@ -194,7 +194,7 @@ $routeBuild.onclick = () => {
 			reader.read().then(({done, value}) => {
 				value.split('\n').filter(line => !!line.length).forEach(line => {
 					const json = JSON.parse(line);
-					state.builtRoute.push([json.lat, json.long]);// = json.map(place => [place.lat, place.long]);
+					state.builtRoute.push([json.long, json.lat]);
 					text.push(`${randomChoice(gotoPhrases)} φ=${json.lat}°, λ=${json.long}°. ${randomChoice(publicPhrases)}: '${json.public}'. ${randomChoice(secretPhrases)}: '${json.secret}'.`);
 				});
 			}).then(() => {
@@ -294,12 +294,12 @@ const update = () => {
 
 	const loc = state.hoverLocation;
 	const hovered = !loc ? undefined : state.places
-		.map(place => [place, Math.abs(loc[0] - place.lat), Math.abs(loc[1] - place.long)])
+		.map(place => [place, Math.abs(loc[1] - place.lat), Math.abs(loc[0] - place.long)])
 		.filter(item => item[1] < 1.5 && item[2] < 1.5)
 		.minBy(item => item[1] + item[2])?.[0];
 
-	document.body.style.cursor = !hovered ? 'auto' : 'pointer';
 	state.hovered = hovered;
+	document.body.style.cursor = !hovered ? 'auto' : 'pointer';
 
 	const drawPlace = place => {
 		context.beginPath();
@@ -307,7 +307,7 @@ const update = () => {
 		d3.geoPath()
 			.projection(projection)
 			.pointRadius(place === hovered || place === state.selected ? 12 : 6)
-			.context(context)({type: 'Feature', geometry: {type: 'Point', coordinates: [place.lat, place.long]}});
+			.context(context)({type: 'Feature', geometry: {type: 'Point', coordinates: [place.long, place.lat]}});
 		context.fill();
 	}
 
