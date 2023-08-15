@@ -2,11 +2,17 @@ import { loadUserAddress } from "@/redux/interactions";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { useEffect } from "react";
 import { Web3 } from "web3";
+import Image from 'next/image'
+import { initPopovers } from "flowbite"
+import { toastError } from "@/app/toasts"
+import networkSelector from "../public/network_selector.png"
+import addNetwork from "../public/add_network.png"
+import addNetworkManually from "../public/add_network_manually.png"
+import networkDetails from "../public/network_details.png"
 
 async function connectWithWallet() {
     if (!window.ethereum) {
-        // TODO: change text
-        window.alert("Non-Ethereum browser detected. You should consider trying MetaMask!");
+        toastError(<>Non-Ethereum browser detected.<br/>Install <b>MetaMask extension</b> by instructions on the page!</>);
         return false;
     }
 
@@ -14,15 +20,15 @@ async function connectWithWallet() {
         await window.ethereum.request({method: "eth_requestAccounts"});
         return true;
     } catch (e) {
-        alert(e && e.hasOwnProperty("message") ? (e as {message: string}).message : JSON.stringify(e));
+        console.log(e);
+        toastError(e && e.hasOwnProperty("message") ? (e as {message: string}).message : JSON.stringify(e));
     }
     return false;
 }
 
 function ConnectWithMetaMaskButton(props: {connect: React.MouseEventHandler<HTMLButtonElement>}) {
       return <button onClick={props.connect}  type="button"
-      // className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2"
-      className="flex w-full items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white"
+      className="flex w-full border border-gray-300 items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white"
       >
             <svg aria-hidden="true" className="w-6 h-5 mr-2 -ml-1" viewBox="0 0 2405 2501" fill="none"
                   xmlns="http://www.w3.org/2000/svg">
@@ -191,7 +197,7 @@ function ConnectWithMetaMaskButton(props: {connect: React.MouseEventHandler<HTML
                   </defs>
             </svg>
             <span className="flex-1 whitespace-nowrap">Connect with MetaMask</span>  
-</button>
+      </button>
 }
 
 export default function ConnectWithMetaMask() {
@@ -207,19 +213,102 @@ export default function ConnectWithMetaMask() {
     useEffect(() => {
         if (web3 && web3.provider)
             loadUserAddress(web3, dispatch).catch();
-    }, [web3])
+    }, [web3]);
+
+    useEffect(() => {
+        initPopovers();
+    }, []);
 
     return <div className="flex flex-col items-center justify-center my-40">
-      <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 dark:bg-gray-800 dark:border-gray-700">
-        <h5 className="mb-3 text-base font-semibold text-gray-900 md:text-xl dark:text-white">
-            Connect wallet
-        </h5>
-        <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
-            To use our Web3 platform you should install <a href="https://metamask.io/">MetaMask extension</a> and connect with it
-        </p>
-        <div className="my-4 space-y-3">
-            <ConnectWithMetaMaskButton connect={connect} />
+        <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 dark:bg-gray-800 dark:border-gray-700">
+            <h5 className="mb-3 text-base font-semibold text-gray-900 md:text-xl dark:text-white">
+                  Connect wallet
+            </h5>
+            <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                  To use our Web3 platform you should install <a href="https://metamask.io/">MetaMask extension</a> and connect with it
+            </p>
+            <div className="mt-4 space-y-3">
+                  <ConnectWithMetaMaskButton connect={connect} />
+            </div>
         </div>
+        <div className="mt-10">
+            <p>
+                  <b>
+                        Welcome to <a href="https://en.wikipedia.org/wiki/Web3">Web3</a> decentralized crowdfunding platform!
+                  </b>
+            </p>
+            <p>
+                  How to use our application?
+            </p>
+
+            <ol className="my-2">
+                  <li><p>1. First, install <a href="https://metamask.io/">MetaMask extension</a> for your browser</p></li>
+                  <li><p>2. Create a new wallet in Metamask (you can also use an existing wallet if you have one)</p></li>
+                  <li>
+                        <p>
+                              3. Click on the network selector
+                              <button data-popover-target="network-selector-description" data-popover-placement="bottom-end" type="button"><svg className="w-4 h-4 ml-1 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd"></path></svg><span className="sr-only">Show information</span></button>
+                        </p>
+                        <div data-popover id="network-selector-description" role="tooltip" className="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
+                              <Image src={networkSelector} alt="Network selector"/>
+                              <div className="p-3 space-y-2">                                    
+                                    Click on this dropdown in the left-top corner of the MetaMask interface
+                              </div>
+                              <div data-popper-arrow></div>
+                        </div>
+                  </li>
+                  <li>
+                        <p>
+                              4. Click "Add network"
+                              <button data-popover-target="add-network-description" data-popover-placement="bottom-end" type="button"><svg className="w-4 h-4 ml-1 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd"></path></svg><span className="sr-only">Show information</span></button>
+                        </p>
+                        <div data-popover id="add-network-description" role="tooltip" className="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
+                              <Image src={addNetwork} alt="Adding network"/>
+                              <div className="p-3 space-y-2">                                    
+                                    Click on this button ↑
+                              </div>
+                              <div data-popper-arrow></div>
+                        </div>
+                  </li>
+                  <li>
+                        <p>
+                              5. Find "Add a network manually" and click on it
+                              <button data-popover-target="add-network-manually-description" data-popover-placement="bottom-end" type="button"><svg className="w-4 h-4 ml-1 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd"></path></svg><span className="sr-only">Show information</span></button>
+                        </p>
+                        <div data-popover id="add-network-manually-description" role="tooltip" className="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
+                              <Image src={addNetworkManually} alt="Adding network manually"/>
+                              <div className="p-3 space-y-2">                                    
+                                    The link "Add a network manually" is located at the bottom of the page
+                              </div>
+                              <div data-popper-arrow></div>
+                        </div>
+                  </li>
+                  <li>
+                        <p>
+                              6. Enter the following details of our HITB Ethereum network:
+                              <button data-popover-target="network-details-description" data-popover-placement="bottom-end" type="button"><svg className="w-4 h-4 ml-1 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd"></path></svg><span className="sr-only">Show information</span></button>
+                        </p>
+                        <div data-popover id="network-details-description" role="tooltip" className="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
+                              <Image src={networkDetails} alt="Adding network manually"/>
+                              <div className="p-3 space-y-2">                                    
+                                    Carefully enter the URL and Chain ID
+                              </div>
+                              <div data-popper-arrow></div>
+                        </div>
+                        <div className="ml-8">
+                              <p>Network Name: <b>HITB CTF</b></p>
+                              <p>New RPC URL: <b>http://eth.ctf.hitb.org:8545</b></p>
+                              <p>Chain ID: <b>68664447</b></p>
+                              <p>Currency symbol: <b>ETH</b></p>
+                        </div>
+                  </li>
+                  <li>
+                        7. Congratulations! Now you can connect your freshly created wallet to our website. 
+                  </li>
+                  <li>
+                        8. If you need some money for your accout, visit <a href="https://eth.cth.hitb.org">eth.cth.hitb.org</a>.
+                  </li>
+            </ol>
         </div>
     </div>
 }
