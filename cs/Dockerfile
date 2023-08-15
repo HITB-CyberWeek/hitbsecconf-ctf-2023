@@ -5,6 +5,9 @@ FROM ghcr.io/hackerdom/checksystem:master
 COPY --from=scoreboard /scoreboard/build /scoreboard
 ENV CS_STATIC=/scoreboard
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        python3 python3-pip
 RUN pip3 install gornilo --break-system-packages
 
 COPY cs/cs.conf /app/c_s.conf
