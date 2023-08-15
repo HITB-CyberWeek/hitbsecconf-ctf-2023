@@ -20,7 +20,8 @@ class BaseController
             'post' => $_POST,
             'get' => $_GET,
             'request_uri' => $_SERVER['REQUEST_URI'],
-            'errors' => []
+            'errors' => [],
+
         );
 
         $this->validator = new Validator;
@@ -34,13 +35,14 @@ class BaseController
     private function getLanguage()
     {
         $language = $_COOKIE['language'] ?? 'en';
-//        var_dump("$language.ini");
-        $this->context['language'] = parse_ini_file("language/$language.ini");
+        $this->context['language_code'] =  $language;
+        $this->context['language'] = parse_ini_file("$language.ini");
     }
 
     public function setLanguage()
     {
-        header('Location: /');
+        $location = $_GET['location'] ?? '/';
+        header("Location: $location");
         $language = $_GET['language'] ?? 'en';
         setcookie("language", $language, strtotime( '+1 days' ), '/');
 
@@ -48,22 +50,17 @@ class BaseController
 
     private function checkAuthRule()
     {
-        if ($this->authRule === "not_auth" && isset($_SESSION['user_id'])) {
+        $user = getUser();
+        if ($this->authRule === "not_auth" && isset($user)) {
             header('Location: /');
             exit();
-        } elseif ($this->authRule === "auth" && !isset($_SESSION['user_id'])) {
+        } elseif ($this->authRule === "auth" && !isset($user)) {
             header('Location: /signin');
             exit();
         }
-
-        if (isset($_SESSION['user_id'])) {
-            $user = \R::load('users', $_SESSION['user_id']);
-            $this->context['user'] = [
-                "id" => $user->id,
-                "email" => $user->email,
-                "username" => $user->username,
-            ];
-
+        if(isset($user)) {
+            $this->context['user'] = $user;
+            $this->context['languages'] = $user->ownLanguagesList;
         }
     }
 

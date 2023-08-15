@@ -21,9 +21,7 @@ class RegistrationController extends BaseController
             $user = \R::dispense('users');
             $user->password = password_hash($_POST["password"], PASSWORD_DEFAULT);
             $user->email = $_POST["email"];
-
-            $_SESSION['user_id'] = \R::store($user);
-
+            setUser($user);
             header('Location: /secrets');
         }
         $this->get();

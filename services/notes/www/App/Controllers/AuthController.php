@@ -17,7 +17,7 @@ class AuthController extends BaseController
         } else {
             $user = \R::findOne('users', ' email = ?', [$_POST['email']]);
             if (password_verify($_POST['password'], $user->password)) {
-                $_SESSION['user_id'] = $user->id;
+                setUser($user);
                 header('Location: /');
             } else {
                 $this->context['errors'][] = "Not found user";

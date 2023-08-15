@@ -2,10 +2,12 @@
     <div>
         <h3 class="float-md-start mb-0">NOTE</h3>
         <nav class="nav nav-masthead justify-content-center float-md-end">
+
             <a class="nav-link fw-bold py-1 px-0 {% if request_uri == '/' %}active{% endif %}" href="/">
                 {{ language.HOME }}
             </a>
             {% if not user %}
+
                 <a class="nav-link fw-bold py-1 px-0  {% if request_uri == '/signin' %}active{% endif %}"
                    href="/signin">
                     {{ language.SIGN_IN }}
@@ -15,10 +17,21 @@
                 </a>
             {% else %}
                 <a class="nav-link fw-bold py-1 px-0"
+                   href="/notes">
+                    {{ language.NOTES }}
+                </a>
+                <a class="nav-link fw-bold py-1 px-0"
                    href="/exit">
                     {{ language.EXIT }}
                 </a>
             {% endif %}
+            <select class="form-select" style="margin-left: 1rem; width: 100px;" onchange="document.location='language/set/?language='+this.options[this.selectedIndex].value+'&location='+document.location">
+                <option value="en" {% if language_code == 'en' %}selected{% endif %}>EN</option>
+                <option value="ru" {% if language_code == 'ru' %}selected{% endif %}>RU</option>
+                {% for lang in languages %}
+                    <option value="lang_{{ lang.id }}" {% if language_code == "lang_#{lang.id}" %}selected{% endif %}>{{ lang.title }}</option>
+                {% endfor %}
+            </select>
         </nav>
     </div>
 </header>
