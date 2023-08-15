@@ -126,9 +126,10 @@ const click = e => {
 
 	const pos = d3.pointer(e, this)
 	const coords = projection.invert(pos);
-	update();
 
-	state.selected = state.hovered || {id: null, lat: coords[0], long: coords[1]};
+	state.selected = state.hovered || {id: null, lat: coords[1], long: coords[0]};
+
+	update();
 	updateSidePanel();
 }
 
