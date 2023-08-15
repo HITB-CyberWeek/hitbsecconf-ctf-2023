@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    output: 'export',
     trailingSlash: true,
 
     // See https://github.com/vercel/next.js/issues/44273
@@ -10,15 +11,6 @@ const nextConfig = {
             'encoding': 'commonjs encoding',
         });
         return config;
-    },
-
-    async rewrites() {
-        return [
-            {
-                source: "/api/:path*",
-                destination: "http://146.190.27.121:3001/:path*", // TODO: change URL
-            },
-        ];
     },
 }
 

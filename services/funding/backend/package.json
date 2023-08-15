@@ -4,7 +4,7 @@
   "description": "Backend for Web3 Crowdfunding platform",
   "main": "app.ts",
   "scripts": {
-    "start": "npm run build:ts && fastify start --log-level info --options dist/backend/src/app.js",
+    "start": "fastify start --log-level info --options dist/backend/src/app.js",
     "generate-key": "npx --yes @fastify/secure-session > dist/backend/src/.cookie.key",
     "build:ts": "tsc",
     "watch:ts": "tsc -w",
