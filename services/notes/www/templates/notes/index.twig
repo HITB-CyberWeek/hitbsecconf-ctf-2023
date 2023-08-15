@@ -1,0 +1,17 @@
+{% extends "base.twig" %}
+
+{% block title %}{{ language.NOTES }}{% endblock %}
+
+{% block content %}
+    <h1>{{ language.NOTES }} (<a href="/notes/add/" style="color:white;text-decoration: none">+</a>)</h1>
+    <div id="notes">
+        {% for note in notes %}
+            <div id="note-{{ note.id }}">
+                <h2 style="text-align: left">{{ note.title }}</h2>
+                <p style="text-align: justify; padding-left: 15px;">
+                    {{ note.description }}
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

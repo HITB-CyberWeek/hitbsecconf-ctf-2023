@@ -4,14 +4,15 @@ use App\Controllers\IndexController;
 use App\Controllers\RegistrationController;
 use App\Controllers\AuthController;
 use App\Controllers\LanguageController;
+use App\Controllers\NoteController;
 use App\Controllers\BaseController;
 
 $router = new \Bramus\Router\Router();
 
-if (isset($_SESSION['user_id'])) {
-    $user = \R::findOne('users', $_SESSION['user_id']);
+if (isset($_COOKIE['jwt'])) {
+    $user = getUser();
     if (is_null($user)) {
-        session_destroy();
+        destroyUser();
         header('Location: /');
     }
 }
@@ -35,17 +36,37 @@ $router->match(
         $authController->view();
     }
 );
-$router->match(
-    'GET', 'language',
-    function () {
+
+$router->mount('/notes', function () use ($router) {
+    $router->get('/', function () {
+        $noteController = new NoteController('notes/index.twig', 'auth');
+        $noteController->get();
+    });
+    $router->match('GET|POST', '/add/', function () {
+        $noteController = new NoteController('notes/add.twig', 'auth');
+        $noteController->view();
+    });
+});
+
+$router->mount('/language', function () use ($router) {
+    $router->match('GET', '/set', function () {
         $languageController = new BaseController('index.twig');
         $languageController->setLanguage();
-    }
-);
+    });
+    $router->match('GET|POST', '/add', function () {
+        $noteController = new LanguageController('language/add.twig', 'auth');
+        $noteController->view();
+    });
+//    $router->match('GET|POST', '/add/', function () {
+//        $noteController = new NoteController('notes/add.twig', 'auth');
+//        $noteController->view();
+//    });
+});
+
 $router->all(
     'exit',
     function () {
-        session_destroy();
+        destroyUser();
         header('Location: /');
     }
 );

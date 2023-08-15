@@ -1,11 +1,26 @@
 <?php
-function generateRandomString(int $length = 10): string
+
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+function getUser()
 {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[random_int(0, $charactersLength - 1)];
+    if (isset($_COOKIE['jwt'])) {
+        $decoded = JWT::decode($_COOKIE['jwt'], new Key($_ENV["SECRET"], 'HS256'));
+        return \R::load('users', $decoded->user_id);
     }
-    return $randomString;
+    return null;
+}
+
+function setUser($user)
+{
+    $payload['user_id'] = $user->id;
+    $jwt = JWT::encode($payload, $_ENV["SECRET"], 'HS256');
+    setcookie("jwt", $jwt, strtotime('+1 days'), '/');
+}
+
+function destroyUser()
+{
+    unset($_COOKIE['jwt']);
+    setcookie('jwt', '', -1, '/');
 }

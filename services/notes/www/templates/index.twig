@@ -6,7 +6,7 @@
     <h1>{{ language.HOME }}</h1>
     <p class="important">
         {% if user %}
-            {{ language.WELCOME }} {{ user.username }}.
+            {{ language.WELCOME }}, {{ user.email }}.
         {% else %}
             {{ language.WELCOME }}!
         {% endif %}
