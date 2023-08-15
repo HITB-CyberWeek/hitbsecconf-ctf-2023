@@ -6,6 +6,6 @@ internal class PutResult
 {
 	[JsonPropertyName("public_flag_id")] public string PublicFlagId { get; set; }
 
-	[JsonPropertyName("user")] public string Space { get; set; }
+	[JsonPropertyName("space")] public string Space { get; set; }
 	[JsonPropertyName("cookie")] public string Cookie { get; set; }
 }

@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 
-import { argv } from "node:process";
-import { readFileSync } from "fs";
+import {argv} from "node:process";
+import {readFileSync} from "fs";
+import {join} from "path";
 import crypto from "crypto";
-import { faker } from '@faker-js/faker';
+import {faker} from '@faker-js/faker';
 import consoleStamp from "console-stamp";
-import { Web3 } from "web3"
+import {Web3} from "web3"
 import {fetch as fetchWithCookies, CookieJar} from "node-fetch-cookies";
 import {passwordSalt, ethereum as ethereumConfig} from "./config.js"
 
 consoleStamp(console, {format: ':date(HH:MM:ss.l)', include: ['error']});
 
-
 // Copy contract ABIs from the service folder:
 // cp ../../services/funding/ethereum/artifacts/contracts/CrowdfundingPlatform.sol/CrowdfundingPlatform.json ../../services/funding/ethereum/artifacts/contracts/Project.sol/Project.json contracts/
-const CrowdfundingPlatformContract = JSON.parse(readFileSync('./contracts/CrowdfundingPlatform.json'));
-const ProjectContract = JSON.parse(readFileSync('./contracts/Project.json'));
+const CrowdfundingPlatformContract = JSON.parse(readFileSync(new URL('./contracts/CrowdfundingPlatform.json', import.meta.url)));
+const ProjectContract = JSON.parse(readFileSync(new URL('./contracts/Project.json', import.meta.url)));
 
 Array.prototype.random = function () {
     return this[Math.floor((Math.random()*this.length))];
@@ -151,13 +151,13 @@ async function createNewProjectContract(platformAddress, title) {
     return parsedLog._address;
 }
 
-async function createProject(url, award) {
+async function createProject(url, reward) {
     const platformAddress = await getPlatformAddress(url);
 
     const projectTitle = faker.commerce.productName();
-    console.error(`Creating project with title "${projectTitle}" and award "${award}" at ${url}`);
+    console.error(`Creating project with title "${projectTitle}" and reward "${reward}" at ${url}`);
     const projectAddress = await createNewProjectContract(platformAddress, projectTitle);
-    const result = await postJSON(`${url}/projects`, {address: projectAddress, award: award});
+    const result = await postJSON(`${url}/projects`, {address: projectAddress, reward: reward});
     if (!result || !result.project || !result.project.id || !result.project.owner ||
         result.project.address !== projectAddress || result.project.title !== projectTitle)
         exitWithStatus(STATUS_MUMBLE, `Invalid response from POST request to ${url}/projects: ${result}`, `Invalid response from POST request to ${url}/projects`);
@@ -245,7 +245,7 @@ function _generateFakeFlag(url) {
 
 async function info() {
     console.log("vulns: 1");
-    console.log("public_flag_description: Flag ID is the project's ID. Flag is an award for the last baker.");
+    console.log("public_flag_description: Flag ID is the project's ID. Flag is an reward for the last baker.");
     exitWithStatus(STATUS_OK);
 }
 
@@ -255,11 +255,11 @@ async function check(url) {
 }
 
 async function put(url, _flag_id, flag) {
-    const fakeProjectAward = _generateFakeFlag(url);
-    const fakeProject = await createProject(url, fakeProjectAward);
+    const fakeProjectReward = _generateFakeFlag(url);
+    const fakeProject = await createProject(url, fakeProjectReward);
     const project = await createProject(url, flag);
 
-    const flag_id = JSON.stringify({public_flag_id: project.id, project, fakeProject, fakeProjectAward});
+    const flag_id = JSON.stringify({public_flag_id: project.id, project, fakeProject, fakeProjectReward});
     exitWithStatus(STATUS_OK, null, flag_id);
 }
 
@@ -286,22 +286,22 @@ async function getFlagForProject(url, project, flag) {
             `Can not find my donation in your service`,
         );
 
-    const award = (await getJSON(`${url}/projects/${project.id}/award/${blockNumber}`, cookieJar)).award;
-    if (award !== flag)
-        exitWithStatus(STATUS_CORRUPT, `Received invalid award from the service: ${award} instead of ${flag}`, `Can not get award as the last baker`)
+    const reward = (await getJSON(`${url}/projects/${project.id}/reward/${blockNumber}`, cookieJar)).reward;
+    if (reward !== flag)
+        exitWithStatus(STATUS_CORRUPT, `Received wrong reward from the service: ${reward} instead of ${flag}`, `Can not get reward as the last baker`)
 
-    console.error(`Found correct award "${award}"`);
+    console.error(`Found correct reward "${reward}"`);
 }
 
 async function get(url, flag_id, flag) {
-    const {project, fakeProject, fakeProjectAward} = JSON.parse(flag_id);
+    const {project, fakeProject, fakeProjectReward} = JSON.parse(flag_id);
 
-    await getFlagForProject(url, fakeProject, fakeProjectAward);
+    await getFlagForProject(url, fakeProject, fakeProjectReward);
 
     exitWithStatus(STATUS_OK);
 }
 
-async function main(args) {
+async function main() {
     if (argv.length < 3) {
         exitWithStatus(STATUS_CHECKER_ERROR, `No arguments passed. Usage: ${argv.length[1]} <info|check|put|get> ...`);
     }

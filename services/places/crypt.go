@@ -6,12 +6,10 @@ import (
 	"errors"
 )
 
-const (
-	size = 16
-)
+const BlockSize = 16
 
 func crypt(data, key []byte, crypt func(cipher cipher.Block, data []byte)) error {
-	if len(key) != size || (len(data)&(size-1)) != 0 {
+	if len(key) != BlockSize || (len(data)&(BlockSize-1)) != 0 {
 		return errors.New("crypt: data to encrypt/decrypt must be a multiple of block size")
 	}
 
@@ -20,21 +18,21 @@ func crypt(data, key []byte, crypt func(cipher cipher.Block, data []byte)) error
 		return err
 	}
 
-	for idx := 0; idx < len(data); idx += size {
-		end := idx + size
+	for idx := 0; idx < len(data); idx += BlockSize {
+		end := idx + BlockSize
 		crypt(block, data[idx:end])
 	}
 
 	return nil
 }
 
-func encrypt(data, key []byte) error {
+func Encrypt(data, key []byte) error {
 	return crypt(data, key, func(cipher cipher.Block, data []byte) {
 		cipher.Encrypt(data, data)
 	})
 }
 
-func decrypt(data, key []byte) error {
+func Decrypt(data, key []byte) error {
 	return crypt(data, key, func(cipher cipher.Block, data []byte) {
 		cipher.Decrypt(data, data)
 	})
