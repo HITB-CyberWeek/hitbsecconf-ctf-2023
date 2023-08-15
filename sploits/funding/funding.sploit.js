@@ -64,8 +64,8 @@ async function hack(url, projectId) {
     project = (await (await fetch(`${url}/projects/${projectId}`)).json()).project;
     console.log("Project after hacking:", project);
 
-    const award = await (await fetchWithCookies(cookieJar, `${url}/projects/${projectId}/award`)).json()
-    console.log(`Extracted award: ${JSON.stringify(award)}`);
+    const reward = await (await fetchWithCookies(cookieJar, `${url}/projects/${projectId}/reward`)).json()
+    console.log(`Extracted reward: ${JSON.stringify(reward)}`);
 }
 
 async function main() {

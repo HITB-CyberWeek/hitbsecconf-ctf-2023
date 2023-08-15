@@ -3,14 +3,14 @@ import * as ProjectContract from '../../../../ethereum/artifacts/contracts/Proje
 
 interface IProjectRequest {
     address: string;
-    award: string;
+    reward: string;
 }
 
 interface IGetProjectParams {
     projectId: number;
 }
 
-interface IGetAwardParams {
+interface IGetRewardParams {
     projectId: number;
     blockNumber: number;
 }
@@ -47,15 +47,15 @@ const projects: FastifyPluginAsync = async function (fastify: FastifyInstance, o
     fastify.post<{ Body: IProjectRequest }>(
         '/', {},
         async (request, reply) => {
-            let { address, award } = request.body;
+            let { address, reward } = request.body;
             fastify.assert(address, 400, 'Address can not be empty');
             fastify.assert(address.startsWith("0x"), 400, 'Address must start with 0x');
             fastify.assert(address.length == 42, 400, 'Address must have 40 hex digits preceding by 0x');
-            fastify.assert(award, 400, 'Award can not be empty');
+            fastify.assert(reward, 400, 'Reward can not be empty');
 
             const project = await fastify.database.one(
-                'INSERT INTO projects (address, award) VALUES ($1, $2) RETURNING id, address',
-                [address, award]
+                'INSERT INTO projects (address, reward) VALUES ($1, $2) RETURNING id, address',
+                [address, reward]
             );
             reply.code(201).send({project: await getProjectInfo(fastify, project)});
         }
@@ -75,21 +75,21 @@ const projects: FastifyPluginAsync = async function (fastify: FastifyInstance, o
         '/:projectId(^\\d+)', {},
         async (request, reply) => {
             const { projectId} = request.params;
-            const project = await fastify.database.oneOrNone('SELECT address FROM projects WHERE id = $1', [projectId]);
+            const project = await fastify.database.oneOrNone('SELECT id, address FROM projects WHERE id = $1', [projectId]);
             fastify.assert(project, 404, `Project ${projectId} not found`);
 
             reply.send({project: await getProjectInfo(fastify, project)});
         }
     );
 
-    fastify.get<{ Params: IGetAwardParams }>(
-        '/:projectId(^\\d+)/award/:blockNumber?', {},
+    fastify.get<{ Params: IGetRewardParams }>(
+        '/:projectId(^\\d+)/reward/:blockNumber?', {},
         async (request, reply) => {
             fastify.assert(request.session.userId, 401, 'You are not authenticated');
             const user = await fastify.database.one('SELECT address FROM users WHERE id = $1', [request.session.userId]);
 
             const {projectId, blockNumber} = request.params;
-            const project = await fastify.database.oneOrNone('SELECT id, address, award FROM projects WHERE id = $1', [projectId]);
+            const project = await fastify.database.oneOrNone('SELECT id, address, reward FROM projects WHERE id = $1', [projectId]);
             fastify.assert(project, 404, `Project ${projectId} not found`);
 
             const contract = new fastify.web3.eth.Contract(ProjectContract.abi, project.address);
@@ -107,10 +107,10 @@ const projects: FastifyPluginAsync = async function (fastify: FastifyInstance, o
             fastify.assert(
                 lastBaker.toLowerCase() == user.address,
                 404,
-                `Only last baker of the project can receive the award`
+                `Only last baker of the project can receive the reward`
             );
 
-            reply.send({award: project.award});
+            reply.send({reward: project.reward});
         }
     );
 }

@@ -29,12 +29,12 @@ export default function Navbar()  {
 
     return (
         <nav className="bg-white border-gray-200 dark:bg-gray-900">
-            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <div className="flex flex-wrap items-center justify-between mx-auto p-6">
                 <a href="/" className="flex items-center navbar-link">
                     <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">HITB CROWD FUNDING</span>
                 </a>
 
-                <div className="flex flex-row space-x-6">
+                <div className="flex md:flex-row flex-col space-x-6">
                     <div className="p-1 w-64 truncate rounded-full text-greay hover:text-greay ">
                         <span>{isAuthenticated ? user.address : web3Address}</span>
                     </div>

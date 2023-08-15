@@ -1,35 +1,31 @@
 import { Project } from '@/redux/reducers'
 import { Web3 } from 'web3'
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { donate, loadProjects, withdraw, getAward, loadProject } from "@/redux/interactions";
+import { useAppSelector } from "@/redux/store";
+import { donate, withdraw, getReward as getReward, loadProject } from "@/redux/interactions";
 import { toastError, toastSuccess } from "@/app/toasts";
 import { useEffect, useState } from "react"
-import projects from '../../backend/dist/backend/src/routes/projects/index';
 
 export default function ProjectCard(props: {project: Project}) {
-    const { project } = props;
     const donation = Web3.utils.toWei(0.0001, "ether");
 
     const web3 = useAppSelector(state => state.web3.connection);
     const userAddress = useAppSelector(state => state.web3.userAddress);
+    const isAuthenticated = useAppSelector(state => state.user.isAuthenticated);
 
-    let [ totalDonations, setTotalDonations ] = useState(project.totalDonations ? Web3.utils.toBigInt(project.totalDonations!) : 0, );
-    let [ award, setAward ] = useState("");
+    let [project, setProject] = useState(props.project);
+    let [reward, setReward] = useState("");
 
     useEffect(() => {
-        if (props.project.totalDonations)
-            setTotalDonations(Web3.utils.toBigInt(props.project.totalDonations));
-        setAward("");
+        setProject(props.project);
+        setReward("");
     }, [props.project]);
-
-    const dispatch = useAppDispatch();
 
     const donateClick = async () => {
         try {
             await donate(web3, userAddress, project.address!, donation);
             toastSuccess(`Successfully donated to the project ${project.title}`);
 
-            setTotalDonations(Web3.utils.toBigInt(totalDonations) + Web3.utils.toBigInt(donation));
+            setProject(await loadProject(project.id));
         } catch (e) {
             toastError(e instanceof Error ? e.message : e as string);
         }
@@ -37,19 +33,19 @@ export default function ProjectCard(props: {project: Project}) {
 
     const withdrawClick = async () => {
         try {
-            let updatedProject = await loadProject(project.id);
-            await withdraw(web3, userAddress, project.address!, updatedProject.totalDonations!);
+            let actualProject = await loadProject(project.id);
+            await withdraw(web3, userAddress, project.address!, actualProject.totalDonations!);
             toastSuccess(`Successfully withdrawn your money`);
-            await loadProjects(dispatch); // TODO: update only current project?
+            setProject(await loadProject(project.id));
         } catch (e) {
             toastError(e instanceof Error ? e.message : e as string);
         }
     }
 
-    const getAwardClick = async () => {
+    const getRewardClick = async () => {
         try {
-            const award = await getAward(project.id);
-            setAward(award);
+            const reward = await getReward(project.id);
+            setReward(reward);
         } catch (e) {
             toastError(e instanceof Error ? e.message : e as string);
         }
@@ -67,7 +63,7 @@ export default function ProjectCard(props: {project: Project}) {
             {project.isFinished && <span className="bg-blue-100 text-blue-800 text-sm font-medium mr-2 ml-4 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">FINISHED</span>}
         </h1>
         <p className="text-md font-sans text-gray">
-            Total donations: {Web3.utils.fromWei(totalDonations, "ether")} ETH            
+            Total donations: {Web3.utils.fromWei(project.totalDonations!, "ether")} ETH            
         </p>
         <p className="text-md font-sans text-gray">
             Owner: {project.owner}
@@ -79,10 +75,20 @@ export default function ProjectCard(props: {project: Project}) {
                     Donate 0.0001 ETH
                 </button>
             }
-            {project.owner == userAddress && totalDonations > 0 && !project.isFinished && <button className="small-button" onClick={withdrawClick}>Withdraw and Finish</button>}
-            {project.isFinished && project.lastBaker == userAddress && <>
-                <button className="small-button" onClick={getAwardClick}>🥳 Get Award</button>
-                {award && <span className="text-green-500"><b>Your award:</b> {award}</span>}
+            {project.owner == userAddress && Web3.utils.toBigInt(project.totalDonations) != Web3.utils.toBigInt(0) && !project.isFinished && <button className="small-button" onClick={withdrawClick}>Withdraw and Finish</button>}
+            {project.isFinished && project.lastBaker == userAddress && isAuthenticated && <>
+                <button className="small-button" onClick={getRewardClick}>🥳 Get Reward</button>
+                {reward && <span className="text-green-500"><b>Your reward:</b> {reward}</span>}
+            </>}
+            {project.isFinished && project.lastBaker == userAddress && !isAuthenticated && <>
+                <div className="flex items-center p-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                    <svg className="flex-shrink-0 inline w-4 h-4 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                    </svg>
+                    <div>
+                        You're the last baker! Authenticate to receive your reward
+                    </div>
+                </div>
             </>}
         </div>
     </div>

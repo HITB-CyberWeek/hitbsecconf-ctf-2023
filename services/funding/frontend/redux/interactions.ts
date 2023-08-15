@@ -98,10 +98,10 @@ export async function createProjectContract(web3: Web3, userAddress: string, pla
     return parsedLog._address as string;
 }
 
-export async function createProjectInApi(address: string, award: string, dispatch: AppDispatch) {
+export async function createProjectInApi(address: string, reward: string, dispatch: AppDispatch) {
     let request = new Request(
         "/api/projects/",
-        <RequestInit>{method: "POST", body: JSON.stringify({address, award}), headers: {"Content-Type": "application/json"}}
+        <RequestInit>{method: "POST", body: JSON.stringify({address, reward}), headers: {"Content-Type": "application/json"}}
     );
     const response = await fetch(request);
     const json = await response.json();
@@ -120,9 +120,9 @@ export async function withdraw(web3: Web3, userAddress: string, projectAddress: 
     await contract.methods.withdraw(amount).send({from: userAddress});
 }
 
-export async function getAward(projectId: number) {
-    const response = await fetch(`/api/projects/${projectId}/award/`);
+export async function getReward(projectId: number) {
+    const response = await fetch(`/api/projects/${projectId}/reward/`);
     const json = await response.json();
 
-    return json.award;
+    return json.reward;
 }
