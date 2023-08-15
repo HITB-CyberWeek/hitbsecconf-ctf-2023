@@ -1,7 +1,7 @@
-import {loadUserAddress} from "@/redux/interactions";
-import {useAppDispatch, useAppSelector} from "@/redux/store";
-import {EventHandler, useEffect} from "react";
-import {Web3} from "web3";
+import { loadUserAddress } from "@/redux/interactions";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { useEffect } from "react";
+import { Web3 } from "web3";
 
 async function connectWithWallet() {
     if (!window.ethereum) {
