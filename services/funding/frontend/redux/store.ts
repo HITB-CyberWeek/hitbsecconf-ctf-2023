@@ -1,7 +1,6 @@
-import {createWrapper} from "next-redux-wrapper"
-import {projectsSlice, userSlice, web3Slice} from "./reducers"
-import {configureStore} from "@reduxjs/toolkit";
-import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
+import { projectsSlice, userSlice, web3Slice } from "./reducers"
+import { configureStore } from "@reduxjs/toolkit";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
     reducer: {
@@ -18,9 +17,6 @@ export const store = configureStore({
             },
         }),
 });
-
-// TODO: is it needed?
-export default createWrapper(() => store)
 
 export type AppRootState = ReturnType<typeof store.getState>
 
