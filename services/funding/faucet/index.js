@@ -12,13 +12,13 @@ const db = connect("database/db.sqlite");
 
 db.query(sql`CREATE TABLE IF NOT EXISTS usage (id INTEGER PRIMARY KEY, network VARCHAR(50), timestamp INTEGER, amount REAL, transactionHash VARCHAR(100))`);
 
-async function getUsage(network) {
-    const result = await db.query(sql`SELECT SUM(amount) AS total FROM usage WHERE network=${network} AND datetime(timestamp) >= datetime('now', '-1 Hour')`);
+async function getUsage(transaction, network) {
+    const result = await transaction.query(sql`SELECT SUM(amount) AS total FROM usage WHERE network=${network} AND datetime(timestamp) >= datetime('now', '-1 Hour')`);
     return result[0].total;
 }
 
-async function addUsage(network, amount, transaction) {
-    await db.query(sql`INSERT INTO usage (network, timestamp, amount, transactionHash) VALUES (${network}, CURRENT_TIMESTAMP, ${amount}, ${transaction})`);
+async function addUsage(transaction, network, amount, transactionHash) {
+    await transaction.query(sql`INSERT INTO usage (network, timestamp, amount, transactionHash) VALUES (${network}, CURRENT_TIMESTAMP, ${amount}, ${transactionHash})`);
 }
 
 fastify.register(require('@fastify/static'), {
@@ -63,25 +63,27 @@ fastify.post('/request', async function (req, reply) {
     }
     const network = `${ipAddressParts[0]}.${ipAddressParts[1]}.${ipAddressParts[2]}.0/24`;
 
-    let currentUsage = await getUsage(network) || 0;
-    currentUsage = currentUsage.toFixed(3);
-    console.log(`Current usage for the network ${network} is ${currentUsage}, requested ${amount} ETH`);
-    if (currentUsage + amount > config.limitPerNetworkPerHour) {
-        reply.send({status: "error", message: `Your usage for the last hour is ${currentUsage}. You can not request ${amount} ETH now. Please wait.`})
-        return;
-    }
+    await db.tx(async (dbTx) => {
+        let currentUsage = await getUsage(dbTx, network) || 0;
+        currentUsage = currentUsage.toFixed(3);
+        console.log(`Current usage for the network ${network} is ${currentUsage}, requested ${amount} ETH`);
+        if (currentUsage + amount > config.limitPerNetworkPerHour) {
+            reply.send({status: "error", message: `Your usage for the last hour is ${currentUsage}. You can not request ${amount} ETH now. Please wait.`})
+            return;
+        }
 
-    const nonce = await web3.eth.getTransactionCount(config.address, "pending");
-    const transaction = {from: config.address, to: userAddress, value: web3.utils.toWei(amount, "ether"), nonce};
-    const estimateGas = await web3.eth.estimateGas(transaction);
-    const gasPrice = await web3.eth.getGasPrice();
-    const signedTransaction = await web3.eth.accounts.signTransaction({...transaction, gas: estimateGas, gasPrice}, config.privateKey);
-    const receipt = await web3.eth.sendSignedTransaction(signedTransaction.rawTransaction)
+        const nonce = await web3.eth.getTransactionCount(config.address, "pending");
+        const transaction = {from: config.address, to: userAddress, value: web3.utils.toWei(amount, "ether"), nonce};
+        const estimateGas = await web3.eth.estimateGas(transaction);
+        const gasPrice = await web3.eth.getGasPrice();
+        const signedTransaction = await web3.eth.accounts.signTransaction({...transaction, gas: estimateGas, gasPrice}, config.privateKey);
+        const receipt = await web3.eth.sendSignedTransaction(signedTransaction.rawTransaction)
 
-    console.log(`Sent in the transaction ${receipt.transactionHash}`);
+        console.log(`Sent in the transaction ${receipt.transactionHash}`);
 
-    await addUsage(network, amount, receipt.transactionHash);
-    await reply.send({status: "ok", blockNumber: receipt.blockNumber.toString(), transactionHash: receipt.transactionHash});
+        await addUsage(dbTx, network, amount, receipt.transactionHash);
+        await reply.send({status: "ok", blockNumber: receipt.blockNumber.toString(), transactionHash: receipt.transactionHash});
+    });
 })
 
 fastify.listen({ port: 3000, host: process.env.FASTIFY_LISTEN || '127.0.0.1' }).catch(console.error);
