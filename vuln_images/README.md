@@ -166,7 +166,7 @@ DO_API_TOKEN=<...>
 ```
 
 The tool will also update file with id's of snaphots for cloud infrastructure 
-(`ctf-cloud/cloud/cloud_master/files/api_srv/do_vulnimages.json`),
+(`ansible/cloud/cloud_master/files/api_srv/do_vulnimages.json`),
 don't forget to commit and deploy it.
 
 ## How to run ./deploy_proxies.py

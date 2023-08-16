@@ -12,3 +12,5 @@ jspm_packages
 
 # compiled app
 dist
+
+.env

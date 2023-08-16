@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     environment:
       DATABASE_URL: postgres://funding:A84jf0Jf!fiu9$@db:5432/funding
-      ETHEREUM_NODE_URL: http://104.248.94.168:8545  # TODO: change before publishing
+      ETHEREUM_NODE_URL: http://eth.ctf.hitb.org:8545
       CROWDFUNDING_PLATFORM_ADDRESS: 0xAfeA6320F0503a63B1769FCfC314f5Aa2fB8308b
     depends_on:
       - db
