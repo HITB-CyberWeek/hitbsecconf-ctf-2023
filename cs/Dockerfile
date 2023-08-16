@@ -10,4 +10,9 @@ RUN apt-get update && \
         python3 python3-pip
 RUN pip3 install gornilo --break-system-packages
 
+# Config
 COPY cs/cs.conf /app/c_s.conf
+
+# Checkers
+
+COPY checkers/docs /app/checkers/docs
