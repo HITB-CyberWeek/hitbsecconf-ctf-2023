@@ -33,7 +33,7 @@ async function authenticate(url) {
 async function donate(projectAddress) {
     const contract = new web3.eth.Contract(ProjectContract.abi, projectAddress);
     console.log(`Donate to project via calling Project.donate() at ${projectAddress}`);
-    await contract.methods.donate().send({from: sender, value: web3.utils.toWei(0.05, "ether")});
+    await contract.methods.donate().send({from: sender, value: web3.utils.toWei(0.0001, "ether")});
 }
 
 async function deployDestructor() {

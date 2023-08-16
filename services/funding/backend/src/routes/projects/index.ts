@@ -15,7 +15,18 @@ interface IGetRewardParams {
     blockNumber: number;
 }
 
-async function getProjectInfo<RawServer>(fastify: FastifyInstance, project: {id: number, address: string}) {
+interface ProjectInfo {
+    id: number;
+    address: string;
+    owner?: string;
+    title?: string;
+    totalDonations?: string;
+    lastBaker?: string;
+    isFinished?: boolean;
+    error?: string;
+}
+
+async function getProjectInfo(fastify: FastifyInstance, project: {id: number, address: string}, retry: number = 1): Promise<ProjectInfo> {
     try {
         const contract = new fastify.web3.eth.Contract(ProjectContract.abi, project.address);
 
@@ -35,10 +46,14 @@ async function getProjectInfo<RawServer>(fastify: FastifyInstance, project: {id:
             isFinished
         };
     } catch (e) {
+        if (retry <= 3) { // Probably our node has not synced this block yet? 
+            await new Promise(f => setTimeout(f, 1000 * retry));
+            return await getProjectInfo(fastify, project, retry + 1);
+        }
         return {
             id: project.id,
             address: project.address,
-            error: e instanceof Error ? e.message : e
+            error: e instanceof Error ? e.message : JSON.stringify(e)
         };
     }
 }
@@ -64,7 +79,7 @@ const projects: FastifyPluginAsync = async function (fastify: FastifyInstance, o
     fastify.get(
         '/', {},
         async (request, reply) => {
-            const projects = await fastify.database.manyOrNone('SELECT id, address FROM projects ORDER BY id DESC LIMIT 20');
+            const projects = await fastify.database.manyOrNone('SELECT id, address FROM projects ORDER BY id DESC LIMIT 10');
             // TODO: add paging
             const projectDetails = await Promise.all(projects.map(project => getProjectInfo(fastify, project)));
             reply.send({projects: projectDetails});

@@ -19,7 +19,7 @@ PROXY_CERTIFICATES = {
         tuple(range(101, 201)): (teams101_200_ctf_hitb_org / "fullchain1.pem", teams101_200_ctf_hitb_org / "privkey1.pem"),
     },
 }
-PROXY_SSH_KEY = env.path("PROXY_SSH_KEY", "../ctf-cloud/cloud/cloud_master/files/api_srv/do_deploy_key")
+PROXY_SSH_KEY = env.path("PROXY_SSH_KEY", "../ansible/cloud/cloud_master/files/api_srv/do_deploy_key")
 PROXY_SSH_PORT = env.int("PROXY_SSH_PORT", 2222)
 PROXY_SSH_USERNAME = env.str("PROXY_SSH_USERNAME", "root")
 

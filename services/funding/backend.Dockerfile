@@ -9,7 +9,8 @@ COPY backend/package*.json ./
 
 RUN npm ci
 
-COPY . .
+COPY backend /app/backend
+COPY ethereum /app/ethereum
 
 WORKDIR /app/backend/
 

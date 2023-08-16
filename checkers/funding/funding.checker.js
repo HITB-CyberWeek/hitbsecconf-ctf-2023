@@ -92,7 +92,7 @@ async function postJSON(url, data, cookieJar = null) {
 }
 
 async function getPlatformAddress(url) {
-    const address = (await getJSON(url)).address;
+    const address = (await getJSON(url + "/")).address;
     console.error(`Found CrowdfundingPlatform Address: ${address}`);
     return address;
 }
@@ -110,7 +110,7 @@ function getRandomAccount(except = null) {
 
 function findAccountByAddress(address) {
     const account = ethereumConfig.accounts.find(account => account.address == address);
-    if (!account) 
+    if (!account)
         throw Error(`Can not find ${address} in config.js`);
     return account;
 }
