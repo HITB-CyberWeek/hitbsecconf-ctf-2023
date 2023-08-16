@@ -18,10 +18,11 @@ const CrowdfundingPlatformContract = JSON.parse(readFileSync(new URL('./contract
 const ProjectContract = JSON.parse(readFileSync(new URL('./contracts/Project.json', import.meta.url)));
 
 Array.prototype.random = function () {
-    return this[Math.floor((Math.random()*this.length))];
+    return this[Math.floor((Math.random() * this.length))];
 }
 
 const web3 = new Web3(ethereumConfig.node);
+
 
 const STATUS_OK = 101;
 const STATUS_CORRUPT = 102;
@@ -39,8 +40,8 @@ function exitWithStatus(status, private_message = null, public_message = null) {
 
 function _getUrlPrefix(host) {
     if (process.env.DIRECT_CONNECT)
-        return `http://${host}:3001`;
-    return `https://${host}`;
+        return `http://${host}/api`;
+    return `https://${host}/api`;
 }
 
 async function _sendRequest(url, options, cookieJar = null, error_status = STATUS_MUMBLE) {
@@ -107,6 +108,20 @@ function getRandomAccount(except = null) {
     return result;
 }
 
+function findAccountByAddress(address) {
+    const account = ethereumConfig.accounts.find(account => account.address == address);
+    if (!account) 
+        throw Error(`Can not find ${address} in config.js`);
+    return account;
+}
+
+async function makeContractCall(call, contractAddress, sender, value=null) {
+    const gasPrice = await web3.eth.getGasPrice();
+    const gasEstimate = await call.estimateGas({ from: sender.address, value });
+    const tx = await web3.eth.accounts.signTransaction({data: call.encodeABI(), to: contractAddress, from: sender.address, gas: gasEstimate, gasPrice, gasEstimate, value}, sender.privateKey);
+    return await web3.eth.sendSignedTransaction(tx.rawTransaction);
+}
+
 async function createNewProjectContract(platformAddress, title) {
     const platform = new web3.eth.Contract(CrowdfundingPlatformContract.abi, platformAddress);
 
@@ -120,8 +135,9 @@ async function createNewProjectContract(platformAddress, title) {
     console.error(`Calling CrowdfundingPlatform.createProject("${title}") at address ${platformAddress} using ${account.address}`)
     let receipt;
     try {
-        receipt = await platform.methods.createProject(title).send({from: account.address});
+        receipt = await makeContractCall(platform.methods.createProject(title), platformAddress, account);
     } catch (e) {
+        console.error(e)
         exitWithStatus(
             STATUS_MUMBLE,
             `Failed to create a new project: ${e.message ? e.message : e}`,
@@ -160,7 +176,9 @@ async function createProject(url, reward) {
     const result = await postJSON(`${url}/projects`, {address: projectAddress, reward: reward});
     if (!result || !result.project || !result.project.id || !result.project.owner ||
         result.project.address !== projectAddress || result.project.title !== projectTitle)
-        exitWithStatus(STATUS_MUMBLE, `Invalid response from POST request to ${url}/projects: ${result}`, `Invalid response from POST request to ${url}/projects`);
+        exitWithStatus(STATUS_MUMBLE, `Invalid response from POST request to ${url}/projects: ${JSON.stringify(result)}`, `Invalid response from POST request to ${url}/projects`);
+
+    console.error(`Created project ${result.project.id}`);
 
     return result.project;
 }
@@ -175,8 +193,9 @@ async function donate(project, account) {
     console.error(`Calling Project.donate() at address ${project.address} using ${account.address}`);
     let receipt;
     try {
-        receipt = await projectContract.methods.donate().send({from: account.address, value: web3.utils.toWei(0.05, "ether")});
+        receipt = await makeContractCall(projectContract.methods.donate(), project.address, account, web3.utils.toWei(0.0001, "ether"));
     } catch (e) {
+        console.error(e);
         exitWithStatus(
             STATUS_MUMBLE,
             `Failed to donate to a project: ${e.message ? e.message : e}`,
@@ -199,8 +218,9 @@ async function withdraw(project) {
         console.error(`Calling Project.getTotalDonations() at address ${project.address}`);
         const totalDonations = await projectContract.methods.getTotalDonations().call();
         console.error(`Calling Project.withdraw(${totalDonations}) at address ${project.address} using ${project.owner}`);
-        receipt = await projectContract.methods.withdraw(totalDonations).send({from: project.owner});
+        receipt = await makeContractCall(projectContract.methods.withdraw(totalDonations), project.address, findAccountByAddress(project.owner));
     } catch (e) {
+        console.error(e);
         exitWithStatus(
             STATUS_MUMBLE,
             `Failed to donate to a project: ${e.message ? e.message : e}`,
@@ -256,8 +276,15 @@ async function check(url) {
 
 async function put(url, _flag_id, flag) {
     const fakeProjectReward = _generateFakeFlag(url);
-    const fakeProject = await createProject(url, fakeProjectReward);
+
+    // Shuffle creating real and fake projects
+    const fakeFirst = Math.floor(Math.random() * 2) < 1;
+    let fakeProject;
+    if (fakeFirst)
+        fakeProject = await createProject(url, fakeProjectReward);
     const project = await createProject(url, flag);
+    if (!fakeFirst)
+        fakeProject = await createProject(url, fakeProjectReward);
 
     const flag_id = JSON.stringify({public_flag_id: project.id, project, fakeProject, fakeProjectReward});
     exitWithStatus(STATUS_OK, null, flag_id);
