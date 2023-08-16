@@ -1,0 +1,36 @@
+version: 1
+
+service: docs
+username: docs
+
+scripts:
+  build_inside_vm: |
+    apt-get update
+    apt-get install -y openssl
+    docker compose -f /home/$USERNAME/docker-compose.yaml pull pg redis nginx
+    docker compose -f /home/$USERNAME/docker-compose.yaml build
+  start_once: |
+    echo "REDIS_URI=redis://redis:6379"              > /home/$USERNAME/.env
+    echo "POSTGRES_PASSWORD=$(openssl rand -hex 6)" >> /home/$USERNAME/.env
+    echo "DOCS_SECRET=$(openssl rand -hex 6)"       >> /home/$USERNAME/.env
+    docker compose -f /home/$USERNAME/docker-compose.yaml up -d
+
+files:
+  - sources:
+      - api
+      - auth
+      - docker-compose.yaml
+      - init.sql
+      - nginx.conf
+    destination: /home/$USERNAME
+
+proxies:
+  - name: main
+    listener:
+      protocol: http
+      certificate: wildcard.ctf.hitb.org
+    upstream:
+      host_index: 12
+      port: 80
+    dns_records:
+      - docs
