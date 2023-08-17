@@ -24,27 +24,27 @@ files:
     destination: /home/$USERNAME
 
   # Service configs
-  - source: ../passmgr/deploy.yaml
+  - source: ../services/passmgr/deploy.yaml
     destination: /home/$USERNAME/configs/passmgr/
-  # - source: ../spaces/deploy.yaml
+  # - source: ../services/spaces/deploy.yaml
   #   destination: /home/$USERNAME/configs/spaces/
-  # - source: ../lockstone/deploy.yaml
+  # - source: ../services/lockstone/deploy.yaml
   #   destination: /home/$USERNAME/configs/lockstone/
-  # - source: ../godeeper/deploy.yaml
+  # - source: ../services/godeeper/deploy.yaml
   #   destination: /home/$USERNAME/configs/godeeper/
-  # - source: ../pure/deploy.yaml
+  # - source: ../services/pure/deploy.yaml
   #   destination: /home/$USERNAME/configs/pure/
-  - source: ../funding/deploy.yaml
+  - source: ../services/funding/deploy.yaml
     destination: /home/$USERNAME/configs/funding/
-  # - source: ../keys/deploy.yaml
+  # - source: ../services/keys/deploy.yaml
   #   destination: /home/$USERNAME/configs/keys/
-  # - source: ../places/deploy.yaml
+  # - source: ../services/places/deploy.yaml
   #   destination: /home/$USERNAME/configs/places/
-  - source: ../docs/deploy.yaml
+  - source: ../services/docs/deploy.yaml
     destination: /home/$USERNAME/configs/docs/
-  # - source: ../tokenourcer/deploy.yaml
+  # - source: ../services/tokenourcer/deploy.yaml
   #   destination: /home/$USERNAME/configs/tokenourcer/
-  - source: ../notes/deploy.yaml
+  - source: ../services/notes/deploy.yaml
     destination: /home/$USERNAME/configs/notes/
 
   - source: router/motd
