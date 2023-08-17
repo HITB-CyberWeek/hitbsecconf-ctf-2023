@@ -13,10 +13,12 @@ CERTIFICATES_FOLDER = env.path("CERTIFICATES_FOLDER", "../../certificates")
 
 teams1_100_ctf_hitb_org = CERTIFICATES_FOLDER / "team1.ctf.hitb.org"
 teams101_200_ctf_hitb_org = CERTIFICATES_FOLDER / "team101.ctf.hitb.org"
+teams201_300_ctf_hitb_org = CERTIFICATES_FOLDER / "team201.ctf.hitb.org"
 PROXY_CERTIFICATES = {
     "wildcard.ctf.hitb.org": {
         tuple(range(1, 101)): (teams1_100_ctf_hitb_org / "fullchain1.pem", teams1_100_ctf_hitb_org / "privkey1.pem"),
         tuple(range(101, 201)): (teams101_200_ctf_hitb_org / "fullchain1.pem", teams101_200_ctf_hitb_org / "privkey1.pem"),
+        tuple(range(201, 301)): (teams201_300_ctf_hitb_org / "fullchain1.pem", teams201_300_ctf_hitb_org / "privkey1.pem"),
     },
 }
 PROXY_SSH_KEY = env.path("PROXY_SSH_KEY", "../ansible/cloud/cloud_master/files/api_srv/do_deploy_key")
@@ -28,7 +30,7 @@ TEAM_NETWORK_MASK = env.int("TEAM_NETWORK_MASK", 24)
 
 DNS_ZONE = env.str("DNS_ZONE", "ctf.hitb.org")
 
-TEAMS_COUNT = 118
+TEAMS_COUNT = 300
 PROXY_HOSTS = {
-    team_id: f"10.80.{team_id}.2" for team_id in range(1, TEAMS_COUNT + 1)
+    team_id: f"10.{80 + team_id // 256}.{team_id % 256}.2" for team_id in range(1, TEAMS_COUNT + 1)
 }
