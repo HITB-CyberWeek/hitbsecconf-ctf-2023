@@ -30,7 +30,7 @@
                     {{ language.EXIT }}
                 </a>
             {% endif %}
-            < select class="form-select" style="margin-left: 1rem; width: 100px;" onchange="document.location='/language/set/?language='+this.options[this.selectedIndex].value+'&location='+document.location.pathname">
+            <select class="form-select" style="margin-left: 1rem; width: 100px;" onchange="document.location='/language/set/?language='+this.options[this.selectedIndex].value+'&location='+document.location.pathname">
                 <option value="en" {% if language_code == 'en' %}selected{% endif %}>EN</option>
                 <option value="ru" {% if language_code == 'ru' %}selected{% endif %}>RU</option>
                 {% for lang in languages %}

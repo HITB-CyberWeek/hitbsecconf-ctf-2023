@@ -11,8 +11,8 @@ scripts:
     echo "MYSQL_HOST=mysql" >> /home/notes/.env
     docker compose -f /home/notes/docker-compose.yml build --pull
   start_once: |
-    echo "MYSQL_ROOT_PASSWORD=$(openssl rand -hex 16)" >> /home/notes/.env
-    echo "SECRET=$(openssl rand -hex 16)" >> /home/notes/.env
+    echo "MYSQL_ROOT_PASSWORD=$(openssl rand -hex 32)" >> /home/notes/.env
+    echo "SECRET=$(openssl rand -hex 32)" >> /home/notes/.env
     docker compose -f /home/notes/docker-compose.yml up -d
 
 files:

@@ -57,7 +57,7 @@ class LanguageController extends BaseController
             $data = str_replace(["{", "}"], "_", $data);
             file_put_contents($language->slug . ".ini", $data);
             $this->context['shared_link'] = "http://" . $_SERVER['HTTP_HOST'] . "/language/set/?language=" . $language->slug . "&location=/";
-            echo $this->twig->render("language/success.html", $this->context);
+            echo $this->twig->render("language/success.twig", $this->context);
             exit();
         }
         $this->get();
