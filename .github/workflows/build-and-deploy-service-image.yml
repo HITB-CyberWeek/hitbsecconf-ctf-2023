@@ -25,7 +25,7 @@ jobs:
         env:
           DO_API_TOKEN: ${{ secrets.DO_API_TOKEN }}
       - name: Set owners # Otherwise git can not commit changes, see https://nvd.nist.gov/vuln/detail/cve-2022-24765
-        run: chown -R "$USER:$USER" .
+        run: chown -R $(id -u):$(id -g) .
         working-directory: "${{ github.workspace  }}"
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
