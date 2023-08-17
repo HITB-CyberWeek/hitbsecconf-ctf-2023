@@ -3,7 +3,10 @@ module.exports = {
   content: [
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/flowbite/**/*.js',
   ],
-  plugins: [],
   darkMode: "class", // alternative: "media"
+  plugins: [
+    require('flowbite/plugin')
+  ],
 }

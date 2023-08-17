@@ -3,11 +3,11 @@ export const ethereum = {
     accounts: [
         {
             address: "0x23B42ADe1d5EC963e4D6dA9022eE648639eE93F1",
-            password: "R9f7bPn3HkAehvpFqkfqkrVzZ",
+            privateKey: "3e8dbc7a24cbe0aae570178c2a670da8df48aae8c30b7bb1b6d46861accf6962",
         },
         {
             address: "0x583D7efd10b585C2e15e8DdaC1d8F341dc97CF9E",
-            password: "ZzPi9U9wJ3V0Ik9YBB9x88R7J",
+            privateKey: "00142c3a2b06df0a48e63fe0dd6ee7bdf99ade9ab5569ee57f72feeb5abee335",
         },
     ],
 }

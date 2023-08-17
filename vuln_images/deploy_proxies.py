@@ -402,6 +402,10 @@ async def deploy_proxies_for_team(
 async def deploy_proxies(
     config: DeployConfig, skip_preparation: bool, prepare_only: bool, skip_dns: bool, only_for_team_id: Optional[int]
 ):
+    if only_for_team_id is not None and only_for_team_id not in settings.PROXY_HOSTS:
+        typer.echo(f"[ERROR] Can not find team #{only_for_team_id} in PROXY_HOSTS. Please edit settings.py.")
+        raise typer.Exit(code=1)
+
     tasks = []
 
     for team_id, host in settings.PROXY_HOSTS.items():

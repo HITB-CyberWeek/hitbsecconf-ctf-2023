@@ -23,10 +23,11 @@ export default function ProjectCard(props: {project: Project}) {
     const donateClick = async () => {
         try {
             await donate(web3, userAddress, project.address!, donation);
-            toastSuccess(`Successfully donated to the project ${project.title}`);
+            toastSuccess(<>Successfully donated to the project <b>{project.title}</b></>);
 
             setProject(await loadProject(project.id));
         } catch (e) {
+            console.error(e);
             toastError(e instanceof Error ? e.message : e as string);
         }
     }
@@ -38,6 +39,7 @@ export default function ProjectCard(props: {project: Project}) {
             toastSuccess(`Successfully withdrawn your money`);
             setProject(await loadProject(project.id));
         } catch (e) {
+            console.error(e);
             toastError(e instanceof Error ? e.message : e as string);
         }
     }
@@ -47,6 +49,7 @@ export default function ProjectCard(props: {project: Project}) {
             const reward = await getReward(project.id);
             setReward(reward);
         } catch (e) {
+            console.error(e);
             toastError(e instanceof Error ? e.message : e as string);
         }
     }
