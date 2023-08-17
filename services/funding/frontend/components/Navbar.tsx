@@ -62,40 +62,4 @@ export default function Navbar()  {
             </div>
         </nav>
     )
-
-    return (
-        <div>
-            <nav className="bg-[#F7F5F2]">
-                <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-                    <div className="relative flex items-center justify-between h-16">
-                        <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-                            <div className="flex-shrink-0 flex items-center">
-                                <h4 className='font-mono text-xl text-greay font-bold hidden lg:block'>HITB CROWD FUNDING</h4>
-                            </div>
-                            <div className="hidden sm:block sm:ml-6">
-                                <div className="flex space-x-4">
-                                    {/*<Link href="/dashboard"  ><span className={`${router.pathname === "/dashboard"?"bg-[#F7C984]":""} text-greay px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer hover:bg-[#F7C984] hover:text-greay`}>Dashboard</span></Link>*/}
-                                    {/*<Link href="/my-contributions"><span className={`${router.pathname === "/my-contributions"?"bg-[#F7C984]":""} text-greay px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer hover:bg-[#F7C984] hover:text-greay`}>My contribution</span></Link>*/}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                            <div className="p-1 w-64 truncate rounded-full text-greay hover:text-greay ">
-                                <span>{isAuthenticated ? user.address : web3Address}</span>
-                            </div>
-                            {!isAuthenticated && <input type="password" name="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" className="input w-48"/>}
-                            {!isAuthenticated && <button type="button" className="button" aria-expanded="false" aria-haspopup="true" onClick={tryToAuthenticate}>
-                                Register or login
-                            </button>}
-                            {isAuthenticated && <button type="button" className="button" aria-expanded="false" aria-haspopup="true" onClick={() => logout(dispatch)}>
-                                Logout
-                            </button>}
-
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
-        </div>
-    )
 }

@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./database:/app/database
+    environment:
+      FASTIFY_LISTEN: 0.0.0.0
+
+  nginx:
+    image: nginx:mainline-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./ssl_private/:/etc/ssl/private
+      - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - app

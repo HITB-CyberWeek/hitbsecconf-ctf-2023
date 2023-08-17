@@ -1,0 +1,34 @@
+version: '3'
+services:
+  backend:
+    build: 
+      context: .
+      dockerfile: backend.Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://funding:A84jf0Jf!fiu9$@db:5432/funding
+      ETHEREUM_NODE_URL: http://eth.ctf.hitb.org:8545
+      CROWDFUNDING_PLATFORM_ADDRESS: 0xAfeA6320F0503a63B1769FCfC314f5Aa2fB8308b
+    depends_on:
+      - db
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+  db:
+    image: postgres:15.3-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: "funding"
+      POSTGRES_DB: "funding"
+      POSTGRES_PASSWORD: "A84jf0Jf!fiu9$"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  pg_data:

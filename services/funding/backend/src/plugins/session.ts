@@ -12,7 +12,7 @@ export default fastifyPlugin<FastifyInstance>(
         fastify.register(fastifySession, <SecureSessionPluginOptions>{
             cookieName: 'session',
             key: fs.readFileSync(path.join(__dirname, '..', '.cookie.key')),
-            cookie: { path: '/', secure: false }, // TODO: change to true (secure: process.env.NODE_ENV === 'production',)
+            cookie: { path: '/', secure: false },
             expires: 1800000
         });
 

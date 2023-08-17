@@ -47,6 +47,8 @@ export async function loadPlatformAddress(dispatch: AppDispatch) {
 
 export async function loadUser(dispatch: AppDispatch) {
     const response = await fetch("/api/users/");
+    if (!response.ok)
+        return;
     const json = await response.json();
 
     const {user_id, address} = json;

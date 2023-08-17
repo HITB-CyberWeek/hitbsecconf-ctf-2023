@@ -8,8 +8,10 @@ function Wrapper({ children }: { children: React.ReactNode }) {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        window.ethereum.on("accountsChanged", () => {window.location.reload()});
-        window.ethereum.on("chainChanged", () => {window.location.reload()});
+        if (window.ethereum) {
+            window.ethereum.on("accountsChanged", () => {window.location.reload()});
+            window.ethereum.on("chainChanged", () => {window.location.reload()});
+        }
     }, [dispatch]);
 
     return children;

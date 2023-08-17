@@ -13,11 +13,13 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 )
 
 const (
-	DbFile = "data.db?_pragma=journal_mode(WAL)&_pragma=_synchronous(NORMAL)"
+	DbFile = "data/places.db?_pragma=journal_mode(WAL)&_pragma=_synchronous(NORMAL)"
 
 	AuthCookieName = "auth"
 	TokenCtxName   = "token"
@@ -33,13 +35,19 @@ const (
 	ErrorUpdateForbidden = "you can only change your own places"
 )
 
-var key = []byte(`1234567890abcdef`)
-var JwtSecret = []byte("secret")
-
-var db *gorm.DB
+var (
+	EncryptionKey = LoadOrCreateKey("settings/enc.key", 16)
+	JwtSecret     = LoadOrCreateKey("settings/jwt.key", 16)
+	db            *gorm.DB
+)
 
 func main() {
 	var err error
+
+	err = os.Mkdir(filepath.Dir("data/"), 0750)
+	if err != nil && !os.IsExist(err) {
+		panic(err)
+	}
 
 	db, err = gorm.Open(sqlite.Open(DbFile), &gorm.Config{})
 	if err != nil {
@@ -95,6 +103,37 @@ func main() {
 	}
 }
 
+func auth(c echo.Context) error {
+	userId, ok := c.Get(UserIdCtxName).(uuid.UUID)
+	if !ok {
+		userId = uuid.New()
+		signed, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{Subject: userId.String()}).SignedString(JwtSecret)
+		if err != nil {
+			return err
+		}
+
+		cookie := new(http.Cookie)
+		cookie.Name = AuthCookieName
+		cookie.Value = signed
+		cookie.HttpOnly = true
+		cookie.SameSite = http.SameSiteStrictMode
+		c.SetCookie(cookie)
+	}
+
+	var coords Coords
+	if err := c.Bind(&coords); err != nil {
+		coords = Coords{}
+	}
+
+	placeId := PlaceId{UserId: userId, Lat: coords.Lat, Long: coords.Long}
+	id, err := placeId.ToString(EncryptionKey)
+	if err != nil {
+		return err
+	}
+
+	return c.String(http.StatusOK, id)
+}
+
 func list(c echo.Context) error {
 	var places [ListTake]string
 	if result := db.Model(&PlaceData{}).Select("Id").Limit(ListTake).Order("Updated desc").Find(&places); result.Error != nil {
@@ -108,7 +147,7 @@ func list(c echo.Context) error {
 	linq.From(places).WhereT(func(place string) bool {
 		return place != ""
 	}).SelectT(func(id string) CoordsWithId {
-		if placeId, err := PlaceIdFromString(id, key); err == nil {
+		if placeId, err := PlaceIdFromString(id, EncryptionKey); err == nil {
 			return CoordsWithId{Id: id, Lat: placeId.Lat, Long: placeId.Long}
 		}
 		return CoordsWithId{}
@@ -129,7 +168,7 @@ func get(c echo.Context) error {
 
 	id := c.Param("id")
 
-	placeId, err := PlaceIdFromString(id, key)
+	placeId, err := PlaceIdFromString(id, EncryptionKey)
 	if err != nil {
 		return c.String(http.StatusBadRequest, ErrorInvalidPlace)
 	}
@@ -157,7 +196,7 @@ func put(c echo.Context) error {
 
 	id := c.Param("id")
 	if id != "" {
-		placeId, err := PlaceIdFromString(id, key)
+		placeId, err := PlaceIdFromString(id, EncryptionKey)
 		if err != nil {
 			return c.String(http.StatusBadRequest, ErrorInvalidPlace)
 		}
@@ -170,7 +209,7 @@ func put(c echo.Context) error {
 		place.Lat = placeId.Lat
 	}
 
-	id, err := PlaceId{UserId: userId, Long: place.Long, Lat: place.Lat}.ToString(key)
+	id, err := PlaceId{UserId: userId, Long: place.Long, Lat: place.Lat}.ToString(EncryptionKey)
 	if err != nil {
 		return err
 	}
@@ -202,7 +241,7 @@ func route(c echo.Context) error {
 	linq.From(places).
 		OrderByT(func(item string) string { return item }).
 		SelectT(func(item string) PlaceId {
-			placeId, e := PlaceIdFromString(item, key)
+			placeId, e := PlaceIdFromString(item, EncryptionKey)
 			if e != nil {
 				err = e
 			}
@@ -250,37 +289,6 @@ func toPlaceInfo(userId uuid.UUID, placeId PlaceId, data PlaceData) PlaceInfo {
 		Public: data.Public,
 		Secret: secret,
 	}
-}
-
-func auth(c echo.Context) error {
-	userId, ok := c.Get(UserIdCtxName).(uuid.UUID)
-	if !ok {
-		userId = uuid.New()
-		signed, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{Subject: userId.String()}).SignedString(JwtSecret)
-		if err != nil {
-			return err
-		}
-
-		cookie := new(http.Cookie)
-		cookie.Name = AuthCookieName
-		cookie.Value = signed
-		cookie.HttpOnly = true
-		cookie.SameSite = http.SameSiteStrictMode
-		c.SetCookie(cookie)
-	}
-
-	var coords Coords
-	if err := c.Bind(&coords); err != nil {
-		coords = Coords{}
-	}
-
-	placeId := PlaceId{UserId: userId, Lat: coords.Lat, Long: coords.Long}
-	id, err := placeId.ToString(key)
-	if err != nil {
-		return err
-	}
-
-	return c.String(http.StatusOK, id)
 }
 
 type PlaceData struct {

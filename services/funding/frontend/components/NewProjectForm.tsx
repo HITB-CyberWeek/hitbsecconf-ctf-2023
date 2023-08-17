@@ -7,6 +7,7 @@ export default function NewProjectForm() {
     const web3 = useAppSelector(state=> state.web3.connection);
     const userAddress = useAppSelector(state=> state.web3.userAddress);
     const platformAddress = useAppSelector(state => state.web3.platformAddress);
+    const isAuthenticated = useAppSelector(state => state.user.isAuthenticated);
 
     const dispatch = useAppDispatch()
 
@@ -59,7 +60,7 @@ export default function NewProjectForm() {
                 </p>
             </div>
 
-            <div>
+            {isAuthenticated && <div>
                 <button type="submit" disabled={btnLoading}
                         className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     Add project
@@ -68,7 +69,16 @@ export default function NewProjectForm() {
                     By clicking this button, you will create a smart contract. 
                     Others can donate money to this contract, and you can withdraw the donated funds at any time.
                 </p>
-            </div>
+            </div>}
+            {!isAuthenticated && <div>
+                <button type="submit" className="w-full text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center" disabled>
+                    Add project
+                </button>
+                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    You must authenticate with your Ethereum address (at the right top corner) first.
+                    If it's your first visit, you can use any password.
+                </p>
+            </div>}
         </form>
     )
 }

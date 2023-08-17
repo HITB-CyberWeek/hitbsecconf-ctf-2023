@@ -13,7 +13,7 @@ from config import DeployConfig, DeployConfigV1, substitute_variables
 
 PACKER_TOOL = "packer"
 CURRENT_FOLDER = pathlib.Path(__file__).parent
-VULNIMAGES_CONFIG_PATH = CURRENT_FOLDER / "../ctf-cloud/cloud/cloud_master/files/api_srv/do_vulnimages.json"
+VULNIMAGES_CONFIG_PATH = CURRENT_FOLDER / "../ansible/cloud/cloud_master/files/api_srv/do_vulnimages.json"
 
 
 def update_vulnimages_config(service_name: str, image_id: int):

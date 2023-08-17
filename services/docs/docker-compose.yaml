@@ -1,6 +1,7 @@
 services:
   auth:
     image: docs/auth:latest
+    restart: unless-stopped
     build: auth
     depends_on:
       - pg
@@ -12,6 +13,7 @@ services:
 
   api:
     image: docs/api:latest
+    restart: unless-stopped
     build: api
     depends_on:
       - pg
@@ -24,6 +26,7 @@ services:
 
   pg:
     image: postgres:15.3
+    restart: unless-stopped
     volumes:
       - "pg-data:/var/lib/postgresql/data"
       - "./init.sql:/docker-entrypoint-initdb.d/init.sql:ro"
@@ -32,6 +35,7 @@ services:
 
   redis:
     image: redis:7.0.12
+    restart: unless-stopped
     volumes:
       - "redis-data:/data"
     command:
@@ -41,6 +45,7 @@ services:
 
   nginx:
     image: nginx:1.24
+    restart: unless-stopped
     volumes:
       - "./nginx.conf:/etc/nginx/nginx.conf"
     ports:
