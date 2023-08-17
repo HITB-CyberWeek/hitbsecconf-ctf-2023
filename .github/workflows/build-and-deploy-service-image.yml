@@ -93,7 +93,7 @@ jobs:
         shell: bash
         env:
           DO_DEPLOY_KEY: ${{ secrets.DO_DEPLOY_KEY }}
-       - name: Deploy proxies
+      - name: Deploy proxies
         run: python3 deploy_proxies.py --skip-preparation --skip-dns ../services/${{ github.event.inputs.service_name }}/deploy.yaml
         working-directory: "${{ github.workspace }}/vuln_images/"
         env:
