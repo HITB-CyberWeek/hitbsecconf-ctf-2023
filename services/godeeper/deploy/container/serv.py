@@ -94,7 +94,6 @@ def makelic():
     license = request.values['license_key']
     company = session['user']
     token = GetTOK()
-    print(token)
     if type(token) == type(b''):
         token=token.decode()
     res = AddLicence(company,token,license)
