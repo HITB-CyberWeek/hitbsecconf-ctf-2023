@@ -24,8 +24,11 @@ jobs:
         working-directory: "${{ github.workspace }}/vuln_images/"
         env:
           DO_API_TOKEN: ${{ secrets.DO_API_TOKEN }}
+      - name: Set owners # Otherwise git can not commit changes, see https://nvd.nist.gov/vuln/detail/cve-2022-24765
+        run: chown -R $(id -u):$(id -g) .
+        working-directory: "${{ github.workspace  }}"
       - name: Commit changes
-        uses: EndBug/add-and-commit@v7
+        uses: EndBug/add-and-commit@v9
         with:
           add: ansible/cloud/cloud_master/files/api_srv/do_vulnimages.json
           message: "[${{ github.event.inputs.service_name }}] New image built on ${{ github.sha }}"
@@ -84,6 +87,12 @@ jobs:
         uses: BSFishy/pip-action@v1
         with:
           requirements: vuln_images/requirements.txt
+      - name: Save private key
+        run: |-
+          echo "$DO_DEPLOY_KEY" > "${{ github.workspace }}/ansible/cloud/cloud_master/files/api_srv/do_deploy_key";
+        shell: bash
+        env:
+          DO_DEPLOY_KEY: ${{ secrets.DO_DEPLOY_KEY }}
       - name: Deploy proxies
         run: python3 deploy_proxies.py --skip-preparation --skip-dns ../services/${{ github.event.inputs.service_name }}/deploy.yaml
         working-directory: "${{ github.workspace }}/vuln_images/"
