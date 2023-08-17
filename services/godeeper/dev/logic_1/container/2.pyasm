@@ -1,0 +1,1739 @@
+# pydisasm version 6.0.5
+# Python bytecode 3.8.0 (3413)
+# Disassembled from Python 3.8.17 (default, Jul  4 2023, 06:27:59)
+# [GCC 12.2.0]
+# Timestamp in code: 1692284132 (2023-08-17 14:55:32)
+# Source code size mod 2**32: 5182 bytes
+# Method Name:       GetTOK
+# Filename:          1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  27
+# Stack size:        34
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        1
+# Constants:
+#    0: None
+#    1: ''
+#    2: (224, 228, 249, 230, 251, 253, 169, 224, 231, 250, 249, 236, 234, 253)
+#    3: 137
+#    4: 7
+#    5: 2
+#    6: 1
+#    7: 'u'
+#    8: 5
+#    9: 'n'
+#   10: 13
+#   11: 89
+#   12: 37
+#   13: 34
+#   14: 22
+#   15: 42
+#   16: 26
+#   17: 106
+#   18: 111
+#   19: 70
+#   20: 60
+#   21: 126
+#   22: 75
+#   23: 120
+#   24: 45
+#   25: 43
+#   26: 64
+#   27: 81
+#   28: 39
+#   29: 35
+#   30: 63
+#   31: 122
+#   32: 119
+#   33: 110
+#   34: 50
+#   35: 11
+#   36: 68
+#   37: 73
+#   38: 97
+#   39: 54
+#   40: 67
+#   41: 0
+#   42: 21
+#   43: 23
+#   44: 80
+#   45: 112
+#   46: 94
+#   47: 38
+#   48: 24
+#   49: 74
+#   50: 79
+#   51: 118
+#   52: 85
+#   53: 59
+#   54: 72
+#   55: 90
+#   56: 77
+#   57: 76
+#   58: 123
+#   59: 69
+#   60: 121
+#   61: 88
+#   62: 114
+#   63: 36
+#   64: 10
+#   65: 32
+#   66: 17
+#   67: 101
+#   68: 57
+#   69: 83
+#   70: 100
+#   71: 108
+#   72: 95
+#   73: 82
+#   74: 41
+#   75: 3
+#   76: 19
+#   77: 84
+#   78: 78
+#   79: 98
+#   80: 65
+#   81: 47
+#   82: 93
+#   83: 127
+#   84: 71
+#   85: 56
+#   86: 53
+#   87: 96
+#   88: 116
+#   89: 44
+#   90: 18
+#   91: 107
+#   92: 115
+#   93: 46
+#   94: 105
+#   95: 125
+#   96: 29
+#   97: 61
+#   98: 102
+#   99: 91
+#  100: 103
+#  101: (126, 93, 89, 110, 1, 94, 81, 15, 121, 80, 75, 1, 113, 95, 80, 14)
+#  102: 4
+#  103: 2886960546
+#  104: 31
+#  105: 4294967295
+#  106: 363383258
+#  107: 2175242801
+#  108: 2736497484
+#  109: '%08X'
+#  110: 2879525698
+# Names:
+#    0: chr
+#    1: exec
+#    2: globals
+#    3: locals
+#    4: list
+#    5: __dict__
+#    6: len
+#    7: append
+#    8: range
+#    9: eval
+#   10: bytes
+#   11: decode
+#   12: encode
+# Varnames:
+#	tmp1, c, f1, res1, key, res2_e, ii, res2_ee, i, res3_e, iii, res3_ee, iiii, res4_e, res4_ee, res2, res3, myCOMP1, secret, mybuff, myhash, cur_byte, lowbits, TOK1, tmp, byte, sign
+# Local variables:
+#    0: tmp1
+#    1: c
+#    2: f1
+#    3: res1
+#    4: key
+#    5: res2_e
+#    6: ii
+#    7: res2_ee
+#    8: i
+#    9: res3_e
+#   10: iii
+#   11: res3_ee
+#   12: iiii
+#   13: res4_e
+#   14: res4_ee
+#   15: res2
+#   16: res3
+#   17: myCOMP1
+#   18: secret
+#   19: mybuff
+#   20: myhash
+#   21: cur_byte
+#   22: lowbits
+#   23: TOK1
+#   24: tmp
+#   25: byte
+#   26: sign
+NOP
+JUMP_ABSOLUTE 4 # L_0
+L_0:
+	LOAD_CONST           1 ('')			# 4
+	STORE_FAST           0 (tmp1)			# 6
+	LOAD_CONST           2 ((224, 228, 249, 230, 251, 253, 169, 224, 231, 250, 249, 236, 234, 253))			# 8
+	GET_ITER			# 10
+		NOP			# 12
+	JUMP_ABSOLUTE 16  # L8			# 14
+L8:
+		FOR_ITER 4			# 16
+		NOP			# 18
+	JUMP_ABSOLUTE 26 # L_1			# 20
+		NOP			# 22
+	JUMP_ABSOLUTE 56 # L30			# 24
+L_1:
+	STORE_FAST           1 (c)			# 26
+	LOAD_FAST            0 (tmp1)			# 28
+	LOAD_GLOBAL          0 (chr)			# 30
+		NOP			# 32
+	JUMP_ABSOLUTE 36  # L_41			# 34
+L_41:
+	LOAD_FAST            1 (c)			# 36
+	LOAD_CONST           3 (137)			# 38
+		NOP			# 40
+	JUMP_ABSOLUTE 44  # L_40			# 42
+L_40:
+	BINARY_XOR			# 44
+	CALL_FUNCTION        1			# 46
+	INPLACE_ADD			# 48
+	STORE_FAST           0 (tmp1)			# 50
+		NOP			# 52
+	JUMP_ABSOLUTE 16  # L8			# 54
+L_2:
+L30:
+	LOAD_GLOBAL          1 (exec)			# 56
+	LOAD_FAST            0 (tmp1)			# 58
+	LOAD_GLOBAL          2 (globals)			# 60
+	CALL_FUNCTION        0			# 62
+		NOP			# 64
+	JUMP_ABSOLUTE 68  # L_44			# 66
+L_44:
+	LOAD_GLOBAL          3 (locals)			# 68
+	CALL_FUNCTION        0			# 70
+		NOP			# 72
+	JUMP_ABSOLUTE 76  # L_43			# 74
+L_43:
+	CALL_FUNCTION        3			# 76
+	POP_TOP			# 78
+	LOAD_GLOBAL          4 (list)			# 80
+		NOP			# 82
+	JUMP_ABSOLUTE 86  # L_45			# 84
+L_45:
+	LOAD_GLOBAL          3 (locals)			# 86
+	CALL_FUNCTION        0			# 88
+		NOP			# 90
+	JUMP_ABSOLUTE 94  # L_42			# 92
+L_42:
+	LOAD_FAST            0 (tmp1)			# 94
+	LOAD_CONST           4 (7)			# 96
+	LOAD_CONST           0 (None)			# 98
+		NOP			# 100
+	JUMP_ABSOLUTE 104  # L_47			# 102
+L_47:
+	BUILD_SLICE          2			# 104
+	BINARY_SUBSCR			# 106
+		NOP			# 108
+	JUMP_ABSOLUTE 112  # L_46			# 110
+L_46:
+	BINARY_SUBSCR			# 112
+	LOAD_ATTR            5 (__dict__)			# 114
+	CALL_FUNCTION        1			# 116
+	GET_ITER			# 118
+		NOP			# 120
+	JUMP_ABSOLUTE 124  # L70			# 122
+L70:
+		FOR_ITER 4			# 124
+		NOP			# 126
+	JUMP_ABSOLUTE 134 # L_3			# 128
+		NOP			# 130
+	JUMP_ABSOLUTE 248 # L138			# 132
+L_3:
+	STORE_FAST           2 (f1)			# 134
+	LOAD_GLOBAL          6 (len)			# 136
+	LOAD_FAST            2 (f1)			# 138
+		NOP			# 140
+	JUMP_ABSOLUTE 144  # L_49			# 142
+L_49:
+	CALL_FUNCTION        1			# 144
+	LOAD_CONST           5 (2)			# 146
+		NOP			# 148
+	JUMP_ABSOLUTE 152  # L_48			# 150
+L_48:
+	COMPARE_OP           4 (>)			# 152
+		NOP			# 154
+	POP_JUMP_IF_FALSE 124 # L70			# 156
+		NOP			# 158
+	JUMP_ABSOLUTE 162 # L_4			# 160
+L_4:
+	LOAD_FAST            2 (f1)			# 162
+	LOAD_CONST           6 (1)			# 164
+	BINARY_SUBSCR			# 166
+	LOAD_CONST           7 ('u')			# 168
+		NOP			# 170
+	JUMP_ABSOLUTE 174  # L_50			# 172
+L_50:
+	COMPARE_OP           2 (==)			# 174
+		NOP			# 176
+	POP_JUMP_IF_FALSE 124 # L70			# 178
+		NOP			# 180
+	JUMP_ABSOLUTE 184 # L_5			# 182
+L_5:
+	LOAD_FAST            2 (f1)			# 184
+	LOAD_CONST           8 (5)			# 186
+	BINARY_SUBSCR			# 188
+	LOAD_CONST           9 ('n')			# 190
+		NOP			# 192
+	JUMP_ABSOLUTE 196  # L_51			# 194
+L_51:
+	COMPARE_OP           2 (==)			# 196
+		NOP			# 198
+	POP_JUMP_IF_FALSE 124 # L70			# 200
+		NOP			# 202
+	JUMP_ABSOLUTE 206 # L_6			# 204
+L_6:
+	LOAD_GLOBAL          3 (locals)			# 206
+	CALL_FUNCTION        0			# 208
+	LOAD_FAST            0 (tmp1)			# 210
+	LOAD_CONST           4 (7)			# 212
+		NOP			# 214
+	JUMP_ABSOLUTE 218  # L_53			# 216
+L_53:
+	LOAD_CONST           0 (None)			# 218
+	BUILD_SLICE          2			# 220
+	BINARY_SUBSCR			# 222
+		NOP			# 224
+	JUMP_ABSOLUTE 228  # L_52			# 226
+L_52:
+	BINARY_SUBSCR			# 228
+	LOAD_ATTR            5 (__dict__)			# 230
+	LOAD_FAST            2 (f1)			# 232
+	BINARY_SUBSCR			# 234
+		NOP			# 236
+	JUMP_ABSOLUTE 240  # L_54			# 238
+L_54:
+	CALL_FUNCTION        0			# 240
+	STORE_FAST           3 (res1)			# 242
+		NOP			# 244
+	JUMP_ABSOLUTE 124  # L70			# 246
+L_7:
+L138:
+	BUILD_LIST           0			# 248
+	STORE_FAST           4 (key)			# 250
+	LOAD_FAST            4 (key)			# 252
+	EXTENDED_ARG 1			# 254
+	JUMP_ABSOLUTE 3 # L_59			# 256
+L_59:
+	LOAD_METHOD          7 (append)			# 258
+	LOAD_CONST           10 (13)			# 260
+	EXTENDED_ARG 1			# 262
+	JUMP_ABSOLUTE 11 # L_58			# 264
+L_58:
+	CALL_METHOD          1			# 266
+	POP_TOP			# 268
+	LOAD_FAST            4 (key)			# 270
+	LOAD_METHOD          7 (append)			# 272
+	EXTENDED_ARG 1			# 274
+	JUMP_ABSOLUTE 23 # L_57			# 276
+L_57:
+	LOAD_CONST           11 (89)			# 278
+	CALL_METHOD          1			# 280
+	POP_TOP			# 282
+	EXTENDED_ARG 1			# 284
+	JUMP_ABSOLUTE 33 # L_61			# 286
+L_61:
+	LOAD_FAST            4 (key)			# 288
+	LOAD_METHOD          7 (append)			# 290
+	EXTENDED_ARG 1			# 292
+	JUMP_ABSOLUTE 41 # L_60			# 294
+L_60:
+	LOAD_CONST           12 (37)			# 296
+	CALL_METHOD          1			# 298
+	POP_TOP			# 300
+	EXTENDED_ARG 1			# 302
+	JUMP_ABSOLUTE 51 # L_56			# 304
+L_56:
+	LOAD_FAST            4 (key)			# 306
+	LOAD_METHOD          7 (append)			# 308
+	LOAD_CONST           13 (34)			# 310
+	EXTENDED_ARG 1			# 312
+	JUMP_ABSOLUTE 61 # L_64			# 314
+L_64:
+	CALL_METHOD          1			# 316
+	POP_TOP			# 318
+	EXTENDED_ARG 1			# 320
+	JUMP_ABSOLUTE 69 # L_63			# 322
+L_63:
+	LOAD_FAST            4 (key)			# 324
+	LOAD_METHOD          7 (append)			# 326
+	LOAD_CONST           14 (22)			# 328
+	EXTENDED_ARG 1			# 330
+	JUMP_ABSOLUTE 79 # L_62			# 332
+L_62:
+	CALL_METHOD          1			# 334
+	POP_TOP			# 336
+	LOAD_CONST           15 (42)			# 338
+	LOAD_CONST           16 (26)			# 340
+	EXTENDED_ARG 1			# 342
+	JUMP_ABSOLUTE 91 # L_65			# 344
+L_65:
+	LOAD_CONST           17 (106)			# 346
+	LOAD_CONST           18 (111)			# 348
+	LOAD_CONST           19 (70)			# 350
+	EXTENDED_ARG 1			# 352
+	JUMP_ABSOLUTE 101 # L_55			# 354
+L_55:
+	LOAD_CONST           20 (60)			# 356
+	LOAD_CONST           21 (126)			# 358
+	LOAD_CONST           8 (5)			# 360
+	EXTENDED_ARG 1			# 362
+	JUMP_ABSOLUTE 111 # L_69			# 364
+L_69:
+	LOAD_CONST           22 (75)			# 366
+	LOAD_CONST           23 (120)			# 368
+	EXTENDED_ARG 1			# 370
+	JUMP_ABSOLUTE 119 # L_68			# 372
+L_68:
+	LOAD_CONST           24 (45)			# 374
+	LOAD_CONST           25 (43)			# 376
+	LOAD_CONST           26 (64)			# 378
+	LOAD_CONST           27 (81)			# 380
+	EXTENDED_ARG 1			# 382
+	JUMP_ABSOLUTE 131 # L_67			# 384
+L_67:
+	LOAD_CONST           28 (39)			# 386
+	LOAD_CONST           29 (35)			# 388
+	LOAD_CONST           30 (63)			# 390
+	LOAD_CONST           31 (122)			# 392
+	EXTENDED_ARG 1			# 394
+	JUMP_ABSOLUTE 143 # L_70			# 396
+L_70:
+	LOAD_CONST           26 (64)			# 398
+	LOAD_CONST           32 (119)			# 400
+	LOAD_CONST           33 (110)			# 402
+	EXTENDED_ARG 1			# 404
+	JUMP_ABSOLUTE 153 # L_66			# 406
+L_66:
+	LOAD_CONST           34 (50)			# 408
+	LOAD_CONST           35 (11)			# 410
+	LOAD_CONST           36 (68)			# 412
+	EXTENDED_ARG 1			# 414
+	JUMP_ABSOLUTE 163 # L_73			# 416
+L_73:
+	LOAD_CONST           37 (73)			# 418
+	LOAD_CONST           38 (97)			# 420
+	EXTENDED_ARG 1			# 422
+	JUMP_ABSOLUTE 171 # L_72			# 424
+L_72:
+	LOAD_CONST           39 (54)			# 426
+	LOAD_CONST           19 (70)			# 428
+	LOAD_CONST           40 (67)			# 430
+	EXTENDED_ARG 1			# 432
+	JUMP_ABSOLUTE 181 # L_71			# 434
+L_71:
+	LOAD_CONST           31 (122)			# 436
+	LOAD_CONST           21 (126)			# 438
+	BUILD_LIST           31			# 440
+	STORE_FAST           5 (res2_e)			# 442
+	EXTENDED_ARG 1			# 444
+	JUMP_ABSOLUTE 193 # L_74			# 446
+L_74:
+	LOAD_CONST           41 (0)			# 448
+	STORE_FAST           6 (ii)			# 450
+	EXTENDED_ARG 1			# 452
+	JUMP_ABSOLUTE 201 # L262			# 454
+L262:
+	LOAD_FAST            6 (ii)			# 456
+	LOAD_GLOBAL          6 (len)			# 458
+	LOAD_FAST            5 (res2_e)			# 460
+	CALL_FUNCTION        1			# 462
+	EXTENDED_ARG 1			# 464
+	JUMP_ABSOLUTE 213 # L_75			# 466
+L_75:
+	COMPARE_OP           0 (<)			# 468
+	EXTENDED_ARG 2			# 470
+	POP_JUMP_IF_FALSE 32 # L316			# 472
+	EXTENDED_ARG 1			# 474
+	JUMP_ABSOLUTE 223 # L_8			# 476
+L_8:
+	LOAD_FAST            5 (res2_e)			# 478
+	LOAD_FAST            6 (ii)			# 480
+	BINARY_SUBSCR			# 482
+	LOAD_FAST            4 (key)			# 484
+	EXTENDED_ARG 1			# 486
+	JUMP_ABSOLUTE 235 # L_78			# 488
+L_78:
+	LOAD_FAST            6 (ii)			# 490
+	LOAD_GLOBAL          6 (len)			# 492
+	EXTENDED_ARG 1			# 494
+	JUMP_ABSOLUTE 243 # L_77			# 496
+L_77:
+	LOAD_FAST            4 (key)			# 498
+	CALL_FUNCTION        1			# 500
+	BINARY_MODULO			# 502
+	BINARY_SUBSCR			# 504
+	EXTENDED_ARG 2			# 506
+	JUMP_ABSOLUTE 4 # L_76			# 508
+L_76:
+	NOP			# 510
+	NOP			# 512
+	BINARY_XOR			# 514
+	LOAD_FAST            5 (res2_e)			# 516
+	LOAD_FAST            6 (ii)			# 518
+	EXTENDED_ARG 2			# 520
+	JUMP_ABSOLUTE 14 # L_80			# 522
+L_80:
+	STORE_SUBSCR			# 524
+	LOAD_FAST            6 (ii)			# 526
+	EXTENDED_ARG 2			# 528
+	JUMP_ABSOLUTE 22 # L_79			# 530
+L_79:
+	LOAD_CONST           6 (1)			# 532
+	INPLACE_ADD			# 534
+	STORE_FAST           6 (ii)			# 536
+	EXTENDED_ARG 1			# 538
+	JUMP_ABSOLUTE 201 # L262			# 540
+L_9:
+L316:
+	BUILD_LIST           0			# 542
+	STORE_FAST           4 (key)			# 544
+	LOAD_FAST            4 (key)			# 546
+	EXTENDED_ARG 2			# 548
+	JUMP_ABSOLUTE 42 # L_85			# 550
+L_85:
+	LOAD_METHOD          7 (append)			# 552
+	LOAD_CONST           13 (34)			# 554
+	EXTENDED_ARG 2			# 556
+	JUMP_ABSOLUTE 50 # L_84			# 558
+L_84:
+	CALL_METHOD          1			# 560
+	POP_TOP			# 562
+	LOAD_FAST            4 (key)			# 564
+	LOAD_METHOD          7 (append)			# 566
+	EXTENDED_ARG 2			# 568
+	JUMP_ABSOLUTE 62 # L_83			# 570
+L_83:
+	LOAD_CONST           42 (21)			# 572
+	CALL_METHOD          1			# 574
+	POP_TOP			# 576
+	LOAD_FAST            4 (key)			# 578
+	EXTENDED_ARG 2			# 580
+	JUMP_ABSOLUTE 74 # L_86			# 582
+L_86:
+	LOAD_METHOD          7 (append)			# 584
+	LOAD_CONST           24 (45)			# 586
+	CALL_METHOD          1			# 588
+	EXTENDED_ARG 2			# 590
+	JUMP_ABSOLUTE 84 # L_82			# 592
+L_82:
+	POP_TOP			# 594
+	LOAD_FAST            4 (key)			# 596
+	LOAD_METHOD          7 (append)			# 598
+	EXTENDED_ARG 2			# 600
+	JUMP_ABSOLUTE 94 # L_89			# 602
+L_89:
+	LOAD_CONST           43 (23)			# 604
+	CALL_METHOD          1			# 606
+	EXTENDED_ARG 2			# 608
+	JUMP_ABSOLUTE 102 # L_88			# 610
+L_88:
+	POP_TOP			# 612
+	LOAD_FAST            4 (key)			# 614
+	LOAD_METHOD          7 (append)			# 616
+	EXTENDED_ARG 2			# 618
+	JUMP_ABSOLUTE 112 # L_87			# 620
+L_87:
+	LOAD_CONST           39 (54)			# 622
+	CALL_METHOD          1			# 624
+	POP_TOP			# 626
+	LOAD_CONST           44 (80)			# 628
+	EXTENDED_ARG 2			# 630
+	JUMP_ABSOLUTE 124 # L_90			# 632
+L_90:
+	LOAD_CONST           45 (112)			# 634
+	LOAD_CONST           46 (94)			# 636
+	LOAD_CONST           47 (38)			# 638
+	EXTENDED_ARG 2			# 640
+	JUMP_ABSOLUTE 134 # L_81			# 642
+L_81:
+	LOAD_CONST           48 (24)			# 644
+	LOAD_CONST           36 (68)			# 646
+	LOAD_CONST           49 (74)			# 648
+	EXTENDED_ARG 2			# 650
+	JUMP_ABSOLUTE 144 # L_94			# 652
+L_94:
+	LOAD_CONST           50 (79)			# 654
+	LOAD_CONST           51 (118)			# 656
+	EXTENDED_ARG 2			# 658
+	JUMP_ABSOLUTE 152 # L_93			# 660
+L_93:
+	LOAD_CONST           52 (85)			# 662
+	LOAD_CONST           37 (73)			# 664
+	LOAD_CONST           53 (59)			# 666
+	EXTENDED_ARG 2			# 668
+	JUMP_ABSOLUTE 162 # L_92			# 670
+L_92:
+	LOAD_CONST           22 (75)			# 672
+	LOAD_CONST           54 (72)			# 674
+	LOAD_CONST           55 (90)			# 676
+	LOAD_CONST           56 (77)			# 678
+	EXTENDED_ARG 2			# 680
+	JUMP_ABSOLUTE 174 # L_95			# 682
+L_95:
+	LOAD_CONST           51 (118)			# 684
+	LOAD_CONST           57 (76)			# 686
+	LOAD_CONST           58 (123)			# 688
+	EXTENDED_ARG 2			# 690
+	JUMP_ABSOLUTE 184 # L_91			# 692
+L_91:
+	LOAD_CONST           59 (69)			# 694
+	LOAD_CONST           60 (121)			# 696
+	LOAD_CONST           34 (50)			# 698
+	EXTENDED_ARG 2			# 700
+	JUMP_ABSOLUTE 194 # L_98			# 702
+L_98:
+	LOAD_CONST           33 (110)			# 704
+	LOAD_CONST           61 (88)			# 706
+	EXTENDED_ARG 2			# 708
+	JUMP_ABSOLUTE 202 # L_97			# 710
+L_97:
+	LOAD_CONST           58 (123)			# 712
+	LOAD_CONST           62 (114)			# 714
+	LOAD_CONST           63 (36)			# 716
+	EXTENDED_ARG 2			# 718
+	JUMP_ABSOLUTE 212 # L_96			# 720
+L_96:
+	LOAD_CONST           64 (10)			# 722
+	LOAD_CONST           49 (74)			# 724
+	BUILD_LIST           29			# 726
+	STORE_FAST           7 (res2_ee)			# 728
+	EXTENDED_ARG 2			# 730
+	JUMP_ABSOLUTE 224 # L_99			# 732
+L_99:
+	LOAD_CONST           41 (0)			# 734
+	STORE_FAST           8 (i)			# 736
+	EXTENDED_ARG 2			# 738
+	JUMP_ABSOLUTE 232 # L436			# 740
+L436:
+	LOAD_FAST            8 (i)			# 742
+	LOAD_GLOBAL          6 (len)			# 744
+	LOAD_FAST            7 (res2_ee)			# 746
+	CALL_FUNCTION        1			# 748
+	EXTENDED_ARG 2			# 750
+	JUMP_ABSOLUTE 244 # L_100			# 752
+L_100:
+	COMPARE_OP           0 (<)			# 754
+	EXTENDED_ARG 3			# 756
+	POP_JUMP_IF_FALSE 59 # L490			# 758
+	EXTENDED_ARG 2			# 760
+	JUMP_ABSOLUTE 254 # L_10			# 762
+L_10:
+	LOAD_FAST            7 (res2_ee)			# 764
+	LOAD_FAST            8 (i)			# 766
+	BINARY_SUBSCR			# 768
+	LOAD_FAST            4 (key)			# 770
+	EXTENDED_ARG 3			# 772
+	JUMP_ABSOLUTE 11 # L_103			# 774
+L_103:
+	LOAD_FAST            8 (i)			# 776
+	LOAD_GLOBAL          6 (len)			# 778
+	EXTENDED_ARG 3			# 780
+	JUMP_ABSOLUTE 19 # L_102			# 782
+L_102:
+	LOAD_FAST            4 (key)			# 784
+	CALL_FUNCTION        1			# 786
+	BINARY_MODULO			# 788
+	BINARY_SUBSCR			# 790
+	EXTENDED_ARG 3			# 792
+	JUMP_ABSOLUTE 31 # L_101			# 794
+L_101:
+	BINARY_XOR			# 796
+	LOAD_FAST            7 (res2_ee)			# 798
+	LOAD_FAST            8 (i)			# 800
+	EXTENDED_ARG 3			# 802
+	JUMP_ABSOLUTE 41 # L_105			# 804
+L_105:
+	STORE_SUBSCR			# 806
+	LOAD_FAST            8 (i)			# 808
+	EXTENDED_ARG 3			# 810
+	JUMP_ABSOLUTE 49 # L_104			# 812
+L_104:
+	LOAD_CONST           6 (1)			# 814
+	INPLACE_ADD			# 816
+	STORE_FAST           8 (i)			# 818
+	EXTENDED_ARG 2			# 820
+	JUMP_ABSOLUTE 232 # L436			# 822
+L_11:
+L490:
+	BUILD_LIST           0			# 824
+	STORE_FAST           4 (key)			# 826
+	LOAD_FAST            4 (key)			# 828
+	EXTENDED_ARG 3			# 830
+	JUMP_ABSOLUTE 69 # L_110			# 832
+L_110:
+	LOAD_METHOD          7 (append)			# 834
+	LOAD_CONST           39 (54)			# 836
+	EXTENDED_ARG 3			# 838
+	JUMP_ABSOLUTE 77 # L_109			# 840
+L_109:
+	CALL_METHOD          1			# 842
+	POP_TOP			# 844
+	LOAD_FAST            4 (key)			# 846
+	LOAD_METHOD          7 (append)			# 848
+	EXTENDED_ARG 3			# 850
+	JUMP_ABSOLUTE 89 # L_108			# 852
+L_108:
+	LOAD_CONST           43 (23)			# 854
+	CALL_METHOD          1			# 856
+	POP_TOP			# 858
+	EXTENDED_ARG 3			# 860
+	JUMP_ABSOLUTE 99 # L_112			# 862
+L_112:
+	LOAD_FAST            4 (key)			# 864
+	LOAD_METHOD          7 (append)			# 866
+	EXTENDED_ARG 3			# 868
+	JUMP_ABSOLUTE 107 # L_111			# 870
+L_111:
+	LOAD_CONST           24 (45)			# 872
+	CALL_METHOD          1			# 874
+	POP_TOP			# 876
+	EXTENDED_ARG 3			# 878
+	JUMP_ABSOLUTE 117 # L_107			# 880
+L_107:
+	LOAD_FAST            4 (key)			# 882
+	LOAD_METHOD          7 (append)			# 884
+	LOAD_CONST           65 (32)			# 886
+	EXTENDED_ARG 3			# 888
+	JUMP_ABSOLUTE 127 # L_115			# 890
+L_115:
+	CALL_METHOD          1			# 892
+	POP_TOP			# 894
+	EXTENDED_ARG 3			# 896
+	JUMP_ABSOLUTE 135 # L_114			# 898
+L_114:
+	LOAD_FAST            4 (key)			# 900
+	LOAD_METHOD          7 (append)			# 902
+	LOAD_CONST           57 (76)			# 904
+	CALL_METHOD          1			# 906
+	EXTENDED_ARG 3			# 908
+	JUMP_ABSOLUTE 147 # L_113			# 910
+L_113:
+	POP_TOP			# 912
+	LOAD_CONST           66 (17)			# 914
+	LOAD_CONST           67 (101)			# 916
+	LOAD_CONST           54 (72)			# 918
+	EXTENDED_ARG 3			# 920
+	JUMP_ABSOLUTE 159 # L_116			# 922
+L_116:
+	LOAD_CONST           27 (81)			# 924
+	LOAD_CONST           68 (57)			# 926
+	LOAD_CONST           69 (83)			# 928
+	EXTENDED_ARG 3			# 930
+	JUMP_ABSOLUTE 169 # L_106			# 932
+L_106:
+	LOAD_CONST           70 (100)			# 934
+	LOAD_CONST           11 (89)			# 936
+	LOAD_CONST           4 (7)			# 938
+	EXTENDED_ARG 3			# 940
+	JUMP_ABSOLUTE 179 # L_120			# 942
+L_120:
+	LOAD_CONST           71 (108)			# 944
+	LOAD_CONST           72 (95)			# 946
+	EXTENDED_ARG 3			# 948
+	JUMP_ABSOLUTE 187 # L_119			# 950
+L_119:
+	LOAD_CONST           60 (121)			# 952
+	LOAD_CONST           10 (13)			# 954
+	LOAD_CONST           73 (82)			# 956
+	LOAD_CONST           74 (41)			# 958
+	EXTENDED_ARG 3			# 960
+	JUMP_ABSOLUTE 199 # L_118			# 962
+L_118:
+	LOAD_CONST           59 (69)			# 964
+	LOAD_CONST           47 (38)			# 966
+	LOAD_CONST           75 (3)			# 968
+	EXTENDED_ARG 3			# 970
+	JUMP_ABSOLUTE 209 # L_122			# 972
+L_122:
+	LOAD_CONST           19 (70)			# 974
+	LOAD_CONST           76 (19)			# 976
+	EXTENDED_ARG 3			# 978
+	JUMP_ABSOLUTE 217 # L_121			# 980
+L_121:
+	LOAD_CONST           77 (84)			# 982
+	LOAD_CONST           51 (118)			# 984
+	LOAD_CONST           78 (78)			# 986
+	EXTENDED_ARG 3			# 988
+	JUMP_ABSOLUTE 227 # L_117			# 990
+L_117:
+	LOAD_CONST           22 (75)			# 992
+	LOAD_CONST           79 (98)			# 994
+	LOAD_CONST           44 (80)			# 996
+	EXTENDED_ARG 3			# 998
+	JUMP_ABSOLUTE 237 # L_125			# 1000
+L_125:
+	LOAD_CONST           54 (72)			# 1002
+	LOAD_CONST           49 (74)			# 1004
+	EXTENDED_ARG 3			# 1006
+	JUMP_ABSOLUTE 245 # L_124			# 1008
+L_124:
+	LOAD_CONST           57 (76)			# 1010
+	LOAD_CONST           29 (35)			# 1012
+	LOAD_CONST           77 (84)			# 1014
+	EXTENDED_ARG 4			# 1016
+	JUMP_ABSOLUTE 4 # L_123			# 1018
+L_123:
+	NOP			# 1020
+	NOP			# 1022
+	LOAD_CONST           51 (118)			# 1024
+	LOAD_CONST           80 (65)			# 1026
+	LOAD_CONST           69 (83)			# 1028
+	BUILD_LIST           34			# 1030
+	EXTENDED_ARG 4			# 1032
+	JUMP_ABSOLUTE 16 # L_126			# 1034
+L_126:
+	STORE_FAST           9 (res3_e)			# 1036
+	LOAD_CONST           41 (0)			# 1038
+	STORE_FAST           10 (iii)			# 1040
+	EXTENDED_ARG 4			# 1042
+	JUMP_ABSOLUTE 26 # L620			# 1044
+L620:
+	LOAD_FAST            10 (iii)			# 1046
+	LOAD_GLOBAL          6 (len)			# 1048
+	LOAD_FAST            9 (res3_e)			# 1050
+	CALL_FUNCTION        1			# 1052
+	EXTENDED_ARG 4			# 1054
+	JUMP_ABSOLUTE 38 # L_127			# 1056
+L_127:
+	COMPARE_OP           0 (<)			# 1058
+	EXTENDED_ARG 4			# 1060
+	POP_JUMP_IF_FALSE 108 # L674			# 1062
+	EXTENDED_ARG 4			# 1064
+	JUMP_ABSOLUTE 48 # L_12			# 1066
+L_12:
+	LOAD_FAST            9 (res3_e)			# 1068
+	LOAD_FAST            10 (iii)			# 1070
+	BINARY_SUBSCR			# 1072
+	LOAD_FAST            4 (key)			# 1074
+	EXTENDED_ARG 4			# 1076
+	JUMP_ABSOLUTE 60 # L_130			# 1078
+L_130:
+	LOAD_FAST            10 (iii)			# 1080
+	LOAD_GLOBAL          6 (len)			# 1082
+	EXTENDED_ARG 4			# 1084
+	JUMP_ABSOLUTE 68 # L_129			# 1086
+L_129:
+	LOAD_FAST            4 (key)			# 1088
+	CALL_FUNCTION        1			# 1090
+	BINARY_MODULO			# 1092
+	BINARY_SUBSCR			# 1094
+	EXTENDED_ARG 4			# 1096
+	JUMP_ABSOLUTE 80 # L_128			# 1098
+L_128:
+	BINARY_XOR			# 1100
+	LOAD_FAST            9 (res3_e)			# 1102
+	LOAD_FAST            10 (iii)			# 1104
+	EXTENDED_ARG 4			# 1106
+	JUMP_ABSOLUTE 90 # L_132			# 1108
+L_132:
+	STORE_SUBSCR			# 1110
+	LOAD_FAST            10 (iii)			# 1112
+	EXTENDED_ARG 4			# 1114
+	JUMP_ABSOLUTE 98 # L_131			# 1116
+L_131:
+	LOAD_CONST           6 (1)			# 1118
+	INPLACE_ADD			# 1120
+	STORE_FAST           10 (iii)			# 1122
+	EXTENDED_ARG 4			# 1124
+	JUMP_ABSOLUTE 26 # L620			# 1126
+L_13:
+L674:
+	LOAD_CONST           36 (68)			# 1128
+	LOAD_CONST           62 (114)			# 1130
+	LOAD_CONST           46 (94)			# 1132
+	LOAD_CONST           66 (17)			# 1134
+	EXTENDED_ARG 4			# 1136
+	JUMP_ABSOLUTE 120 # L_136			# 1138
+L_136:
+	LOAD_CONST           79 (98)			# 1140
+	LOAD_CONST           44 (80)			# 1142
+	EXTENDED_ARG 4			# 1144
+	JUMP_ABSOLUTE 128 # L_135			# 1146
+L_135:
+	LOAD_CONST           54 (72)			# 1148
+	LOAD_CONST           50 (79)			# 1150
+	LOAD_CONST           80 (65)			# 1152
+	LOAD_CONST           81 (47)			# 1154
+	EXTENDED_ARG 4			# 1156
+	JUMP_ABSOLUTE 140 # L_134			# 1158
+L_134:
+	LOAD_CONST           82 (93)			# 1160
+	LOAD_CONST           68 (57)			# 1162
+	LOAD_CONST           22 (75)			# 1164
+	EXTENDED_ARG 4			# 1166
+	JUMP_ABSOLUTE 150 # L_138			# 1168
+L_138:
+	LOAD_CONST           83 (127)			# 1170
+	LOAD_CONST           25 (43)			# 1172
+	EXTENDED_ARG 4			# 1174
+	JUMP_ABSOLUTE 158 # L_137			# 1176
+L_137:
+	LOAD_CONST           55 (90)			# 1178
+	LOAD_CONST           23 (120)			# 1180
+	LOAD_CONST           50 (79)			# 1182
+	LOAD_CONST           80 (65)			# 1184
+	EXTENDED_ARG 4			# 1186
+	JUMP_ABSOLUTE 170 # L_133			# 1188
+L_133:
+	LOAD_CONST           65 (32)			# 1190
+	LOAD_CONST           59 (69)			# 1192
+	LOAD_CONST           57 (76)			# 1194
+	EXTENDED_ARG 4			# 1196
+	JUMP_ABSOLUTE 180 # L_141			# 1198
+L_141:
+	LOAD_CONST           64 (10)			# 1200
+	LOAD_CONST           73 (82)			# 1202
+	EXTENDED_ARG 4			# 1204
+	JUMP_ABSOLUTE 188 # L_140			# 1206
+L_140:
+	LOAD_CONST           74 (41)			# 1208
+	LOAD_CONST           84 (71)			# 1210
+	LOAD_CONST           79 (98)			# 1212
+	LOAD_CONST           54 (72)			# 1214
+	EXTENDED_ARG 4			# 1216
+	JUMP_ABSOLUTE 200 # L_139			# 1218
+L_139:
+	LOAD_CONST           69 (83)			# 1220
+	LOAD_CONST           85 (56)			# 1222
+	LOAD_CONST           66 (17)			# 1224
+	EXTENDED_ARG 4			# 1226
+	JUMP_ABSOLUTE 210 # L_143			# 1228
+L_143:
+	LOAD_CONST           49 (74)			# 1230
+	BUILD_LIST           32			# 1232
+	EXTENDED_ARG 4			# 1234
+	JUMP_ABSOLUTE 218 # L_142			# 1236
+L_142:
+	STORE_FAST           11 (res3_ee)			# 1238
+	LOAD_CONST           41 (0)			# 1240
+	STORE_FAST           12 (iiii)			# 1242
+	EXTENDED_ARG 4			# 1244
+	JUMP_ABSOLUTE 228 # L746			# 1246
+L746:
+	LOAD_FAST            12 (iiii)			# 1248
+	LOAD_GLOBAL          6 (len)			# 1250
+	LOAD_FAST            11 (res3_ee)			# 1252
+	CALL_FUNCTION        1			# 1254
+	EXTENDED_ARG 4			# 1256
+	JUMP_ABSOLUTE 240 # L_144			# 1258
+L_144:
+	COMPARE_OP           0 (<)			# 1260
+	EXTENDED_ARG 5			# 1262
+	POP_JUMP_IF_FALSE 55 # L800			# 1264
+	EXTENDED_ARG 4			# 1266
+	JUMP_ABSOLUTE 250 # L_14			# 1268
+L_14:
+	LOAD_FAST            11 (res3_ee)			# 1270
+	LOAD_FAST            12 (iiii)			# 1272
+	BINARY_SUBSCR			# 1274
+	LOAD_FAST            4 (key)			# 1276
+	EXTENDED_ARG 5			# 1278
+	JUMP_ABSOLUTE 7 # L_147			# 1280
+L_147:
+	LOAD_FAST            12 (iiii)			# 1282
+	LOAD_GLOBAL          6 (len)			# 1284
+	EXTENDED_ARG 5			# 1286
+	JUMP_ABSOLUTE 15 # L_146			# 1288
+L_146:
+	LOAD_FAST            4 (key)			# 1290
+	CALL_FUNCTION        1			# 1292
+	BINARY_MODULO			# 1294
+	BINARY_SUBSCR			# 1296
+	EXTENDED_ARG 5			# 1298
+	JUMP_ABSOLUTE 27 # L_145			# 1300
+L_145:
+	BINARY_XOR			# 1302
+	LOAD_FAST            11 (res3_ee)			# 1304
+	LOAD_FAST            12 (iiii)			# 1306
+	EXTENDED_ARG 5			# 1308
+	JUMP_ABSOLUTE 37 # L_149			# 1310
+L_149:
+	STORE_SUBSCR			# 1312
+	LOAD_FAST            12 (iiii)			# 1314
+	EXTENDED_ARG 5			# 1316
+	JUMP_ABSOLUTE 45 # L_148			# 1318
+L_148:
+	LOAD_CONST           6 (1)			# 1320
+	INPLACE_ADD			# 1322
+	STORE_FAST           12 (iiii)			# 1324
+	EXTENDED_ARG 4			# 1326
+	JUMP_ABSOLUTE 228 # L746			# 1328
+L_15:
+L800:
+	BUILD_LIST           0			# 1330
+	STORE_FAST           4 (key)			# 1332
+	LOAD_FAST            4 (key)			# 1334
+	EXTENDED_ARG 5			# 1336
+	JUMP_ABSOLUTE 65 # L_154			# 1338
+L_154:
+	LOAD_METHOD          7 (append)			# 1340
+	LOAD_CONST           48 (24)			# 1342
+	EXTENDED_ARG 5			# 1344
+	JUMP_ABSOLUTE 73 # L_153			# 1346
+L_153:
+	CALL_METHOD          1			# 1348
+	POP_TOP			# 1350
+	LOAD_FAST            4 (key)			# 1352
+	LOAD_METHOD          7 (append)			# 1354
+	EXTENDED_ARG 5			# 1356
+	JUMP_ABSOLUTE 85 # L_152			# 1358
+L_152:
+	LOAD_CONST           86 (53)			# 1360
+	CALL_METHOD          1			# 1362
+	POP_TOP			# 1364
+	EXTENDED_ARG 5			# 1366
+	JUMP_ABSOLUTE 95 # L_156			# 1368
+L_156:
+	LOAD_FAST            4 (key)			# 1370
+	LOAD_METHOD          7 (append)			# 1372
+	EXTENDED_ARG 5			# 1374
+	JUMP_ABSOLUTE 103 # L_155			# 1376
+L_155:
+	LOAD_CONST           22 (75)			# 1378
+	CALL_METHOD          1			# 1380
+	POP_TOP			# 1382
+	EXTENDED_ARG 5			# 1384
+	JUMP_ABSOLUTE 113 # L_151			# 1386
+L_151:
+	LOAD_FAST            4 (key)			# 1388
+	LOAD_METHOD          7 (append)			# 1390
+	LOAD_CONST           16 (26)			# 1392
+	EXTENDED_ARG 5			# 1394
+	JUMP_ABSOLUTE 123 # L_159			# 1396
+L_159:
+	CALL_METHOD          1			# 1398
+	POP_TOP			# 1400
+	EXTENDED_ARG 5			# 1402
+	JUMP_ABSOLUTE 131 # L_158			# 1404
+L_158:
+	LOAD_FAST            4 (key)			# 1406
+	LOAD_METHOD          7 (append)			# 1408
+	LOAD_CONST           78 (78)			# 1410
+	EXTENDED_ARG 5			# 1412
+	JUMP_ABSOLUTE 141 # L_157			# 1414
+L_157:
+	CALL_METHOD          1			# 1416
+	POP_TOP			# 1418
+	LOAD_CONST           30 (63)			# 1420
+	LOAD_CONST           87 (96)			# 1422
+	EXTENDED_ARG 5			# 1424
+	JUMP_ABSOLUTE 153 # L_160			# 1426
+L_160:
+	LOAD_CONST           85 (56)			# 1428
+	LOAD_CONST           83 (127)			# 1430
+	LOAD_CONST           20 (60)			# 1432
+	EXTENDED_ARG 5			# 1434
+	JUMP_ABSOLUTE 163 # L_150			# 1436
+L_150:
+	LOAD_CONST           86 (53)			# 1438
+	LOAD_CONST           88 (116)			# 1440
+	LOAD_CONST           89 (44)			# 1442
+	EXTENDED_ARG 5			# 1444
+	JUMP_ABSOLUTE 173 # L_164			# 1446
+L_164:
+	LOAD_CONST           83 (127)			# 1448
+	LOAD_CONST           65 (32)			# 1450
+	EXTENDED_ARG 5			# 1452
+	JUMP_ABSOLUTE 181 # L_163			# 1454
+L_163:
+	LOAD_CONST           71 (108)			# 1456
+	LOAD_CONST           90 (18)			# 1458
+	LOAD_CONST           91 (107)			# 1460
+	LOAD_CONST           92 (115)			# 1462
+	EXTENDED_ARG 5			# 1464
+	JUMP_ABSOLUTE 193 # L_162			# 1466
+L_162:
+	LOAD_CONST           65 (32)			# 1468
+	LOAD_CONST           85 (56)			# 1470
+	LOAD_CONST           84 (71)			# 1472
+	LOAD_CONST           93 (46)			# 1474
+	EXTENDED_ARG 5			# 1476
+	JUMP_ABSOLUTE 205 # L_165			# 1478
+L_165:
+	LOAD_CONST           94 (105)			# 1480
+	LOAD_CONST           95 (125)			# 1482
+	LOAD_CONST           39 (54)			# 1484
+	EXTENDED_ARG 5			# 1486
+	JUMP_ABSOLUTE 215 # L_161			# 1488
+L_161:
+	LOAD_CONST           82 (93)			# 1490
+	LOAD_CONST           93 (46)			# 1492
+	LOAD_CONST           58 (123)			# 1494
+	EXTENDED_ARG 5			# 1496
+	JUMP_ABSOLUTE 225 # L_168			# 1498
+L_168:
+	LOAD_CONST           15 (42)			# 1500
+	LOAD_CONST           95 (125)			# 1502
+	EXTENDED_ARG 5			# 1504
+	JUMP_ABSOLUTE 233 # L_167			# 1506
+L_167:
+	LOAD_CONST           84 (71)			# 1508
+	LOAD_CONST           85 (56)			# 1510
+	BUILD_LIST           28			# 1512
+	EXTENDED_ARG 5			# 1514
+	JUMP_ABSOLUTE 243 # L_166			# 1516
+L_166:
+	STORE_FAST           13 (res4_e)			# 1518
+	LOAD_GLOBAL          8 (range)			# 1520
+	LOAD_GLOBAL          6 (len)			# 1522
+	LOAD_FAST            13 (res4_e)			# 1524
+	EXTENDED_ARG 5			# 1526
+	JUMP_ABSOLUTE 4 # L_169			# 1528
+L_169:
+	NOP			# 1530
+	NOP			# 1532
+	CALL_FUNCTION        1			# 1534
+	CALL_FUNCTION        1			# 1536
+	GET_ITER			# 1538
+	EXTENDED_ARG 6			# 1540
+	JUMP_ABSOLUTE 14 # L926			# 1542
+L926:
+		FOR_ITER 4			# 1544
+	EXTENDED_ARG 6			# 1546
+	JUMP_ABSOLUTE 24 # L_16			# 1548
+	EXTENDED_ARG 6			# 1550
+	JUMP_ABSOLUTE 74 # L962			# 1552
+L_16:
+	STORE_FAST           8 (i)			# 1554
+	LOAD_FAST            13 (res4_e)			# 1556
+	LOAD_FAST            8 (i)			# 1558
+	EXTENDED_ARG 6			# 1560
+	JUMP_ABSOLUTE 34 # L_172			# 1562
+L_172:
+	BINARY_SUBSCR			# 1564
+	LOAD_FAST            4 (key)			# 1566
+	EXTENDED_ARG 6			# 1568
+	JUMP_ABSOLUTE 42 # L_171			# 1570
+L_171:
+	LOAD_FAST            8 (i)			# 1572
+	LOAD_GLOBAL          6 (len)			# 1574
+	LOAD_FAST            4 (key)			# 1576
+	EXTENDED_ARG 6			# 1578
+	JUMP_ABSOLUTE 52 # L_170			# 1580
+L_170:
+	CALL_FUNCTION        1			# 1582
+	BINARY_MODULO			# 1584
+	BINARY_SUBSCR			# 1586
+	BINARY_XOR			# 1588
+	EXTENDED_ARG 6			# 1590
+	JUMP_ABSOLUTE 64 # L_173			# 1592
+L_173:
+	LOAD_FAST            13 (res4_e)			# 1594
+	LOAD_FAST            8 (i)			# 1596
+	STORE_SUBSCR			# 1598
+	EXTENDED_ARG 6			# 1600
+	JUMP_ABSOLUTE 14 # L926			# 1602
+L_17:
+L962:
+	LOAD_CONST           17 (106)			# 1604
+	LOAD_CONST           44 (80)			# 1606
+	LOAD_CONST           85 (56)			# 1608
+	LOAD_CONST           74 (41)			# 1610
+	EXTENDED_ARG 6			# 1612
+	JUMP_ABSOLUTE 86 # L_177			# 1614
+L_177:
+	LOAD_CONST           87 (96)			# 1616
+	LOAD_CONST           45 (112)			# 1618
+	EXTENDED_ARG 6			# 1620
+	JUMP_ABSOLUTE 94 # L_176			# 1622
+L_176:
+	LOAD_CONST           44 (80)			# 1624
+	LOAD_CONST           15 (42)			# 1626
+	LOAD_CONST           21 (126)			# 1628
+	EXTENDED_ARG 6			# 1630
+	JUMP_ABSOLUTE 104 # L_178			# 1632
+L_178:
+	LOAD_CONST           25 (43)			# 1634
+	LOAD_CONST           17 (106)			# 1636
+	EXTENDED_ARG 6			# 1638
+	JUMP_ABSOLUTE 112 # L_175			# 1640
+L_175:
+	LOAD_CONST           19 (70)			# 1642
+	LOAD_CONST           67 (101)			# 1644
+	LOAD_CONST           95 (125)			# 1646
+	EXTENDED_ARG 6			# 1648
+	JUMP_ABSOLUTE 122 # L_180			# 1650
+L_180:
+	LOAD_CONST           25 (43)			# 1652
+	LOAD_CONST           71 (108)			# 1654
+	EXTENDED_ARG 6			# 1656
+	JUMP_ABSOLUTE 130 # L_179			# 1658
+L_179:
+	LOAD_CONST           96 (29)			# 1660
+	LOAD_CONST           71 (108)			# 1662
+	LOAD_CONST           50 (79)			# 1664
+	LOAD_CONST           97 (61)			# 1666
+	EXTENDED_ARG 6			# 1668
+	JUMP_ABSOLUTE 142 # L_174			# 1670
+L_174:
+	LOAD_CONST           95 (125)			# 1672
+	LOAD_CONST           84 (71)			# 1674
+	LOAD_CONST           98 (102)			# 1676
+	LOAD_CONST           99 (91)			# 1678
+	EXTENDED_ARG 6			# 1680
+	JUMP_ABSOLUTE 154 # L_183			# 1682
+L_183:
+	LOAD_CONST           74 (41)			# 1684
+	LOAD_CONST           95 (125)			# 1686
+	EXTENDED_ARG 6			# 1688
+	JUMP_ABSOLUTE 162 # L_182			# 1690
+L_182:
+	LOAD_CONST           99 (91)			# 1692
+	LOAD_CONST           30 (63)			# 1694
+	LOAD_CONST           97 (61)			# 1696
+	LOAD_CONST           100 (103)			# 1698
+	EXTENDED_ARG 6			# 1700
+	JUMP_ABSOLUTE 174 # L_181			# 1702
+L_181:
+	BUILD_LIST           30			# 1704
+	STORE_FAST           14 (res4_ee)			# 1706
+	LOAD_GLOBAL          8 (range)			# 1708
+	EXTENDED_ARG 6			# 1710
+	JUMP_ABSOLUTE 184 # L_185			# 1712
+L_185:
+	LOAD_GLOBAL          6 (len)			# 1714
+	LOAD_FAST            14 (res4_ee)			# 1716
+	EXTENDED_ARG 6			# 1718
+	JUMP_ABSOLUTE 192 # L_184			# 1720
+L_184:
+	CALL_FUNCTION        1			# 1722
+	CALL_FUNCTION        1			# 1724
+	GET_ITER			# 1726
+	EXTENDED_ARG 6			# 1728
+	JUMP_ABSOLUTE 202 # L1038			# 1730
+L1038:
+		FOR_ITER 4			# 1732
+	EXTENDED_ARG 6			# 1734
+	JUMP_ABSOLUTE 212 # L_18			# 1736
+	EXTENDED_ARG 7			# 1738
+	JUMP_ABSOLUTE 7 # L1074			# 1740
+L_18:
+	STORE_FAST           8 (i)			# 1742
+	LOAD_FAST            14 (res4_ee)			# 1744
+	LOAD_FAST            8 (i)			# 1746
+	EXTENDED_ARG 6			# 1748
+	JUMP_ABSOLUTE 222 # L_188			# 1750
+L_188:
+	BINARY_SUBSCR			# 1752
+	LOAD_FAST            4 (key)			# 1754
+	EXTENDED_ARG 6			# 1756
+	JUMP_ABSOLUTE 230 # L_187			# 1758
+L_187:
+	LOAD_FAST            8 (i)			# 1760
+	LOAD_GLOBAL          6 (len)			# 1762
+	LOAD_FAST            4 (key)			# 1764
+	EXTENDED_ARG 6			# 1766
+	JUMP_ABSOLUTE 240 # L_186			# 1768
+L_186:
+	CALL_FUNCTION        1			# 1770
+	BINARY_MODULO			# 1772
+	BINARY_SUBSCR			# 1774
+	BINARY_XOR			# 1776
+	EXTENDED_ARG 6			# 1778
+	JUMP_ABSOLUTE 252 # L_189			# 1780
+L_189:
+	LOAD_FAST            14 (res4_ee)			# 1782
+	LOAD_FAST            8 (i)			# 1784
+	STORE_SUBSCR			# 1786
+	EXTENDED_ARG 6			# 1788
+	JUMP_ABSOLUTE 202 # L1038			# 1790
+L_19:
+L1074:
+	LOAD_CONST           1 ('')			# 1792
+	STORE_FAST           15 (res2)			# 1794
+	LOAD_GLOBAL          9 (eval)			# 1796
+	LOAD_GLOBAL          10 (bytes)			# 1798
+	EXTENDED_ARG 7			# 1800
+	JUMP_ABSOLUTE 19 # L_191			# 1802
+L_191:
+	LOAD_FAST            5 (res2_e)			# 1804
+	CALL_FUNCTION        1			# 1806
+	EXTENDED_ARG 7			# 1808
+	JUMP_ABSOLUTE 27 # L_190			# 1810
+L_190:
+	LOAD_METHOD          11 (decode)			# 1812
+	CALL_METHOD          0			# 1814
+	CALL_FUNCTION        1			# 1816
+	EXTENDED_ARG 7			# 1818
+	JUMP_ABSOLUTE 37 # L_192			# 1820
+L_192:
+	EXTENDED_ARG 7			# 1822
+	POP_JUMP_IF_FALSE 73 # L1114			# 1824
+	EXTENDED_ARG 7			# 1826
+	JUMP_ABSOLUTE 45 # L_20			# 1828
+L_20:
+	LOAD_GLOBAL          9 (eval)			# 1830
+	LOAD_GLOBAL          10 (bytes)			# 1832
+	LOAD_FAST            7 (res2_ee)			# 1834
+	EXTENDED_ARG 7			# 1836
+	JUMP_ABSOLUTE 55 # L_194			# 1838
+L_194:
+	CALL_FUNCTION        1			# 1840
+	LOAD_METHOD          11 (decode)			# 1842
+	EXTENDED_ARG 7			# 1844
+	JUMP_ABSOLUTE 63 # L_193			# 1846
+L_193:
+	CALL_METHOD          0			# 1848
+	CALL_FUNCTION        1			# 1850
+	STORE_FAST           15 (res2)			# 1852
+	EXTENDED_ARG 7			# 1854
+	JUMP_ABSOLUTE 77 # L1118			# 1856
+L_21:
+L1114:
+	LOAD_CONST           0 (None)			# 1858
+	RETURN_VALUE			# 1860
+L1118:
+	LOAD_GLOBAL          9 (eval)			# 1862
+	LOAD_GLOBAL          10 (bytes)			# 1864
+	LOAD_FAST            9 (res3_e)			# 1866
+	EXTENDED_ARG 7			# 1868
+	JUMP_ABSOLUTE 87 # L_196			# 1870
+L_196:
+	CALL_FUNCTION        1			# 1872
+	LOAD_METHOD          11 (decode)			# 1874
+	EXTENDED_ARG 7			# 1876
+	JUMP_ABSOLUTE 95 # L_195			# 1878
+L_195:
+	CALL_METHOD          0			# 1880
+	CALL_FUNCTION        1			# 1882
+	EXTENDED_ARG 7			# 1884
+	POP_JUMP_IF_FALSE 135 # L1154			# 1886
+	EXTENDED_ARG 7			# 1888
+	JUMP_ABSOLUTE 107 # L_22			# 1890
+L_22:
+	LOAD_GLOBAL          9 (eval)			# 1892
+	LOAD_GLOBAL          10 (bytes)			# 1894
+	LOAD_FAST            11 (res3_ee)			# 1896
+	EXTENDED_ARG 7			# 1898
+	JUMP_ABSOLUTE 117 # L_198			# 1900
+L_198:
+	CALL_FUNCTION        1			# 1902
+	LOAD_METHOD          11 (decode)			# 1904
+	EXTENDED_ARG 7			# 1906
+	JUMP_ABSOLUTE 125 # L_197			# 1908
+L_197:
+	CALL_METHOD          0			# 1910
+	CALL_FUNCTION        1			# 1912
+	STORE_FAST           16 (res3)			# 1914
+	EXTENDED_ARG 7			# 1916
+	JUMP_ABSOLUTE 139 # L1158			# 1918
+L_23:
+L1154:
+	LOAD_CONST           0 (None)			# 1920
+	RETURN_VALUE			# 1922
+L1158:
+	LOAD_GLOBAL          9 (eval)			# 1924
+	LOAD_GLOBAL          10 (bytes)			# 1926
+	LOAD_FAST            13 (res4_e)			# 1928
+	EXTENDED_ARG 7			# 1930
+	JUMP_ABSOLUTE 149 # L_200			# 1932
+L_200:
+	CALL_FUNCTION        1			# 1934
+	LOAD_METHOD          11 (decode)			# 1936
+	EXTENDED_ARG 7			# 1938
+	JUMP_ABSOLUTE 157 # L_199			# 1940
+L_199:
+	CALL_METHOD          0			# 1942
+	CALL_FUNCTION        1			# 1944
+	EXTENDED_ARG 7			# 1946
+	POP_JUMP_IF_FALSE 197 # L1194			# 1948
+	EXTENDED_ARG 7			# 1950
+	JUMP_ABSOLUTE 169 # L_24			# 1952
+L_24:
+	LOAD_GLOBAL          9 (eval)			# 1954
+	LOAD_GLOBAL          10 (bytes)			# 1956
+	LOAD_FAST            14 (res4_ee)			# 1958
+	EXTENDED_ARG 7			# 1960
+	JUMP_ABSOLUTE 179 # L_202			# 1962
+L_202:
+	CALL_FUNCTION        1			# 1964
+	LOAD_METHOD          11 (decode)			# 1966
+	EXTENDED_ARG 7			# 1968
+	JUMP_ABSOLUTE 187 # L_201			# 1970
+L_201:
+	CALL_METHOD          0			# 1972
+	CALL_FUNCTION        1			# 1974
+	STORE_FAST           16 (res3)			# 1976
+	EXTENDED_ARG 7			# 1978
+	JUMP_ABSOLUTE 201 # L1198			# 1980
+L_25:
+L1194:
+	LOAD_CONST           0 (None)			# 1982
+	RETURN_VALUE			# 1984
+L1198:
+	LOAD_FAST            15 (res2)			# 1986
+	LOAD_FAST            16 (res3)			# 1988
+	BINARY_ADD			# 1990
+	EXTENDED_ARG 7			# 1992
+	JUMP_ABSOLUTE 211 # L_204			# 1994
+L_204:
+	STORE_FAST           17 (myCOMP1)			# 1996
+	LOAD_CONST           1 ('')			# 1998
+	EXTENDED_ARG 7			# 2000
+	JUMP_ABSOLUTE 219 # L_203			# 2002
+L_203:
+	STORE_FAST           0 (tmp1)			# 2004
+	LOAD_CONST           101 ((126, 93, 89, 110, 1, 94, 81, 15, 121, 80, 75, 1, 113, 95, 80, 14))			# 2006
+	GET_ITER			# 2008
+	EXTENDED_ARG 7			# 2010
+	JUMP_ABSOLUTE 229 # L1214			# 2012
+L1214:
+		FOR_ITER 4			# 2014
+	EXTENDED_ARG 7			# 2016
+	JUMP_ABSOLUTE 239 # L_26			# 2018
+	EXTENDED_ARG 8			# 2020
+	JUMP_ABSOLUTE 14 # L1238			# 2022
+L_26:
+	STORE_FAST           1 (c)			# 2024
+	LOAD_FAST            0 (tmp1)			# 2026
+	LOAD_GLOBAL          0 (chr)			# 2028
+	EXTENDED_ARG 7			# 2030
+	JUMP_ABSOLUTE 249 # L_206			# 2032
+L_206:
+	LOAD_FAST            1 (c)			# 2034
+	LOAD_CONST           3 (137)			# 2036
+	EXTENDED_ARG 7			# 2038
+	JUMP_ABSOLUTE 2 # L_205			# 2040
+L_205:
+	BINARY_XOR			# 2042
+	CALL_FUNCTION        1			# 2044
+	INPLACE_ADD			# 2046
+	STORE_FAST           0 (tmp1)			# 2048
+	EXTENDED_ARG 7			# 2050
+	JUMP_ABSOLUTE 229 # L1214			# 2052
+L_27:
+L1238:
+	LOAD_FAST            0 (tmp1)			# 2054
+	STORE_FAST           18 (secret)			# 2056
+	LOAD_FAST            17 (myCOMP1)			# 2058
+	LOAD_CONST           0 (None)			# 2060
+	EXTENDED_ARG 8			# 2062
+	JUMP_ABSOLUTE 26 # L_208			# 2064
+L_208:
+	LOAD_CONST           0 (None)			# 2066
+	BUILD_SLICE          2			# 2068
+	BINARY_SUBSCR			# 2070
+	EXTENDED_ARG 8			# 2072
+	JUMP_ABSOLUTE 36 # L_207			# 2074
+L_207:
+	LOAD_METHOD          12 (encode)			# 2076
+	CALL_METHOD          0			# 2078
+	STORE_FAST           19 (mybuff)			# 2080
+	EXTENDED_ARG 8			# 2082
+	JUMP_ABSOLUTE 46 # L_209			# 2084
+L_209:
+	LOAD_CONST           41 (0)			# 2086
+	STORE_FAST           20 (myhash)			# 2088
+	EXTENDED_ARG 8			# 2090
+	JUMP_ABSOLUTE 54 # L1262			# 2092
+L1262:
+	LOAD_GLOBAL          6 (len)			# 2094
+	LOAD_FAST            19 (mybuff)			# 2096
+	CALL_FUNCTION        1			# 2098
+	LOAD_CONST           41 (0)			# 2100
+	EXTENDED_ARG 8			# 2102
+	JUMP_ABSOLUTE 66 # L_210			# 2104
+L_210:
+	COMPARE_OP           4 (>)			# 2106
+	EXTENDED_ARG 9			# 2108
+	POP_JUMP_IF_FALSE 107 # L1452			# 2110
+	EXTENDED_ARG 8			# 2112
+	JUMP_ABSOLUTE 76 # L_28			# 2114
+L_28:
+	LOAD_FAST            19 (mybuff)			# 2116
+	LOAD_CONST           41 (0)			# 2118
+	BINARY_SUBSCR			# 2120
+	EXTENDED_ARG 8			# 2122
+	JUMP_ABSOLUTE 86 # L_213			# 2124
+L_213:
+	STORE_FAST           21 (cur_byte)			# 2126
+	LOAD_FAST            19 (mybuff)			# 2128
+	EXTENDED_ARG 8			# 2130
+	JUMP_ABSOLUTE 94 # L_212			# 2132
+L_212:
+	LOAD_CONST           6 (1)			# 2134
+	LOAD_CONST           0 (None)			# 2136
+	BUILD_SLICE          2			# 2138
+	EXTENDED_ARG 8			# 2140
+	JUMP_ABSOLUTE 104 # L_211			# 2142
+L_211:
+	BINARY_SUBSCR			# 2144
+	STORE_FAST           19 (mybuff)			# 2146
+	LOAD_GLOBAL          8 (range)			# 2148
+	LOAD_CONST           102 (4)			# 2150
+	EXTENDED_ARG 8			# 2152
+	JUMP_ABSOLUTE 116 # L_214			# 2154
+L_214:
+	CALL_FUNCTION        1			# 2156
+	GET_ITER			# 2158
+	EXTENDED_ARG 8			# 2160
+	JUMP_ABSOLUTE 124 # L1304			# 2162
+L1304:
+		FOR_ITER 4			# 2164
+	EXTENDED_ARG 8			# 2166
+	JUMP_ABSOLUTE 134 # L_29			# 2168
+	EXTENDED_ARG 9			# 2170
+	JUMP_ABSOLUTE 103 # L1448			# 2172
+L_29:
+	STORE_FAST           8 (i)			# 2174
+	LOAD_FAST            21 (cur_byte)			# 2176
+	LOAD_CONST           75 (3)			# 2178
+	EXTENDED_ARG 8			# 2180
+	JUMP_ABSOLUTE 144 # L_217			# 2182
+L_217:
+	BINARY_AND			# 2184
+	STORE_FAST           22 (lowbits)			# 2186
+	EXTENDED_ARG 8			# 2188
+	JUMP_ABSOLUTE 152 # L_216			# 2190
+L_216:
+	LOAD_FAST            21 (cur_byte)			# 2192
+	LOAD_CONST           5 (2)			# 2194
+	BINARY_FLOOR_DIVIDE			# 2196
+	STORE_FAST           21 (cur_byte)			# 2198
+	EXTENDED_ARG 8			# 2200
+	JUMP_ABSOLUTE 164 # L_215			# 2202
+L_215:
+	LOAD_FAST            22 (lowbits)			# 2204
+	LOAD_CONST           6 (1)			# 2206
+	BINARY_AND			# 2208
+	LOAD_CONST           41 (0)			# 2210
+	EXTENDED_ARG 8			# 2212
+	JUMP_ABSOLUTE 176 # L_218			# 2214
+L_218:
+	COMPARE_OP           2 (==)			# 2216
+	EXTENDED_ARG 9			# 2218
+	POP_JUMP_IF_FALSE 17 # L1392			# 2220
+	EXTENDED_ARG 8			# 2222
+	JUMP_ABSOLUTE 186 # L_30			# 2224
+L_30:
+	LOAD_FAST            22 (lowbits)			# 2226
+	LOAD_CONST           5 (2)			# 2228
+	BINARY_AND			# 2230
+	LOAD_CONST           41 (0)			# 2232
+	EXTENDED_ARG 8			# 2234
+	JUMP_ABSOLUTE 198 # L_219			# 2236
+L_219:
+	COMPARE_OP           2 (==)			# 2238
+	EXTENDED_ARG 8			# 2240
+	POP_JUMP_IF_FALSE 1 # L1382			# 2242
+	EXTENDED_ARG 8			# 2244
+	JUMP_ABSOLUTE 208 # L_31			# 2246
+L_31:
+	LOAD_FAST            20 (myhash)			# 2248
+	LOAD_CONST           103 (2886960546)			# 2250
+	BINARY_XOR			# 2252
+	EXTENDED_ARG 8			# 2254
+	JUMP_ABSOLUTE 218 # L_222			# 2256
+L_222:
+	STORE_FAST           20 (myhash)			# 2258
+	LOAD_FAST            20 (myhash)			# 2260
+	EXTENDED_ARG 8			# 2262
+	JUMP_ABSOLUTE 226 # L_221			# 2264
+L_221:
+	LOAD_CONST           6 (1)			# 2266
+	BINARY_RSHIFT			# 2268
+	LOAD_FAST            20 (myhash)			# 2270
+	EXTENDED_ARG 8			# 2272
+	JUMP_ABSOLUTE 236 # L_220			# 2274
+L_220:
+	LOAD_CONST           104 (31)			# 2276
+	BINARY_LSHIFT			# 2278
+	BINARY_OR			# 2280
+	LOAD_CONST           105 (4294967295)			# 2282
+	EXTENDED_ARG 8			# 2284
+	JUMP_ABSOLUTE 248 # L_223			# 2286
+L_223:
+	BINARY_AND			# 2288
+	STORE_FAST           20 (myhash)			# 2290
+	EXTENDED_ARG 9			# 2292
+	JUMP_ABSOLUTE 13 # L1390			# 2294
+L_32:
+L1382:
+	LOAD_FAST            20 (myhash)			# 2296
+	LOAD_CONST           106 (363383258)			# 2298
+	BINARY_XOR			# 2300
+	STORE_FAST           20 (myhash)			# 2302
+	EXTENDED_ARG 9			# 2304
+	JUMP_ABSOLUTE 13 # L1390			# 2306
+L1390:
+	EXTENDED_ARG 9			# 2308
+	JUMP_ABSOLUTE 99 # L1444			# 2310
+L1392:
+	LOAD_FAST            22 (lowbits)			# 2312
+	LOAD_CONST           5 (2)			# 2314
+	BINARY_AND			# 2316
+	LOAD_CONST           41 (0)			# 2318
+	EXTENDED_ARG 9			# 2320
+	JUMP_ABSOLUTE 29 # L_224			# 2322
+L_224:
+	COMPARE_OP           2 (==)			# 2324
+	EXTENDED_ARG 9			# 2326
+	POP_JUMP_IF_FALSE 87 # L1436			# 2328
+	EXTENDED_ARG 9			# 2330
+	JUMP_ABSOLUTE 39 # L_33			# 2332
+L_33:
+	LOAD_FAST            20 (myhash)			# 2334
+	LOAD_CONST           107 (2175242801)			# 2336
+	BINARY_XOR			# 2338
+	EXTENDED_ARG 9			# 2340
+	JUMP_ABSOLUTE 49 # L_227			# 2342
+L_227:
+	STORE_FAST           20 (myhash)			# 2344
+	LOAD_FAST            20 (myhash)			# 2346
+	EXTENDED_ARG 9			# 2348
+	JUMP_ABSOLUTE 57 # L_226			# 2350
+L_226:
+	LOAD_CONST           6 (1)			# 2352
+	BINARY_RSHIFT			# 2354
+	LOAD_FAST            20 (myhash)			# 2356
+	EXTENDED_ARG 9			# 2358
+	JUMP_ABSOLUTE 67 # L_225			# 2360
+L_225:
+	LOAD_CONST           104 (31)			# 2362
+	BINARY_LSHIFT			# 2364
+	BINARY_OR			# 2366
+	LOAD_CONST           105 (4294967295)			# 2368
+	EXTENDED_ARG 9			# 2370
+	JUMP_ABSOLUTE 79 # L_228			# 2372
+L_228:
+	BINARY_AND			# 2374
+	STORE_FAST           20 (myhash)			# 2376
+	EXTENDED_ARG 9			# 2378
+	JUMP_ABSOLUTE 99 # L1444			# 2380
+L_34:
+L1436:
+	LOAD_FAST            20 (myhash)			# 2382
+	LOAD_CONST           108 (2736497484)			# 2384
+	BINARY_XOR			# 2386
+	STORE_FAST           20 (myhash)			# 2388
+	EXTENDED_ARG 9			# 2390
+	JUMP_ABSOLUTE 99 # L1444			# 2392
+L1444:
+	EXTENDED_ARG 8			# 2394
+	JUMP_ABSOLUTE 124 # L1304			# 2396
+L_35:
+L1448:
+	EXTENDED_ARG 8			# 2398
+	JUMP_ABSOLUTE 54 # L1262			# 2400
+L_36:
+L1452:
+	LOAD_CONST           109 ('%08X')			# 2402
+	LOAD_FAST            20 (myhash)			# 2404
+	BINARY_MODULO			# 2406
+	EXTENDED_ARG 9			# 2408
+	JUMP_ABSOLUTE 117 # L_231			# 2410
+L_231:
+	STORE_FAST           23 (TOK1)			# 2412
+	LOAD_FAST            18 (secret)			# 2414
+	EXTENDED_ARG 9			# 2416
+	JUMP_ABSOLUTE 125 # L_230			# 2418
+L_230:
+	LOAD_FAST            23 (TOK1)			# 2420
+	BINARY_ADD			# 2422
+	STORE_FAST           24 (tmp)			# 2424
+	LOAD_FAST            24 (tmp)			# 2426
+	EXTENDED_ARG 9			# 2428
+	JUMP_ABSOLUTE 137 # L_229			# 2430
+L_229:
+	LOAD_METHOD          12 (encode)			# 2432
+	CALL_METHOD          0			# 2434
+	STORE_FAST           19 (mybuff)			# 2436
+	LOAD_CONST           110 (2879525698)			# 2438
+	EXTENDED_ARG 9			# 2440
+	JUMP_ABSOLUTE 149 # L_232			# 2442
+L_232:
+	STORE_FAST           20 (myhash)			# 2444
+	LOAD_FAST            19 (mybuff)			# 2446
+	GET_ITER			# 2448
+	EXTENDED_ARG 9			# 2450
+	JUMP_ABSOLUTE 159 # L1484			# 2452
+L1484:
+		FOR_ITER 4			# 2454
+	EXTENDED_ARG 9			# 2456
+	JUMP_ABSOLUTE 169 # L_37			# 2458
+	EXTENDED_ARG 9			# 2460
+	JUMP_ABSOLUTE 219 # L1520			# 2462
+L_37:
+	STORE_FAST           25 (byte)			# 2464
+	LOAD_FAST            20 (myhash)			# 2466
+	LOAD_FAST            25 (byte)			# 2468
+	EXTENDED_ARG 9			# 2470
+	JUMP_ABSOLUTE 179 # L_235			# 2472
+L_235:
+	INPLACE_XOR			# 2474
+	STORE_FAST           20 (myhash)			# 2476
+	EXTENDED_ARG 9			# 2478
+	JUMP_ABSOLUTE 187 # L_234			# 2480
+L_234:
+	LOAD_FAST            20 (myhash)			# 2482
+	LOAD_CONST           6 (1)			# 2484
+	BINARY_RSHIFT			# 2486
+	EXTENDED_ARG 9			# 2488
+	JUMP_ABSOLUTE 197 # L_233			# 2490
+L_233:
+	LOAD_FAST            20 (myhash)			# 2492
+	LOAD_CONST           104 (31)			# 2494
+	BINARY_LSHIFT			# 2496
+	BINARY_OR			# 2498
+	EXTENDED_ARG 9			# 2500
+	JUMP_ABSOLUTE 209 # L_236			# 2502
+L_236:
+	LOAD_CONST           105 (4294967295)			# 2504
+	BINARY_AND			# 2506
+	STORE_FAST           20 (myhash)			# 2508
+	EXTENDED_ARG 9			# 2510
+	JUMP_ABSOLUTE 159 # L1484			# 2512
+L_38:
+L1520:
+	LOAD_CONST           109 ('%08X')			# 2514
+	LOAD_FAST            20 (myhash)			# 2516
+	BINARY_MODULO			# 2518
+	EXTENDED_ARG 9			# 2520
+	JUMP_ABSOLUTE 229 # L_238			# 2522
+L_238:
+	STORE_FAST           26 (sign)			# 2524
+	LOAD_FAST            23 (TOK1)			# 2526
+	EXTENDED_ARG 9			# 2528
+	JUMP_ABSOLUTE 237 # L_237			# 2530
+L_237:
+	LOAD_FAST            26 (sign)			# 2532
+	BINARY_ADD			# 2534
+	STORE_FAST           23 (TOK1)			# 2536
+	LOAD_FAST            23 (TOK1)			# 2538
+	RETURN_VALUE			# 2540
+# Method Name:       <module>
+# Filename:          1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  0
+# Stack size:        2
+# Flags:             0x00000040 (NOFREE)
+# First Line:        1
+# Constants:
+#    0: <Code38 code object GetTOK at 0x7f804709b0a0, file 1.py>, line 1
+#    1: 'GetTOK'
+#    2: None
+# Names:
+#    0: GetTOK
+NOP
+JUMP_ABSOLUTE 4 # L_39
+L_39:
+	LOAD_CONST           0 (<Code38 code object GetTOK at 0x7f804709b0a0, file 1.py>, line 1)			# 4
+	LOAD_CONST           1 ('GetTOK')			# 6
+	MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)			# 8
+	STORE_NAME           0 (GetTOK)			# 10
+	LOAD_CONST           2 (None)			# 12
+	RETURN_VALUE			# 14
