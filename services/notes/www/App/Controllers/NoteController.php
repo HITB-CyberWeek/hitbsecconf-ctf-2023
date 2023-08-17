@@ -21,6 +21,7 @@ class NoteController extends BaseController
 
             $this->context['user']->ownNotesList[] = $note;
             \R::store($this->context['user']);
+            header('Location: /notes');
         }
         $this->get();
     }
