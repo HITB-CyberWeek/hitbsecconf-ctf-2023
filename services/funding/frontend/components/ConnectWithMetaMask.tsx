@@ -234,7 +234,7 @@ export default function ConnectWithMetaMask() {
         <div className="mt-10">
             <p>
                   <b>
-                        Welcome to <a href="https://en.wikipedia.org/wiki/Web3">Web3</a> decentralized crowdfunding platform!
+                        Welcome to the <a href="https://en.wikipedia.org/wiki/Web3">Web3</a> decentralized crowdfunding platform!
                   </b>
             </p>
             <p>
@@ -306,7 +306,7 @@ export default function ConnectWithMetaMask() {
                         7. Congratulations! Now you can connect your freshly created wallet to our website. 
                   </li>
                   <li>
-                        8. If you need some money for your accout, visit <a href="https://eth.cth.hitb.org">eth.cth.hitb.org</a>.
+                        8. If you need some money for your accout, visit <a href="https://eth.ctf.hitb.org">eth.ctf.hitb.org</a>.
                   </li>
             </ol>
         </div>
