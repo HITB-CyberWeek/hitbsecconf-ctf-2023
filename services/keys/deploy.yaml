@@ -27,7 +27,7 @@ proxies:
       protocol: http
       certificate: wildcard.ctf.hitb.org
     upstream:
-      host_index: 6
+      host_index: 10
       port: 3000
     limits:
       - source: team
