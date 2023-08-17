@@ -29,7 +29,7 @@ proxies:
     limits:
       - source: team
         location: /
-        limit: 300r/m
-        burst: 100
+        limit: 100r/m
+        burst: 50
     dns_records:
       - funding
