@@ -17,9 +17,9 @@ CLOUDS = {
         "vulnimages": vulnimages,
         "vulnimage_ssh_keys": [27173548, 30939122],
         "sizes": {
-            "default": "s-1vcpu-512mb",
+            "default": "s-1vcpu-1gb",
             "router": "s-1vcpu-1gb",
-            "empty": "s-1vcpu-512mb",
+            "empty": "s-1vcpu-1gb",
         }
     },
     "bay": {
