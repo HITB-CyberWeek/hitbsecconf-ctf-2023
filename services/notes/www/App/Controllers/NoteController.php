@@ -7,7 +7,7 @@ class NoteController extends BaseController
     public function post()
     {
         $validation = $this->validator->make($_POST, [
-            'title' => 'required|min:5|max:50',
+            'title' => 'required|min:5',
             'description' => 'required|min:10'
         ]);
         $validation->validate();
@@ -18,18 +18,16 @@ class NoteController extends BaseController
             $note = \R::dispense('notes');
             $note->title = $_POST["title"];
             $note->description = $_POST["description"];
-            $user = getUser();
-            $user->ownNotesList[] = $note;
-            \R::store($user);
+
+            $this->context['user']->ownNotesList[] = $note;
+            \R::store($this->context['user']);
         }
         $this->get();
     }
 
     public function get()
     {
-        #TODO
-        $user = getUser();
-        foreach ($user->ownNotesList as $note) {
+        foreach ($this->context['user']->ownNotesList as $note) {
             $this->context['notes'][] = $note;
         }
 

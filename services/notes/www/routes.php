@@ -9,14 +9,6 @@ use App\Controllers\BaseController;
 
 $router = new \Bramus\Router\Router();
 
-if (isset($_COOKIE['jwt'])) {
-    $user = getUser();
-    if (is_null($user)) {
-        destroyUser();
-        header('Location: /');
-    }
-}
-
 $router->all('', function () {
     $indexController = new IndexController('index.twig');
     $indexController->view();
@@ -57,18 +49,11 @@ $router->mount('/language', function () use ($router) {
         $noteController = new LanguageController('language/add.twig', 'auth');
         $noteController->view();
     });
-//    $router->match('GET|POST', '/add/', function () {
-//        $noteController = new NoteController('notes/add.twig', 'auth');
-//        $noteController->view();
-//    });
 });
 
-$router->all(
-    'exit',
-    function () {
-        destroyUser();
-        header('Location: /');
-    }
-);
+$router->all('exit', function () {
+    destroyUser();
+    header('Location: /');
+});
 
 $router->run();

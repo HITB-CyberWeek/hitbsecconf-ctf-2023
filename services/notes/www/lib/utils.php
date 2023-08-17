@@ -7,7 +7,8 @@ function getUser()
 {
     if (isset($_COOKIE['jwt'])) {
         $decoded = JWT::decode($_COOKIE['jwt'], new Key($_ENV["SECRET"], 'HS256'));
-        return \R::load('users', $decoded->user_id);
+        $user = \R::findOne('users', ' id = ?', [$decoded->user_id]);
+        return $user;
     }
     return null;
 }

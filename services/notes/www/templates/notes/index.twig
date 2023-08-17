@@ -12,6 +12,8 @@
                     {{ note.description }}
                 </p>
             </div>
+        {% else %}
+            {{ language.NOTES_NOT_FOUND }}
         {% endfor %}
     </div>
 {% endblock %}

