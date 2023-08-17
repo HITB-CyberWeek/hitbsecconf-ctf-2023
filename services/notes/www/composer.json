@@ -8,6 +8,7 @@
     "twig/twig": "^3.0",
     "bramus/router": "~1.6",
     "rakit/validation": "^1.4",
-    "firebase/php-jwt": "^6.8.1"
+    "firebase/php-jwt": "^6.8.1",
+    "ausi/slug-generator": "^1.1"
   }
 }

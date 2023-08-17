@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Controllers;
-//use Ausi\SlugGenerator\SlugGenerator;
+
+use Ausi\SlugGenerator\SlugGenerator;
 
 
 class LanguageController extends BaseController
@@ -9,9 +11,22 @@ class LanguageController extends BaseController
     public function __construct($template, $authRule = "all")
     {
         parent::__construct($template, $authRule);
-            $en_ini = parse_ini_file('en.ini');
-            $this->context['keys'] = array_keys($en_ini);
+        $en_ini = parse_ini_file('en.ini');
+        $this->context['keys'] = array_keys($en_ini);
     }
+
+
+    private function getSlug($title)
+    {
+        $generator = new SlugGenerator;
+        $slug = $generator->generate($title);
+        $count_notes = \R::count('languages', ' slug LIKE ? ', ['%'. $slug . '%']);
+        if ($count_notes >= 1) {
+            $slug .= "-$count_notes";
+        }
+        return $slug;
+    }
+
 
     public function post()
     {
@@ -29,21 +44,24 @@ class LanguageController extends BaseController
         if ($validation->fails()) {
             $this->context['errors'] = $validation->errors()->firstOfAll();
         } else {
-            $generator = new SlugGenerator;
             $user = getUser();
             $language = \R::dispense('languages');
             $language->title = $_POST['title'];
-//            $language->slug = $generator->generate($_POST['title']);
+            $language->slug = $this->getSlug($_POST["title"]);
             $user->ownLanguagesList[] = $language;
             \R::store($user);
             $data = "";
             foreach ($this->context['keys'] as $key) {
                 $data .= $key . " = " . $_POST[$key] . "\n";
             }
-            $data = str_replace(["{", "}"], "_",$data);
-            file_put_contents("lang_" . $language->getID() . ".ini", $data);
+            $data = str_replace(["{", "}"], "_", $data);
+            file_put_contents($language->slug . ".ini", $data);
+            $this->context['shared_link'] = "http://" . $_SERVER['HTTP_HOST'] . "/language/set/?language=" . $language->slug . "&location=/";
+            echo $this->twig->render("language/success.html", $this->context);
+            exit();
         }
         $this->get();
+
     }
 
 

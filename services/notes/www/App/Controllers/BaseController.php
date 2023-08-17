@@ -34,9 +34,10 @@ class BaseController
 
     private function getLanguage()
     {
-        $language = $_COOKIE['language'] ?? 'en';
+        $language = (isset($_COOKIE['language']) && !str_contains('data:', $_COOKIE['language'])) ? $_COOKIE['language']: 'en';
         $this->context['language_code'] =  $language;
         $this->context['language'] = parse_ini_file("$language.ini");
+//        var_dump($this->context['language']);
     }
 
     public function setLanguage()
@@ -51,14 +52,14 @@ class BaseController
     private function checkAuthRule()
     {
         $user = getUser();
-        if ($this->authRule === "not_auth" && isset($user)) {
+        if ($this->authRule === "not_auth" && !is_null($user)) {
             header('Location: /');
             exit();
-        } elseif ($this->authRule === "auth" && !isset($user)) {
+        } elseif ($this->authRule === "auth" && is_null($user)) {
             header('Location: /signin');
             exit();
         }
-        if(isset($user)) {
+        if(!is_null($user)) {
             $this->context['user'] = $user;
             $this->context['languages'] = $user->ownLanguagesList;
         }
@@ -76,7 +77,6 @@ class BaseController
 
     public function get()
     {
-//        var_dump($this->context);
         echo $this->twig->render($this->template, $this->context);
     }
 

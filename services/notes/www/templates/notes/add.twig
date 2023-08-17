@@ -4,14 +4,14 @@
     <h1>{{ language.NOTES_ADD }}</h1>
     <form method="post">
         <div class="mb-3">
-            <label for="title" class="form-label">{{ language.EMAIL }}</label>
+            <label for="title" class="form-label">{{ language.TITLE }}</label>
             <input type="text" class="form-control" id="title" name="title">
             {% if errors.title %}
                 <p>{{ errors.title }}</p>
             {% endif %}
         </div>
         <div class="mb-3">
-            <label for="description" class="form-label">{{ language.PASSWORD }}</label>
+            <label for="description" class="form-label">{{ language.NOTE }}</label>
             <textarea type="text" class="form-control" id="description" name="description">
             </textarea>
             {% if errors.description %}
