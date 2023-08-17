@@ -1,11 +1,12 @@
 from flask import *
-import datetime,os,random,string
+import datetime,os,random,string,time
 import dataset
 from threading import Lock
 from functools import wraps
 import re
 from token_generator import *
 
+OLD_MINUTES = 30
 app = Flask(__name__)
 if os.path.isfile("secret_string.txt"):
     app.secret_key = open("secret_string.txt").read()
@@ -36,6 +37,9 @@ def Init():
         db.query("CREATE TABLE licences (id INTEGER NOT NULL PRIMARY KEY,user_id INTEGER, token TEXT NOT NULL, licence TEXT NOT NULL, create_date TEXT)")
         db.executable.close()
         DB_lock.release()
+
+
+
 @db_access
 def FindUsers(db,pattern):
     res = db.query("SELECT * FROM users where login like '%"+pattern+"%'")
@@ -52,6 +56,11 @@ def GetUser(db,login):
 @db_access
 def CreateUser(db,login,password):
     db['users'].insert(dict(login=login,password=password,reg_date=str(datetime.datetime.now())))
+
+    global OLD_MINUTES
+    early_date = datetime.datetime.now() - datetime.timedelta(minutes=OLD_MINUTES)
+    db.query("DELETE  FROM licences where create_date < '"+str(early_date)+"'")
+    db.query("DELETE  FROM users where reg_date < '"+str(early_date)+"'")
 
 @db_access
 def AddLicence(db,user,token,licence):
@@ -189,4 +198,4 @@ def login():
 def logout():
     del session['user']
     return redirect("/")
-app.run(host="0.0.0.0",debug=False,threaded=True,port=5555)
+app.run(host="0.0.0.0",debug=True,threaded=True,port=5555)
