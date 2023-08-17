@@ -11,12 +11,12 @@ shutdowns it and creates a snapshot for further copying.
 
 ## Tool 2: Proxy deployer 
 
-This tool deploys HTTP-proxy to team's router
-with respect of service's deployment config (aka `deploy.yaml`).
+This tool deploys HTTP- or TCP-proxy to the team's router
+with respect of the service's deployment config (aka `deploy.yaml`).
 
 ### How it works
 
-Basically, this script copies some nginx configs and run some commands
+Basically, this script copies some nginx and iptables configs and run some commands
 on teams routers. You can see an example of configs in `nginx/`.
 
 ## Example of deploy.yaml
@@ -35,7 +35,7 @@ service: test
 # Available as $USERNAME in some places below.
 username: test
 
-# Scripts/commands for running on different build stages.
+# Scripts/commands for running at different build stages.
 # If your build instructions are complicated, extract them into a separate file, and
 # run it as a script here, i.e.:
 #
@@ -47,7 +47,7 @@ username: test
 # building environment.
 #
 # All paths here are relative to the folder contained deploy.yaml, so you can write 
-# ./build.sh it build.sh is in the same folder as deploy.yaml.
+# ./build.sh if build.sh is in the same folder as deploy.yaml.
 scripts:
   # First command: build_outside_vm
   # This command will be run outside the target VM. Here you can compile you code, 
@@ -64,7 +64,9 @@ scripts:
   start_once: docker compose -f /home/$USERNAME/docker-compose.yaml up -d
 
 # Here you have to specify files which we need to deliver to the VM.
-# You can upload a single file or a complete directory. 
+# You can upload a single file or a complete directory.
+# These files will be uploaded strictly AFTER running "build_outside_vm" command, 
+# but BEFORE running "build_inside_vm" command.
 files:
   # Will copy all files from ./deploy/ folder to /home/$SERVICE/.
   - source: ./deploy/
@@ -160,7 +162,7 @@ proxies:
 4. Get the API Token for Digital Ocean: https://cloud.digitalocean.com/settings/applications
 5. Run `DO_API_TOKEN=<...> python3 build_image.py ../services/<service-name>/deploy.yaml`
 
-You can also put you `DO_API_TOKEN` into `.env` file in following format:
+You can also put you `DO_API_TOKEN` into `.env` file in the following format:
 ```dotenv
 DO_API_TOKEN=<...>
 ```
@@ -185,8 +187,9 @@ DO_API_TOKEN=<...>
 ```
 6. Run `python3 deploy_proxies.py [--skip-preparation] ../services/<service-name>/deploy.yaml`
 
-You can also deploy proxies on current machine, not remote one. In this case:
-1. Ignore option `PROXY_SSH_KEY` in `settings.py`, because we will not use SSH for connection to the proxy machine
+You can also deploy proxies on the current machine, not remote one. In this case:
+
+1. Ignore option `PROXY_SSH_KEY` in `settings.py`, because we will not use SSH for connecting to the proxy machine
 2. Run `python3 deploy_proxies.py [--skip-preparation] --local --team-id <TEAM_ID> ../services/<service-name>/deploy.yaml`
 
-_See routes/deploy_local_proxies.sh as an example how we deploy all proxies to the local machine._
+_See router/deploy_local_proxies.sh as an example how we deploy all proxies to the local machine._
