@@ -6,7 +6,7 @@
 for num in {0..300}; do
     ip="10.$((80 + num / 256)).$((num % 256)).1"
 
-    if iptables -t nat -C POSTROUTING -o team${num} -j SNAT --to-source ${ip} &>/dev/null; then
+    if iptables -t nat -C POSTROUTING -d 10.60.0.0/22 -o team${num} -j SNAT --to-source ${ip} &>/dev/null; then
         echo "SNAT rules already exists, delete them first"
         exit 1
     fi
@@ -16,7 +16,7 @@ done
 for num in {0..300}; do
     ip="10.$((80 + num / 256)).$((num % 256)).1"
 
-    iptables -t nat -A POSTROUTING -o team${num} -j SNAT --to-source ${ip}
+    iptables -t nat -A POSTROUTING -d 10.60.0.0/22 -o team${num} -j SNAT --to-source ${ip}
 done
 
 sysctl net.nf_conntrack_max=30000000
