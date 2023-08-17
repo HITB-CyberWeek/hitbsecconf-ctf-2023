@@ -1,0 +1,799 @@
+# pydisasm version 6.0.5
+# Python bytecode 3.8.0 (3413)
+# Disassembled from Python 3.8.17 (default, Jul  4 2023, 06:27:59) 
+# [GCC 12.2.0]
+# Timestamp in code: 1692273060 (2023-08-17 11:51:00)
+# Source code size mod 2**32: 0 bytes
+
+# Method Name:       <module>
+# Filename:          test_jmp.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  0
+# Stack size:        2
+# Flags:             0x00000040 (NOFREE)
+# First Line:        3
+# Constants:
+#    0: 1
+#    1: None
+# Names:
+#    0: a
+#    1: b
+#    2: print
+  3:
+            LOAD_CONST           0 (1)
+            STORE_NAME           0 (a)
+
+  4:
+            LOAD_CONST           0 (1)
+            LOAD_NAME            0 (a)
+            BINARY_ADD
+            STORE_NAME           1 (b)
+
+  5:
+            LOAD_NAME            0 (a)
+            LOAD_CONST           0 (1)
+            COMPARE_OP           2 (==)
+            EXTENDED_ARG         3 (768)
+            POP_JUMP_IF_FALSE    L1020 (to 1020)
+
+  6:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+  7:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+  8:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+  9:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 10:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 11:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 12:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 13:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 14:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 15:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 16:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 17:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 18:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 19:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 20:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 21:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 22:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 23:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 24:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 25:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 26:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 27:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 28:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 29:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 30:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 31:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 32:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 33:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 34:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 35:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 36:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 37:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 38:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 39:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 40:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 41:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 42:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 43:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 44:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 45:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 46:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 47:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 48:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 49:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 50:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 51:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 52:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 53:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 54:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 55:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 56:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 57:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 58:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 59:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 60:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 61:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 62:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 63:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 64:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 65:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 66:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 67:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 68:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 69:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 70:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 71:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 72:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 73:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 74:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 75:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 76:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 77:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 78:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 79:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 80:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 81:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 82:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 83:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 84:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 85:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 86:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 87:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 88:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 89:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 90:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 91:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 92:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 93:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 94:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 95:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 96:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 97:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 98:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+ 99:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+100:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+101:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+102:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+103:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+104:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+105:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+106:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+107:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+108:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+109:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+110:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+111:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+112:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+113:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+114:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+115:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+116:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+117:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+118:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+119:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+120:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+121:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+122:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+123:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+124:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+125:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+126:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+127:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+128:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+129:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+            STORE_NAME           1 (b)
+
+130:
+            LOAD_NAME            1 (b)
+            LOAD_CONST           0 (1)
+            INPLACE_ADD
+L1020:
+            STORE_NAME           1 (b)
+
+131:
+            LOAD_NAME            2 (print)
+            LOAD_NAME            1 (b)
+            CALL_FUNCTION        1
+            POP_TOP
+            LOAD_CONST           1 (None)
+            RETURN_VALUE
+
