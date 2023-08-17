@@ -1,10 +1,70 @@
+import dataclasses
+import functools
 import json
 import uuid
+
+import redis
+
+
+def with_pipe(handler):
+    @functools.wraps(handler)
+    def wrapped_handler(self, key, *args, **kwargs):
+        with self.redis_client.pipeline() as pipe:
+            pipe.watch(key)
+            res = handler(self, pipe, key, *args, **kwargs)
+            pipe.execute()
+            return res
+    return wrapped_handler
 
 
 class StorageApi:
     def __init__(self, redis_client):
-        self.redis_client = redis_client
+        self.redis_client: redis.Redis = redis_client
+
+    @with_pipe
+    def _append_value(self, pipe, key, field, element):
+        list_data = pipe.hget(key, field)
+        if not list_data:
+            res = [element]
+        else:
+            res = json.loads(list_data) + [element]
+        pipe.multi()
+        pipe.hset(key, field, json.dumps(res))
+
+    @with_pipe
+    def _remove_value(self, pipe, key, field, element):
+        list_data = pipe.hget(key, field)
+        if not list_data:
+            res = [element]
+        else:
+            res = json.loads(list_data) + [element]
+        pipe.multi()
+        pipe.hset(key, field, json.dumps(res))
+
+    @with_pipe
+    def _inc_value(self, pipe, key, field, element):
+        raw_value = pipe.hget(key, field)
+        if raw_value:
+            value = json.loads(raw_value)
+            if element not in value:
+                value[element] = 0
+            value[element] += 1
+        else:
+            raise KeyError(f'Invalid field {field} for key {key}')
+        pipe.multi()
+        pipe.hset(key, field, json.dumps(value))
+
+    @with_pipe
+    def _del_value(self, pipe, key, field, element):
+        raw_value = pipe.hget(key, field)
+        pipe.multi()
+        if raw_value:
+            value = json.loads(raw_value)
+            del value[element]
+            pipe.hset(key, field, json.dumps(value))
+        else:
+            raise KeyError(f'Invalid field {field} for key {key}')
+        pipe.hset(key, field, json.dumps(value))
 
     def add_resource(self, blob):
         resource_id = uuid.uuid4().hex
@@ -34,12 +94,7 @@ class StorageApi:
         return self.redis_client.hexists("token_secrets", token_secret)
 
     def add_resource_to_token(self, resource_id, token_secret):
-        raw_tokens = self.redis_client.hget("resource_to_tokens", resource_id)
-        if not raw_tokens:
-            tokens = [token_secret]
-        else:
-            tokens = json.loads(raw_tokens) + [token_secret]
-        self.redis_client.hset("resource_to_tokens", resource_id, json.dumps(tokens))
+        self._append_value("resource_to_tokens", resource_id, token_secret, )
 
     def get_tokens_by_resource_id(self, resource_id):
         raw_tokens = self.redis_client.hget("resource_to_tokens", resource_id)
@@ -48,23 +103,14 @@ class StorageApi:
         return []
 
     def remove_resource_to_token(self, resource_id, token_secret):
-        tokens = self.get_tokens_by_resource_id(resource_id)
-        if len(tokens) == 1:
-            self.redis_client.hdel("resource_to_tokens", resource_id)
-        else:
-            tokens.remove(token_secret)
-            self.redis_client.hset("resource_to_tokens", resource_id, json.dumps(tokens))
+        self._remove_value("resource_to_tokens", resource_id, token_secret)
 
     def add_token_to_resource(self, token_secret, resource_id):
-        raw_resources = self.redis_client.hget("token_to_resource", token_secret)
-        if raw_resources:
-            resources = set(json.loads(raw_resources)) | {resource_id}
-        else:
-            resources = {resource_id}
-        self.redis_client.hset("token_to_resource", token_secret, json.dumps(list(resources)))
+        self._append_value("token_to_resource", token_secret, resource_id)
 
-    def get_resource_ids_by_token(self, token_secret):
-        raw_resource_ids = self.redis_client.hget("token_to_resource", token_secret)
+    @staticmethod
+    def get_resource_ids_by_token(pipe, token_secret):
+        raw_resource_ids = pipe.hget("token_to_resource", token_secret)
         if raw_resource_ids:
             return set(json.loads(raw_resource_ids))
         return set()
@@ -73,30 +119,27 @@ class StorageApi:
         self.redis_client.hset("counter", token_secret, json.dumps({resource_id: 0}))
 
     def inc_counter(self, token_secret, resource_id):
-        raw_counter = self.redis_client.hget("counter", token_secret)
-        if raw_counter:
-            counter = json.loads(raw_counter)
-            if resource_id not in counter:
-                counter[resource_id] = 0
-            counter[resource_id] += 1
-        else:
-            raise KeyError(token_secret)  # TODO: fix it!
-            counter = {resource_id: 1}
-        self.redis_client.hset("counter", token_secret, json.dumps(counter))
+        self._inc_value("counter", token_secret, resource_id)
 
     def del_counter(self, token_secret, resource_id):
-        raw_counter = self.redis_client.hget("counter", token_secret)
-        if raw_counter:
-            counter = json.loads(raw_counter)
-            del counter[resource_id]
-            self.redis_client.hset("counter", token_secret, json.dumps(counter))
+        self._del_value("counter", token_secret, resource_id)
 
     def remove_token_to_resource(self, token_secret, resource_id):
-        resource_ids = self.get_resource_ids_by_token(token_secret)
-        if len(resource_ids) == 1:
-            self.redis_client.hdel("token_to_resource", token_secret)
-            self.redis_client.hdel("counter", token_secret)
-        else:
-            resource_ids.remove(resource_id)
-            self.redis_client.hset("token_to_resource", token_secret, json.dumps(list(resource_ids)))
-            self.del_counter(token_secret, resource_id)
+        with self.redis_client.pipeline() as pipe:
+            pipe.watch("token_to_resource", "counter")
+            resource_ids = self.get_resource_ids_by_token(pipe, token_secret)
+            raw_counter = pipe.hget("counter", token_secret)
+            pipe.multi()
+            if len(resource_ids) == 1:
+                pipe.hdel("token_to_resource", token_secret)
+                pipe.hdel("counter", token_secret)
+            else:
+                resource_ids.remove(resource_id)
+                pipe.hset("token_to_resource", token_secret, json.dumps(list(resource_ids)))
+
+                if raw_counter:
+                    counter = json.loads(raw_counter)
+                    del counter[resource_id]
+                    pipe.hset("counter", token_secret, json.dumps(counter))
+
+            pipe.execute()
