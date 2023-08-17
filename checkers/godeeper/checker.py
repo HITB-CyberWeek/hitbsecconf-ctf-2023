@@ -41,37 +41,37 @@ def VerifySign(token):
 
 
 if proc == 'check':
-    res = sess.get(url)
+    res = sess.get(url, headers=headers)
     login1=id_gen(10)
     password1=id_gen(10)
     testlic=id_gen(10)
 
-    res = sess.get(url+"enter")
+    res = sess.get(url+"enter", headers=headers)
     if not "Register new company" in res.text:
         print("Cannot register 1")
         exit(102)
 
-    res = sess.post(url+"register",data=dict(login=login1,password=password1))
+    res = sess.post(url+"register",data=dict(login=login1,password=password1), headers=headers)
     if not "Logged in as "+login1 in res.text:
         print("Cannot register 2")
         exit(102)
-    sess.get(url+"/logout")
-    res = sess.get(url+"search?pattern="+login1[:3])
+    sess.get(url+"/logout", headers=headers)
+    res = sess.get(url+"search?pattern="+login1[:3], headers=headers)
     if not login1 in res.text:
         print("Cannot find registered company")
         exit(102)
 
-    res = sess.post(url+"register",data=dict(login=login1,password=password1))
+    res = sess.post(url+"register",data=dict(login=login1,password=password1), headers=headers)
     if not "Already exists" in res.text:
         print("Can register twise")
         exit(102)
 
-    res = sess.post(url+"login",data=dict(login=login1,password=password1))
+    res = sess.post(url+"login",data=dict(login=login1,password=password1), headers=headers)
     if not "Logged in as "+login1 in res.text:
         print("Cannot login")
         exit(102)
 
-    res = sess.post(url+"make_license",data=dict(license_key=testlic))
+    res = sess.post(url+"make_license",data=dict(license_key=testlic), headers=headers)
     res1 = re.findall(r'Successfully added. Your token is ([0-9A-Za-z]+)',res.text)
     if len(res1) != 1:
         print("Cannot find result token")
@@ -81,7 +81,7 @@ if proc == 'check':
         print("Not a correct token")
         exit(102)
 
-    res = sess.get(url+"get_token?token="+res1[0])
+    res = sess.get(url+"get_token?token="+res1[0], headers=headers)
     if not testlic in res.text:
         print("Not a correct license by token")
         exit(102)
@@ -90,11 +90,11 @@ elif proc == 'put':
     login1 = sys.argv[3]
     password1=id_gen(10)
     flag = sys.argv[4]
-    res = sess.post(url+"register",data=dict(login=login1,password=password1))
+    res = sess.post(url+"register",data=dict(login=login1,password=password1), headers=headers)
     if not "Logged in as "+login1 in res.text:
         print("Cannot register 2")
         exit(102)
-    res = sess.post(url+"make_license",data=dict(license_key=flag))
+    res = sess.post(url+"make_license",data=dict(license_key=flag), headers=headers)
     res1 = re.findall(r'Successfully added. Your token is ([0-9A-Za-z]+)',res.text)
     if len(res1) != 1:
         print("Cannot find result token")
@@ -108,7 +108,7 @@ elif proc == 'get':
     login1,token = list(sys.argv[3].split(","))
     flag = sys.argv[4]
 
-    res = sess.get(url+"get_token?token="+token)
+    res = sess.get(url+"get_token?token="+token, headers=headers)
     if not flag  in res.text:
         print("Not a correct license by token")
         exit(102)
