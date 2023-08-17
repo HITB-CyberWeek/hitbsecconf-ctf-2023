@@ -16,13 +16,36 @@ files:
       - iptables
       - monitoring
     destination: /home/$USERNAME
+
   # Note! Following paths are absolute and runner-specific
   - source: /etc/letsencrypt/archive/
     destination: /home/$USERNAME/certificates/
   - source: /home/runner/do_api_token
     destination: /home/$USERNAME
+
   # Service configs
-  - source: ../training/service/deploy.yaml
-    destination: /home/$USERNAME/configs/training/
+  - source: ../passmgr/deploy.yaml
+    destination: /home/$USERNAME/configs/passmgr/
+  # - source: ../spaces/deploy.yaml
+  #   destination: /home/$USERNAME/configs/spaces/
+  # - source: ../lockstone/deploy.yaml
+  #   destination: /home/$USERNAME/configs/lockstone/
+  # - source: ../godeeper/deploy.yaml
+  #   destination: /home/$USERNAME/configs/godeeper/
+  # - source: ../pure/deploy.yaml
+  #   destination: /home/$USERNAME/configs/pure/
+  - source: ../funding/deploy.yaml
+    destination: /home/$USERNAME/configs/funding/
+  # - source: ../keys/deploy.yaml
+  #   destination: /home/$USERNAME/configs/keys/
+  # - source: ../places/deploy.yaml
+  #   destination: /home/$USERNAME/configs/places/
+  - source: ../docs/deploy.yaml
+    destination: /home/$USERNAME/configs/docs/
+  # - source: ../tokenourcer/deploy.yaml
+  #   destination: /home/$USERNAME/configs/tokenourcer/
+  - source: ../notes/deploy.yaml
+    destination: /home/$USERNAME/configs/notes/
+
   - source: router/motd
     destination: /etc/
