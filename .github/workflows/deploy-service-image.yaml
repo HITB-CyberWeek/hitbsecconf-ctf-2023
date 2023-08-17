@@ -61,4 +61,5 @@ jobs:
           DO_API_TOKEN: ${{ secrets.DO_API_TOKEN }}
           CERTIFICATES_FOLDER: /etc/letsencrypt/live
           PROXY_SSH_KEY: "${{ github.workspace }}/ansible/cloud/cloud_master/files/api_srv/do_deploy_key"
+          TEAMS_COUNT: 1
 

@@ -11,14 +11,8 @@ scripts:
 files:
   - sources:
       - docker-compose.yml
-      - keys/Dockerfile
-      - keys/check.php
-      - keys/generate.php
-      - keys/index.php
-      - keys/key.php
-      - nginx/Dockerfile
-      - nginx/index.html
-      - nginx/keys.conf
+      - keys
+      - nginx
     destination: /home/keys
 
 proxies:
