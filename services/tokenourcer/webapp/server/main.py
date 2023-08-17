@@ -61,7 +61,7 @@ def issue_token():
     if storage_api.is_token_exist(token_name):
         return make_response("token name is already exist", 400)
 
-    token_secret = util.gen_token_secret()
+    token_secret = token_name + ':' + util.gen_token_secret()
     storage_api.add_token(token_name, token_secret)
 
     return {
