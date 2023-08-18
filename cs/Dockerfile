@@ -1,11 +1,12 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-dotnet-checkers
-WORKDIR /app
 
-COPY checkers/places/src/ /app/
-RUN dotnet publish -c release -o ./places-publish
+WORKDIR /app/places
+COPY checkers/places/src/ ./
+RUN dotnet publish -c release -o ./publish
 
-COPY checkers/spaces/src/ /app/
-RUN dotnet publish -c release -o ./spaces-publish
+WORKDIR /app/spaces
+COPY checkers/spaces/src/ ./
+RUN dotnet publish -c release -o ./publish
 
 
 FROM ghcr.io/hackerdom/ctf-scoreboard-client:master AS scoreboard
@@ -40,14 +41,14 @@ COPY cs/cs.conf /app/c_s.conf
 
 COPY checkers/passmgr      /app/checkers/passmgr
 COPY checkers/spaces       /app/checkers/spaces
-COPY --from=build-dotnet-checkers /app/spaces-publish/ /app/checkers/spaces/src/bin/Release/net7.0/publish
+COPY --from=build-dotnet-checkers /app/spaces/publish/ /app/checkers/spaces/src/bin/Release/net7.0/publish
 COPY checkers/lockstone    /app/checkers/lockstone
 COPY checkers/godeeper     /app/checkers/godeeper
 # COPY checkers/pure         /app/checkers/pure
 COPY checkers/funding      /app/checkers/funding
 COPY checkers/keys         /app/checkers/keys
 COPY checkers/places       /app/checkers/places
-COPY --from=build-dotnet-checkers /app/places-publish/ /app/checkers/places/src/bin/Release/net7.0/publish
+COPY --from=build-dotnet-checkers /app/places/publish/ /app/checkers/places/src/bin/Release/net7.0/publish
 # COPY checkers/docs         /app/checkers/docs
 # COPY checkers/tokenourcer  /app/checkers/tokenourcer
 COPY checkers/notes        /app/checkers/notes
