@@ -39,10 +39,14 @@ internal class SpacesChecker : IChecker
 			throw new CheckerException(result.StatusCode.ToExitCode(), $"get / failed: {result.StatusCode.ToReadableCode()}");
 
 		var wsUri = GetWsUri(host);
-		var wsClient = await new WsClient<Message, Command>(SerializeMessage, DeserializeMessageAsync<Message>, client.Cookies, MaxMessageSize).ConnectAsync(wsUri).ConfigureAwait(false);
+		var wsClient = new WsClient<Message, Command>(SerializeMessage, DeserializeMessageAsync<Message>, client.Cookies, MaxMessageSize);
+
+		wsClient = await DoIt.TryOrDefaultAsync(() => wsClient.ConnectAsync(wsUri)).ConfigureAwait(false);
+		if(wsClient == null)
+			throw new CheckerException(ExitCode.DOWN, "ws connection failed");
 
 		WsResult wsSendResult;
-		var messagesCount = RndUtil.GetInt(1, 30);
+		var messagesCount = RndUtil.GetInt(1, 20);
 		for(int i = 0; i < messagesCount; i++)
 		{
 			wsSendResult = await wsClient.SendAsync(new Command { Type = MsgType.Generate }).ConfigureAwait(false);
@@ -137,6 +141,10 @@ internal class SpacesChecker : IChecker
 
 		var wsUri = GetWsUri(host);
 		var wsClient = await new WsClient<Message, Command>(SerializeMessage, DeserializeMessageAsync<Message>, client.Cookies, MaxMessageSize).ConnectAsync(wsUri).ConfigureAwait(false);
+
+		wsClient = await DoIt.TryOrDefaultAsync(() => wsClient.ConnectAsync(wsUri)).ConfigureAwait(false);
+		if(wsClient == null)
+			throw new CheckerException(ExitCode.DOWN, "ws connection failed");
 
 		var awaited = await AwaitReceiveMessagesAsync(wsClient, msg => msg.Text?.Contains(flag) ?? false).ConfigureAwait(false);
 		if(awaited == null)
