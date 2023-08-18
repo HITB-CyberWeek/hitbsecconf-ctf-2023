@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import requests,sys,string,random,re,logging
 
 # logging.basicConfig(level=logging.INFO)
