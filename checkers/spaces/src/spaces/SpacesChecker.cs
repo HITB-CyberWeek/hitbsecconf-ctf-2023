@@ -93,7 +93,7 @@ internal class SpacesChecker : IChecker
 		if(awaited == null)
 			throw new CheckerException(ExitCode.MUMBLE, "failed to await all messages");
 
-        var cookie = string.Join("; ", client.Cookies?.GetAllCookies().Select(c => $"{c.Name}={c.Value}") ?? Enumerable.Empty<string>());
+		var cookie = string.Join("; ", client.Cookies?.GetAllCookies().Select(c => $"{c.Name}={c.Value}") ?? Enumerable.Empty<string>());
 		await Console.Error.WriteLineAsync($"cookie '{cookie.ShortenLog(MaxCookieSize)}' with length '{cookie?.Length ?? 0}'").ConfigureAwait(false);
 
 		if(string.IsNullOrEmpty(cookie) || cookie.Length > MaxCookieSize)
@@ -174,7 +174,7 @@ internal class SpacesChecker : IChecker
 		return writer.WrittenMemory;
 	}
 
-	private const int Port = 5000;
+	private const int Port = 443;
 
 	private const int MaxMessageSize = 1024;
 
@@ -185,8 +185,8 @@ internal class SpacesChecker : IChecker
 	private const int MaxWsOneTimeDelay = 200;
 	private const int NetworkOpTimeout = 12000;
 
-	private static Uri GetBaseUri(string host) => new($"http://{host}:{Port}/");
-	private static Uri GetWsUri(string host) => new($"ws://{host}:{Port}/ws");
+	private static Uri GetBaseUri(string host) => new($"https://{host}:{Port}/");
+	private static Uri GetWsUri(string host) => new($"wss://{host}:{Port}/ws");
 
 	private static readonly JsonSerializerOptions JsonOptions = new()
 	{

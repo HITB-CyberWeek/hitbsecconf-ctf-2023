@@ -1,11 +1,11 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/preview/sdk:8.0-alpine AS build
 WORKDIR /app
 
 COPY ./src/ /app/
 RUN dotnet publish -c release -o ./out
 
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine
+FROM mcr.microsoft.com/dotnet/preview/aspnet:8.0-alpine
 WORKDIR /app
 
 RUN adduser -u 1000 --system --home /app --shell /usr/sbin/nologin --no-create-home --disabled-password usr

@@ -72,8 +72,17 @@ const add = (msg) => {
   });
 }
 
-let ws = new WebSocket(`ws://${location.host}/ws`);
-ws.onmessage = msg => add(JSON.parse(msg.data));
+function connect() {
+  let ws = new WebSocket(`${/^https:/i.test(location.href) ? 'wss' : 'ws'}://${location.host}/ws`);
+  ws.onmessage = msg => add(JSON.parse(msg.data));
+  ws.onclose = _ => setTimeout(connect, 3000);
+  ws.onerror = err => {
+    console.error('ws error: ', err.message, 'closing socket');
+    ws.close();
+  };
+}
+
+connect();
 
 // Colour Alphabet: https://eleanormaclure.files.wordpress.com/2011/03/colour-coding.pdf
 const palette = {
