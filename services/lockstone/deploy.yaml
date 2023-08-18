@@ -33,6 +33,7 @@ proxies:
       certificate: wildcard.ctf.hitb.org
     upstream:
       host_index: 6
+      protocol: https
       port: 443
     limits:
       - source: team
