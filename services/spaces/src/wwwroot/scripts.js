@@ -13,6 +13,8 @@ const $join = document.getElementById('join');
 const $room = document.getElementById('room');
 const $close = document.getElementById('close');
 
+var ws;
+
 $gen.onclick = () => ws.send(JSON.stringify({type: 'generate'}));
 $join.onclick = () => {
   $chat.replaceChildren();
@@ -73,7 +75,7 @@ const add = (msg) => {
 }
 
 function connect() {
-  let ws = new WebSocket(`${/^https:/i.test(location.href) ? 'wss' : 'ws'}://${location.host}/ws`);
+  ws = new WebSocket(`${/^https:/i.test(location.href) ? 'wss' : 'ws'}://${location.host}/ws`);
   ws.onmessage = msg => add(JSON.parse(msg.data));
   ws.onclose = _ => setTimeout(connect, 3000);
   ws.onerror = err => {

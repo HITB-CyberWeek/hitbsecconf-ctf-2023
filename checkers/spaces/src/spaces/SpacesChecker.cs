@@ -140,7 +140,7 @@ internal class SpacesChecker : IChecker
 			throw new CheckerException(result.StatusCode.ToExitCode(), $"get / failed: {result.StatusCode.ToReadableCode()}");
 
 		var wsUri = GetWsUri(host);
-		var wsClient = await new WsClient<Message, Command>(SerializeMessage, DeserializeMessageAsync<Message>, client.Cookies, MaxMessageSize).ConnectAsync(wsUri).ConfigureAwait(false);
+		var wsClient = new WsClient<Message, Command>(SerializeMessage, DeserializeMessageAsync<Message>, client.Cookies, MaxMessageSize);
 
 		wsClient = await DoIt.TryOrDefaultAsync(() => wsClient.ConnectAsync(wsUri)).ConfigureAwait(false);
 		if(wsClient == null)
