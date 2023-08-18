@@ -31,5 +31,11 @@ proxies:
         location: /
         limit: 5r/s
         burst: 10
+      - source: team
+        location: /ws
+        proxy_websockets: true
+        limit: 5r/s
+        burst: 10
+        simultaneous_connections: 1
     dns_records:
       - spaces

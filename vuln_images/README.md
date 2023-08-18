@@ -142,12 +142,20 @@ proxies:
         # 
         # For HTTP proxies: Burst in terms of nginx's limit_req directive:
         # http://nginx.org/en/docs/http/ngx_http_limit_req_module.html#limit_req.
-        # Optional. If specified, it will be applied together "nodelay" option.
+        # Optional. If specified, it will be applied together with "nodelay" option.
         #
         # For TCP proxies: Burst in terms of iptables hashlimit's option −−hashlimit−burst:
         # https://fossies.org/linux/iptables/extensions/libxt_hashlimit.man
         # Optional. Default value is 5
         burst: 10
+        # [HTTP only] Number of simultaneous connections to the location as defined in
+        # nginx's limit_conn directive:
+        # http://nginx.org/en/docs/http/ngx_http_limit_conn_module.html#limit_conn.
+        # Optional. Default value is unlimited.
+        simultaneous_connections: 5
+        # [HTTP only] Proxy Upgrade and Connection headers for allowing websocket connections.
+        # Optional. Default value is False.
+        proxy_websockets: True
     # List of DNS records for proxies (can be empty). 
     # Records will be created in team's DNS zone, i.e. test.team42.ctf.hitb.org. 
     dns_records:
