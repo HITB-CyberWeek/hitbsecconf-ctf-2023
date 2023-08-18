@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import requests,sys,string,random,re,logging
 
-# logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
 def id_gen(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
