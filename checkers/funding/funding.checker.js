@@ -253,13 +253,22 @@ function _generateRandomString(length) {
 }
 
 function _generateFakeFlag(url) {
-    // Suppose that url contains something like 10.60.23.5, where 23 is a team number
-    const matches = url.match(/\d+.(\d+).(\d+).\d+/);
     const randomSuffix = _generateRandomString(32);
-    if (!matches) {
-        return randomSuffix;
-    }
-    const teamId = (parseInt(matches[1]) - 60) * 256 + parseInt(matches[2]);
+
+    // Suppose that url contains something like 10.60.23.5, where 23 is a team number
+    let matches = url.match(/\d+.(\d+).(\d+).\d+/);
+    let teamId;
+    if (matches) {
+        teamId = (parseInt(matches[1]) - 60) * 256 + parseInt(matches[2]);
+    } else {
+        // If url is not an IP address, then probable it's a domain name like funding.team23.<domain>
+        matches = url.match(/\.team(\d+)\./);
+        if (!matches) {
+            return randomSuffix;
+        }
+        teamId = parseInt(matches[1]);
+    } 
+    
     return "TEAM" + teamId.toString().padStart(3, "0") + "_" + randomSuffix
 }
 
