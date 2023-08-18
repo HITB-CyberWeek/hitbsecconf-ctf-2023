@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import requests,sys,string,random,re,logging
 
-logging.basicConfig(level=logging.INFO)
+
+logging.basicConfig(format='%(asctime)-15s [%(levelname)s] %(message)s',
+                    level=logging.DEBUG)
 
 def id_gen(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -35,13 +37,12 @@ def VerifySign(token):
         myhash ^= byte
         myhash = ((myhash >> 1) | (myhash << 31)) & 0xFFFFFFFF
 
-    if myhash != h:
-        return False
-    return True
+    return myhash == h
+
 try:
     if proc == 'check':
         res = sess.get(url)
-        logging.info("Initial page get")
+        logging.info("Initial page received")
 
         login1=id_gen(10)
         password1=id_gen(10)
@@ -51,14 +52,15 @@ try:
         res = sess.get(url+"enter")
         logging.info("Going to /enter")
         if not "Register new company" in res.text:
-            print("Cannot register 1")
+            logging.error("Can not find 'Register new company' at the /enter page")
+            print("Can not register a new company")
             exit(102)
 
 
         res = sess.post(url+"register",data=dict(login=login1,password=password1))
         logging.info("Registering new company " + login1 + " "+ password1)
         if not "Logged in as "+login1 in res.text:
-            print("Cannot register 2")
+            print("Can not register a new company")
             exit(102)
         logging.info("Successfully registered")
         sess.get(url+"/logout")
@@ -89,17 +91,17 @@ try:
         if len(res1) != 1:
             print("Cannot find result token")
             exit(102)
-        logging.info("Token got "+ res1[0])
+        logging.info("Token received: "+ res1[0])
 
         if not VerifySign(res1[0]):
             print("Not a correct token")
             exit(102)
-        logging.info("Token sign verified")
+        logging.info("Token sign has been successfully verified")
 
         res = sess.get(url+"get_token?token="+res1[0])
-        logging.info("Getting license for token "+res1[0])
+        logging.info("Getting the license for the token "+res1[0])
         if not testlic in res.text:
-            print("Not a correct license by token")
+            print("The license retrieve by the token is incorrect")
             exit(102)
         logging.info("License got")
         exit(101)
@@ -121,7 +123,7 @@ try:
             exit(102)
         logging.info("Successfuly added flag. Token is "+res1[0])
         if not VerifySign(res1[0]):
-            print("Not a correct token")
+            print("Token is incorrect")
             exit(102)
         logging.info("Verified sign for token "+ res1[0])
         print(login1+","+res1[0])
@@ -136,14 +138,19 @@ try:
             logging.info("Cannot find flag in "+res.text)
             print("Not a correct license by token")
             exit(102)
-        logging.info("Found flag in result ")
+        logging.info("Found flag in result")
         exit(101)
     elif proc == "info":
-        print("vulns: 1\npublic_flag_description: Flag ID is name of company. Flag is the license.\n")
+        print("vulns: 1\npublic_flag_description: Flag ID is the name of the company. Flag is the license.\n")
         exit(101)
     else:
         print("No command provided")
         exit(105)
 except requests.exceptions.ConnectionError as e:
-    print("Cannot connect to server")
+    logging.error(f"Can not connect to the server: {e}", exc_info=e)
+    print("Can not connect to server")
     exit(105)
+except ValueError as e:
+    logging.error(f"ValueError received: {e}", exc_info=e)
+    print("Token is incorrect")
+    print(102)
