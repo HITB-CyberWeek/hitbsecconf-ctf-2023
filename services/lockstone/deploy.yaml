@@ -4,9 +4,9 @@ username: lockstone
 
 scripts:
   build_inside_vm: |
-    docker-compose -f /home/lockstone/docker-compose.yml build --pull
+    docker compose -f /home/lockstone/docker-compose.yml build --pull
   start_once: |
-    docker-compose -f /home/godeeper/docker-compose.yml up -d
+    docker compose -f /home/godeeper/docker-compose.yml up -d
 
 files:
   - sources:
