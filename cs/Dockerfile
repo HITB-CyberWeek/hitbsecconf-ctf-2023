@@ -52,4 +52,4 @@ COPY --from=build-dotnet-checkers /app/places/publish/ /app/checkers/places/src/
 # COPY checkers/docs         /app/checkers/docs
 # COPY checkers/tokenourcer  /app/checkers/tokenourcer
 COPY checkers/notes        /app/checkers/notes
-RUN pip install -r /app/checkers/notes/requirements.txt
+RUN pip install -r /app/checkers/notes/requirements.txt --break-system-packages
