@@ -1,5 +1,5 @@
 export const ethereum = {
-    node: "http://104.248.94.168:8545",
+    node: "http://eth.ctf.hitb.org:8545",
     accounts: [
         {
             address: "0x23B42ADe1d5EC963e4D6dA9022eE648639eE93F1",
