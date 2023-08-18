@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       approve:
-        description: "Are you sure to update checkers?"
+        description: "Are you sure you want to update checkers?"
         type: boolean
         required: true
 

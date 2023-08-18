@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       approve:
-        description: "Are you sure you want to reset the game? ALL DATA WILL BE DELETED!"
+        description: "Are you sure you want to reset the game? IT WILL DESTROY ALL DATA!"
         type: boolean
         required: true
 
