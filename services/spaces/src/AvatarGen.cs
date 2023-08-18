@@ -146,12 +146,4 @@ internal static class AvatarGen
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static int FastOneOrZero(this Random rnd) => rnd.Next() & 1;
-
-    private static T[] GetItems<T>(this Random rnd, T[] array, int count)
-    {
-        var dst = new T[count];
-        for(int i = 0; i < dst.Length; i++)
-            dst[i] = array[rnd.Next(array.Length)];
-        return dst;
-    }
 }
