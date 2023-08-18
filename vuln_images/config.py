@@ -74,6 +74,8 @@ class ProxyLimit(YamlModel):
     location: Optional[str] = None
     limit: str
     burst: NonNegativeInt = 0
+    simultaneous_connections: Optional[int] = None
+    proxy_websockets: bool = False
 
 
 class UpstreamProtocol(YamlStrEnum):
@@ -139,12 +141,17 @@ class ProxyConfigV1(YamlModel):
         if "listener" in values and values["listener"].protocol == "tcp":
             for limit in values.get("limits", []):
                 if limit.location:
-                    raise ValidationError("Limit in TCP proxy can not have a location parameter")
+                    raise ValidationError("Limit in TCP proxy can not have a 'location' parameter")
+                if limit.proxy_websocket:
+                    raise ValidationError("Limit in TCP proxy can not have a 'proxy_websocket' parameter")
+                if limit.simultaneous_connections:
+                    raise ValidationError("Limit in TCP proxy can not have a 'simultaneous_connections' parameter. "
+                                          "Use listener.tcp_simultaneous_connections instead.")
 
             if values["listener"].port is None:
                 raise ValidationError("TCP proxy must have listener.port parameter")
 
-        elif "listener" in values and values["listener"].protocol == "tcp":
+        elif "listener" in values and values["listener"].protocol == "http":
             for limit in values.get("limits", []):
                 if not limit.location:
                     raise ValidationError("Limit in HTTP proxy must have a location parameter")
