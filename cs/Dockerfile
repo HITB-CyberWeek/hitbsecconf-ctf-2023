@@ -9,6 +9,13 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         python3 python3-pip nodejs npm
 
+# Install dotnet (https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian)
+RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \ 
+    dpkg -i packages-microsoft-prod.deb && \
+    rm packages-microsoft-prod.deb
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends dotnet-sdk-7.0
+
 COPY checkers/funding/package*.json /app/checkers/funding/
 RUN /bin/bash -c "cd /app/checkers/funding; npm ci"
 
