@@ -1,6 +1,6 @@
 #!/bin/sh
 
-chown lockstone:lockstone /home/lockstone/ /home/lockstone/package-lock.json /home/lockstone/schema.graphql /home/lockstone/schema.prisma
+chown lockstone:lockstone -R /home/lockstone/
 
 su -s /bin/bash -c "npm install" lockstone
 
