@@ -49,7 +49,7 @@ COPY checkers/funding      /app/checkers/funding
 COPY checkers/keys         /app/checkers/keys
 COPY checkers/places       /app/checkers/places
 COPY --from=build-dotnet-checkers /app/places/publish/ /app/checkers/places/src/bin/Release/net7.0/publish
-# COPY checkers/docs         /app/checkers/docs
+COPY checkers/docs         /app/checkers/docs
 # COPY checkers/tokenourcer  /app/checkers/tokenourcer
 COPY checkers/notes        /app/checkers/notes
 RUN pip install -r /app/checkers/notes/requirements.txt --break-system-packages
