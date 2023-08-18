@@ -39,7 +39,7 @@ export const lists: Lists = {
     },
     ui: {
       labelField: "login",
-      description: "desc",
+      description: "Log in to see your flag",
       searchFields: ["login"],
       hideDelete: true,
       listView: {
