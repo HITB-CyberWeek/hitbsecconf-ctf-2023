@@ -25,15 +25,15 @@ class NoteChecker(checklib.http.HttpChecker):
 
     def info(self):
         print("vulns: 1")
-        print("public_flag_description: Flag ID is just a user ID, flag is note description")
+        print("public_flag_description: Flag ID is the user's ID, flag is the note's description")
 
     def check(self, address):
 
-        # check create
+        # check user creating
         user = self.create_user()
         self.logout()
 
-        # check crate note
+        # check note creating 
         self.login(user)
         description = ""
         for i in range(checklib.random.integer([4, 5, 7])):
@@ -73,7 +73,7 @@ class NoteChecker(checklib.http.HttpChecker):
         check_donate_2 = self.try_http_get("/notes")
         self.corrupt_if_false(
             flag in check_donate_2.text,
-            "Could not find flag in notes for user " + user["email"]
+            "Could not find the flag in notes for the user " + user["email"]
         )
         self.logout()
 
@@ -83,12 +83,12 @@ class NoteChecker(checklib.http.HttpChecker):
             data={"email": user['email'], "password": user['password']}
         )
         self.mumble_if_false(
-            'href="/notes"' in r.text, "Invalid format of response on POST /signin"
+            'href="/notes"' in r.text, "Invalid format of the response at POST /signin"
         )
 
     def logout(self):
         r = self.try_http_post("/exit")
-        self.mumble_if_false("Welcome!" in r.text, "Invalid format of response on /exit")
+        self.mumble_if_false("Welcome!" in r.text, "Invalid format of the response at /exit")
 
     def create_user(self) -> dict:
         username = f"{checklib.random.firstname().lower()}_{checklib.random.firstname().lower()}"
@@ -101,7 +101,7 @@ class NoteChecker(checklib.http.HttpChecker):
         )
 
         self.mumble_if_false(
-            'href="/notes"' in r.text and 'href="/notes/add/"' in r.text, "Invalid format of response on POST /signup"
+            'href="/notes"' in r.text and 'href="/notes/add/"' in r.text, "Invalid format of the response at POST /signup"
         )
         logging.info(f"Created user with username {username}")
         return {
@@ -123,19 +123,16 @@ class NoteChecker(checklib.http.HttpChecker):
         )
 
         self.mumble_if_false(title in create_note.text and flag in create_note.text,
-                             "Invalid format of response on POST /notes/add/")
+                             "Invalid format of the response at POST /notes/add/")
 
     def get_user_id(self):
-        user_id = 0
-        if 'jwt' in self.get_cookies():
-            jwt_token = self.get_cookies().get('jwt')
-            jwt_data = jwt.decode(jwt_token, options={"verify_signature": False})
-            user_id = jwt_data.get('user_id', 0)
-            self.mumble_if_false(
-                user_id != 0, "Not found jwt in cookies"
-            )
-        else:
-            self.mumble_if_false(False, "Not found jwt in cookies")
+        self.mumble_if_false('jwt' in self.get_cookies(), "Not found jwt in cookies")
+        jwt_token = self.get_cookies().get('jwt')
+        jwt_data = jwt.decode(jwt_token, options={"verify_signature": False})
+        user_id = jwt_data.get('user_id', 0)
+        self.mumble_if_false(
+            user_id != 0, "Not found jwt in cookies"
+        )
         return user_id
 
 
