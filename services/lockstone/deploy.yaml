@@ -39,7 +39,7 @@ proxies:
       - source: team
         location: /api/
         limit: 60r/m
-        burst: 10
+        burst: 50
       - source: team
         location: /
         limit: 300r/m
