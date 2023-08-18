@@ -8,6 +8,8 @@ token_secret = api.issue_token(hostname, user_token_name)
 print('token_secret:', token_secret)
 resource_id = api.create_resource(hostname, token_secret, 'some content')
 print('resource_id:', resource_id)
+resource_ids = api.list_resources(hostname, token_secret)
+print('resource_ids:', resource_ids)
 resource_blob = api.get_resource(hostname, token_secret, resource_id)
 print('resource_blob:', resource_blob)
 
