@@ -1,19 +1,27 @@
-import dataclasses
 import functools
 import json
+import random
+import sys
+import time
 import uuid
 
 import redis
+from redis import WatchError
 
 
 def with_pipe(handler):
     @functools.wraps(handler)
     def wrapped_handler(self, key, *args, **kwargs):
-        with self.redis_client.pipeline() as pipe:
-            pipe.watch(key)
-            res = handler(self, pipe, key, *args, **kwargs)
-            pipe.execute()
-            return res
+        for try_index in range(3):
+            try:
+                with self.redis_client.pipeline() as pipe:
+                    pipe.watch(key)
+                    res = handler(self, pipe, key, *args, **kwargs)
+                    pipe.execute()
+                    return res
+            except WatchError:
+                print(f'retry #{try_index + 1}', file=sys.stderr)
+                time.sleep(2 ** try_index + random.random())
     return wrapped_handler
 
 
@@ -34,10 +42,11 @@ class StorageApi:
     @with_pipe
     def _remove_value(self, pipe, key, field, element):
         list_data = pipe.hget(key, field)
-        if not list_data:
-            res = [element]
+        if list_data:
+            res = json.loads(list_data)
+            res.remove(element)
         else:
-            res = json.loads(list_data) + [element]
+            raise KeyError(f'Invalid field {field} for key {key}')
         pipe.multi()
         pipe.hset(key, field, json.dumps(res))
 
@@ -108,9 +117,8 @@ class StorageApi:
     def add_token_to_resource(self, token_secret, resource_id):
         self._append_value("token_to_resource", token_secret, resource_id)
 
-    @staticmethod
-    def get_resource_ids_by_token(pipe, token_secret):
-        raw_resource_ids = pipe.hget("token_to_resource", token_secret)
+    def get_resource_ids_by_token(self, token_secret, redis_client=None):
+        raw_resource_ids = (redis_client or self.redis_client).hget("token_to_resource", token_secret)
         if raw_resource_ids:
             return set(json.loads(raw_resource_ids))
         return set()
@@ -127,7 +135,7 @@ class StorageApi:
     def remove_token_to_resource(self, token_secret, resource_id):
         with self.redis_client.pipeline() as pipe:
             pipe.watch("token_to_resource", "counter")
-            resource_ids = self.get_resource_ids_by_token(pipe, token_secret)
+            resource_ids = self.get_resource_ids_by_token(token_secret, pipe)
             raw_counter = pipe.hget("counter", token_secret)
             pipe.multi()
             if len(resource_ids) == 1:
@@ -137,9 +145,8 @@ class StorageApi:
                 resource_ids.remove(resource_id)
                 pipe.hset("token_to_resource", token_secret, json.dumps(list(resource_ids)))
 
-                if raw_counter:
-                    counter = json.loads(raw_counter)
-                    del counter[resource_id]
-                    pipe.hset("counter", token_secret, json.dumps(counter))
+                counter = json.loads(raw_counter)
+                del counter[resource_id]
+                pipe.hset("counter", token_secret, json.dumps(counter))
 
             pipe.execute()
