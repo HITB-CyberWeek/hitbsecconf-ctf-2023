@@ -9,7 +9,8 @@ from token_generator import *
 OLD_MINUTES = 30
 app = Flask(__name__)
 if os.path.isfile("secret_string.txt"):
-    app.secret_key = open("secret_string.txt").read()
+    with open("secret_string.txt") as key_file:
+        app.secret_key = key_file.read()
 else:
     app.secret_key = ''.join(random.choice(string.ascii_lowercase) for i in range(16))
     open("secret_string.txt","w").write(app.secret_key)
@@ -21,24 +22,20 @@ def db_access(fn):
     def wrapper(*args, **kwargs):
         global DB_lock,DB
         DB_lock.acquire()
-        db = dataset.connect(f'sqlite:///{DB}')
-        args=tuple([db]+list(args))
-        result = fn(*args, **kwargs)
-        db.executable.close()
-        DB_lock.release()
-        return result
+        try:
+            db = dataset.connect(f'sqlite:///{DB}')
+            try:
+                return fn(db, *args, **kwargs)
+            finally:
+                db.executable.close()
+        finally:
+            DB_lock.release()
     return wrapper
+
+@db_access
 def Init():
-    if not os.path.isfile(DB):
-        DB_lock.acquire()
-        open(DB,"a").write("")
-        db = dataset.connect(f'sqlite:///{DB}')
-        db.query("CREATE TABLE users (id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,login TEXT, password TEXT, reg_date TEXT)")
-        db.query("CREATE TABLE licences (id INTEGER NOT NULL PRIMARY KEY,user_id INTEGER, token TEXT NOT NULL, licence TEXT NOT NULL, create_date TEXT)")
-        db.executable.close()
-        DB_lock.release()
-
-
+    db.query("CREATE TABLE IF NOT EXISTS users (id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,login TEXT, password TEXT, reg_date TEXT)")
+    db.query("CREATE TABLE  IF NOT EXISTS licences (id INTEGER NOT NULL PRIMARY KEY,user_id INTEGER, token TEXT NOT NULL, licence TEXT NOT NULL, create_date TEXT)")
 
 @db_access
 def FindUsers(db,pattern):
@@ -103,7 +100,7 @@ def makelic():
     license = request.values['license_key']
     company = session['user']
     token = GetTOK()
-    if type(token) == type(b''):
+    if type(token) is bytes:
         token=token.decode()
     res = AddLicence(company,token,license)
     if not res:
@@ -148,18 +145,12 @@ def register():
         return render_template("reg.html",message="Already exists")
 
 def check_alphanumeric(input_str):
-    if re.match("^[a-zA-Z0-9]+$", input_str):
-        return True
-    else:
-        return False
+    return bool(re.fullmatch(r"[a-zA-Z0-9]+", input_str))
 
 @app.route("/search",methods=["GET"])
 def search():
     if not "pattern" in request.values:
-        if 'user' in session:
-            return render_template("all_companies.html",message="No pattern provided",user=session['user'])
-        else:
-            return render_template("all_companies.html",message="No pattern provided")
+        return render_template("all_companies.html",message="No pattern provided",user=session.get('user'))
     if len(request.values['pattern']) < 2:
         if 'user' in session:
             return render_template("all_companies.html",message="Too short pattern",user=session['user'])
