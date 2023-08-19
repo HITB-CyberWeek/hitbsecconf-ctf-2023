@@ -27,4 +27,4 @@ proxies:
         limit: 100r/m
         burst: 50
     dns_records:
-      - notes
+      - tokenourcer
