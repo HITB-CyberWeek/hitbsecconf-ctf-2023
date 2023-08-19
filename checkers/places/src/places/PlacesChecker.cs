@@ -269,7 +269,7 @@ internal class PlacesChecker : IChecker
 		return writer.WrittenMemory;
 	}
 
-	private const int Port = 8080;
+	private const int Port = 443;
 
 	private const int MaxMessageSize = 1024;
 	private const int MaxHttpBodySize = 16 * 1024;
@@ -280,7 +280,7 @@ internal class PlacesChecker : IChecker
 
 	private const double FloatingPointTolerance = 0.000001;
 
-	private static Uri GetBaseUri(string host) => new($"http://{host}:{Port}/");
+	private static Uri GetBaseUri(string host) => new($"https://{host}:{Port}/");
 
 	private const string ApiAuth = "/api/auth";
 	private const string ApiList = "/api/list";
