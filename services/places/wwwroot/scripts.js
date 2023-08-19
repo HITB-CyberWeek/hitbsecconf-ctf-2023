@@ -83,7 +83,7 @@ geolocate().then(coords => {
 			.then(body => {
 				const reader = body.pipeThrough(new TextDecoderStream()).getReader();
 				reader.read().then(({done, value}) => {
-					value.split('\n')
+					value?.split('\n')
 						.filter(line => !!line.length)
 						.forEach(line => state.places.push(JSON.parse(line)));
 			}).then(() => update());
@@ -193,7 +193,7 @@ $routeBuild.onclick = () => {
 			state.builtRoute = [];
 			const reader = body.pipeThrough(new TextDecoderStream()).getReader();
 			reader.read().then(({done, value}) => {
-				value.split('\n').filter(line => !!line.length).forEach(line => {
+				value?.split('\n').filter(line => !!line.length).forEach(line => {
 					const json = JSON.parse(line);
 					state.builtRoute.push([json.long, json.lat]);
 					text.push(`${randomChoice(gotoPhrases)} φ=${json.lat}°, λ=${json.long}°. ${randomChoice(publicPhrases)}: '${json.public}'. ${randomChoice(secretPhrases)}: '${json.secret}'.`);
