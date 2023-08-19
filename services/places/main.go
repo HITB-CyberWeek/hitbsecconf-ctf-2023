@@ -27,7 +27,7 @@ const (
 
 	ListTake       = 30
 	MaxRoutePlaces = 10
-	MaxFieldLength = 128
+	MaxFieldLength = 64
 
 	ErrorInvalidPlace    = "invalid place"
 	ErrorInvalidRoute    = "invalid route"
@@ -61,13 +61,8 @@ func main() {
 
 	e := echo.New()
 	e.Use(middleware.BodyLimit("1k"))
-	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
-		Root:   "wwwroot",
-		Browse: true,
-	}))
-	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
-		Timeout: 10 * time.Second,
-	}))
+	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{Root: "wwwroot"}))
+	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{Timeout: 10 * time.Second}))
 
 	r := e.Group("/api")
 	{
