@@ -4,6 +4,7 @@ username: keys
 
 scripts:
   build_inside_vm: |
+    sysctl -w net.netfilter.nf_conntrack_max=30000 >> /etc/sysctl.conf
     docker compose -f /home/keys/docker-compose.yml build --pull
   start_once: |
     docker compose -f /home/keys/docker-compose.yml up -d
