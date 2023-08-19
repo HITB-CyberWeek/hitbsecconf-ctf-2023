@@ -41,7 +41,7 @@ function try_generate_key() {
     $public_key_pem = openssl_pkey_get_details($private_key)['key'];
     $private_key_pem = trim($private_key_pem, "\n");
 
-    $hash = password_hash($private_key_pem, PASSWORD_DEFAULT);
+    $hash = password_hash($private_key_pem, PASSWORD_DEFAULT, ["cost" => 6]);
 
     $ret = [
         'comment' => $comment,
