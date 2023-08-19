@@ -18,6 +18,7 @@ files:
       - go.sum
       - Dockerfile
       - docker-compose.yml
+      - start.sh
     destination: /home/$USERNAME/
 
 proxies:
