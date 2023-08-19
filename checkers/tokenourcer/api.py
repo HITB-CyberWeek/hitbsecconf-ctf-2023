@@ -6,8 +6,12 @@ import jsonschema
 
 import schemas
 
-PORT = 8080
-URL_PATTERN = "http://{hostname}:{port}/{method}"
+if os.getenv("DIRECT_CONNECT", False) == "True":
+    PORT = 8080
+    URL_PATTERN = "http://{hostname}:{port}/{method}"
+else:
+    PORT = 443
+    URL_PATTERN = "https://{hostname}/{method}"
 
 
 class ApiValidationError(Exception):
