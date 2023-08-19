@@ -7,6 +7,8 @@ scripts:
   start_once: docker compose -f /home/$USERNAME/docker-compose.yml up -d
 
 files:
+  - source: wwwroot
+    destination: /home/$USERNAME/
   - sources:
       - crypt.go
       - main.go
