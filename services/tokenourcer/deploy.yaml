@@ -3,8 +3,8 @@ service: tokenourcer
 username: tokenourcer
 
 scripts:
-  build_inside_vm: docker compose -f /home/notes/docker-compose.yml build --pull
-  start_once: docker compose -f /home/notes/docker-compose.yml up -d
+  build_inside_vm: docker compose -f /home/$USERNAME/docker-compose.yaml build --pull
+  start_once: docker compose -f /home/$USERNAME/docker-compose.yaml up -d
 
 files:
   - sources:
