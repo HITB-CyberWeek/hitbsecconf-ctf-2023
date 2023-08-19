@@ -13,7 +13,7 @@ files:
       - crypt.go
       - main.go
       - keys.go
-      - places.go
+      - place.go
       - go.mod
       - go.sum
       - Dockerfile
