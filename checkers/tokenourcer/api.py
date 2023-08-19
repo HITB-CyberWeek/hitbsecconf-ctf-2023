@@ -1,12 +1,13 @@
 import base64
 import functools
+import os
 
 import requests
 import jsonschema
 
 import schemas
 
-if os.getenv("DIRECT_CONNECT", False) == "True":
+if os.getenv("DIRECT_CONNECT", False):
     PORT = 8080
     URL_PATTERN = "http://{hostname}:{port}/{method}"
 else:
