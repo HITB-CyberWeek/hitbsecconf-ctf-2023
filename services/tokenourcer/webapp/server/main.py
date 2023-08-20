@@ -1,6 +1,6 @@
 import functools
 
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, redirect
 import redis
 
 import util
@@ -158,6 +158,11 @@ def list_resources(token_secret):
     return {
         'resource_ids': resource_ids,
     }
+
+
+@app.get('/')
+def index_handler():
+    return redirect("/index.html")
 
 
 if __name__ == '__main__':
