@@ -118,7 +118,7 @@ async def check_service(request: CheckRequest) -> Verdict:
     return ec.verdict
 
 
-@checker.define_vuln("flag_id is a token name")
+@checker.define_vuln("Flag ID is the token's name, flag is the content of the resource")
 class TokenoucerChecker(VulnChecker):
     @staticmethod
     def put(request: PutRequest) -> Verdict:

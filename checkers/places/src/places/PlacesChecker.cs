@@ -20,7 +20,7 @@ namespace checker.places;
 internal class PlacesChecker : IChecker
 {
 	public Task<string> Info()
-		=> Task.FromResult("vulns: 1\npublic_flag_description: Flag ID is place ID, flag is inside secret field in this place\n");
+		=> Task.FromResult("vulns: 1\npublic_flag_description: Flag ID is the place's ID, flag is inside the secret field in this place\n");
 
 	public async Task Check(string host)
 	{
