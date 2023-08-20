@@ -36,7 +36,7 @@ class NoteChecker(checklib.http.HttpChecker):
         # check crate note
         self.login(user)
         description = ""
-        for i in range(checklib.random.integer([4, 5, 7])):
+        while len(description) < 15:
             description += f"{checklib.random.english_word()} "
         self.create_notes(description)
         self.logout()
@@ -112,7 +112,7 @@ class NoteChecker(checklib.http.HttpChecker):
 
     def create_notes(self, flag: str):
         title = ""
-        for i in range(checklib.random.integer([1, 2, 3, 4, 5])):
+        while len(title) < 7:
             title += f"{checklib.random.english_word()} "
         create_note = self.try_http_post(
             "/notes/add/",
