@@ -1,0 +1,31 @@
+version: 1
+service: router
+username: router
+scripts:
+  build_inside_vm: /home/$USERNAME/router/setup_router_and_proxy.sh
+  start_once: /home/$USERNAME/router/deploy_local_proxies.sh > /home/$USERNAME/router/deploy_local_proxies.log 2>&1
+files:
+  - sources:
+      - requirements.txt
+      - deploy_proxies.py
+      - config.py
+      - settings.py
+      - local_connection.py
+      - router
+      - nginx
+      - iptables
+      - monitoring
+    destination: /home/$USERNAME
+
+  # Note! Following paths are absolute and runner-specific
+  - source: /etc/letsencrypt/archive/
+    destination: /home/$USERNAME/certificates/
+  - source: /home/runner/do_api_token
+    destination: /home/$USERNAME
+
+  # Service configs
+  - source: ../training/service/deploy.yaml
+    destination: /home/$USERNAME/configs/training/
+
+  - source: router/motd
+    destination: /etc/

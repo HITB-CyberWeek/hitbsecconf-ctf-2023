@@ -10,7 +10,7 @@ var builder = WebApplication
 builder.WebHost
     .UseKestrel(options =>
     {
-        options.ListenLocalhost(5000);
+        options.ListenAnyIP(5000);
         options.Limits.MaxRequestBodySize = 0L;
         options.Limits.MaxRequestHeadersTotalSize = 8192;
         options.Limits.MinRequestBodyDataRate = new MinDataRate(1024.0, TimeSpan.FromSeconds(3));

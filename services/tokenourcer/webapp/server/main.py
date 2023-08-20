@@ -61,7 +61,7 @@ def issue_token():
     if storage_api.is_token_exist(token_name):
         return make_response("token name is already exist", 400)
 
-    token_secret = util.gen_token_secret()
+    token_secret = token_name + ':' + util.gen_token_secret()
     storage_api.add_token(token_name, token_secret)
 
     return {
@@ -85,12 +85,6 @@ def create_resource(token_secret):
     return {
         'resource_id': resource_id
     }
-
-
-# def check_owner(token_name, resource_id):
-#     token_secret = get_token_secret(token_name)
-#     assert storage_api.get_tokens_by_resource_id(resource_id)[0] != token_secret, 'forbidden'
-#     return token_secret
 
 
 @app.post('/grant_access')
@@ -146,12 +140,23 @@ def get_resource(token_secret):
     if token_secret not in storage_api.get_tokens_by_resource_id(resource_id):
         return make_response('resource not found', 404)
 
-    storage_api.inc_counter(token_secret, resource_id)
     resource = storage_api.get_resource(resource_id)
     if not resource:
         return make_response('resource not found', 404)
+    storage_api.inc_counter(token_secret, resource_id)
     return {
         'blob': resource
+    }
+
+
+@app.get('/list_resources')
+@handler_wrapper
+@with_auth_token
+def list_resources(token_secret):
+    resource_ids = list(storage_api.get_resource_ids_by_token(token_secret) or [])
+
+    return {
+        'resource_ids': resource_ids,
     }
 
 

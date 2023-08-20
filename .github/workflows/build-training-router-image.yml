@@ -25,7 +25,7 @@ jobs:
           # and we host DNS records in the "main" DO account
           DO_API_TOKEN: ${{ secrets.DO_API_TOKEN }}
       - name: Build the image
-        run: python3 build_image.py --skip-updating-vulnimage-config router.deploy.yaml
+        run: python3 build_image.py --skip-updating-vulnimage-config router.training.deploy.yaml
         working-directory: "${{ github.workspace }}/vuln_images/"
         env:
           DO_API_TOKEN: ${{ secrets.DO_API_TOKEN_TRAINING }}

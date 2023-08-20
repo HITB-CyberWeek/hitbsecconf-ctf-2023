@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -56,14 +55,14 @@ internal class PlacesChecker : IChecker
 			Route = places.Select(place => place.Id).RandomOrder().ToArray(),
 			PublicHash = Convert.ToBase64String(places.Select(place => place.Public).OrderBy(s => s).ComputeSha256()),
 			SecretHash = Convert.ToBase64String(placesWithFlag.Select(place => place.Secret).OrderBy(s => s).ComputeSha256()),
-			CookieWithFlag = Convert.ToBase64String(cookieWithFlag),
-			CookieWithoutFlag = Convert.ToBase64String(cookieWithoutFlag),
+			CookieWithFlag = cookieWithFlag,
+			CookieWithoutFlag = cookieWithoutFlag,
 
 			PublicFlagId = places.FirstOrDefault(place => place.Secret == flag)!.Id
 		};
 	}
 
-	private async Task<(byte[] Cookie, Place[] Places)> PutInternal(string host, string flag)
+	private async Task<(string Cookie, Place[] Places)> PutInternal(string host, string flag)
 	{
 		var baseUri = GetBaseUri(host);
 
@@ -77,7 +76,7 @@ internal class PlacesChecker : IChecker
 		var (lat, lon) = RndUtil.Bool() ? (0.0, 0.0) : RndPlace.Coords();
 		var id = await AuthAsync(client, lat, lon).ConfigureAwait(false);
 
-		await Console.Error.WriteLineAsync($"auth for lat={lat.ToString(NumberFormatInfo.InvariantInfo)} and long={lon.ToString(NumberFormatInfo.InvariantInfo)}, got place id '{id}'").ConfigureAwait(false);
+		await Console.Error.WriteLineAsync($"auth '{id}' for lat={lat.ToString(NumberFormatInfo.InvariantInfo)} and long={lon.ToString(NumberFormatInfo.InvariantInfo)}").ConfigureAwait(false);
 		await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
 
 		if(flag != null)
@@ -111,17 +110,13 @@ internal class PlacesChecker : IChecker
 
 		await Console.Error.WriteLineAsync($"total sleep: {slept} msec").ConfigureAwait(false);
 
-		var cookie = string.Join("; ", client.Cookies?.GetAllCookies().Select(c => $"{c.Name}={c.Value}") ?? Enumerable.Empty<string>());
-		await Console.Error.WriteLineAsync($"cookie '{cookie.ShortenLog(MaxCookieSize)}' with length '{cookie.Length}'").ConfigureAwait(false);
+		var cookie = client.Cookies?.GetAllCookies().FirstOrDefault(c => c.Name == AuthCookieName)?.Value;
+		await Console.Error.WriteLineAsync($"cookie '{cookie.ShortenLog(MaxCookieSize)}' with length '{cookie?.Length}'").ConfigureAwait(false);
 
-		if(string.IsNullOrEmpty(cookie) || cookie.Length > MaxCookieSize)
-			throw new CheckerException(ExitCode.MUMBLE, "too large or invalid cookies");
+		if(string.IsNullOrEmpty(cookie) || cookie.Length > MaxCookieSize || !AuthCookieRegex.IsMatch(cookie))
+			throw new CheckerException(ExitCode.MUMBLE, "cookie 'auth' not found or too large or contains invalid chars");
 
-		var bytes = DoIt.TryOrDefault(() => Encoding.UTF8.GetBytes(cookie));
-		if(bytes == null || bytes.Length > MaxCookieSize)
-			throw new CheckerException(ExitCode.MUMBLE, "too large or invalid cookies");
-
-		return (bytes, places);
+		return (cookie, places);
 	}
 
 	public async Task Get(string host, PutResult put, string flag, int vuln)
@@ -133,8 +128,8 @@ internal class PlacesChecker : IChecker
 		var route = put.Route;
 		var publicHash = Convert.FromBase64String(put.PublicHash);
 		var secretHash = Convert.FromBase64String(put.SecretHash);
-		var cookieWithFlag = Encoding.UTF8.GetString(Convert.FromBase64String(put.CookieWithFlag));
-		var cookieWithoutFlag = Encoding.UTF8.GetString(Convert.FromBase64String(put.CookieWithoutFlag));
+		var cookieWithFlag = $"{AuthCookieName}={put.CookieWithFlag}";
+		var cookieWithoutFlag = $"{AuthCookieName}={put.CookieWithoutFlag}";
 
 		int slept = 0;
 		await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
@@ -175,6 +170,8 @@ internal class PlacesChecker : IChecker
 
 		if(RndUtil.Bool())
 		{
+			await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
+
 			randomDefaultHeaders = RndHttp.RndDefaultHeaders(baseUri);
 			await Console.Error.WriteLineAsync($"random headers '{JsonSerializer.Serialize(new FakeDictionary<string, string>(randomDefaultHeaders))}'").ConfigureAwait(false);
 			client = new AsyncHttpClient(baseUri, randomDefaultHeaders, cookies: true);
@@ -240,7 +237,7 @@ internal class PlacesChecker : IChecker
 
 		var id = result.BodyAsString;
 		if(string.IsNullOrEmpty(id) || !PlaceIdRegex.IsMatch(id))
-			throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiPlace} response: expected /[0-9a-fA-F]{{64}}/ place ID");
+			throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiPlace} response: expected /^[0-9a-f]{{64}}$/i");
 
 		return id;
 	}
@@ -269,18 +266,20 @@ internal class PlacesChecker : IChecker
 		return writer.WrittenMemory;
 	}
 
-	private const int Port = 8080;
+	private const int Port = 443;
 
 	private const int MaxMessageSize = 1024;
 	private const int MaxHttpBodySize = 16 * 1024;
 	private const int MaxCookieSize = 256;
 
-	private const int MaxOneTimeDelay = 5000;
+	private const int MaxOneTimeDelay = 2000;
 	private const int NetworkOpTimeout = 12000;
 
 	private const double FloatingPointTolerance = 0.000001;
 
-	private static Uri GetBaseUri(string host) => new($"http://{host}:{Port}/");
+	private static Uri GetBaseUri(string host) => new($"https://{host}:{Port}/");
+
+	private const string AuthCookieName = "auth";
 
 	private const string ApiAuth = "/api/auth";
 	private const string ApiList = "/api/list";
@@ -289,6 +288,8 @@ internal class PlacesChecker : IChecker
 	private const string ApiRoute = "/api/route";
 
 	private static readonly Regex PlaceIdRegex = new("^[0-9a-fA-F]{64}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+	private static readonly Regex AuthCookieRegex = new(@"^[a-zA-Z0-9\.!$@:+\*=_-]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
 	private static readonly Dictionary<string, string> JsonContentTypeHeaders = new() { { "Content-Type", "application/json" } };
 
 	private static readonly JsonSerializerOptions JsonOptions = new()

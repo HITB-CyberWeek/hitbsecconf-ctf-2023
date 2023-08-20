@@ -3,7 +3,6 @@ import { createAuth } from '@keystone-6/auth';
 
 import { statelessSessions } from '@keystone-6/core/session';
 
-// let sessionSecret = process.env.SESSION_SECRET;
 let sessionSecret = randomBytes(32).toString('hex');
 
 // set this to some secret sting persist session on restarts

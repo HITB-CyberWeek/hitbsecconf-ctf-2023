@@ -13,7 +13,6 @@ export default withAuth(
     lists,
     session,
     ui: {
-      // isDisabled: true,
       isAccessAllowed: (context) =>  true,
     }
   })

@@ -1,9 +1,30 @@
 ﻿using System.Buffers;
+using System.Runtime.CompilerServices;
 
 namespace spaces;
 
 internal static class AvatarGen
 {
+    private static readonly byte[,] Mask16 =
+    {
+        { 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 4, 4, 4, 4 },
+        { 0, 0, 0, 1, 1, 1, 4, 4 },
+        { 0, 0, 1, 1, 1, 1, 1, 1 },
+        { 0, 0, 1, 1, 1, 1, 1, 1 },
+        { 0, 0, 1, 1, 2, 2, 1, 1 },
+        { 0, 0, 1, 1, 2, 2, 1, 1 },
+        { 0, 1, 1, 1, 1, 1, 1, 1 },
+        { 0, 1, 1, 1, 1, 1, 1, 1 },
+        { 0, 1, 1, 1, 1, 1, 1, 1 },
+        { 0, 0, 1, 1, 1, 3, 3, 3 },
+        { 0, 0, 1, 1, 1, 3, 3, 3 },
+        { 0, 0, 1, 1, 1, 1, 1, 1 },
+        { 0, 0, 0, 1, 1, 1, 5, 5 },
+        { 0, 0, 0, 0, 0, 5, 5, 5 },
+        { 0, 0, 0, 0, 0, 0, 0, 0 },
+    };
+
     private static readonly byte[,] Mask8 =
     {
         { 0, 0, 0, 0 },
@@ -47,7 +68,7 @@ internal static class AvatarGen
         {'Z', "Zinnia"},
     };
 
-    private static readonly byte[,] Mask = Mask8;
+    private static readonly byte[,] Mask = Mask16;
     private static readonly int MaskHeight = Mask.GetLength(0);
     private static readonly int MaskWidth = Mask.GetLength(1);
 
@@ -88,11 +109,12 @@ internal static class AvatarGen
             var row = y << SizeLog2;
             for(int x = 0; x < MaskWidth; x++)
             {
+                var r = rnd.FastOneOrZero();
                 var i = Mask[y, x] switch
                 {
                     0 => 0,
-                    1 => flag ? 1 : rnd.Next(2),
-                    var v and >= 2 => rnd.Next(2) == 0 ? rnd.Next(2) : v
+                    1 => flag ? 1 : r,
+                    var v and >= 2 => rnd.FastOneOrZero() == 0 ? r : v
                 };
 
                 flag |= i > 0;
@@ -113,7 +135,7 @@ internal static class AvatarGen
                 if(array[idx] != White)
                     continue;
 
-                if(x > 0 && array[idx - 1] is not (White or Black) || x < MaskWidth - 1 && array[idx + 1] is not (White or Black) || y > 0 && array[((y - 1) << SizeLog2) + x] is not (White or Black) || y < MaskHeight - 1 && array[((y + 1) << SizeLog2) + x] is not (White or Black))
+                if(x < MaskWidth - 1 && array[idx + 1] != White || y > 0 && array[((y - 1) << SizeLog2) + x] is not (White or Black) || y < MaskHeight - 1 && array[((y + 1) << SizeLog2) + x] is not (White or Black))
                 {
                     array[idx] = Black;
                     array[row - x + SizeMinusOne] = Black;
@@ -121,4 +143,7 @@ internal static class AvatarGen
             }
         }
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static int FastOneOrZero(this Random rnd) => rnd.Next() & 1;
 }

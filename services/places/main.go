@@ -27,7 +27,7 @@ const (
 
 	ListTake       = 30
 	MaxRoutePlaces = 10
-	MaxFieldLength = 128
+	MaxFieldLength = 64
 
 	ErrorInvalidPlace    = "invalid place"
 	ErrorInvalidRoute    = "invalid route"
@@ -61,13 +61,8 @@ func main() {
 
 	e := echo.New()
 	e.Use(middleware.BodyLimit("1k"))
-	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
-		Root:   "wwwroot",
-		Browse: true,
-	}))
-	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
-		Timeout: 10 * time.Second,
-	}))
+	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{Root: "wwwroot"}))
+	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{Timeout: 10 * time.Second}))
 
 	r := e.Group("/api")
 	{
@@ -98,7 +93,7 @@ func main() {
 		r.POST("/route", route)
 	}
 
-	if err := e.Start("127.0.0.1:8080"); !errors.Is(err, http.ErrServerClosed) {
+	if err := e.Start(":8080"); !errors.Is(err, http.ErrServerClosed) {
 		panic(err)
 	}
 }
@@ -246,9 +241,6 @@ func route(c echo.Context) error {
 				err = e
 			}
 			return placeId
-		}).
-		WhereT(func(item PlaceId) bool {
-			return item != PlaceId{}
 		}).
 		Distinct().
 		ToSlice(&route)

@@ -1,0 +1,64 @@
+# pydisasm version 6.0.5
+# Python bytecode 3.9.0 (3425)
+# Disassembled from Python 3.9.17 (main, Jul  4 2023, 06:18:56) 
+# [GCC 12.2.0]
+# Timestamp in code: 1690284959 (2023-07-25 11:35:59)
+# Source code size mod 2**32: 78 bytes
+
+# Method Name:       F1
+# Filename:          test_obf1.py
+# Argument count:    1
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  1
+# Stack size:        2
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        3
+# Constants:
+#    0: None
+#    1: '123qweasd'
+#    2: 'FLAG'
+#    3: 'None'
+# Varnames:
+#	p
+# Positional arguments:
+#	p
+  4:
+            LOAD_FAST            0 (p)
+            LOAD_CONST           1 ('123qweasd')
+            COMPARE_OP           2 (==)
+            POP_JUMP_IF_FALSE    L12 (to 12)
+
+  5:
+            LOAD_CONST           2 ('FLAG')
+            RETURN_VALUE
+
+L12:
+   6:
+            LOAD_CONST           3 ('None')
+            RETURN_VALUE
+
+
+# Method Name:       <module>
+# Filename:          test_obf1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  0
+# Stack size:        2
+# Flags:             0x00000040 (NOFREE)
+# First Line:        3
+# Constants:
+#    0: <Code38 code object F1 at 0x7f491c3c3220, file test_obf1.py>, line 3
+#    1: 'F1'
+#    2: None
+# Names:
+#    0: F1
+  3:
+            LOAD_CONST           0 (<Code38 code object F1 at 0x7f491c3c3220, file test_obf1.py>, line 3)
+            LOAD_CONST           1 ('F1')
+            MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
+            STORE_NAME           0 (F1)
+            LOAD_CONST           2 (None)
+            RETURN_VALUE
+

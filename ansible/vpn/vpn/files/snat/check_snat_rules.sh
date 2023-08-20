@@ -5,7 +5,7 @@
 for num in {0..300}; do 
     ip="10.$((80 + num / 256)).$((num % 256)).1"
 
-    if ! iptables -t nat -C POSTROUTING -o team${num} -j SNAT --to-source ${ip}; then
+    if ! iptables -t nat -C POSTROUTING -d 10.60.0.0/22 -o team${num} -j SNAT --to-source ${ip}; then
         echo "Holy sheet! Team ${num} is not SNATted!!!"
         echo "You can fix it with this command"
         echo "iptables -t nat -A POSTROUTING -o team${num} -j SNAT --to-source ${ip}"

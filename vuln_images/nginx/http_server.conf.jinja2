@@ -2,7 +2,15 @@
     {% if location.limit %}
         limit_req_zone $bin_slash24_limit zone=req_zone_{{ service_name }}_{{ proxy_name }}_{{ location.index }}:10m rate={{ location.limit }};
     {% endif %}
+    {% if location.simultaneous_connections %}
+        limit_conn_zone $bin_slash24_limit zone=conn_zone_{{ service_name }}_{{ proxy_name }}_{{ location.index }}:10m;
+    {% endif %}
 {% endfor %}
+
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    '' close;
+}
 
 upstream upstream_{{ service_name }}_{{ proxy_name }} {
     server {{ upstream_address }} max_fails=0;
@@ -79,6 +87,7 @@ server {
     client_max_body_size 100M;
 
     error_page 503 =429 /---ctf-proxy-too-many-requests---.html;
+    error_page 429 /---ctf-proxy-too-many-requests---.html;
 
     proxy_buffering off;
 
@@ -107,6 +116,11 @@ server {
         location {{ location.location }} {
             {% if location.limit %}
                 limit_req zone=req_zone_{{ service_name }}_{{ proxy_name }}_{{ location.index }} {% if location.burst > 0 %}burst={{ location.burst }} nodelay{% endif %};
+                limit_req_status 429;
+            {% endif %}
+            {% if location.simultaneous_connections %}
+                limit_conn conn_zone_{{ service_name }}_{{ proxy_name }}_{{ location.index }} {{ location.simultaneous_connections }};
+                limit_conn_status 429;
             {% endif %}
 
             proxy_pass {{ upstream_protocol }}://upstream_{{ service_name }}_{{ proxy_name }};
@@ -116,6 +130,11 @@ server {
                 proxy_ssl_certificate_key {{ upstream_client_certificate_key }};
                 proxy_ssl_server_name on;
                 proxy_ssl_name {{ server_name }};
+            {% endif %}
+
+            {% if location.proxy_websockets %}
+                    proxy_set_header Upgrade $http_upgrade;
+                    proxy_set_header Connection $connection_upgrade;
             {% endif %}
         }
     {% endfor %}
