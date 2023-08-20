@@ -170,6 +170,8 @@ internal class PlacesChecker : IChecker
 
 		if(RndUtil.Bool())
 		{
+			await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
+
 			randomDefaultHeaders = RndHttp.RndDefaultHeaders(baseUri);
 			await Console.Error.WriteLineAsync($"random headers '{JsonSerializer.Serialize(new FakeDictionary<string, string>(randomDefaultHeaders))}'").ConfigureAwait(false);
 			client = new AsyncHttpClient(baseUri, randomDefaultHeaders, cookies: true);
@@ -270,7 +272,7 @@ internal class PlacesChecker : IChecker
 	private const int MaxHttpBodySize = 16 * 1024;
 	private const int MaxCookieSize = 256;
 
-	private const int MaxOneTimeDelay = 5000;
+	private const int MaxOneTimeDelay = 2000;
 	private const int NetworkOpTimeout = 12000;
 
 	private const double FloatingPointTolerance = 0.000001;
