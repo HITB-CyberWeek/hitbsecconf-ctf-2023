@@ -94,10 +94,11 @@ jobs:
         env:
           DO_DEPLOY_KEY: ${{ secrets.DO_DEPLOY_KEY }}
       - name: Deploy proxies
-        run: python3 deploy_proxies.py --skip-preparation --skip-dns ../services/${{ github.event.inputs.service_name }}/deploy.yaml
+        run: python3 deploy_proxies.py --skip-preparation ../services/${{ github.event.inputs.service_name }}/deploy.yaml # --skip-dns
         working-directory: "${{ github.workspace }}/vuln_images/"
         env:
           DO_API_TOKEN: ${{ secrets.DO_API_TOKEN }}
           CERTIFICATES_FOLDER: /etc/letsencrypt/live
           PROXY_SSH_KEY: "${{ github.workspace }}/ansible/cloud/cloud_master/files/api_srv/do_deploy_key"
+          TEAMS_COUNT: 1
 

@@ -7,12 +7,14 @@ import random
 import time
 import json
 import traceback
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 import requests
 
 OK, CORRUPT, MUMBLE, DOWN, CHECKER_ERROR = 101, 102, 103, 104, 110
 
-PORT = 3000
+PORT = 443
 TIMEOUT = 15
 
 ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
@@ -36,7 +38,7 @@ def info():
 
 
 def call_api(s, ip, data):
-    return s.post(f"http://{ip}:{PORT}/api/graphql", json=data).json().get("data", {})
+    return s.post(f"https://{ip}:{PORT}/api/graphql", json=data, verify=False).json().get("data", {})
 
 
 def gen_login():

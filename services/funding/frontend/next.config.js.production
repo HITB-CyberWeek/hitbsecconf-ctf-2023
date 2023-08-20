@@ -12,6 +12,11 @@ const nextConfig = {
         });
         return config;
     },
+
+    // See https://nextjs.org/docs/pages/api-reference/components/image#unoptimized
+    images: {
+        unoptimized: true,
+    },
 }
 
 module.exports = nextConfig

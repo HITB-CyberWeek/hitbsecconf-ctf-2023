@@ -1,0 +1,136 @@
+# pydisasm version 6.0.5
+# Python bytecode 3.8.0 (3413)
+# Disassembled from Python 3.8.17 (default, Jul  4 2023, 06:27:59) 
+# [GCC 12.2.0]
+# Timestamp in code: 1690294256 (2023-07-25 14:10:56)
+# Source code size mod 2**32: 151 bytes
+
+# Method Name:       five
+# Filename:          1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  0
+# Stack size:        1
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        1
+# Constants:
+#    0: None
+#    1: 5
+  2:
+            LOAD_CONST           1 (5)
+            RETURN_VALUE
+
+# Method Name:       <module>
+# Filename:          1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  0
+# Stack size:        2
+# Flags:             0x00000040 (NOFREE)
+# First Line:        1
+# Constants:
+#    0: <Code38 code object five at 0x7f42673239d0, file 1.py>, line 1
+#    1: 'five'
+#    2: 10
+#    3: 5
+#    4: 1
+#    5: 3
+#    6: 0
+#    7: 'a'
+#    8: 'b'
+#    9: None
+# Names:
+#    0: five
+#    1: print
+#    2: a
+#    3: c
+#    4: b
+  1:
+            LOAD_CONST           0 (<Code38 code object five at 0x7f42673239d0, file 1.py>, line 1)
+            LOAD_CONST           1 ('five')
+            MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
+            STORE_NAME           0 (five)
+
+  3:
+            LOAD_NAME            1 (print)
+            LOAD_NAME            0 (five)
+            CALL_FUNCTION        0
+            CALL_FUNCTION        1
+            POP_TOP
+
+  4:
+            LOAD_CONST           2 (10)
+            STORE_NAME           2 (a)
+
+  5:
+            LOAD_NAME            2 (a)
+            LOAD_CONST           3 (5)
+            BINARY_SUBTRACT
+            STORE_NAME           2 (a)
+
+  6:
+            LOAD_NAME            2 (a)
+            LOAD_CONST           3 (5)
+            BINARY_MULTIPLY
+            STORE_NAME           2 (a)
+
+  7:
+            LOAD_NAME            1 (print)
+            LOAD_NAME            2 (a)
+            CALL_FUNCTION        1
+            POP_TOP
+
+  9:
+            LOAD_CONST           4 (1)
+            STORE_NAME           2 (a)
+
+ 10:
+            LOAD_CONST           5 (3)
+            STORE_NAME           3 (c)
+
+ 11:
+            LOAD_NAME            2 (a)
+            LOAD_CONST           6 (0)
+            COMPARE_OP           5 (>=)
+            POP_JUMP_IF_FALSE    L76 (to 76)
+            LOAD_NAME            3 (c)
+            LOAD_CONST           5 (3)
+            COMPARE_OP           2 (==)
+            POP_JUMP_IF_FALSE    L76 (to 76)
+
+ 12:
+            LOAD_NAME            2 (a)
+            STORE_NAME           4 (b)
+            JUMP_FORWARD         L82 (to 82)
+
+L76:
+  14:
+            LOAD_NAME            2 (a)
+            UNARY_NEGATIVE
+            STORE_NAME           4 (b)
+
+L82:
+  16:
+            LOAD_NAME            1 (print)
+            LOAD_NAME            4 (b)
+            CALL_FUNCTION        1
+            POP_TOP
+            JUMP_ABSOLUTE        LAB1
+ 17:
+            LOAD_NAME            1 (print)
+            LOAD_CONST           7 ('a')
+            CALL_FUNCTION        1
+            POP_TOP
+LAB2:
+ 18:
+            LOAD_NAME            1 (print)
+            LOAD_CONST           8 ('b')
+            CALL_FUNCTION        1
+            POP_TOP
+            LOAD_CONST           9 (None)
+            RETURN_VALUE
+
+LAB1:
+            JUMP_ABSOLUTE LAB2

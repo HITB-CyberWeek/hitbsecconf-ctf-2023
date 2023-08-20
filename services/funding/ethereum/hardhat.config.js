@@ -6,7 +6,9 @@ module.exports = {
         hitb: {
             url: "http://eth.ctf.hitb.org:8545",
             chainId: 68664447,
-            accounts: ["<INSERT-YOUR-PRIVATE-KEY-HERE>"]
+            accounts: [
+                // Insert your private key here
+            ]
         }
     }
 };

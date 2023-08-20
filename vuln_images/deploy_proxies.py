@@ -75,6 +75,8 @@ async def deploy_http_proxy(ssh: asyncssh.SSHClientConnection, host: str, team_i
             "location": limit.location,
             "limit": limit.limit,
             "burst": limit.burst,
+            "proxy_websockets": limit.proxy_websockets,
+            "simultaneous_connections": limit.simultaneous_connections,
         })
         if limit.location == "/":
             has_global_location = True
@@ -458,6 +460,7 @@ def main(
         config = None  # config is not needed if we do --prepare-only
 
     if check:
+        typer.echo("Config looks good!")
         raise typer.Exit()
 
     if local:

@@ -22,7 +22,10 @@ func LoadOrCreateKey(file string, size int32) []byte {
 	}
 
 	bytes = make([]byte, size)
-	rand.Read(bytes)
+	_, err = rand.Read(bytes)
+	if err != nil {
+		panic(err)
+	}
 
 	err = os.WriteFile(file, bytes, 0640)
 	if err != nil {

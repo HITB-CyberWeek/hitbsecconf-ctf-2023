@@ -39,10 +39,14 @@ internal class SpacesChecker : IChecker
 			throw new CheckerException(result.StatusCode.ToExitCode(), $"get / failed: {result.StatusCode.ToReadableCode()}");
 
 		var wsUri = GetWsUri(host);
-		var wsClient = await new WsClient<Message, Command>(SerializeMessage, DeserializeMessageAsync<Message>, client.Cookies, MaxMessageSize).ConnectAsync(wsUri).ConfigureAwait(false);
+		var wsClient = new WsClient<Message, Command>(SerializeMessage, DeserializeMessageAsync<Message>, client.Cookies, MaxMessageSize);
+
+		wsClient = await DoIt.TryOrDefaultAsync(() => wsClient.ConnectAsync(wsUri)).ConfigureAwait(false);
+		if(wsClient == null)
+			throw new CheckerException(ExitCode.DOWN, "ws connection failed");
 
 		WsResult wsSendResult;
-		var messagesCount = RndUtil.GetInt(1, 30);
+		var messagesCount = RndUtil.GetInt(1, 20);
 		for(int i = 0; i < messagesCount; i++)
 		{
 			wsSendResult = await wsClient.SendAsync(new Command { Type = MsgType.Generate }).ConfigureAwait(false);
@@ -93,7 +97,7 @@ internal class SpacesChecker : IChecker
 		if(awaited == null)
 			throw new CheckerException(ExitCode.MUMBLE, "failed to await all messages");
 
-        var cookie = string.Join("; ", client.Cookies?.GetAllCookies().Select(c => $"{c.Name}={c.Value}") ?? Enumerable.Empty<string>());
+		var cookie = string.Join("; ", client.Cookies?.GetAllCookies().Select(c => $"{c.Name}={c.Value}") ?? Enumerable.Empty<string>());
 		await Console.Error.WriteLineAsync($"cookie '{cookie.ShortenLog(MaxCookieSize)}' with length '{cookie?.Length ?? 0}'").ConfigureAwait(false);
 
 		if(string.IsNullOrEmpty(cookie) || cookie.Length > MaxCookieSize)
@@ -136,7 +140,11 @@ internal class SpacesChecker : IChecker
 			throw new CheckerException(result.StatusCode.ToExitCode(), $"get / failed: {result.StatusCode.ToReadableCode()}");
 
 		var wsUri = GetWsUri(host);
-		var wsClient = await new WsClient<Message, Command>(SerializeMessage, DeserializeMessageAsync<Message>, client.Cookies, MaxMessageSize).ConnectAsync(wsUri).ConfigureAwait(false);
+		var wsClient = new WsClient<Message, Command>(SerializeMessage, DeserializeMessageAsync<Message>, client.Cookies, MaxMessageSize);
+
+		wsClient = await DoIt.TryOrDefaultAsync(() => wsClient.ConnectAsync(wsUri)).ConfigureAwait(false);
+		if(wsClient == null)
+			throw new CheckerException(ExitCode.DOWN, "ws connection failed");
 
 		var awaited = await AwaitReceiveMessagesAsync(wsClient, msg => msg.Text?.Contains(flag) ?? false).ConfigureAwait(false);
 		if(awaited == null)
@@ -174,7 +182,7 @@ internal class SpacesChecker : IChecker
 		return writer.WrittenMemory;
 	}
 
-	private const int Port = 5000;
+	private const int Port = 443;
 
 	private const int MaxMessageSize = 1024;
 
@@ -185,8 +193,8 @@ internal class SpacesChecker : IChecker
 	private const int MaxWsOneTimeDelay = 200;
 	private const int NetworkOpTimeout = 12000;
 
-	private static Uri GetBaseUri(string host) => new($"http://{host}:{Port}/");
-	private static Uri GetWsUri(string host) => new($"ws://{host}:{Port}/ws");
+	private static Uri GetBaseUri(string host) => new($"https://{host}:{Port}/");
+	private static Uri GetWsUri(string host) => new($"wss://{host}:{Port}/ws");
 
 	private static readonly JsonSerializerOptions JsonOptions = new()
 	{

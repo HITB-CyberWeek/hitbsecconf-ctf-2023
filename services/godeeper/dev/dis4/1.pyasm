@@ -1,0 +1,683 @@
+# pydisasm version 6.0.5
+# Python bytecode 3.8.0 (3413)
+# Disassembled from Python 3.8.17 (default, Jul  4 2023, 06:27:59) 
+# [GCC 12.2.0]
+# Timestamp in code: 1692044704 (2023-08-14 20:25:04)
+# Source code size mod 2**32: 4161 bytes
+
+# Method Name:       GetTOK
+# Filename:          1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  17
+# Stack size:        5
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        1
+# Constants:
+#    0: None
+#    1: ''
+#    2: (224, 228, 249, 230, 251, 253, 169, 224, 231, 250, 249, 236, 234, 253)
+#    3: 137
+#    4: 7
+#    5: 2
+#    6: 1
+#    7: 'u'
+#    8: 5
+#    9: 'n'
+#   10: "res1.f_back.f_locals['COMP1']"
+#   11: "res1.f_back.f_globals['request']"
+#   12: "res3.headers.get('User-Agent')"
+#   13: 'Tohash'
+#   14: (126, 93, 89, 110, 1, 94, 81, 15, 121, 80, 75, 1, 113, 95, 80, 14)
+#   15: 0
+#   16: 4
+#   17: 3
+#   18: 2886960546
+#   19: 31
+#   20: 4294967295
+#   21: 363383258
+#   22: 2175242801
+#   23: 2736497484
+#   24: '%08X'
+#   25: 2879525698
+# Names:
+#    0: chr
+#    1: print
+#    2: exec
+#    3: globals
+#    4: locals
+#    5: list
+#    6: __dict__
+#    7: len
+#    8: eval
+#    9: encode
+#   10: range
+# Varnames:
+#	tmp1, c, f1, res1, res2, res3, myCOMP1, secret, mybuff, myhash, cur_byte, i, lowbits, TOK1, tmp, byte, sign
+# Local variables:
+#    0: tmp1
+#    1: c
+#    2: f1
+#    3: res1
+#    4: res2
+#    5: res3
+#    6: myCOMP1
+#    7: secret
+#    8: mybuff
+#    9: myhash
+#   10: cur_byte
+#   11: i
+#   12: lowbits
+#   13: TOK1
+#   14: tmp
+#   15: byte
+#   16: sign
+  4:
+            LOAD_CONST           1 ('')
+            STORE_FAST           0 (tmp1)
+
+  5:
+            LOAD_CONST           2 ((224, 228, 249, 230, 251, 253, 169, 224, 231, 250, 249, 236, 234, 253))
+            GET_ITER
+L8:
+            FOR_ITER             L30 (to 30)
+            STORE_FAST           1 (c)
+
+  6:
+            LOAD_FAST            0 (tmp1)
+            LOAD_GLOBAL          0 (chr)
+            LOAD_FAST            1 (c)
+            LOAD_CONST           3 (137)
+            BINARY_XOR
+            CALL_FUNCTION        1
+            INPLACE_ADD
+            STORE_FAST           0 (tmp1)
+            JUMP_ABSOLUTE        L8 (to 8)
+
+L30:
+   7:
+            LOAD_GLOBAL          1 (print)
+            LOAD_FAST            0 (tmp1)
+            CALL_FUNCTION        1
+            POP_TOP
+
+  9:
+            LOAD_GLOBAL          2 (exec)
+            LOAD_FAST            0 (tmp1)
+            LOAD_GLOBAL          3 (globals)
+            CALL_FUNCTION        0
+            LOAD_GLOBAL          4 (locals)
+            CALL_FUNCTION        0
+            CALL_FUNCTION        3
+            POP_TOP
+
+ 12:
+            LOAD_GLOBAL          5 (list)
+            LOAD_GLOBAL          4 (locals)
+            CALL_FUNCTION        0
+            LOAD_FAST            0 (tmp1)
+            LOAD_CONST           4 (7)
+            LOAD_CONST           0 (None)
+            BUILD_SLICE          2
+            BINARY_SUBSCR
+            BINARY_SUBSCR
+            LOAD_ATTR            6 (__dict__)
+            CALL_FUNCTION        1
+            GET_ITER
+L78:
+            FOR_ITER             L146 (to 146)
+            STORE_FAST           2 (f1)
+
+ 13:
+            LOAD_GLOBAL          7 (len)
+            LOAD_FAST            2 (f1)
+            CALL_FUNCTION        1
+            LOAD_CONST           5 (2)
+            COMPARE_OP           4 (>)
+            POP_JUMP_IF_FALSE    L78 (to 78)
+            LOAD_FAST            2 (f1)
+            LOAD_CONST           6 (1)
+            BINARY_SUBSCR
+            LOAD_CONST           7 ('u')
+            COMPARE_OP           2 (==)
+            POP_JUMP_IF_FALSE    L78 (to 78)
+            LOAD_FAST            2 (f1)
+            LOAD_CONST           8 (5)
+            BINARY_SUBSCR
+            LOAD_CONST           9 ('n')
+            COMPARE_OP           2 (==)
+            POP_JUMP_IF_FALSE    L78 (to 78)
+
+ 14:
+            LOAD_GLOBAL          4 (locals)
+            CALL_FUNCTION        0
+            LOAD_FAST            0 (tmp1)
+            LOAD_CONST           4 (7)
+            LOAD_CONST           0 (None)
+            BUILD_SLICE          2
+            BINARY_SUBSCR
+            BINARY_SUBSCR
+            LOAD_ATTR            6 (__dict__)
+            LOAD_FAST            2 (f1)
+            BINARY_SUBSCR
+            CALL_FUNCTION        0
+            STORE_FAST           3 (res1)
+            JUMP_ABSOLUTE        L78 (to 78)
+
+L146:
+  16:
+            LOAD_GLOBAL          8 (eval)
+            LOAD_CONST           10 ("res1.f_back.f_locals['COMP1']")
+            CALL_FUNCTION        1
+            STORE_FAST           4 (res2)
+
+ 17:
+            LOAD_GLOBAL          8 (eval)
+            LOAD_CONST           11 ("res1.f_back.f_globals['request']")
+            CALL_FUNCTION        1
+            STORE_FAST           5 (res3)
+
+ 18:
+            LOAD_GLOBAL          8 (eval)
+            LOAD_CONST           12 ("res3.headers.get('User-Agent')")
+            CALL_FUNCTION        1
+            STORE_FAST           5 (res3)
+
+ 21:
+            LOAD_FAST            4 (res2)
+            STORE_FAST           6 (myCOMP1)
+
+ 23:
+            LOAD_GLOBAL          1 (print)
+            LOAD_CONST           13 ('Tohash')
+            LOAD_FAST            6 (myCOMP1)
+            CALL_FUNCTION        2
+            POP_TOP
+
+ 24:
+            LOAD_CONST           1 ('')
+            STORE_FAST           0 (tmp1)
+
+ 25:
+            LOAD_CONST           14 ((126, 93, 89, 110, 1, 94, 81, 15, 121, 80, 75, 1, 113, 95, 80, 14))
+            GET_ITER
+L192:
+            FOR_ITER             L214 (to 214)
+            STORE_FAST           1 (c)
+
+ 26:
+            LOAD_FAST            0 (tmp1)
+            LOAD_GLOBAL          0 (chr)
+            LOAD_FAST            1 (c)
+            LOAD_CONST           3 (137)
+            BINARY_XOR
+            CALL_FUNCTION        1
+            INPLACE_ADD
+            STORE_FAST           0 (tmp1)
+            JUMP_ABSOLUTE        L192 (to 192)
+
+L214:
+  27:
+            LOAD_FAST            0 (tmp1)
+            STORE_FAST           7 (secret)
+
+ 28:
+            LOAD_FAST            6 (myCOMP1)
+            LOAD_CONST           0 (None)
+            LOAD_CONST           0 (None)
+            BUILD_SLICE          2
+            BINARY_SUBSCR
+            LOAD_METHOD          9 (encode)
+            CALL_METHOD          0
+            STORE_FAST           8 (mybuff)
+
+ 29:
+            LOAD_CONST           15 (0)
+            STORE_FAST           9 (myhash)
+
+L238:
+  30:
+            LOAD_GLOBAL          7 (len)
+            LOAD_FAST            8 (mybuff)
+            CALL_FUNCTION        1
+            LOAD_CONST           15 (0)
+            COMPARE_OP           4 (>)
+            EXTENDED_ARG         1 (256)
+            POP_JUMP_IF_FALSE    L426 (to 426)
+
+ 31:
+            LOAD_FAST            8 (mybuff)
+            LOAD_CONST           15 (0)
+            BINARY_SUBSCR
+            STORE_FAST           10 (cur_byte)
+
+ 32:
+            LOAD_FAST            8 (mybuff)
+            LOAD_CONST           6 (1)
+            LOAD_CONST           0 (None)
+            BUILD_SLICE          2
+            BINARY_SUBSCR
+            STORE_FAST           8 (mybuff)
+
+ 33:
+            LOAD_GLOBAL          10 (range)
+            LOAD_CONST           16 (4)
+            CALL_FUNCTION        1
+            GET_ITER
+L280:
+            FOR_ITER             L424 (to 424)
+            STORE_FAST           11 (i)
+
+ 34:
+            LOAD_FAST            10 (cur_byte)
+            LOAD_CONST           17 (3)
+            BINARY_AND
+            STORE_FAST           12 (lowbits)
+
+ 35:
+            LOAD_FAST            10 (cur_byte)
+            LOAD_CONST           5 (2)
+            BINARY_FLOOR_DIVIDE
+            STORE_FAST           10 (cur_byte)
+
+ 36:
+            LOAD_FAST            12 (lowbits)
+            LOAD_CONST           6 (1)
+            BINARY_AND
+            LOAD_CONST           15 (0)
+            COMPARE_OP           2 (==)
+            EXTENDED_ARG         1 (256)
+            POP_JUMP_IF_FALSE    L368 (to 368)
+
+ 37:
+            LOAD_FAST            12 (lowbits)
+            LOAD_CONST           5 (2)
+            BINARY_AND
+            LOAD_CONST           15 (0)
+            COMPARE_OP           2 (==)
+            EXTENDED_ARG         1 (256)
+            POP_JUMP_IF_FALSE    L358 (to 358)
+
+ 38:
+            LOAD_FAST            9 (myhash)
+            LOAD_CONST           18 (2886960546)
+            BINARY_XOR
+            STORE_FAST           9 (myhash)
+
+ 39:
+            LOAD_FAST            9 (myhash)
+            LOAD_CONST           6 (1)
+            BINARY_RSHIFT
+            LOAD_FAST            9 (myhash)
+            LOAD_CONST           19 (31)
+            BINARY_LSHIFT
+            BINARY_OR
+            LOAD_CONST           20 (4294967295)
+            BINARY_AND
+            STORE_FAST           9 (myhash)
+            JUMP_FORWARD         L366 (to 366)
+
+L358:
+  41:
+            LOAD_FAST            9 (myhash)
+            LOAD_CONST           21 (363383258)
+            BINARY_XOR
+            STORE_FAST           9 (myhash)
+L366:
+            JUMP_FORWARD         L420 (to 420)
+
+L368:
+  43:
+            LOAD_FAST            12 (lowbits)
+            LOAD_CONST           5 (2)
+            BINARY_AND
+            LOAD_CONST           15 (0)
+            COMPARE_OP           2 (==)
+            EXTENDED_ARG         1 (256)
+            POP_JUMP_IF_FALSE    L412 (to 412)
+
+ 44:
+            LOAD_FAST            9 (myhash)
+            LOAD_CONST           22 (2175242801)
+            BINARY_XOR
+            STORE_FAST           9 (myhash)
+
+ 45:
+            LOAD_FAST            9 (myhash)
+            LOAD_CONST           6 (1)
+            BINARY_RSHIFT
+            LOAD_FAST            9 (myhash)
+            LOAD_CONST           19 (31)
+            BINARY_LSHIFT
+            BINARY_OR
+            LOAD_CONST           20 (4294967295)
+            BINARY_AND
+            STORE_FAST           9 (myhash)
+            JUMP_FORWARD         L420 (to 420)
+
+L412:
+  47:
+            LOAD_FAST            9 (myhash)
+            LOAD_CONST           23 (2736497484)
+            BINARY_XOR
+            STORE_FAST           9 (myhash)
+L420:
+            EXTENDED_ARG         1 (256)
+            JUMP_ABSOLUTE        L280 (to 280)
+L424:
+            JUMP_ABSOLUTE        L238 (to 238)
+
+L426:
+  49:
+            LOAD_CONST           24 ('%08X')
+            LOAD_FAST            9 (myhash)
+            BINARY_MODULO
+            STORE_FAST           13 (TOK1)
+
+ 50:
+            LOAD_FAST            7 (secret)
+            LOAD_FAST            13 (TOK1)
+            BINARY_ADD
+            STORE_FAST           14 (tmp)
+
+ 52:
+            LOAD_FAST            14 (tmp)
+            LOAD_METHOD          9 (encode)
+            CALL_METHOD          0
+            STORE_FAST           8 (mybuff)
+
+ 53:
+            LOAD_CONST           25 (2879525698)
+            STORE_FAST           9 (myhash)
+
+ 54:
+            LOAD_FAST            8 (mybuff)
+            GET_ITER
+L458:
+            FOR_ITER             L494 (to 494)
+            STORE_FAST           15 (byte)
+
+ 55:
+            LOAD_FAST            9 (myhash)
+            LOAD_FAST            15 (byte)
+            INPLACE_XOR
+            STORE_FAST           9 (myhash)
+
+ 56:
+            LOAD_FAST            9 (myhash)
+            LOAD_CONST           6 (1)
+            BINARY_RSHIFT
+            LOAD_FAST            9 (myhash)
+            LOAD_CONST           19 (31)
+            BINARY_LSHIFT
+            BINARY_OR
+            LOAD_CONST           20 (4294967295)
+            BINARY_AND
+            STORE_FAST           9 (myhash)
+            EXTENDED_ARG         1 (256)
+            JUMP_ABSOLUTE        L458 (to 458)
+
+L494:
+  58:
+            LOAD_CONST           24 ('%08X')
+            LOAD_FAST            9 (myhash)
+            BINARY_MODULO
+            STORE_FAST           16 (sign)
+
+ 59:
+            LOAD_FAST            13 (TOK1)
+            LOAD_FAST            16 (sign)
+            BINARY_ADD
+            STORE_FAST           13 (TOK1)
+
+ 60:
+            LOAD_FAST            13 (TOK1)
+            RETURN_VALUE
+
+
+# Method Name:       __init__
+# Filename:          1.py
+# Argument count:    1
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  1
+# Stack size:        1
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        63
+# Constants:
+#    0: None
+# Varnames:
+#	self
+# Positional arguments:
+#	self
+ 64:
+            LOAD_CONST           0 (None)
+            RETURN_VALUE
+
+
+# Method Name:       get
+# Filename:          1.py
+# Argument count:    2
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  2
+# Stack size:        1
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        65
+# Constants:
+#    0: None
+#    1: 'uauauauaua'
+# Varnames:
+#	self, a
+# Positional arguments:
+#	self, a
+ 66:
+            LOAD_CONST           1 ('uauauauaua')
+            RETURN_VALUE
+
+
+# Method Name:       A2
+# Filename:          1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  0
+# Stack size:        2
+# Flags:             0x00000040 (NOFREE)
+# First Line:        62
+# Constants:
+#    0: 'A2'
+#    1: <Code38 code object __init__ at 0x7fcd7424cb80, file 1.py>, line 63
+#    2: 'A2.__init__'
+#    3: <Code38 code object get at 0x7fcd7424c9a0, file 1.py>, line 65
+#    4: 'A2.get'
+#    5: None
+# Names:
+#    0: __name__
+#    1: __module__
+#    2: __qualname__
+#    3: __init__
+#    4: get
+ 62:
+            LOAD_NAME            0 (__name__)
+            STORE_NAME           1 (__module__)
+            LOAD_CONST           0 ('A2')
+            STORE_NAME           2 (__qualname__)
+
+ 63:
+            LOAD_CONST           1 (<Code38 code object __init__ at 0x7fcd7424cb80, file 1.py>, line 63)
+            LOAD_CONST           2 ('A2.__init__')
+            MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
+            STORE_NAME           3 (__init__)
+
+ 65:
+            LOAD_CONST           3 (<Code38 code object get at 0x7fcd7424c9a0, file 1.py>, line 65)
+            LOAD_CONST           4 ('A2.get')
+            MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
+            STORE_NAME           4 (get)
+            LOAD_CONST           5 (None)
+            RETURN_VALUE
+
+
+# Method Name:       __init___0x7fcd7424c840
+# Filename:          1.py
+# Argument count:    1
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  1
+# Stack size:        2
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        68
+# Constants:
+#    0: None
+# Names:
+#    0: A2
+#    1: headers
+# Varnames:
+#	self
+# Positional arguments:
+#	self
+ 69:
+            LOAD_GLOBAL          0 (A2)
+            CALL_FUNCTION        0
+            LOAD_FAST            0 (self)
+            STORE_ATTR           1 (headers)
+            LOAD_CONST           0 (None)
+            RETURN_VALUE
+
+
+# Method Name:       A1
+# Filename:          1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  0
+# Stack size:        2
+# Flags:             0x00000040 (NOFREE)
+# First Line:        67
+# Constants:
+#    0: 'A1'
+#    1: <Code38 code object __init___0x7fcd7424c840 at 0x7fcd7424ca90, file 1.py>, line 68
+#    2: 'A1.__init__'
+#    3: None
+# Names:
+#    0: __name__
+#    1: __module__
+#    2: __qualname__
+#    3: __init__
+ 67:
+            LOAD_NAME            0 (__name__)
+            STORE_NAME           1 (__module__)
+            LOAD_CONST           0 ('A1')
+            STORE_NAME           2 (__qualname__)
+
+ 68:
+            LOAD_CONST           1 (<Code38 code object __init___0x7fcd7424c840 at 0x7fcd7424ca90, file 1.py>, line 68)
+            LOAD_CONST           2 ('A1.__init__')
+            MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
+            STORE_NAME           3 (__init__)
+            LOAD_CONST           3 (None)
+            RETURN_VALUE
+
+
+# Method Name:       main
+# Filename:          1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  1
+# Stack size:        2
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        71
+# Constants:
+#    0: None
+#    1: 'qweqweqweeee'
+# Names:
+#    0: print
+#    1: GetTOK
+# Varnames:
+#	COMP1
+# Local variables:
+#    0: COMP1
+ 72:
+            LOAD_CONST           1 ('qweqweqweeee')
+            STORE_FAST           0 (COMP1)
+
+ 73:
+            LOAD_GLOBAL          0 (print)
+            LOAD_GLOBAL          1 (GetTOK)
+            CALL_FUNCTION        0
+            CALL_FUNCTION        1
+            POP_TOP
+            LOAD_CONST           0 (None)
+            RETURN_VALUE
+
+
+# Method Name:       <module>
+# Filename:          1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  0
+# Stack size:        3
+# Flags:             0x00000040 (NOFREE)
+# First Line:        1
+# Constants:
+#    0: <Code38 code object GetTOK at 0x7fcd7424c7f0, file 1.py>, line 1
+#    1: 'GetTOK'
+#    2: <Code38 code object A2 at 0x7fcd746dab80, file 1.py>, line 62
+#    3: 'A2'
+#    4: <Code38 code object A1 at 0x7fcd7424cac0, file 1.py>, line 67
+#    5: 'A1'
+#    6: <Code38 code object main at 0x7fcd7424ca60, file 1.py>, line 71
+#    7: 'main'
+#    8: None
+# Names:
+#    0: GetTOK
+#    1: A2
+#    2: A1
+#    3: request
+#    4: main
+  1:
+            LOAD_CONST           0 (<Code38 code object GetTOK at 0x7fcd7424c7f0, file 1.py>, line 1)
+            LOAD_CONST           1 ('GetTOK')
+            MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
+            STORE_NAME           0 (GetTOK)
+
+ 62:
+            LOAD_BUILD_CLASS
+            LOAD_CONST           2 (<Code38 code object A2 at 0x7fcd746dab80, file 1.py>, line 62)
+            LOAD_CONST           3 ('A2')
+            MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
+            LOAD_CONST           3 ('A2')
+            CALL_FUNCTION        2
+            STORE_NAME           1 (A2)
+
+ 67:
+            LOAD_BUILD_CLASS
+            LOAD_CONST           4 (<Code38 code object A1 at 0x7fcd7424cac0, file 1.py>, line 67)
+            LOAD_CONST           5 ('A1')
+            MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
+            LOAD_CONST           5 ('A1')
+            CALL_FUNCTION        2
+            STORE_NAME           2 (A1)
+
+ 70:
+            LOAD_NAME            2 (A1)
+            CALL_FUNCTION        0
+            STORE_NAME           3 (request)
+
+ 71:
+            LOAD_CONST           6 (<Code38 code object main at 0x7fcd7424ca60, file 1.py>, line 71)
+            LOAD_CONST           7 ('main')
+            MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
+            STORE_NAME           4 (main)
+
+ 75:
+            LOAD_NAME            4 (main)
+            CALL_FUNCTION        0
+            POP_TOP
+            LOAD_CONST           8 (None)
+            RETURN_VALUE
+

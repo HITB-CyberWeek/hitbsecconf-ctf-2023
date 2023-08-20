@@ -1,0 +1,30 @@
+version: 1
+service: tokenourcer
+username: tokenourcer
+
+scripts:
+  build_inside_vm: docker compose -f /home/$USERNAME/docker-compose.yaml build --pull
+  start_once: docker compose -f /home/$USERNAME/docker-compose.yaml up -d
+
+files:
+  - sources:
+      - ./docker-compose.yaml
+      - ./nginx.conf
+      - ./webapp
+    destination: /home/$USERNAME
+
+proxies:
+  - name: main
+    listener:
+      protocol: http
+      certificate: wildcard.ctf.hitb.org
+    upstream:
+      host_index: 13
+      port: 8080
+    limits:
+      - source: team
+        location: /
+        limit: 100r/m
+        burst: 50
+    dns_records:
+      - tokenourcer

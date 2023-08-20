@@ -1,0 +1,1199 @@
+# pydisasm version 6.0.5
+# Python bytecode 3.8.0 (3413)
+# Disassembled from Python 3.8.17 (default, Jul  4 2023, 06:27:59) 
+# [GCC 12.2.0]
+# Timestamp in code: 1692284132 (2023-08-17 14:55:32)
+# Source code size mod 2**32: 5182 bytes
+
+# Method Name:       GetTOK
+# Filename:          1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  27
+# Stack size:        34
+# Flags:             0x00000043 (NOFREE | NEWLOCALS | OPTIMIZED)
+# First Line:        1
+# Constants:
+#    0: None
+#    1: ''
+#    2: (224, 228, 249, 230, 251, 253, 169, 224, 231, 250, 249, 236, 234, 253)
+#    3: 137
+#    4: 7
+#    5: 2
+#    6: 1
+#    7: 'u'
+#    8: 5
+#    9: 'n'
+#   10: 13
+#   11: 89
+#   12: 37
+#   13: 34
+#   14: 22
+#   15: 42
+#   16: 26
+#   17: 106
+#   18: 111
+#   19: 70
+#   20: 60
+#   21: 126
+#   22: 75
+#   23: 120
+#   24: 45
+#   25: 43
+#   26: 64
+#   27: 81
+#   28: 39
+#   29: 35
+#   30: 63
+#   31: 122
+#   32: 119
+#   33: 110
+#   34: 50
+#   35: 11
+#   36: 68
+#   37: 73
+#   38: 97
+#   39: 54
+#   40: 67
+#   41: 0
+#   42: 21
+#   43: 23
+#   44: 80
+#   45: 112
+#   46: 94
+#   47: 38
+#   48: 24
+#   49: 74
+#   50: 79
+#   51: 118
+#   52: 85
+#   53: 59
+#   54: 72
+#   55: 90
+#   56: 77
+#   57: 76
+#   58: 123
+#   59: 69
+#   60: 121
+#   61: 88
+#   62: 114
+#   63: 36
+#   64: 10
+#   65: 32
+#   66: 17
+#   67: 101
+#   68: 57
+#   69: 83
+#   70: 100
+#   71: 108
+#   72: 95
+#   73: 82
+#   74: 41
+#   75: 3
+#   76: 19
+#   77: 84
+#   78: 78
+#   79: 98
+#   80: 65
+#   81: 47
+#   82: 93
+#   83: 127
+#   84: 71
+#   85: 56
+#   86: 53
+#   87: 96
+#   88: 116
+#   89: 44
+#   90: 18
+#   91: 107
+#   92: 115
+#   93: 46
+#   94: 105
+#   95: 125
+#   96: 29
+#   97: 61
+#   98: 102
+#   99: 91
+#  100: 103
+#  101: (126, 93, 89, 110, 1, 94, 81, 15, 121, 80, 75, 1, 113, 95, 80, 14)
+#  102: 4
+#  103: 2886960546
+#  104: 31
+#  105: 4294967295
+#  106: 363383258
+#  107: 2175242801
+#  108: 2736497484
+#  109: '%08X'
+#  110: 2879525698
+# Names:
+#    0: chr
+#    1: exec
+#    2: globals
+#    3: locals
+#    4: list
+#    5: __dict__
+#    6: len
+#    7: append
+#    8: range
+#    9: eval
+#   10: bytes
+#   11: decode
+#   12: encode
+# Varnames:
+#	tmp1, c, f1, res1, key, res2_e, ii, res2_ee, i, res3_e, iii, res3_ee, iiii, res4_e, res4_ee, res2, res3, myCOMP1, secret, mybuff, myhash, cur_byte, lowbits, TOK1, tmp, byte, sign
+# Local variables:
+#    0: tmp1
+#    1: c
+#    2: f1
+#    3: res1
+#    4: key
+#    5: res2_e
+#    6: ii
+#    7: res2_ee
+#    8: i
+#    9: res3_e
+#   10: iii
+#   11: res3_ee
+#   12: iiii
+#   13: res4_e
+#   14: res4_ee
+#   15: res2
+#   16: res3
+#   17: myCOMP1
+#   18: secret
+#   19: mybuff
+#   20: myhash
+#   21: cur_byte
+#   22: lowbits
+#   23: TOK1
+#   24: tmp
+#   25: byte
+#   26: sign
+  4:
+            LOAD_CONST           1 ('')
+            STORE_FAST           0 (tmp1)
+
+  5:
+            LOAD_CONST           2 ((224, 228, 249, 230, 251, 253, 169, 224, 231, 250, 249, 236, 234, 253))
+            GET_ITER
+L8:
+            FOR_ITER             L30 (to 30)
+            STORE_FAST           1 (c)
+
+  6:
+            LOAD_FAST            0 (tmp1)
+            LOAD_GLOBAL          0 (chr)
+            LOAD_FAST            1 (c)
+            LOAD_CONST           3 (137)
+            BINARY_XOR
+            CALL_FUNCTION        1
+            INPLACE_ADD
+            STORE_FAST           0 (tmp1)
+            JUMP_ABSOLUTE        L8 (to 8)
+
+L30:
+   9:
+            LOAD_GLOBAL          1 (exec)
+            LOAD_FAST            0 (tmp1)
+            LOAD_GLOBAL          2 (globals)
+            CALL_FUNCTION        0
+            LOAD_GLOBAL          3 (locals)
+            CALL_FUNCTION        0
+            CALL_FUNCTION        3
+            POP_TOP
+
+ 12:
+            LOAD_GLOBAL          4 (list)
+            LOAD_GLOBAL          3 (locals)
+            CALL_FUNCTION        0
+            LOAD_FAST            0 (tmp1)
+            LOAD_CONST           4 (7)
+            LOAD_CONST           0 (None)
+            BUILD_SLICE          2
+            BINARY_SUBSCR
+            BINARY_SUBSCR
+            LOAD_ATTR            5 (__dict__)
+            CALL_FUNCTION        1
+            GET_ITER
+L70:
+            FOR_ITER             L138 (to 138)
+            STORE_FAST           2 (f1)
+
+ 13:
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            2 (f1)
+            CALL_FUNCTION        1
+            LOAD_CONST           5 (2)
+            COMPARE_OP           4 (>)
+            POP_JUMP_IF_FALSE    L70 (to 70)
+            LOAD_FAST            2 (f1)
+            LOAD_CONST           6 (1)
+            BINARY_SUBSCR
+            LOAD_CONST           7 ('u')
+            COMPARE_OP           2 (==)
+            POP_JUMP_IF_FALSE    L70 (to 70)
+            LOAD_FAST            2 (f1)
+            LOAD_CONST           8 (5)
+            BINARY_SUBSCR
+            LOAD_CONST           9 ('n')
+            COMPARE_OP           2 (==)
+            POP_JUMP_IF_FALSE    L70 (to 70)
+
+ 14:
+            LOAD_GLOBAL          3 (locals)
+            CALL_FUNCTION        0
+            LOAD_FAST            0 (tmp1)
+            LOAD_CONST           4 (7)
+            LOAD_CONST           0 (None)
+            BUILD_SLICE          2
+            BINARY_SUBSCR
+            BINARY_SUBSCR
+            LOAD_ATTR            5 (__dict__)
+            LOAD_FAST            2 (f1)
+            BINARY_SUBSCR
+            CALL_FUNCTION        0
+            STORE_FAST           3 (res1)
+            JUMP_ABSOLUTE        L70 (to 70)
+
+L138:
+  16:
+            BUILD_LIST           0
+            STORE_FAST           4 (key)
+
+ 17:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           10 (13)
+            CALL_METHOD          1
+            POP_TOP
+
+ 18:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           11 (89)
+            CALL_METHOD          1
+            POP_TOP
+
+ 19:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           12 (37)
+            CALL_METHOD          1
+            POP_TOP
+
+ 20:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           13 (34)
+            CALL_METHOD          1
+            POP_TOP
+
+ 21:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           14 (22)
+            CALL_METHOD          1
+            POP_TOP
+
+ 22:
+            LOAD_CONST           15 (42)
+            LOAD_CONST           16 (26)
+            LOAD_CONST           17 (106)
+            LOAD_CONST           18 (111)
+            LOAD_CONST           19 (70)
+            LOAD_CONST           20 (60)
+            LOAD_CONST           21 (126)
+            LOAD_CONST           8 (5)
+            LOAD_CONST           22 (75)
+            LOAD_CONST           23 (120)
+            LOAD_CONST           24 (45)
+            LOAD_CONST           25 (43)
+            LOAD_CONST           26 (64)
+            LOAD_CONST           27 (81)
+            LOAD_CONST           28 (39)
+            LOAD_CONST           29 (35)
+            LOAD_CONST           30 (63)
+            LOAD_CONST           31 (122)
+            LOAD_CONST           26 (64)
+            LOAD_CONST           32 (119)
+            LOAD_CONST           33 (110)
+            LOAD_CONST           34 (50)
+            LOAD_CONST           35 (11)
+            LOAD_CONST           36 (68)
+            LOAD_CONST           37 (73)
+            LOAD_CONST           38 (97)
+            LOAD_CONST           39 (54)
+            LOAD_CONST           19 (70)
+            LOAD_CONST           40 (67)
+            LOAD_CONST           31 (122)
+            LOAD_CONST           21 (126)
+            BUILD_LIST           31
+            STORE_FAST           5 (res2_e)
+
+ 23:
+            LOAD_CONST           41 (0)
+            STORE_FAST           6 (ii)
+
+L262:
+  24:
+            LOAD_FAST            6 (ii)
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            5 (res2_e)
+            CALL_FUNCTION        1
+            COMPARE_OP           0 (<)
+            EXTENDED_ARG         1 (256)
+            POP_JUMP_IF_FALSE    L316 (to 316)
+
+ 25:
+            LOAD_FAST            5 (res2_e)
+            LOAD_FAST            6 (ii)
+            BINARY_SUBSCR
+            LOAD_FAST            4 (key)
+            LOAD_FAST            6 (ii)
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            4 (key)
+            CALL_FUNCTION        1
+            BINARY_MODULO
+            BINARY_SUBSCR
+            BINARY_XOR
+            LOAD_FAST            5 (res2_e)
+            LOAD_FAST            6 (ii)
+            STORE_SUBSCR
+
+ 26:
+            LOAD_FAST            6 (ii)
+            LOAD_CONST           6 (1)
+            INPLACE_ADD
+            STORE_FAST           6 (ii)
+            EXTENDED_ARG         1 (256)
+            JUMP_ABSOLUTE        L262 (to 262)
+
+L316:
+  27:
+            BUILD_LIST           0
+            STORE_FAST           4 (key)
+
+ 28:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           13 (34)
+            CALL_METHOD          1
+            POP_TOP
+
+ 29:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           42 (21)
+            CALL_METHOD          1
+            POP_TOP
+
+ 30:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           24 (45)
+            CALL_METHOD          1
+            POP_TOP
+
+ 31:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           43 (23)
+            CALL_METHOD          1
+            POP_TOP
+
+ 32:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           39 (54)
+            CALL_METHOD          1
+            POP_TOP
+
+ 33:
+            LOAD_CONST           44 (80)
+            LOAD_CONST           45 (112)
+            LOAD_CONST           46 (94)
+            LOAD_CONST           47 (38)
+            LOAD_CONST           48 (24)
+            LOAD_CONST           36 (68)
+            LOAD_CONST           49 (74)
+            LOAD_CONST           50 (79)
+            LOAD_CONST           51 (118)
+            LOAD_CONST           52 (85)
+            LOAD_CONST           37 (73)
+            LOAD_CONST           53 (59)
+            LOAD_CONST           22 (75)
+            LOAD_CONST           54 (72)
+            LOAD_CONST           55 (90)
+            LOAD_CONST           56 (77)
+            LOAD_CONST           51 (118)
+            LOAD_CONST           57 (76)
+            LOAD_CONST           58 (123)
+            LOAD_CONST           59 (69)
+            LOAD_CONST           60 (121)
+            LOAD_CONST           34 (50)
+            LOAD_CONST           33 (110)
+            LOAD_CONST           61 (88)
+            LOAD_CONST           58 (123)
+            LOAD_CONST           62 (114)
+            LOAD_CONST           63 (36)
+            LOAD_CONST           64 (10)
+            LOAD_CONST           49 (74)
+            BUILD_LIST           29
+            STORE_FAST           7 (res2_ee)
+
+ 34:
+            LOAD_CONST           41 (0)
+            STORE_FAST           8 (i)
+
+L436:
+  35:
+            LOAD_FAST            8 (i)
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            7 (res2_ee)
+            CALL_FUNCTION        1
+            COMPARE_OP           0 (<)
+            EXTENDED_ARG         1 (256)
+            POP_JUMP_IF_FALSE    L490 (to 490)
+
+ 36:
+            LOAD_FAST            7 (res2_ee)
+            LOAD_FAST            8 (i)
+            BINARY_SUBSCR
+            LOAD_FAST            4 (key)
+            LOAD_FAST            8 (i)
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            4 (key)
+            CALL_FUNCTION        1
+            BINARY_MODULO
+            BINARY_SUBSCR
+            BINARY_XOR
+            LOAD_FAST            7 (res2_ee)
+            LOAD_FAST            8 (i)
+            STORE_SUBSCR
+
+ 37:
+            LOAD_FAST            8 (i)
+            LOAD_CONST           6 (1)
+            INPLACE_ADD
+            STORE_FAST           8 (i)
+            EXTENDED_ARG         1 (256)
+            JUMP_ABSOLUTE        L436 (to 436)
+
+L490:
+  39:
+            BUILD_LIST           0
+            STORE_FAST           4 (key)
+
+ 40:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           39 (54)
+            CALL_METHOD          1
+            POP_TOP
+
+ 41:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           43 (23)
+            CALL_METHOD          1
+            POP_TOP
+
+ 42:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           24 (45)
+            CALL_METHOD          1
+            POP_TOP
+
+ 43:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           65 (32)
+            CALL_METHOD          1
+            POP_TOP
+
+ 44:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           57 (76)
+            CALL_METHOD          1
+            POP_TOP
+
+ 45:
+            LOAD_CONST           66 (17)
+            LOAD_CONST           67 (101)
+            LOAD_CONST           54 (72)
+            LOAD_CONST           27 (81)
+            LOAD_CONST           68 (57)
+            LOAD_CONST           69 (83)
+            LOAD_CONST           70 (100)
+            LOAD_CONST           11 (89)
+            LOAD_CONST           4 (7)
+            LOAD_CONST           71 (108)
+            LOAD_CONST           72 (95)
+            LOAD_CONST           60 (121)
+            LOAD_CONST           10 (13)
+            LOAD_CONST           73 (82)
+            LOAD_CONST           74 (41)
+            LOAD_CONST           59 (69)
+            LOAD_CONST           47 (38)
+            LOAD_CONST           75 (3)
+            LOAD_CONST           19 (70)
+            LOAD_CONST           76 (19)
+            LOAD_CONST           77 (84)
+            LOAD_CONST           51 (118)
+            LOAD_CONST           78 (78)
+            LOAD_CONST           22 (75)
+            LOAD_CONST           79 (98)
+            LOAD_CONST           44 (80)
+            LOAD_CONST           54 (72)
+            LOAD_CONST           49 (74)
+            LOAD_CONST           57 (76)
+            LOAD_CONST           29 (35)
+            LOAD_CONST           77 (84)
+            LOAD_CONST           51 (118)
+            LOAD_CONST           80 (65)
+            LOAD_CONST           69 (83)
+            BUILD_LIST           34
+            STORE_FAST           9 (res3_e)
+
+ 46:
+            LOAD_CONST           41 (0)
+            STORE_FAST           10 (iii)
+
+L620:
+  47:
+            LOAD_FAST            10 (iii)
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            9 (res3_e)
+            CALL_FUNCTION        1
+            COMPARE_OP           0 (<)
+            EXTENDED_ARG         2 (512)
+            POP_JUMP_IF_FALSE    L674 (to 674)
+
+ 48:
+            LOAD_FAST            9 (res3_e)
+            LOAD_FAST            10 (iii)
+            BINARY_SUBSCR
+            LOAD_FAST            4 (key)
+            LOAD_FAST            10 (iii)
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            4 (key)
+            CALL_FUNCTION        1
+            BINARY_MODULO
+            BINARY_SUBSCR
+            BINARY_XOR
+            LOAD_FAST            9 (res3_e)
+            LOAD_FAST            10 (iii)
+            STORE_SUBSCR
+
+ 49:
+            LOAD_FAST            10 (iii)
+            LOAD_CONST           6 (1)
+            INPLACE_ADD
+            STORE_FAST           10 (iii)
+            EXTENDED_ARG         2 (512)
+            JUMP_ABSOLUTE        L620 (to 620)
+
+L674:
+  51:
+            LOAD_CONST           36 (68)
+            LOAD_CONST           62 (114)
+            LOAD_CONST           46 (94)
+            LOAD_CONST           66 (17)
+            LOAD_CONST           79 (98)
+            LOAD_CONST           44 (80)
+            LOAD_CONST           54 (72)
+            LOAD_CONST           50 (79)
+            LOAD_CONST           80 (65)
+            LOAD_CONST           81 (47)
+            LOAD_CONST           82 (93)
+            LOAD_CONST           68 (57)
+            LOAD_CONST           22 (75)
+            LOAD_CONST           83 (127)
+            LOAD_CONST           25 (43)
+            LOAD_CONST           55 (90)
+            LOAD_CONST           23 (120)
+            LOAD_CONST           50 (79)
+            LOAD_CONST           80 (65)
+            LOAD_CONST           65 (32)
+            LOAD_CONST           59 (69)
+            LOAD_CONST           57 (76)
+            LOAD_CONST           64 (10)
+            LOAD_CONST           73 (82)
+            LOAD_CONST           74 (41)
+            LOAD_CONST           84 (71)
+            LOAD_CONST           79 (98)
+            LOAD_CONST           54 (72)
+            LOAD_CONST           69 (83)
+            LOAD_CONST           85 (56)
+            LOAD_CONST           66 (17)
+            LOAD_CONST           49 (74)
+            BUILD_LIST           32
+            STORE_FAST           11 (res3_ee)
+
+ 52:
+            LOAD_CONST           41 (0)
+            STORE_FAST           12 (iiii)
+
+L746:
+  53:
+            LOAD_FAST            12 (iiii)
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            11 (res3_ee)
+            CALL_FUNCTION        1
+            COMPARE_OP           0 (<)
+            EXTENDED_ARG         3 (768)
+            POP_JUMP_IF_FALSE    L800 (to 800)
+
+ 54:
+            LOAD_FAST            11 (res3_ee)
+            LOAD_FAST            12 (iiii)
+            BINARY_SUBSCR
+            LOAD_FAST            4 (key)
+            LOAD_FAST            12 (iiii)
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            4 (key)
+            CALL_FUNCTION        1
+            BINARY_MODULO
+            BINARY_SUBSCR
+            BINARY_XOR
+            LOAD_FAST            11 (res3_ee)
+            LOAD_FAST            12 (iiii)
+            STORE_SUBSCR
+
+ 55:
+            LOAD_FAST            12 (iiii)
+            LOAD_CONST           6 (1)
+            INPLACE_ADD
+            STORE_FAST           12 (iiii)
+            EXTENDED_ARG         2 (512)
+            JUMP_ABSOLUTE        L746 (to 746)
+
+L800:
+  57:
+            BUILD_LIST           0
+            STORE_FAST           4 (key)
+
+ 58:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           48 (24)
+            CALL_METHOD          1
+            POP_TOP
+
+ 59:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           86 (53)
+            CALL_METHOD          1
+            POP_TOP
+
+ 60:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           22 (75)
+            CALL_METHOD          1
+            POP_TOP
+
+ 61:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           16 (26)
+            CALL_METHOD          1
+            POP_TOP
+
+ 62:
+            LOAD_FAST            4 (key)
+            LOAD_METHOD          7 (append)
+            LOAD_CONST           78 (78)
+            CALL_METHOD          1
+            POP_TOP
+
+ 64:
+            LOAD_CONST           30 (63)
+            LOAD_CONST           87 (96)
+            LOAD_CONST           85 (56)
+            LOAD_CONST           83 (127)
+            LOAD_CONST           20 (60)
+            LOAD_CONST           86 (53)
+            LOAD_CONST           88 (116)
+            LOAD_CONST           89 (44)
+            LOAD_CONST           83 (127)
+            LOAD_CONST           65 (32)
+            LOAD_CONST           71 (108)
+            LOAD_CONST           90 (18)
+            LOAD_CONST           91 (107)
+            LOAD_CONST           92 (115)
+            LOAD_CONST           65 (32)
+            LOAD_CONST           85 (56)
+            LOAD_CONST           84 (71)
+            LOAD_CONST           93 (46)
+            LOAD_CONST           94 (105)
+            LOAD_CONST           95 (125)
+            LOAD_CONST           39 (54)
+            LOAD_CONST           82 (93)
+            LOAD_CONST           93 (46)
+            LOAD_CONST           58 (123)
+            LOAD_CONST           15 (42)
+            LOAD_CONST           95 (125)
+            LOAD_CONST           84 (71)
+            LOAD_CONST           85 (56)
+            BUILD_LIST           28
+            STORE_FAST           13 (res4_e)
+
+ 65:
+            LOAD_GLOBAL          8 (range)
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            13 (res4_e)
+            CALL_FUNCTION        1
+            CALL_FUNCTION        1
+            GET_ITER
+L926:
+            FOR_ITER             L962 (to 962)
+            STORE_FAST           8 (i)
+
+ 66:
+            LOAD_FAST            13 (res4_e)
+            LOAD_FAST            8 (i)
+            BINARY_SUBSCR
+            LOAD_FAST            4 (key)
+            LOAD_FAST            8 (i)
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            4 (key)
+            CALL_FUNCTION        1
+            BINARY_MODULO
+            BINARY_SUBSCR
+            BINARY_XOR
+            LOAD_FAST            13 (res4_e)
+            LOAD_FAST            8 (i)
+            STORE_SUBSCR
+            EXTENDED_ARG         3 (768)
+            JUMP_ABSOLUTE        L926 (to 926)
+
+L962:
+  69:
+            LOAD_CONST           17 (106)
+            LOAD_CONST           44 (80)
+            LOAD_CONST           85 (56)
+            LOAD_CONST           74 (41)
+            LOAD_CONST           87 (96)
+            LOAD_CONST           45 (112)
+            LOAD_CONST           44 (80)
+            LOAD_CONST           15 (42)
+            LOAD_CONST           21 (126)
+            LOAD_CONST           25 (43)
+            LOAD_CONST           17 (106)
+            LOAD_CONST           19 (70)
+            LOAD_CONST           67 (101)
+            LOAD_CONST           95 (125)
+            LOAD_CONST           25 (43)
+            LOAD_CONST           71 (108)
+            LOAD_CONST           96 (29)
+            LOAD_CONST           71 (108)
+            LOAD_CONST           50 (79)
+            LOAD_CONST           97 (61)
+            LOAD_CONST           95 (125)
+            LOAD_CONST           84 (71)
+            LOAD_CONST           98 (102)
+            LOAD_CONST           99 (91)
+            LOAD_CONST           74 (41)
+            LOAD_CONST           95 (125)
+            LOAD_CONST           99 (91)
+            LOAD_CONST           30 (63)
+            LOAD_CONST           97 (61)
+            LOAD_CONST           100 (103)
+            BUILD_LIST           30
+            STORE_FAST           14 (res4_ee)
+
+ 70:
+            LOAD_GLOBAL          8 (range)
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            14 (res4_ee)
+            CALL_FUNCTION        1
+            CALL_FUNCTION        1
+            GET_ITER
+L1038:
+            FOR_ITER             L1074 (to 1074)
+            STORE_FAST           8 (i)
+
+ 71:
+            LOAD_FAST            14 (res4_ee)
+            LOAD_FAST            8 (i)
+            BINARY_SUBSCR
+            LOAD_FAST            4 (key)
+            LOAD_FAST            8 (i)
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            4 (key)
+            CALL_FUNCTION        1
+            BINARY_MODULO
+            BINARY_SUBSCR
+            BINARY_XOR
+            LOAD_FAST            14 (res4_ee)
+            LOAD_FAST            8 (i)
+            STORE_SUBSCR
+            EXTENDED_ARG         4 (1024)
+            JUMP_ABSOLUTE        L1038 (to 1038)
+
+L1074:
+  73:
+            LOAD_CONST           1 ('')
+            STORE_FAST           15 (res2)
+
+ 74:
+            LOAD_GLOBAL          9 (eval)
+            LOAD_GLOBAL          10 (bytes)
+            LOAD_FAST            5 (res2_e)
+            CALL_FUNCTION        1
+            LOAD_METHOD          11 (decode)
+            CALL_METHOD          0
+            CALL_FUNCTION        1
+            EXTENDED_ARG         4 (1024)
+            POP_JUMP_IF_FALSE    L1114 (to 1114)
+
+ 75:
+            LOAD_GLOBAL          9 (eval)
+            LOAD_GLOBAL          10 (bytes)
+            LOAD_FAST            7 (res2_ee)
+            CALL_FUNCTION        1
+            LOAD_METHOD          11 (decode)
+            CALL_METHOD          0
+            CALL_FUNCTION        1
+            STORE_FAST           15 (res2)
+            JUMP_FORWARD         L1118 (to 1118)
+
+L1114:
+  77:
+            LOAD_CONST           0 (None)
+            RETURN_VALUE
+
+L1118:
+  78:
+            LOAD_GLOBAL          9 (eval)
+            LOAD_GLOBAL          10 (bytes)
+            LOAD_FAST            9 (res3_e)
+            CALL_FUNCTION        1
+            LOAD_METHOD          11 (decode)
+            CALL_METHOD          0
+            CALL_FUNCTION        1
+            EXTENDED_ARG         4 (1024)
+            POP_JUMP_IF_FALSE    L1154 (to 1154)
+
+ 79:
+            LOAD_GLOBAL          9 (eval)
+            LOAD_GLOBAL          10 (bytes)
+            LOAD_FAST            11 (res3_ee)
+            CALL_FUNCTION        1
+            LOAD_METHOD          11 (decode)
+            CALL_METHOD          0
+            CALL_FUNCTION        1
+            STORE_FAST           16 (res3)
+            JUMP_FORWARD         L1158 (to 1158)
+
+L1154:
+  81:
+            LOAD_CONST           0 (None)
+            RETURN_VALUE
+
+L1158:
+  83:
+            LOAD_GLOBAL          9 (eval)
+            LOAD_GLOBAL          10 (bytes)
+            LOAD_FAST            13 (res4_e)
+            CALL_FUNCTION        1
+            LOAD_METHOD          11 (decode)
+            CALL_METHOD          0
+            CALL_FUNCTION        1
+            EXTENDED_ARG         4 (1024)
+            POP_JUMP_IF_FALSE    L1194 (to 1194)
+
+ 84:
+            LOAD_GLOBAL          9 (eval)
+            LOAD_GLOBAL          10 (bytes)
+            LOAD_FAST            14 (res4_ee)
+            CALL_FUNCTION        1
+            LOAD_METHOD          11 (decode)
+            CALL_METHOD          0
+            CALL_FUNCTION        1
+            STORE_FAST           16 (res3)
+            JUMP_FORWARD         L1198 (to 1198)
+
+L1194:
+  86:
+            LOAD_CONST           0 (None)
+            RETURN_VALUE
+
+L1198:
+ 105:
+            LOAD_FAST            15 (res2)
+            LOAD_FAST            16 (res3)
+            BINARY_ADD
+            STORE_FAST           17 (myCOMP1)
+
+108:
+            LOAD_CONST           1 ('')
+            STORE_FAST           0 (tmp1)
+
+109:
+            LOAD_CONST           101 ((126, 93, 89, 110, 1, 94, 81, 15, 121, 80, 75, 1, 113, 95, 80, 14))
+            GET_ITER
+L1214:
+            FOR_ITER             L1238 (to 1238)
+            STORE_FAST           1 (c)
+
+110:
+            LOAD_FAST            0 (tmp1)
+            LOAD_GLOBAL          0 (chr)
+            LOAD_FAST            1 (c)
+            LOAD_CONST           3 (137)
+            BINARY_XOR
+            CALL_FUNCTION        1
+            INPLACE_ADD
+            STORE_FAST           0 (tmp1)
+            EXTENDED_ARG         4 (1024)
+            JUMP_ABSOLUTE        L1214 (to 1214)
+
+L1238:
+ 111:
+            LOAD_FAST            0 (tmp1)
+            STORE_FAST           18 (secret)
+
+112:
+            LOAD_FAST            17 (myCOMP1)
+            LOAD_CONST           0 (None)
+            LOAD_CONST           0 (None)
+            BUILD_SLICE          2
+            BINARY_SUBSCR
+            LOAD_METHOD          12 (encode)
+            CALL_METHOD          0
+            STORE_FAST           19 (mybuff)
+
+113:
+            LOAD_CONST           41 (0)
+            STORE_FAST           20 (myhash)
+
+L1262:
+ 114:
+            LOAD_GLOBAL          6 (len)
+            LOAD_FAST            19 (mybuff)
+            CALL_FUNCTION        1
+            LOAD_CONST           41 (0)
+            COMPARE_OP           4 (>)
+            EXTENDED_ARG         5 (1280)
+            POP_JUMP_IF_FALSE    L1452 (to 1452)
+
+115:
+            LOAD_FAST            19 (mybuff)
+            LOAD_CONST           41 (0)
+            BINARY_SUBSCR
+            STORE_FAST           21 (cur_byte)
+
+116:
+            LOAD_FAST            19 (mybuff)
+            LOAD_CONST           6 (1)
+            LOAD_CONST           0 (None)
+            BUILD_SLICE          2
+            BINARY_SUBSCR
+            STORE_FAST           19 (mybuff)
+
+117:
+            LOAD_GLOBAL          8 (range)
+            LOAD_CONST           102 (4)
+            CALL_FUNCTION        1
+            GET_ITER
+L1304:
+            FOR_ITER             L1448 (to 1448)
+            STORE_FAST           8 (i)
+
+118:
+            LOAD_FAST            21 (cur_byte)
+            LOAD_CONST           75 (3)
+            BINARY_AND
+            STORE_FAST           22 (lowbits)
+
+119:
+            LOAD_FAST            21 (cur_byte)
+            LOAD_CONST           5 (2)
+            BINARY_FLOOR_DIVIDE
+            STORE_FAST           21 (cur_byte)
+
+120:
+            LOAD_FAST            22 (lowbits)
+            LOAD_CONST           6 (1)
+            BINARY_AND
+            LOAD_CONST           41 (0)
+            COMPARE_OP           2 (==)
+            EXTENDED_ARG         5 (1280)
+            POP_JUMP_IF_FALSE    L1392 (to 1392)
+
+121:
+            LOAD_FAST            22 (lowbits)
+            LOAD_CONST           5 (2)
+            BINARY_AND
+            LOAD_CONST           41 (0)
+            COMPARE_OP           2 (==)
+            EXTENDED_ARG         5 (1280)
+            POP_JUMP_IF_FALSE    L1382 (to 1382)
+
+122:
+            LOAD_FAST            20 (myhash)
+            LOAD_CONST           103 (2886960546)
+            BINARY_XOR
+            STORE_FAST           20 (myhash)
+
+123:
+            LOAD_FAST            20 (myhash)
+            LOAD_CONST           6 (1)
+            BINARY_RSHIFT
+            LOAD_FAST            20 (myhash)
+            LOAD_CONST           104 (31)
+            BINARY_LSHIFT
+            BINARY_OR
+            LOAD_CONST           105 (4294967295)
+            BINARY_AND
+            STORE_FAST           20 (myhash)
+            JUMP_FORWARD         L1390 (to 1390)
+
+L1382:
+ 125:
+            LOAD_FAST            20 (myhash)
+            LOAD_CONST           106 (363383258)
+            BINARY_XOR
+            STORE_FAST           20 (myhash)
+L1390:
+            JUMP_FORWARD         L1444 (to 1444)
+
+L1392:
+ 127:
+            LOAD_FAST            22 (lowbits)
+            LOAD_CONST           5 (2)
+            BINARY_AND
+            LOAD_CONST           41 (0)
+            COMPARE_OP           2 (==)
+            EXTENDED_ARG         5 (1280)
+            POP_JUMP_IF_FALSE    L1436 (to 1436)
+
+128:
+            LOAD_FAST            20 (myhash)
+            LOAD_CONST           107 (2175242801)
+            BINARY_XOR
+            STORE_FAST           20 (myhash)
+
+129:
+            LOAD_FAST            20 (myhash)
+            LOAD_CONST           6 (1)
+            BINARY_RSHIFT
+            LOAD_FAST            20 (myhash)
+            LOAD_CONST           104 (31)
+            BINARY_LSHIFT
+            BINARY_OR
+            LOAD_CONST           105 (4294967295)
+            BINARY_AND
+            STORE_FAST           20 (myhash)
+            JUMP_FORWARD         L1444 (to 1444)
+
+L1436:
+ 131:
+            LOAD_FAST            20 (myhash)
+            LOAD_CONST           108 (2736497484)
+            BINARY_XOR
+            STORE_FAST           20 (myhash)
+L1444:
+            EXTENDED_ARG         5 (1280)
+            JUMP_ABSOLUTE        L1304 (to 1304)
+L1448:
+            EXTENDED_ARG         4 (1024)
+            JUMP_ABSOLUTE        L1262 (to 1262)
+
+L1452:
+ 133:
+            LOAD_CONST           109 ('%08X')
+            LOAD_FAST            20 (myhash)
+            BINARY_MODULO
+            STORE_FAST           23 (TOK1)
+
+134:
+            LOAD_FAST            18 (secret)
+            LOAD_FAST            23 (TOK1)
+            BINARY_ADD
+            STORE_FAST           24 (tmp)
+
+136:
+            LOAD_FAST            24 (tmp)
+            LOAD_METHOD          12 (encode)
+            CALL_METHOD          0
+            STORE_FAST           19 (mybuff)
+
+137:
+            LOAD_CONST           110 (2879525698)
+            STORE_FAST           20 (myhash)
+
+138:
+            LOAD_FAST            19 (mybuff)
+            GET_ITER
+L1484:
+            FOR_ITER             L1520 (to 1520)
+            STORE_FAST           25 (byte)
+
+139:
+            LOAD_FAST            20 (myhash)
+            LOAD_FAST            25 (byte)
+            INPLACE_XOR
+            STORE_FAST           20 (myhash)
+
+140:
+            LOAD_FAST            20 (myhash)
+            LOAD_CONST           6 (1)
+            BINARY_RSHIFT
+            LOAD_FAST            20 (myhash)
+            LOAD_CONST           104 (31)
+            BINARY_LSHIFT
+            BINARY_OR
+            LOAD_CONST           105 (4294967295)
+            BINARY_AND
+            STORE_FAST           20 (myhash)
+            EXTENDED_ARG         5 (1280)
+            JUMP_ABSOLUTE        L1484 (to 1484)
+
+L1520:
+ 142:
+            LOAD_CONST           109 ('%08X')
+            LOAD_FAST            20 (myhash)
+            BINARY_MODULO
+            STORE_FAST           26 (sign)
+
+143:
+            LOAD_FAST            23 (TOK1)
+            LOAD_FAST            26 (sign)
+            BINARY_ADD
+            STORE_FAST           23 (TOK1)
+
+144:
+            LOAD_FAST            23 (TOK1)
+            RETURN_VALUE
+
+
+# Method Name:       <module>
+# Filename:          1.py
+# Argument count:    0
+# Position-only argument count: 0
+# Keyword-only arguments: 0
+# Number of locals:  0
+# Stack size:        2
+# Flags:             0x00000040 (NOFREE)
+# First Line:        1
+# Constants:
+#    0: <Code38 code object GetTOK at 0x7f804709b0a0, file 1.py>, line 1
+#    1: 'GetTOK'
+#    2: None
+# Names:
+#    0: GetTOK
+  1:
+            LOAD_CONST           0 (<Code38 code object GetTOK at 0x7f804709b0a0, file 1.py>, line 1)
+            LOAD_CONST           1 ('GetTOK')
+            MAKE_FUNCTION        0 (Neither defaults, keyword-only args, annotations, nor closures)
+            STORE_NAME           0 (GetTOK)
+            LOAD_CONST           2 (None)
+            RETURN_VALUE
+

@@ -1,10 +1,11 @@
 version: "3.7"
 
 services:
-  web:
+  nginx:
     image: nginx:alpine
     ports:
-      - 8080:8080
+      - "8080:8080"
+    restart: unless-stopped
     networks:
       - internal
     volumes:
@@ -12,26 +13,24 @@ services:
       - ./webapp:/var/www/webapp
       - ./webapp/logs:/var/log/nginx
     depends_on:
-      - flask
-  flask:
+      - app
+  app:
     build: webapp/server
+    restart: unless-stopped
     environment:
       ENV: "PROD"
     volumes:
-      - ./webapp/logs:/flask/logs
+      - ./webapp/logs:/app/logs
     depends_on:
       - redis
     networks:
       - internal
-    restart: always
 
   redis:
     image: redis
+    restart: unless-stopped
     networks:
       - internal
-
-volumes:
-  data:
 
 networks:
   internal:

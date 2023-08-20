@@ -1,3 +1,16 @@
+FROM node:20-alpine AS compile-ethereum
+
+WORKDIR /app/ethereum
+
+COPY ethereum/package*.json ./
+
+RUN npm ci
+
+COPY ethereum /app/ethereum
+
+RUN npm run compile
+
+
 FROM node:20-alpine
 
 WORKDIR /app/
@@ -10,7 +23,7 @@ COPY backend/package*.json ./
 RUN npm ci
 
 COPY backend /app/backend
-COPY ethereum /app/ethereum
+COPY --from=compile-ethereum /app/ethereum /app/ethereum
 
 WORKDIR /app/backend/
 
