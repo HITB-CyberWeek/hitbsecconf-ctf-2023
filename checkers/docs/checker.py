@@ -46,7 +46,7 @@ def get_base_url(host):
 
 
 def info():
-    verdict(OK, "vulns: 1\npublic_flag_description: Flag ID is a document title and user's org in format title@org, flag is a content of the document with title from flag ID")
+    verdict(OK, "vulns: 1\npublic_flag_description: Flag ID is the document's title and user's org in \"title@org\" format, flag is the content of the document with this title")
 
 
 def check(host):
@@ -72,7 +72,7 @@ def check(host):
         verdict(MUMBLE, public="Invalid answer")
     invalid_login = random.choice(string.punctuation) + login + random.choice(string.punctuation)
     invalid_org = random.choice(string.punctuation) + org + random.choice(string.punctuation)
-    r = requests.post(url, timeout=TIMEOUT, json={"login": invalid_login, "password": password,"org": invalid_org})
+    r = requests.post(url, timeout=TIMEOUT, json={"login": invalid_login, "password": password, "org": invalid_org})
     if r.status_code != 400:
         verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /register")
 

@@ -15,12 +15,11 @@ if len(sys.argv) <= 2:
     exit(105)
 proc = sys.argv[1]
 ip = sys.argv[2]
-PORT =  8080
 if ip == "localhost":
-    url = f"http://{ip}:{PORT}/"
+    port = 8080
+    url = f"http://{ip}:{port}/"
 else:
-    url = f"http://{ip}/"
-#url = f"http://{ip}:{PORT}/"
+    url = f"https://{ip}/"
 
 def VerifySign(token):
     h = int(token[-8:],16)
@@ -148,7 +147,7 @@ try:
         exit(105)
 except requests.exceptions.ConnectionError as e:
     logging.error(f"Can not connect to the server: {e}", exc_info=e)
-    print("Can not connect to server")
+    print("Can not connect to the server")
     exit(105)
 except ValueError as e:
     logging.error(f"ValueError received: {e}", exc_info=e)

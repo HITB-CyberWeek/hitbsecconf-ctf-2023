@@ -33,7 +33,7 @@ def verdict(exit_code, public="", private=""):
 
 
 def info():
-    verdict(OK, "vulns: 1\npublic_flag_description: Flag ID is user login, flag is near\n")
+    verdict(OK, "vulns: 1\npublic_flag_description: Flag ID is the user's login, flag is somewhere near\n")
 
 
 
@@ -210,7 +210,7 @@ def get(host, flag_id, flag, vuln):
 
 
     data = {
-        "operationName":"ItemPage",
+        "operationName": "ItemPage",
         "variables": {"id": user_id},
         "query": ITEM_QUERY
     }
