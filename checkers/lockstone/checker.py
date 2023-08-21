@@ -119,7 +119,7 @@ def check(host):
     resp = call_api(s, host, data=data)
 
     items = resp.get("items", [])
-    logins = [item["login"] for item in items]
+    logins = [item.get("login", "") for item in items]
 
     if created_login not in logins:
         verdict(MUMBLE, "User list is broken", "User list is broken: %s %s" % (login, password))
