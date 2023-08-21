@@ -1,12 +1,12 @@
 empty 3 +
 passmgr 4 +
-spaces 5 +
+places 5 +
 lockstone 6 +
 godeeper 7 +
 pure 8 +
 funding 9 +
 keys 10 +
-places 11 +
+spaces 11 +
 docs 12 +
 tokenourcer 13 +
 notes 14 +

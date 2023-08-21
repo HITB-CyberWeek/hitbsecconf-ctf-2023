@@ -10,6 +10,7 @@ services:
     mem_limit: 2000m
   nginx:
     image: nginx:mainline
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"

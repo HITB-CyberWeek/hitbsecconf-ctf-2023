@@ -181,7 +181,7 @@ class NoteChecker(checklib.http.HttpChecker):
             jwt_data = jwt.decode(jwt_token, options={"verify_signature": False})
             user_id = jwt_data.get('user_id', 0)
             self.mumble_if_false(
-                user_id != 0, "Not found JWT in cookies"
+                user_id != 0, "JWT not found in the cookie"
             )
             self.logout()
             return user_id

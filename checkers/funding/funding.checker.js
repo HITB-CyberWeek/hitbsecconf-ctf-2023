@@ -146,7 +146,7 @@ async function createNewProjectContract(platformAddress, title) {
     }
 
     const log = receipt.logs[0];
-    if (!log.data || !log.topics)
+    if (!log || !log.data || !log.topics)
         exitWithStatus(
             STATUS_MUMBLE,
             `Failed to create a new project: empty logs`,

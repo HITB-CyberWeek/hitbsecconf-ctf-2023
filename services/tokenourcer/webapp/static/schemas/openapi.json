@@ -1,0 +1,271 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Tokenoucer",
+    "description": "Simple resource manager with token-based access mamagement"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "paths": {
+    "/issue_token": {
+      "post": {
+        "summary": "Issue a new token",
+        "operationId": "issue_token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful issuance"
+          },
+          "400": {
+            "description": "Token name is already exist or bad params"
+          }
+        }
+      }
+    },
+    "/create_resource": {
+      "post": {
+        "summary": "Create a new resource",
+        "operationId": "create_resource",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful resource creation"
+          },
+          "400": {
+            "description": "Invalid params"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Resource not found"
+          }
+        }
+      }
+    },
+    "/grant_access": {
+      "post": {
+        "summary": "Grant access to another token secret",
+        "operationId": "grant_access",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeAccessRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Access granted successfully"
+          },
+          "400": {
+            "description": "Invalid params"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Resource or token not found"
+          }
+        }
+      }
+    },
+    "/revoke_access": {
+      "post": {
+        "summary": "Revoke access to another token secret",
+        "operationId": "revoke_access",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeAccessRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Access revoked successfully"
+          },
+          "400": {
+            "description": "Invalid params"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Resource or token not found"
+          }
+        }
+      }
+    },
+    "/get_resource": {
+      "get": {
+        "summary": "Get resource by id",
+        "operationId": "get_resource",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "resource_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Resource id"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource was fetched"
+          },
+          "400": {
+            "description": "Invalid params"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Resource or token not found"
+          }
+        }
+      }
+    },
+    "/list_resources": {
+      "get": {
+        "summary": "List available resources",
+        "operationId": "list_resources",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Got resource id list"
+          },
+          "400": {
+            "description": "Invalid params"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Resource or token not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "IssueTokenRequest": {
+        "required": [
+          "token_name"
+        ],
+        "type": "object",
+        "properties": {
+          "token_name": {
+            "type": "string",
+            "description": "Token name",
+            "example": "my_token_name"
+          }
+        }
+      },
+      "CreateResourceRequest": {
+        "required": [
+          "blob"
+        ],
+        "type": "object",
+        "properties": {
+          "blob": {
+            "type": "string",
+            "description": "Resource content to upload",
+            "example": "Some useful data"
+          }
+        }
+      },
+      "GetResourceRequest": {
+        "required": [
+          "resource_id"
+        ],
+        "type": "object",
+        "properties": {
+          "blob": {
+            "type": "string",
+            "description": "Resource content to upload",
+            "example": "Some useful data"
+          }
+        }
+      },
+      "ChangeAccessRequest": {
+        "required": [
+          "resource_id",
+          "token_name"
+        ],
+        "type": "object",
+        "properties": {
+          "token_name": {
+            "type": "string",
+            "description": "Token name for which access will be granted",
+            "example": "my_token_name"
+          },
+          "resource_id": {
+            "type": "string",
+            "description": "Resource id",
+            "example": "21258f9f3a2e404ab493cf89f68e9e27"
+          }
+        }
+      }
+    }
+  }
+}

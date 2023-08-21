@@ -21,7 +21,7 @@ PUBLIC_KEY_RE = re.compile(r'(-----BEGIN PUBLIC KEY-----.*?-----END PUBLIC KEY--
 
 
 def info():
-    verdict(OK, "vulns: 1\npublic_flag_description: TODO")
+    verdict(OK, "vulns: 1\npublic_flag_description: Flag ID is the user's login, flag is the comment")
 
 
 def get_random_string(min_len, max_len):
@@ -75,17 +75,17 @@ def put(args):
 
     m = PRIVATE_KEY_RE.search(resp.text)
     if not m:
-        verdict(MUMBLE, "No private key", f"Cant find private key login:{login}, resp:{resp.text}")
+        verdict(MUMBLE, "No private key", f"Can't find the private key for login:{login}, resp:{resp.text}")
     private_key = m.group(1)
 
     m = PUBLIC_KEY_RE.search(resp.text)
     if not m:
-        verdict(MUMBLE, "No public key", f"Cant find public key login:{login}, resp:{resp.text}")
+        verdict(MUMBLE, "No public key", f"Can't find the public key for login:{login}, resp:{resp.text}")
     public_key = m.group(1)
 
     ret = json.dumps({
         "login": login,
-        "public_flag_id": f"login: {login}",
+        "public_flag_id": login,
         "public_key": public_key,
         "private_key": private_key,
         "orig_flag_id": flag_id,
@@ -114,11 +114,11 @@ def get(args):
 
     m = PUBLIC_KEY_RE.search(resp.text)
     if not m:
-        verdict(MUMBLE, "No public key", f"Cant find public key login:{login}, resp:{resp.text}")
+        verdict(MUMBLE, "No public key", f"Can't find the public key login:{login}, resp:{resp.text}")
     public_key_from_service = m.group(1).strip()
 
     if public_key != public_key_from_service:
-        verdict(MUMBLE, "Cant find public key", f"Cant find public key login:{login}, resp:{resp.text}")
+        verdict(MUMBLE, "Cant find public key", f"Can't find the public key login:{login}, resp:{resp.text}")
 
     url = f'{_url_prefix}/check.php'
     trace("get1(%s, %s, %s, %s)" % (url, flag_id, flag_data, vuln))

@@ -39,6 +39,7 @@ COPY cs/cs.conf /app/c_s.conf
 
 # Copy checkers and install dependencies
 
+COPY checkers/training     /app/checkers/training
 COPY checkers/passmgr      /app/checkers/passmgr
 COPY checkers/spaces       /app/checkers/spaces
 COPY --from=build-dotnet-checkers /app/spaces/publish/ /app/checkers/spaces/src/bin/Release/net7.0/publish

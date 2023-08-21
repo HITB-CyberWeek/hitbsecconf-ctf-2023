@@ -14,7 +14,6 @@ requests.packages.urllib3.disable_warnings()
 
 CHECKER_PATH = "../../checkers/keys/keys.checker.py"
 SPLOIT_PATH = "./hack.php"
-RE_FLAG_ID = re.compile(r'login: (.*)')
 TIMEOUT = 30
 
 
@@ -34,11 +33,7 @@ def set_flag(checker_path, host):
     ret_data = json.loads(ret)
     public_flag_id = ret_data['public_flag_id']
 
-    m = RE_FLAG_ID.match(public_flag_id)
-    assert m
-
-    new_flag_id = m.group(1)
-    return new_flag_id, flag
+    return public_flag_id, flag
 
 
 def hack(sploit_path, host, flag_id):

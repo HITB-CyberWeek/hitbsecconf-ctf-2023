@@ -1,4 +1,5 @@
 from environs import Env
+import pathlib
 
 env = Env()
 env.read_env()  # read .env file, if it exists
@@ -14,12 +15,15 @@ CERTIFICATES_FOLDER = env.path("CERTIFICATES_FOLDER", "../../certificates")
 teams1_100_ctf_hitb_org = CERTIFICATES_FOLDER / "team1.ctf.hitb.org"
 teams101_200_ctf_hitb_org = CERTIFICATES_FOLDER / "team101.ctf.hitb.org"
 teams201_300_ctf_hitb_org = CERTIFICATES_FOLDER / "team201.ctf.hitb.org"
+pure_certs = pathlib.Path("../services/pure/certs")
 PROXY_CERTIFICATES = {
     "wildcard.ctf.hitb.org": {
         tuple(range(1, 101)): (teams1_100_ctf_hitb_org / "fullchain1.pem", teams1_100_ctf_hitb_org / "privkey1.pem"),
         tuple(range(101, 201)): (teams101_200_ctf_hitb_org / "fullchain1.pem", teams101_200_ctf_hitb_org / "privkey1.pem"),
         tuple(range(201, 301)): (teams201_300_ctf_hitb_org / "fullchain1.pem", teams201_300_ctf_hitb_org / "privkey1.pem"),
     },
+    "pure_client":  (pure_certs / "client.crt", pure_certs / "client.key"),
+    "pure_ca":   (pure_certs / "ca.crt", pure_certs / "ca.key"),
 }
 PROXY_SSH_KEY = env.path("PROXY_SSH_KEY", "../ansible/cloud/cloud_master/files/api_srv/do_deploy_key")
 PROXY_SSH_PORT = env.int("PROXY_SSH_PORT", 2222)

@@ -143,7 +143,7 @@ const init = () => {
 }
 
 $save.onclick = () => {
-	let url = `/api/place`;
+	let url = `/api/put/place`;
 	let data = {public: $public.value, secret: $secret.value};
 	if(/^[0-9a-f]{64}$/i.test($id.textContent))
 		url += '/' + encodeURIComponent($id.textContent);
@@ -222,7 +222,7 @@ $routeClean.onclick = () => {
 	$routeCount.textContent = state.route.length;
 };
 
-const get = (id, my) => fetch(`/api/place/${encodeURIComponent(id)}`)
+const get = (id, my) => fetch(`/api/get/place/${encodeURIComponent(id)}`)
 	.then(handleErrors)
 	.then(response => response.json())
 	.then(json => {

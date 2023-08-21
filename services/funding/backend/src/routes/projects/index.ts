@@ -62,6 +62,7 @@ const projects: FastifyPluginAsync = async function (fastify: FastifyInstance, o
     fastify.post<{ Body: IProjectRequest }>(
         '/', {},
         async (request, reply) => {
+            fastify.assert(request.body, 400, 'Body can not be empty');
             let { address, reward } = request.body;
             fastify.assert(address, 400, 'Address can not be empty');
             fastify.assert(address.startsWith("0x"), 400, 'Address must start with 0x');
@@ -80,7 +81,6 @@ const projects: FastifyPluginAsync = async function (fastify: FastifyInstance, o
         '/', {},
         async (request, reply) => {
             const projects = await fastify.database.manyOrNone('SELECT id, address FROM projects ORDER BY id DESC LIMIT 10');
-            // TODO: add paging
             const projectDetails = await Promise.all(projects.map(project => getProjectInfo(fastify, project)));
             reply.send({projects: projectDetails});
         }
