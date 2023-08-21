@@ -2,14 +2,11 @@
 
 internal class RequestLimit
 {
-    public Task WithRpmLimit(Func<Task> task, Func<Task> exceeded, long rpm)
+    public bool TryIncrement(long rpm, out bool crossed)
     {
         var value = Increment();
-        if(value == rpm + 1) // Invoke exceeded only once
-            return exceeded();
-        if(value > rpm)
-            return Task.CompletedTask;
-        return task();
+        crossed = value == rpm + 1;
+        return value <= rpm;
     }
 
     private long Increment()

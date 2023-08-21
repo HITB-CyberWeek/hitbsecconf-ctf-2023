@@ -109,12 +109,14 @@ internal static class AvatarGen
             var row = y << SizeLog2;
             for(int x = 0; x < MaskWidth; x++)
             {
-                var r = rnd.FastOneOrZero();
+                var r1 = rnd.FastOneOrZero();
+                var r2 = rnd.FastOneOrZero();
+                var r3 = rnd.FastOneOrZero();
                 var i = Mask[y, x] switch
                 {
                     0 => 0,
-                    1 => flag ? 1 : r,
-                    var v and >= 2 => rnd.FastOneOrZero() == 0 ? r : v
+                    1 => flag ? 1 : r1,
+                    var v and >= 2 => r2 == 0 ? r3 : v
                 };
 
                 flag |= i > 0;
