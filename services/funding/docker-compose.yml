@@ -8,7 +8,7 @@ services:
     environment:
       DATABASE_URL: postgres://funding:A84jf0Jf!fiu9$@db:5432/funding
       ETHEREUM_NODE_URL: http://eth.ctf.hitb.org:8545
-      CROWDFUNDING_PLATFORM_ADDRESS: 0xAfeA6320F0503a63B1769FCfC314f5Aa2fB8308b
+      CROWDFUNDING_PLATFORM_ADDRESS: 0x54f8DcA2c5338916a42bb454e2853F269B8913B0
     depends_on:
       - db
   frontend:
