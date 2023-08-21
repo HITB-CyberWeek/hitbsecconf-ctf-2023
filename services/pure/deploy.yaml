@@ -1,0 +1,33 @@
+version: 1
+
+service: pure
+username: pure
+
+scripts:
+  build_inside_vm: |
+    apt-get update
+    apt-get install -y openssl
+    docker compose -f /home/$USERNAME/docker-compose.yaml pull mongo
+    docker compose -f /home/$USERNAME/docker-compose.yaml build
+  start_once: |
+    echo "SESSION_SECRET=$(openssl rand -hex 20)" >> /home/$USERNAME/.env
+    docker compose -f /home/$USERNAME/docker-compose.yaml up -d
+
+files:
+  - sources:
+      - nginx
+      - web
+      - docker-compose.yaml
+    destination: /home/$USERNAME
+
+proxies:
+  - name: main
+    listener:
+      protocol: http
+      certificate: wildcard.ctf.hitb.org
+    upstream:
+      host_index: 8
+      port: 443
+      protocol: https
+    dns_records:
+      - pure
