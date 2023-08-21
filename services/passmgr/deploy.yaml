@@ -30,7 +30,7 @@ proxies:
     limits:
       - source: team
         location: /
-        limit: 20r/m
+        limit: 60r/m
         burst: 20
     dns_records:
       - passmgr
