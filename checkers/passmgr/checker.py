@@ -56,7 +56,9 @@ def check(host):
     expected = "<h1>CTF Password Manager Service</h1>"
     if expected in response.text:
         verdict(OK)
-    verdict(MUMBLE, "Service's greeting ({!r}) not found".format(expected))
+
+    logging.debug("Greeting %r not found in response text: %r", expected, ellipsis_str(response.text))
+    verdict(MUMBLE, "Service seems broken")
 
 
 def register(host, user, password):
@@ -73,7 +75,8 @@ def register(host, user, password):
 
     expected = "You have successfully registered! Now you may log in."
     if expected not in response.text:
-        verdict(MUMBLE, "No {!r} text in response".format(expected))
+        logging.debug("Text %r not found in response: %r", expected, ellipsis_str(response.text))
+        verdict(MUMBLE, "Unexpected registration response")
 
     logging.info("Registration OK: found %r text.", expected)
 
@@ -109,8 +112,8 @@ def login(host, user, password):
 
     expected = "Welcome, <b>{}</b>!".format(user)
     if expected not in response.text:
-        logging.debug("Response text: %r", ellipsis_str(response.text))
-        verdict(MUMBLE, "No {!r} text in response".format(expected))
+        logging.debug("Text %r not found in response: %r", expected, ellipsis_str(response.text))
+        verdict(MUMBLE, "Unexpected login response")
     logging.info("Found %r text.", expected)
 
     return cookies, response.text
@@ -130,13 +133,16 @@ def add_password(host, cookies, address, user, password):
     response.raise_for_status()
 
     if address not in response.text:
-        verdict(MUMBLE, "No address {!r} text in response".format(address))
+        logging.debug("No address %r in response text: %r", address, ellipsis_str(response.text))
+        verdict(MUMBLE, "Adding has failed.")
 
     if user not in response.text:
-        verdict(MUMBLE, "No user {!r} text in response".format(user))
+        logging.debug("No user %r in response text: %r", user, ellipsis_str(response.text))
+        verdict(MUMBLE, "Adding has failed..")
 
     if password not in response.text:
-        verdict(MUMBLE, "No password {!r} text in response".format(password))
+        logging.debug("No password %r in response text: %r", password, ellipsis_str(response.text))
+        verdict(MUMBLE, "Adding has failed...")
 
 
 def logout(host, cookies):
@@ -181,7 +187,7 @@ def get(host, flag_id, flag, vuln):
     if flag in text:
         verdict(OK, "Flag found")
 
-    logging.debug("Response text: %r", ellipsis_str(text))
+    logging.debug("Flag %r not found in response: %r", flag, ellipsis_str(text))
     verdict(CORRUPT, "Flag not found")
 
 
