@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     ports:
       - 443:443
-    links:
+    depends_on:
       - app
 
   mongo:
@@ -21,6 +21,9 @@ services:
     build: web
     container_name: pure_app
     restart: unless-stopped
+    depends_on:
+      - mongo
     environment:
       - NODE_ENV=production
       - MONGODB_URL=mongodb://pure_mongodb/pure?serverSelectionTimeoutMS=5000
+      - SESSION_SECRET

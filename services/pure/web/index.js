@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 app.use(middlewares.endFunctionSaver);
 app.use(session({
-    secret: 'keyboard cat',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL })
