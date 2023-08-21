@@ -16,6 +16,7 @@ files:
       - ./ethereum
       - ./frontend.build
       - ./frontend.nginx.conf
+      - ./README.md
     destination: /home/$USERNAME
 
 proxies:
