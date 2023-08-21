@@ -1,0 +1,26 @@
+version: '3.4'
+services:
+  nginx:
+    image: 'pure/nginx'
+    build: nginx
+    container_name: pure_nginx
+    restart: unless-stopped
+    ports:
+      - 443:443
+    links:
+      - app
+
+  mongo:
+    image: mongo
+    container_name: pure_mongodb
+    restart: unless-stopped
+
+  app:
+    image: 'pure/app'
+    init: true
+    build: web
+    container_name: pure_app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URL=mongodb://pure_mongodb/pure?serverSelectionTimeoutMS=5000
