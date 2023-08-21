@@ -189,4 +189,4 @@ def login():
 def logout():
     del session['user']
     return redirect("/")
-app.run(host="0.0.0.0",debug=True,threaded=True,port=5555)
+app.run(host="0.0.0.0",debug=False,threaded=True,port=5555)
