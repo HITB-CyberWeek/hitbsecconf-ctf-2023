@@ -27,7 +27,7 @@ end
 get '/users' do
   begin
     db = db(user_name(request))
-    res = db.exec("select id, login, org from users")
+    res = db.exec("select id, login, org from users order by id desc limit 100")
     {:users => res.to_a}.to_json
   rescue => e
     status 400
