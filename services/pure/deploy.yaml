@@ -7,17 +7,17 @@ scripts:
   build_inside_vm: |
     apt-get update
     apt-get install -y openssl
-    docker compose -f /home/$USERNAME/docker-compose.yaml pull mongo
-    docker compose -f /home/$USERNAME/docker-compose.yaml build
+    docker compose -f /home/$USERNAME/docker-compose.yml pull mongo
+    docker compose -f /home/$USERNAME/docker-compose.yml build
   start_once: |
     echo "SESSION_SECRET=$(openssl rand -hex 20)" >> /home/$USERNAME/.env
-    docker compose -f /home/$USERNAME/docker-compose.yaml up -d
+    docker compose -f /home/$USERNAME/docker-compose.yml up -d
 
 files:
   - sources:
       - nginx
       - web
-      - docker-compose.yaml
+      - docker-compose.yml
     destination: /home/$USERNAME
 
 proxies:
