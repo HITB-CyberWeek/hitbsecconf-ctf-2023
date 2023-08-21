@@ -32,7 +32,19 @@ proxies:
     limits:
       - source: team
         location: /
-        limit: 5r/s
-        burst: 10
+        limit: 200r/m
+        burst: 0
+      - source: team
+        location: /api/put
+        limit: 10r/m
+        burst: 0
+      - source: team
+        location: /api/list
+        limit: 10r/m
+        burst: 0
+      - source: team
+        location: /api/route
+        limit: 10r/m
+        burst: 0
     dns_records:
       - places
