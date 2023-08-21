@@ -65,10 +65,9 @@ fastify.post('/request', async function (req, reply) {
 
     await db.tx(async (dbTx) => {
         let currentUsage = await getUsage(dbTx, network) || 0;
-        currentUsage = currentUsage.toFixed(3);
-        console.log(`Current usage for the network ${network} is ${currentUsage}, requested ${amount} ETH`);
+        console.log(`Current usage for the network ${network} is ${currentUsage.toFixed(3)}, requested ${amount} ETH`);
         if (currentUsage + amount > config.limitPerNetworkPerHour) {
-            reply.send({status: "error", message: `Your usage for the last hour is ${currentUsage}. You can not request ${amount} ETH now. Please wait.`})
+            reply.send({status: "error", message: `Your usage for the last hour is ${currentUsage.toFixed(3)}. You can not request ${amount} ETH now. Please wait.`})
             return;
         }
 
