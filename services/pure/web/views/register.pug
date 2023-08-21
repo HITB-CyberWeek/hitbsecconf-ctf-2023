@@ -1,0 +1,23 @@
+extends layout
+
+block title
+  title Register
+
+block content
+  div(class='col-xs-12 col-md-8 col-xl-4 offset-md-2 offset-xl-4 text-center mb-3')
+    form(autocomplete='off', action='/register', method='post')
+      div(class='card border-0')
+        if (error)
+          input(type='text', name='username', class='form-control form-control-lg mt-3 is-invalid', placeholder='Username', value=username, required)
+        else
+          input(type='text', name='username', class='form-control form-control-lg mt-3', placeholder='Username', value=username, required)
+        input(type='password', name='password', class='form-control form-control-lg form-control-last mt-3', placeholder='Password', required)
+
+        if (error)
+          div(class='invalid-feedback')= error
+
+      div(class='d-inline-flex align-items-baseline')
+        button(type='submit', class='btn btn-outline-dark mt-3') Register
+        span
+          |&nbsp;or 
+          a(href='/login', class='link-dark') Login
