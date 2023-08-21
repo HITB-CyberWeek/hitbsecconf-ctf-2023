@@ -7,6 +7,8 @@ interface IUserRequest {
 }
 
 function validateUserRequest(fastify: FastifyInstance, request: IUserRequest): IUserRequest {
+    fastify.assert(request, 400, 'Body can not be empty');
+
     const password = request.password;
     fastify.assert(password, 400, 'Password can not be empty');
 
