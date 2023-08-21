@@ -24,15 +24,9 @@ var (
 )
 
 func handleGet(c *gin.Context) {
-	var stats Stats
-	db.Model(&Record{}).Count(&stats.Users)
-	db.Model(&Session{}).Count(&stats.Sessions)
-
 	cookieValue, err := c.Cookie(cookieName)
 	if err != nil || len(cookieValue) == 0 {
-		c.HTML(http.StatusOK, template, gin.H{
-			"Stats": stats,
-		})
+		c.HTML(http.StatusOK, template, gin.H{})
 		return
 	}
 
