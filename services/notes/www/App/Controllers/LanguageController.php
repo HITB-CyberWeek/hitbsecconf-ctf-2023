@@ -35,7 +35,7 @@ class LanguageController extends BaseController
         ];
 
         foreach ($this->context['keys'] as $key) {
-            $validator[$key] = 'required|min:5|max:50';
+            $validator[$key] = 'required|min:1';
         }
 
         $validation = $this->validator->make($_POST, $validator);
