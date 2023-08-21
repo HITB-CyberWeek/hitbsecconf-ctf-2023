@@ -99,10 +99,17 @@ func handleLogin(c *gin.Context) {
 		return
 	}
 
-	db.Create(&Session{
+	result = db.Create(&Session{
 		Cookie: cookieValue,
 		User:   user,
 	})
+	if result.Error != nil {
+		c.HTML(http.StatusOK, template, gin.H{
+			"Error": result.Error,
+		})
+		return
+	}
+
 	c.SetCookie(cookieName, cookieValue, sessionTTL, "/", cookieDomain(c), false, true)
 	c.Redirect(http.StatusFound, "/")
 }
@@ -128,6 +135,12 @@ func handleRegister(c *gin.Context) {
 
 	var record Record
 	result := db.Where("\"user\" = ? AND user_ref = ''", user).Find(&record)
+	if result.Error != nil {
+		c.HTML(http.StatusOK, template, gin.H{
+			"Error": result.Error,
+		})
+		return
+	}
 	if result.RowsAffected > 0 {
 		c.HTML(http.StatusOK, template, gin.H{
 			"Error": "User already exists",
@@ -135,10 +148,16 @@ func handleRegister(c *gin.Context) {
 		return
 	}
 
-	db.Create(&Record{
+	result = db.Create(&Record{
 		User: user,
 		Pass: password,
 	})
+	if result.Error != nil {
+		c.HTML(http.StatusOK, template, gin.H{
+			"Error": result.Error,
+		})
+		return
+	}
 
 	c.HTML(http.StatusOK, template, gin.H{
 		"Info": "You have successfully registered! Now you may log in.",
@@ -195,12 +214,18 @@ func handleAdd(c *gin.Context) {
 		return
 	}
 
-	db.Create(&Record{
+	result = db.Create(&Record{
 		User:    user,
 		Pass:    password,
 		Site:    address,
 		UserRef: session.User,
 	})
+	if result.Error != nil {
+		c.HTML(http.StatusOK, template, gin.H{
+			"Error": result.Error,
+		})
+		return
+	}
 
 	c.Redirect(http.StatusFound, "/")
 }
