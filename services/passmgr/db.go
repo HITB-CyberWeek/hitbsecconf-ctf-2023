@@ -20,7 +20,7 @@ type Record struct {
 	User    string `gorm:"index"`
 	Pass    string
 	Site    string
-	UserRef string
+	UserRef string `gorm:"index"`
 }
 
 type Session struct {

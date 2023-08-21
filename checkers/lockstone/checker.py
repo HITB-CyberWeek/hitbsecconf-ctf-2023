@@ -33,7 +33,7 @@ def verdict(exit_code, public="", private=""):
 
 
 def info():
-    verdict(OK, "vulns: 1\npublic_flag_description: Flag ID is user login, flag is near\n")
+    verdict(OK, "vulns: 1\npublic_flag_description: Flag ID is the user's login, flag is somewhere near\n")
 
 
 
@@ -119,7 +119,7 @@ def check(host):
     resp = call_api(s, host, data=data)
 
     items = resp.get("items", [])
-    logins = [item["login"] for item in items]
+    logins = [item.get("login", "") for item in items]
 
     if created_login not in logins:
         verdict(MUMBLE, "User list is broken", "User list is broken: %s %s" % (login, password))
@@ -210,7 +210,7 @@ def get(host, flag_id, flag, vuln):
 
 
     data = {
-        "operationName":"ItemPage",
+        "operationName": "ItemPage",
         "variables": {"id": user_id},
         "query": ITEM_QUERY
     }

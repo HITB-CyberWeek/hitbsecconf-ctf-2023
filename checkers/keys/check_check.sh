@@ -18,7 +18,7 @@ function check_verdict () {
     verdict=$?
     if [ $verdict -ne 101 ]
     then
-        echo "ERROR:Bad_vardict:$verdict"
+        echo "ERROR:Bad_verdict:$verdict"
         exit 200
     fi
 }

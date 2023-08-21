@@ -1,0 +1,32 @@
+version: 1
+
+service: pure
+username: pure
+
+scripts:
+  build_inside_vm: |
+    apt-get update
+    apt-get install -y openssl
+    docker compose -f /home/$USERNAME/docker-compose.yml pull mongo
+    docker compose -f /home/$USERNAME/docker-compose.yml build
+  start_once: |
+    echo "SESSION_SECRET=$(openssl rand -hex 20)" >> /home/$USERNAME/.env
+    docker compose -f /home/$USERNAME/docker-compose.yml up -d
+
+files:
+  - sources:
+      - nginx
+      - web
+      - docker-compose.yml
+    destination: /home/$USERNAME
+
+proxies:
+  - name: main
+    listener:
+      protocol: http
+    upstream:
+      host_index: 8
+      port: 443
+    template: ../services/pure/proxy_config.jinja
+    dns_records:
+      - pure

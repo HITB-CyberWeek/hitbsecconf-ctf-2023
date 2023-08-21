@@ -20,7 +20,7 @@ namespace checker.places;
 internal class PlacesChecker : IChecker
 {
 	public Task<string> Info()
-		=> Task.FromResult("vulns: 1\npublic_flag_description: Flag ID is place ID, flag is inside secret field in this place\n");
+		=> Task.FromResult("vulns: 1\npublic_flag_description: Flag ID is the place's ID, flag is inside the secret field in this place\n");
 
 	public async Task Check(string host)
 	{
@@ -85,7 +85,7 @@ internal class PlacesChecker : IChecker
 			{
 				var place = await GetPlaceAsync(client, id).ConfigureAwait(false);
 				if(Math.Abs(place.Lat - lat) > FloatingPointTolerance || Math.Abs(place.Long - lon) > FloatingPointTolerance)
-					throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiPlaceById} response: invalid place returned");
+					throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiGetPlaceById} response: invalid place returned");
 
 				await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
 			}
@@ -154,7 +154,7 @@ internal class PlacesChecker : IChecker
 		{
 			var place = await GetPlaceAsync(client, flagId).ConfigureAwait(false);
 			if(place?.Secret != flag)
-				throw new CheckerException(ExitCode.CORRUPT, $"invalid {ApiPlaceById} response: flag not found");
+				throw new CheckerException(ExitCode.CORRUPT, $"invalid {ApiGetPlaceById} response: flag not found");
 		}
 		else
 		{
@@ -215,13 +215,13 @@ internal class PlacesChecker : IChecker
 
 	private static async Task<Place> GetPlaceAsync(AsyncHttpClient client, string id)
 	{
-		var result = await client.DoRequestAsync(HttpMethod.Get, string.Format(ApiPlaceById, id), null, null, NetworkOpTimeout, MaxHttpBodySize).ConfigureAwait(false);
+		var result = await client.DoRequestAsync(HttpMethod.Get, string.Format(ApiGetPlaceById, id), null, null, NetworkOpTimeout, MaxHttpBodySize).ConfigureAwait(false);
 		if(result.StatusCode != HttpStatusCode.OK)
-			throw new CheckerException(result.StatusCode.ToExitCode(), $"get {ApiPlaceById} failed: {result.StatusCode.ToReadableCode()}");
+			throw new CheckerException(result.StatusCode.ToExitCode(), $"get {ApiGetPlaceById} failed: {result.StatusCode.ToReadableCode()}");
 
 		var place = DoIt.TryOrDefault(() => JsonSerializer.Deserialize<Place>(result.BodyAsString, JsonOptions));
 		if(place == null)
-			throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiPlaceById} response: invalid place returned");
+			throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiGetPlaceById} response: invalid place returned");
 
 		return place;
 	}
@@ -231,13 +231,13 @@ internal class PlacesChecker : IChecker
 		using var buffer = MemoryPool<byte>.Shared.Rent(MaxMessageSize);
 		var data = SerializeMessage(place, buffer.Memory);
 
-		var result = await client.DoRequestAsync(HttpMethod.Put, ApiPlace, JsonContentTypeHeaders, data, NetworkOpTimeout, MaxHttpBodySize).ConfigureAwait(false);
+		var result = await client.DoRequestAsync(HttpMethod.Put, ApiPutPlace, JsonContentTypeHeaders, data, NetworkOpTimeout, MaxHttpBodySize).ConfigureAwait(false);
 		if(result.StatusCode != HttpStatusCode.OK)
-			throw new CheckerException(result.StatusCode.ToExitCode(), $"put {ApiPlace} failed: {result.StatusCode.ToReadableCode()}");
+			throw new CheckerException(result.StatusCode.ToExitCode(), $"put {ApiPutPlace} failed: {result.StatusCode.ToReadableCode()}");
 
 		var id = result.BodyAsString;
 		if(string.IsNullOrEmpty(id) || !PlaceIdRegex.IsMatch(id))
-			throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiPlace} response: expected /^[0-9a-f]{{64}}$/i");
+			throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiPutPlace} response: expected /^[0-9a-f]{{64}}$/i");
 
 		return id;
 	}
@@ -283,8 +283,9 @@ internal class PlacesChecker : IChecker
 
 	private const string ApiAuth = "/api/auth";
 	private const string ApiList = "/api/list";
-	private const string ApiPlace = "/api/place";
-	private const string ApiPlaceById = "/api/place/{0}";
+	private const string ApiPutPlace = "/api/put/place";
+	private const string ApiGetPlaceById = "/api/get/place/{0}";
+	private const string ApiPutPlaceById = "/api/put/place/{0}";
 	private const string ApiRoute = "/api/route";
 
 	private static readonly Regex PlaceIdRegex = new("^[0-9a-fA-F]{64}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);

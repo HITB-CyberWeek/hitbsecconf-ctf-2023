@@ -24,18 +24,18 @@ proxies:
       protocol: http
       certificate: wildcard.ctf.hitb.org
     upstream:
-      host_index: 5
+      host_index: 11
       port: 80
     limits:
       - source: team
         location: /
-        limit: 5r/s
+        limit: 30r/m
         burst: 10
       - source: team
         location: /ws
         proxy_websockets: true
-        limit: 5r/s
-        burst: 10
+        limit: 2r/m
+        burst: 2
         simultaneous_connections: 1
     dns_records:
       - spaces

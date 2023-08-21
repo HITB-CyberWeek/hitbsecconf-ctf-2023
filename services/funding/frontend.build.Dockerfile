@@ -26,4 +26,6 @@ WORKDIR /app/frontend
 
 RUN cp next.config.js.production next.config.js
 
+ENV NODE_ENV=production
+
 CMD npm run build

@@ -112,7 +112,11 @@ async def deploy_http_proxy(ssh: asyncssh.SSHClientConnection, host: str, team_i
         "locations": locations,
         "proxy_host": host,
     }
-    template = jinja2.Template((CURRENT_FOLDER / "nginx/http_server.conf.jinja2").read_text())
+    if proxy.template:
+        template = jinja2.Template((CURRENT_FOLDER / proxy.template).read_text())
+    else:
+        template = jinja2.Template((CURRENT_FOLDER / "nginx/http_server.conf.jinja2").read_text())
+
     filename = tempfile.mktemp(prefix=f"nginx-{service_name}-{proxy.name}-", suffix=".conf")
     with open(filename, "w") as f:
         f.write(template.render(**jinja2_variables))

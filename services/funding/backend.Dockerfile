@@ -27,6 +27,8 @@ COPY --from=compile-ethereum /app/ethereum /app/ethereum
 
 WORKDIR /app/backend/
 
+ENV NODE_ENV=production
+
 RUN npm run build:ts
 
 CMD [ "/bin/bash", "-c", "npm run generate-key; npm run start" ]

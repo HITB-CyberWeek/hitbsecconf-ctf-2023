@@ -1,0 +1,30 @@
+extends layout
+
+block navbar
+  div(class='navbar-collapse collapse')
+    ul(class='navbar-nav ms-auto')
+      li(class='nav-item')
+        span
+          |&nbsp;#{user.username} | 
+          a(href='/logout', class='link-dark') Logout
+
+block content
+  div(class='col-md-4 offset-md-4 mt-3 text-center')
+    form(autocomplete='off', action=action, method='post')
+      div(class='card border-0')
+        input(type='text', name='firstName', class='form-control', placeholder='First Name', value=card.firstName)
+        input(type='text', name='middleName', class='form-control mt-3', placeholder='Middle Name', value=card.middleName)
+        input(type='text', name='lastName', class='form-control mt-3', placeholder='Last Name', value=card.lastName)
+        input(type='text', name='organization', class='form-control mt-3', placeholder='Organization', value=card.organization)
+        input(type='text', name='title', class='form-control mt-3', placeholder='Title', value=card.title)
+        input(type='text', name='email', class='form-control mt-3', placeholder='Email', value=card.email)
+        input(type='text', name='phone', class='form-control mt-3', placeholder='Phone', value=card.phone)
+        textarea(name='comment', class='form-control mt-3', placeholder='Comment', rows='2')= card.comment
+      p(class='mt-3')
+        a(class='btn btn-outline-danger', href='/')
+          span(class='bi bi-x')
+          |&nbsp;Cancel
+        |&nbsp;
+        button(type='submit', class='btn btn-outline-success')
+          span(class='bi bi-save')
+          |&nbsp;Save
