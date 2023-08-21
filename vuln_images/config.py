@@ -135,6 +135,7 @@ class ProxyConfigV1(YamlModel):
     upstream: UpstreamConfigV1
     limits: List[ProxyLimit] = []
     dns_records: List[str] = []
+    template: Optional[str] = None
 
     @root_validator
     def validate_object(cls, values):
