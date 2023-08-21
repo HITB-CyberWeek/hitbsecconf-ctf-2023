@@ -113,7 +113,7 @@ function main($argv) {
     }
 
     if (!$flag_from_service) {
-        throw new Exception("CANT GET FLAG: login:$$flag_id, flag_from_service:$flag_from_service; So sad :(");
+        throw new Exception("CANT GET FLAG: login:$flag_id, flag_from_service:$flag_from_service; So sad :(");
     }
 
     print("$flag_from_service\n");
