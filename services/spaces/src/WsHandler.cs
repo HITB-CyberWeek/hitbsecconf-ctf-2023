@@ -34,14 +34,17 @@ internal static class WsHandler
         {
             bool continuation = false;
             ValueWebSocketReceiveResult rcv;
-            var buffer = MemoryPool<byte>.Shared.Rent(MaxMessageSize);
+            var buffer = MemoryPool<byte>.Shared.Rent(MaxInputMessageSize);
             try
             {
                 rcv = await ws.ReceiveAsync(buffer.Memory, cancel);
                 if(rcv.MessageType == WebSocketMessageType.Close)
                     break;
-                if(!rcv.EndOfMessage) // Too large fragmented message, skip all fragments except the last one
+                if(!conn.ProfileLimit.TryIncrement(Connection.TotalLimitRpm, out var crossed))
+                {
+                    if(crossed) await conn.TrySendErrorAsync("Limit exceeded, wait 1 min", cancel);
                     continue;
+                }
                 continuation = true;
             }
             catch { break; }
@@ -54,6 +57,11 @@ internal static class WsHandler
                     var cmd = JsonSerializer.Deserialize<Command>(buffer.Memory.Span.Slice(0, rcv.Count), JsonHelper.SerializerOptions);
                     if(cmd == default)
                         return;
+                    if(conn.TryIncrement(cmd.Type, out var crossed) == false)
+                    {
+                        if(crossed) await conn.TrySendErrorAsync("Limit exceeded, wait 1 min", cancel);
+                        return;
+                    }
                     await conn.ExecuteCommandAsync(cmd, cancel);
                 }
                 catch { await conn.TrySendErrorAsync("Failed to process command", cancel); }
@@ -69,11 +77,11 @@ internal static class WsHandler
 
     private static Task ExecuteCommandAsync(this Connection conn, Command cmd, CancellationToken cancel) => cmd.Type switch
     {
-        MsgType.Close => conn.CtxLimit.WithRpmLimit(conn.CloseSpace, () => conn.TrySendErrorAsync("Space ops limit exceeded, wait 1 min", cancel), 5),
-        MsgType.Join => conn.CtxLimit.WithRpmLimit(() => conn.JoinAsync(cmd.Data, cancel), () => conn.TrySendErrorAsync("Space ops limit exceeded, wait 1 min", cancel), 5),
-        MsgType.Room => conn.CtxLimit.WithRpmLimit(() => conn.JoinRoomAsync(cmd.Data, cancel), () => conn.TrySendErrorAsync("Space ops limit exceeded, wait 1 min", cancel), 5),
-        MsgType.Msg => conn.MsgLimit.WithRpmLimit(() => conn.SendMessage(cmd.Data, cancel), () => conn.TrySendErrorAsync("Messages limit exceeded, wait 1 min", cancel), 50),
-        MsgType.Generate => conn.ProfileLimit.WithRpmLimit(() => conn.GenProfile(cancel), () => conn.TrySendErrorAsync("Profile limit exceeded, wait 1 min", cancel), 500),
+        MsgType.Close => conn.CloseSpace(),
+        MsgType.Join => conn.JoinAsync(cmd.Data, cancel),
+        MsgType.Room => conn.JoinRoomAsync(cmd.Data, cancel),
+        MsgType.Msg => conn.SendMessage(cmd.Data, cancel),
+        MsgType.Generate => conn.GenProfile(cancel),
         _ => throw new Exception()
     };
 
@@ -229,7 +237,7 @@ internal static class WsHandler
 
     private static async Task BroadcastAsync(this IEnumerable<Connection> connections, Message msg, CancellationToken cancel)
     {
-        using var buffer = MemoryPool<byte>.Shared.Rent(MaxMessageSize);
+        using var buffer = MemoryPool<byte>.Shared.Rent(MaxOutputMessageSize);
         var serialized = SerializeMessage(msg, buffer.Memory);
         await Task.WhenAll(connections.Select(conn => TrySendMessageAsync(conn, serialized, cancel)));
     }
@@ -254,7 +262,8 @@ internal static class WsHandler
         => unchecked((ulong)conn.Random.Value.NextInt64());
 
     private static readonly ConcurrentDictionary<WebSocket, Connection> Connections = new();
-    private const int MaxMessageSize = 1024;
+    private const int MaxOutputMessageSize = 1024;
+    private const int MaxInputMessageSize = 256;
 }
 
 internal class Connection
@@ -263,6 +272,18 @@ internal class Connection
     {
         Ws = ws;
         UserId = userId;
+    }
+
+    public bool TryIncrement(MsgType type, out bool crossed)
+    {
+        crossed = false;
+        var (limit, max) = type switch
+        {
+            MsgType.Msg => (MsgLimit, MsgLimitRpm),
+            MsgType.Join or MsgType.Room or MsgType.Close => (CtxLimit, CtxLimitRpm),
+            _ => (null, int.MaxValue)
+        };
+        return limit == null || limit.TryIncrement(max, out crossed);
     }
 
     public readonly WebSocket Ws;
@@ -276,4 +297,8 @@ internal class Connection
     public readonly RequestLimit CtxLimit = new();
     public readonly RequestLimit MsgLimit = new();
     public readonly RequestLimit ProfileLimit = new();
+
+    public const int CtxLimitRpm = 6;
+    public const int MsgLimitRpm = 60;
+    public const int TotalLimitRpm = 600;
 }

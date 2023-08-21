@@ -22,7 +22,7 @@ $join.onclick = () => {
 }
 $room.onclick = () => {
   $chat.replaceChildren();
-  ws.send(JSON.stringify({type: 'room', data: prompt("Enter room name")}));
+  ws.send(JSON.stringify({type: 'room', data: prompt("Enter room name /[a-z]+/i")}));
 }
 $msg.onclick = () => {
   if(!!$text.value?.length) {
@@ -69,7 +69,7 @@ const add = (msg) => {
     template.querySelector('.msg-content').classList[msg.type === 'error' ? "add" : "remove"]('system');
     template.querySelector('.msg-content').classList[msg.type !== 'msg' && msg.type !== 'error' ? "add" : "remove"]('aux');
     const $clone = document.importNode(template, true);
-    $chat.append($clone); // TODO: bin search + order by time
+    $chat.append($clone);
     $container.scrollTop = $container.scrollHeight;
   });
 }
