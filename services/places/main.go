@@ -87,9 +87,9 @@ func main() {
 
 		r.GET("/auth", auth)
 		r.GET("/list", list)
-		r.PUT("/place", put)
-		r.PUT("/place/:id", put)
-		r.GET("/place/:id", get)
+		r.PUT("/put/place", put)
+		r.PUT("/put/place/:id", put)
+		r.GET("/get/place/:id", get)
 		r.POST("/route", route)
 	}
 
