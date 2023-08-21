@@ -28,22 +28,22 @@ files:
     destination: /home/$USERNAME/configs/passmgr/
   - source: ../services/spaces/deploy.yaml
     destination: /home/$USERNAME/configs/spaces/
-  # - source: ../services/lockstone/deploy.yaml
-  #   destination: /home/$USERNAME/configs/lockstone/
+  - source: ../services/lockstone/deploy.yaml
+    destination: /home/$USERNAME/configs/lockstone/
   - source: ../services/godeeper/deploy.yaml
     destination: /home/$USERNAME/configs/godeeper/
-  # - source: ../services/pure/deploy.yaml
-  #   destination: /home/$USERNAME/configs/pure/
+  - source: ../services/pure/deploy.yaml
+    destination: /home/$USERNAME/configs/pure/
   - source: ../services/funding/deploy.yaml
     destination: /home/$USERNAME/configs/funding/
   - source: ../services/keys/deploy.yaml
     destination: /home/$USERNAME/configs/keys/
-  # - source: ../services/places/deploy.yaml
-  #   destination: /home/$USERNAME/configs/places/
+  - source: ../services/places/deploy.yaml
+    destination: /home/$USERNAME/configs/places/
   - source: ../services/docs/deploy.yaml
     destination: /home/$USERNAME/configs/docs/
-  # - source: ../services/tokenourcer/deploy.yaml
-  #   destination: /home/$USERNAME/configs/tokenourcer/
+  - source: ../services/tokenourcer/deploy.yaml
+    destination: /home/$USERNAME/configs/tokenourcer/
   - source: ../services/notes/deploy.yaml
     destination: /home/$USERNAME/configs/notes/
 

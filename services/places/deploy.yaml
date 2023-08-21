@@ -33,18 +33,18 @@ proxies:
       - source: team
         location: /
         limit: 200r/m
-        burst: 0
+        burst: 100
       - source: team
         location: /api/put
-        limit: 10r/m
-        burst: 0
+        limit: 8r/m
+        burst: 8
       - source: team
         location: /api/list
-        limit: 10r/m
-        burst: 0
+        limit: 5r/m
+        burst: 5
       - source: team
         location: /api/route
-        limit: 10r/m
-        burst: 0
+        limit: 8r/m
+        burst: 8
     dns_records:
       - places
