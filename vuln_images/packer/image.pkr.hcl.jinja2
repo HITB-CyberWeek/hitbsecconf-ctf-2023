@@ -60,6 +60,14 @@ build {
       "apt-get -y -q -o DPkg::Lock::Timeout=-1 install haveged",
 
       "if systemctl --all --type service | grep -q rpcbind; then systemctl disable rpcbind.service; fi",
+
+      # Increase conntrack table size
+      "echo 'net.netfilter.nf_conntrack_max = 524288' >> /etc/sysctl.conf",
+      # Workaround for https://bugs.launchpad.net/ubuntu/+source/procps/+bug/50093
+      "echo 'nf_conntrack' >> /etc/modules",
+
+      # Disable unattended upgrades: https://linuxhint.com/enable-disable-unattended-upgrades-ubuntu/
+      "sed -i 's/1/0/g' /etc/apt/apt.conf.d/20auto-upgrades",
     ]
   }
 

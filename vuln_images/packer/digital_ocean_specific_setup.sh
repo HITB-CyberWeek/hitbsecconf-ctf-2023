@@ -13,3 +13,6 @@ sed -i '/^[^#]*PasswordAuthentication[[:space:]]no/c\PasswordAuthentication yes'
 
 # Prohibit to set PasswordAuthentication no
 sed -i 's/updated = update_ssh_config.*/\    updated = False/' /usr/lib/python3/dist-packages/cloudinit/config/cc_set_passwords.py
+
+# Install do-agent: https://docs.digitalocean.com/products/monitoring/how-to/install-agent/
+curl -sSL https://repos.insights.digitalocean.com/install.sh | sudo bash
