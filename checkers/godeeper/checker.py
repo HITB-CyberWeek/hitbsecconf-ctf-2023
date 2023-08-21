@@ -12,7 +12,7 @@ sess = requests.Session()
 
 if len(sys.argv) <= 2:
     print("No command provided")
-    exit(105)
+    exit(110)
 proc = sys.argv[1]
 ip = sys.argv[2]
 if ip == "localhost":
@@ -144,11 +144,11 @@ try:
         exit(101)
     else:
         print("No command provided")
-        exit(105)
+        exit(110)
 except requests.exceptions.ConnectionError as e:
     logging.error(f"Can not connect to the server: {e}", exc_info=e)
     print("Can not connect to the server")
-    exit(105)
+    exit(104)
 except ValueError as e:
     logging.error(f"ValueError received: {e}", exc_info=e)
     print("Token is incorrect")
