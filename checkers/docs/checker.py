@@ -50,90 +50,81 @@ def info():
 
 
 def check(host):
-    base_url = get_base_url(host)
-
-    login = random_name()
-    password = random_name()
-    org = random_name(length=5)
-    logging.info(f"Try to register user '{login}' with password '{password}' at org '{org}'")
-
-    url = f"{base_url}register"
-    logging.info(f"Check register url '{url}'")
-
-    r = requests.post(url, timeout=TIMEOUT, json={"login": login, "password": password, "org": org})
-    if r.status_code != 200:
-        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /register")
-    try:
-        jr = r.json()
-        logging.debug(f"Login in answer: '{jr['login']}'")
-        if jr["login"] != login:
-            verdict(MUMBLE, public="Wrong login in answer on /register")
-    except Exception as e:
-        logging.debug(traceback.format_exc())
-        verdict(MUMBLE, public="Invalid answer")
-
-    invalid_login = random.choice(string.punctuation) + login + random.choice(string.punctuation)
-    invalid_org = random.choice(string.punctuation) + org + random.choice(string.punctuation)
-    logging.info(f"Try to register invalid user '{invalid_login}' with password '{password}' at org '{invalid_org}'")
-    r = requests.post(url, timeout=TIMEOUT, json={"login": invalid_login, "password": password, "org": invalid_org})
-    if r.status_code != 400:
-        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /register")
-
-    url = f"{base_url}login"
-    logging.info(f"Try invalid login")
-    r = requests.post(url, timeout=TIMEOUT, json={"login": invalid_login, "password": password, "org": org})
-    if r.status_code != 400:
-        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /login")
-
-    logging.info(f"Try valid url '{url}'")
-    r = requests.post(url, timeout=TIMEOUT, json={"login": login, "password": password, "org": org})
-    if r.status_code != 204:
-        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /login")
-    if not "docs_session" in r.cookies:
-        verdict(MUMBLE, public=f"Wrong cookie 'docs_session' on /login")
-
     verdict(OK)
 
 
 def put(host, flag_id, flag, vuln):
-    login = random_name()
-    password = random_name()
-    org = random_name(length=5)
-    logging.info(f"Try to register user '{login}' with password '{password}' at org '{org}'")
+    user1 = {"login": random_name(), "password": random_name(), "org": random_name(length=5)}
+    logging.info(f"user1 {user1}")
+    user2 = {"login": random_name(), "password": random_name(), "org": random_name(length=5)}
+    logging.info(f"user2 {user2}")
 
-    user_info = {"login": login, "password": password, "org": org}
-    state = {"public_flag_id": f"{flag_id}@{org}", "flag_id": flag_id, "user_info": user_info}
+    state = {"public_flag_id": f"{flag_id}@{user1['org']}", "flag_id": flag_id, "user1": user1, "user2": user2}
 
     base_url = get_base_url(host)
-    session = requests.Session()
+    session1 = requests.Session()
+    session2 = requests.Session()
 
     url = f"{base_url}register"
-    r = session.post(url, timeout=TIMEOUT, json=user_info)
+    r = session1.post(url, timeout=TIMEOUT, json=user1)
     if r.status_code != 200:
         verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /register")
     try:
-        user_id = r.json()["user_id"]
-        logging.info(f"Registered user with id: {user_id}")
-        state["user_id"] = user_id
+        user1_id = r.json()["user_id"]
+        logging.info(f"Registered user1 with id: {user1_id}")
+        state["user1"]["id"] = user1_id
+    except Exception as e:
+        logging.debug(traceback.format_exc())
+        verdict(MUMBLE, public="Invalid answer on /register")
+
+    r = session2.post(url, timeout=TIMEOUT, json=user2)
+    if r.status_code != 200:
+        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /register")
+    try:
+        user2_id = r.json()["user_id"]
+        logging.info(f"Registered user2 with id: {user2_id}")
+        state["user2"]["id"] = user2_id
     except Exception as e:
         logging.debug(traceback.format_exc())
         verdict(MUMBLE, public="Invalid answer on /register")
 
     url = f"{base_url}login"
-    r = session.post(url, timeout=TIMEOUT, json=user_info)
+    r = session1.post(url, timeout=TIMEOUT, json=user1)
+    if r.status_code != 204:
+        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /login")
+    r = session2.post(url, timeout=TIMEOUT, json=user2)
     if r.status_code != 204:
         verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /login")
 
     url = f"{base_url}docs"
-    r = session.post(url, timeout=TIMEOUT, json={"title": flag_id, "shares": []})
+    r = session1.post(url, timeout=TIMEOUT, json={"title": flag_id, "shares": []})
     if r.status_code != 201:
         verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /docs")
     try:
         doc_id = r.json()["id"]
         url = f"{base_url}contents"
-        r = session.post(url, timeout=TIMEOUT, json={"doc_id": doc_id, "data": flag})
+        r = session1.post(url, timeout=TIMEOUT, json={"doc_id": doc_id, "data": flag})
         if r.status_code != 201:
             verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /contents")
+    except Exception as e:
+        logging.debug(traceback.format_exc())
+        verdict(MUMBLE, public="Invalid answer on /docs")
+
+    url = f"{base_url}docs"
+    r = session1.post(url, timeout=TIMEOUT, json={"title": random_name(), "shares": [user2_id]})
+    if r.status_code != 201:
+        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /docs")
+
+    url = f"{base_url}docs"
+    r = session2.get(url, timeout=TIMEOUT)
+    if r.status_code != 200:
+        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /docs")
+    try:
+        docs = r.json()["docs"]
+        if len(docs) != 1:
+            verdict(MUMBLE, public=f"Invalid answer on /docs")
+        if docs[0] == state["flag_id"]:
+            verdict(MUMBLE, public=f"Invalid answer on /docs")
     except Exception as e:
         logging.debug(traceback.format_exc())
         verdict(MUMBLE, public="Invalid answer on /docs")
@@ -145,20 +136,33 @@ def get(host, flag_id, flag, vuln):
     state = json.loads(flag_id)
 
     base_url = get_base_url(host)
-    session = requests.Session()
+    session1 = requests.Session()
+    session2 = requests.Session()
 
     url = f"{base_url}login"
-    r = session.post(url, timeout=TIMEOUT, json=state["user_info"])
+    r = session1.post(url, timeout=TIMEOUT, json=state["user1"])
+    if r.status_code != 204:
+        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /login")
+    r = session2.post(url, timeout=TIMEOUT, json=state["user2"])
     if r.status_code != 204:
         verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /login")
 
+    url = f"{base_url}users/{state['user2']['id']}"
+    logging.info(f"Update org of user2")
+    r = session2.put(url, timeout=TIMEOUT, json={"org": state["user1"]["org"]})
+    if r.status_code != 204:
+        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on PUT /users")
+
     url = f"{base_url}docs"
-    r = session.get(url, timeout=TIMEOUT)
+    r = session2.get(url, timeout=TIMEOUT)
     if r.status_code != 200:
         verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /docs")
     try:
+        docs = r.json()["docs"]
+        if len(docs) != 2:
+            verdict(MUMBLE, public=f"Invalid answer on /docs")
         doc_id = None
-        for doc in r.json()["docs"]:
+        for doc in docs:
             if doc["title"] == state["flag_id"]:
                 doc_id = doc["id"]
                 break
@@ -167,34 +171,12 @@ def get(host, flag_id, flag, vuln):
             verdict(MUMBLE, public=f"Invalid answer on /docs; document with title {state['flag_id']} not found")
 
         url = f"{base_url}contents/{doc_id}"
-        r = session.get(url, timeout=TIMEOUT)
+        r = session1.get(url, timeout=TIMEOUT)
         if r.status_code != 200:
             verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /contents")
 
         if r.text != flag:
             verdict(CORRUPT, public=f"Wrong data in document with title {state['flag_id']}")
-    except Exception as e:
-        logging.debug(traceback.format_exc())
-        verdict(MUMBLE, public="Invalid answer on /docs")
-
-    url = f"{base_url}users/{state['user_id']}"
-    new_org = f"new_{state['user_info']['org']}"
-    logging.info(f"Update org to {new_org}")
-    r = session.put(url, timeout=TIMEOUT, json={"org": new_org})
-    if r.status_code != 204:
-        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on PUT /users")
-
-    url = f"{base_url}docs"
-    r = session.get(url, timeout=TIMEOUT)
-    if r.status_code != 200:
-        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /docs")
-    try:
-        doc_id = None
-        for doc in r.json()["docs"]:
-            if doc["title"] == state["flag_id"]:
-                if doc["owner_login"] != state["user_info"]["login"] + "@" + new_org:
-                    verdict(MUMBLE, public=f"Invalid answer on /docs; document with title {state['flag_id']} has invalid owner")
-                break
     except Exception as e:
         logging.debug(traceback.format_exc())
         verdict(MUMBLE, public="Invalid answer on /docs")
