@@ -33,9 +33,7 @@ func handleGet(c *gin.Context) {
 	var session Session
 	result := db.Where("cookie = ?", cookieValue).Find(&session)
 	if result.Error != nil || result.RowsAffected == 0 {
-		c.HTML(http.StatusOK, template, gin.H{
-			"Stats": stats,
-		})
+		c.HTML(http.StatusOK, template, gin.H{})
 		return
 	}
 
@@ -54,7 +52,6 @@ func handleGet(c *gin.Context) {
 		"User": User{
 			Name: session.User,
 		},
-		"Stats": stats,
 		"Sites": sites,
 	})
 }
