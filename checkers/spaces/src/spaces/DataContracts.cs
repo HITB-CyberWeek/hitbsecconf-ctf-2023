@@ -16,7 +16,7 @@ internal class Message
 	[JsonInclude] public string? Author { get; set; }
 	[JsonInclude] public string? Avatar { get; set; }
 	[JsonInclude] public string? Text { get; set; }
-	[JsonInclude] public DateTime Time { get; private set; } = DateTime.UtcNow;
+	[JsonInclude] public DateTime Time { get; set; }
 }
 
 public enum MsgType

@@ -303,10 +303,13 @@ export default function ConnectWithMetaMask() {
                         </div>
                   </li>
                   <li>
-                        7. Congratulations! Now you can connect your freshly created wallet to our website. 
+                        7. Click on "Add wallet". Your Ethereum address is located on the top of the page.
                   </li>
                   <li>
-                        8. If you need some money for your accout, visit <a href="https://eth.ctf.hitb.org">eth.ctf.hitb.org</a>.
+                        8. Congratulations! Now you can <b>refresh the page</b> and connect your freshly created wallet to our website. 
+                  </li>
+                  <li>
+                        9. If you need some money for your accout, visit <a href="https://eth.ctf.hitb.org">eth.ctf.hitb.org</a>.
                   </li>
             </ol>
         </div>

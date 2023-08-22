@@ -2,6 +2,7 @@
 using System.Buffers;
 using System.Net;
 using System.Net.WebSockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -39,7 +40,7 @@ public class WsClient<TInMsg, TOutMsg> where TInMsg : class
 		try
 		{
 			await ws.SendAsync(serialized, WebSocketMessageType.Text, true, cts.Token).ConfigureAwait(false);
-			await Console.Error.WriteLineAsync($"ws sent {WebSocketMessageType.Text} message, eom flag '{true}', {serialized.Length} bytes").ConfigureAwait(false);
+			await Console.Error.WriteLineAsync($"ws sent {WebSocketMessageType.Text} msg, {serialized.Length} bytes: {Encoding.UTF8.GetString(serialized.Span)}").ConfigureAwait(false);
 			return WsResult.Ok;
 		}
 		catch(WebSocketException e)
@@ -78,7 +79,7 @@ public class WsClient<TInMsg, TOutMsg> where TInMsg : class
 			var result = await ws.ReceiveAsync(buffer.Memory, cts.Token).ConfigureAwait(false);
 			if(result.MessageType == WebSocketMessageType.Close)
 				return (WsResult.ConnectionClosed, null);
-			await Console.Error.WriteLineAsync($"ws received {result.MessageType} message, eom flag '{result.EndOfMessage}', {result.Count} bytes").ConfigureAwait(false);
+			await Console.Error.WriteLineAsync($"ws recv {result.MessageType} msg, eom flag '{result.EndOfMessage}', {result.Count} bytes").ConfigureAwait(false);
 			try
 			{
 				var msg = await deserialize(buffer.Memory.Slice(0, result.Count));

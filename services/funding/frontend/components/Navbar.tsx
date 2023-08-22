@@ -16,6 +16,10 @@ export default function Navbar()  {
     }, [dispatch]);
 
     const tryToAuthenticate = async () => {
+        if (!password) {
+            toastError("Password can not be empty");
+            return;
+        }
         const result = await authenticate(web3Address, password, dispatch);
         if (!result) {
             toastError("Wrong password, try again");
