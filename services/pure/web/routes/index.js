@@ -164,8 +164,4 @@ router.get('/delete/:id', ensureAuthenticated, async (req, res) => {
     res.redirect('/');
 });
 
-router.get('/admin', (req, res) => {
-    return res.send(JSON.stringify(req.headers));
-});
-
 module.exports = router;
