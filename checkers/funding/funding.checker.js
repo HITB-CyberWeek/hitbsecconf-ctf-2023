@@ -274,7 +274,7 @@ function _generateFakeFlag(url) {
 
 async function info() {
     console.log("vulns: 1");
-    console.log("public_flag_description: Flag ID is the project's ID. Flag is an reward for the last baker");
+    console.log("public_flag_description: Flag ID is the project's ID, flag is a reward for the last baker");
     exitWithStatus(STATUS_OK);
 }
 
