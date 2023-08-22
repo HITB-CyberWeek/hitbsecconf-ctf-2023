@@ -89,7 +89,7 @@ function get_flag($url_prefix, $login, $private_key) {
         return FALSE;
     }
 
-    if (!preg_match('/.*comment: (.*?=)/ms', $result, $matches)) {
+    if (!preg_match('/.*comment: (\w+)/', $result, $matches)) {
         throw new Exception("Cant find flag in result: '$login' : $result");
     }
 
