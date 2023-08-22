@@ -23,3 +23,5 @@ services:
       image: redis:7.0.12-alpine
       expose:
         - "6379"
+      volumes:
+        - "/data/redis:/data"

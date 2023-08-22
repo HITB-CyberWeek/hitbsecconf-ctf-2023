@@ -78,7 +78,7 @@ def issue_token(hostname, token_name):
     params = {
         'token_name': token_name
     }
-    return make_json_request("/issue_token", hostname, result_key='token_secret', params=params)
+    return make_json_request("issue_token", hostname, result_key='token_secret', params=params)
 
 
 @with_validator(schemas.string_schema)
@@ -86,7 +86,7 @@ def create_resource(hostname, token_secret, blob):
     params = {
         'blob': blob
     }
-    return make_json_request("/create_resource", hostname, token_secret, 'resource_id', params)
+    return make_json_request("create_resource", hostname, token_secret, 'resource_id', params)
 
 
 @with_validator()
@@ -95,7 +95,7 @@ def grant_access(hostname, token_secret, token_name, resource_id):
         'resource_id': resource_id,
         'token_name': token_name,
     }
-    return make_json_request("/grant_access", hostname, token_secret, params=params)
+    return make_json_request("grant_access", hostname, token_secret, params=params)
 
 
 @with_validator(schemas.string_schema)
@@ -103,12 +103,12 @@ def get_resource(hostname, token_secret, resource_id):
     params = {
         'resource_id': resource_id
     }
-    return make_query_request("/get_resource", hostname, token_secret, 'blob', params)
+    return make_query_request("get_resource", hostname, token_secret, 'blob', params)
 
 
 @with_validator(schemas.string_list_schema)
 def list_resources(hostname, token_secret):
-    return make_query_request("/list_resources", hostname, token_secret, 'resource_ids')
+    return make_query_request("list_resources", hostname, token_secret, 'resource_ids')
 
 
 @with_validator()
@@ -117,4 +117,4 @@ def revoke_access(hostname, token_secret, token_name, resource_id):
         'token_name': token_name,
         'resource_id': resource_id,
     }
-    return make_json_request("/revoke_access", hostname, token_secret, params=params)
+    return make_json_request("revoke_access", hostname, token_secret, params=params)

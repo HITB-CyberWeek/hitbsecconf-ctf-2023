@@ -20,10 +20,6 @@ var buildCardModel = function (req) {
         model.firstName = req.body.firstName;
     }
 
-    if (req.body.middleName) {
-        model.middleName = req.body.middleName;
-    }
-
     if (req.body.lastName) {
         model.lastName = req.body.lastName;
     }
@@ -50,17 +46,6 @@ var buildCardModel = function (req) {
 
     return model;
 };
-
-router.get('/', ensureAuthenticated, async (req, res) => {
-    var cards;
-    if (!req.session.isAdmin) {
-        cards = await Card.find({ user: req.user.username }).sort({ firstName: 1, middleName: 1, lastName: 1, updatedAt: -1 });
-    } else {
-        cards = await Card.find().sort({ firstName: 1, middleName: 1, lastName: 1, updatedAt: -1 });
-    }
-
-    res.render('index', { user : req.user, cards: cards });
-});
 
 router.get('/register', (req, res) => {
     var model = {};
@@ -128,13 +113,33 @@ router.get('/logout', (req, res, next) => {
     });
 });
 
+router.get('/', ensureAuthenticated, async (req, res) => {
+    var filter = {};
+    if (!req.session.isAdmin) {
+        filter['user'] = req.user.username;
+    }
+    
+    const cards = await Card.find(filter).sort({ firstName: 1, lastName: 1, updatedAt: -1 });
+    res.render('index', { user : req.user, cards: cards });
+});
+
 router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
-    const card = await Card.findOne({ _id: req.params.id, user: req.user.username });
+    var filter = { _id: req.params.id };
+    if (!req.session.isAdmin) {
+        filter['user'] = req.user.username;
+    }
+
+    const card = await Card.findOne(filter);
     // TODO check not null & return not found
     res.render('edit', { user : req.user, action: `/edit/${req.params.id}`, card: card });
 });
 router.post('/edit/:id', ensureAuthenticated, async (req, res) => {
-    await Card.updateOne({ _id: req.params.id, user: req.user.username }, buildCardModel(req));
+    var filter = { _id: req.params.id };
+    if (!req.session.isAdmin) {
+        filter['user'] = req.user.username;
+    }
+
+    await Card.updateOne(filter, buildCardModel(req));
     // TODO check permissions
     // TODO check not null & return not found
     res.redirect('/');
@@ -149,7 +154,12 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
 });
 
 router.get('/delete/:id', ensureAuthenticated, async (req, res) => {
-    await Card.deleteOne({ _id: req.params.id, user: req.user.username });
+    var filter = { _id: req.params.id };
+    if (!req.session.isAdmin) {
+        filter['user'] = req.user.username;
+    }
+
+    await Card.deleteOne(filter);
     // TODO check not null & return not found
     res.redirect('/');
 });

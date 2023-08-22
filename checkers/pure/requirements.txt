@@ -1,0 +1,5 @@
+# Requirements for pure service checker
+
+requests
+lxml
+Faker
