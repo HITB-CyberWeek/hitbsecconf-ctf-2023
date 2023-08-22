@@ -53,7 +53,7 @@ function try_generate_key() {
 
     return <<< END
 Generated!<br/>
-Save your private key in a safe space!<br/>
+Save your private key in a safe place!<br/>
 Private key:<br/>
 <pre>
 $private_key_pem
