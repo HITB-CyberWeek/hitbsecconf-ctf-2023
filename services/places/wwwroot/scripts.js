@@ -25,7 +25,7 @@ const handleErrors = response => {
 
 const geolocate = () => new Promise((resolve, reject) => !navigator.permissions
 	? reject(new Error("permission API is not supported"))
-	: navigator.permissions.query({name: 'geolocation'}).then(permission => permission.state === "granted"
+	: navigator.permissions.query({name: 'geolocation'}).then(permission => permission.state !== "denied"
 		? navigator.geolocation.getCurrentPosition(pos => resolve(pos?.coords), err => reject(err))
 		: resolve(null)));
 
@@ -72,7 +72,8 @@ $public.onkeyup = $secret.onkeyup = () => $save.disabled = false;
 
 geolocate().then(coords => {
 	const lat = coords?.latitude || 0.0, long = coords?.longitude || 0.0;
-	projection.rotate([lat, long - 10.0]);
+	projection.rotate([-lat, - (long / 2.0) - 10.0]);
+	state.selected = {id: null, lat: lat, long: long};
 	fetch(`/api/auth?lat=${encodeURIComponent(lat.toString())}&long=${encodeURIComponent(long.toString())}`)
 		.then(handleErrors)
 		.then(response => response.text())
