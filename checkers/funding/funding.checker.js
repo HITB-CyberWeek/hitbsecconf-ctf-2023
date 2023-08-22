@@ -267,14 +267,14 @@ function _generateFakeFlag(url) {
             return randomSuffix;
         }
         teamId = parseInt(matches[1]);
-    } 
-    
+    }
+
     return "TEAM" + teamId.toString().padStart(3, "0") + "_" + randomSuffix
 }
 
 async function info() {
     console.log("vulns: 1");
-    console.log("public_flag_description: Flag ID is the project's ID. Flag is an reward for the last baker.");
+    console.log("public_flag_description: Flag ID is the project's ID. Flag is an reward for the last baker");
     exitWithStatus(STATUS_OK);
 }
 
