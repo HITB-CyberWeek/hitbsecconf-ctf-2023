@@ -60,7 +60,8 @@ get '/docs' do
       "select \
         *, (select login || '@' || org as owner_login from users where id = owner), \
         (select array_agg(x) from (select (select login || '@' || org from users as u where u.id = uid) as x from unnest(shares) as tmp(uid)) as xx) as shares_logins \
-      from docs"
+      from docs
+      order by id desc"
     )
     {:docs => res.to_a}.to_json
   rescue => e
