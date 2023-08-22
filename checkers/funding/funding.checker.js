@@ -55,6 +55,13 @@ async function _sendRequest(url, options, cookieJar = null, errorStatus = STATUS
     } catch (e) {
         exitWithStatus(STATUS_DOWN, `Can not receive response from ${url}: ${e}`, `Can not receive response from ${url}`);
     }
+    if (response.status == 502) { // 502 means Bad Gateway from the proxy
+        exitWithStatus(
+            STATUS_DOWN,
+            `Received unexpected HTTP status ${response.status} on ${response.url}: ${await response.text()}`,
+            `Can not request ${response.url}`
+        )
+    }
     if (response.status >= 400) {
         exitWithStatus(
             errorStatus,
