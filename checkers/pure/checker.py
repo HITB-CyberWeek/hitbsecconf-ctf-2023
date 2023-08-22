@@ -17,7 +17,6 @@ from faker import Faker
 requests.packages.urllib3.disable_warnings()
 from checker_helper import *
 
-PORT = 443
 VERIFY = False
 TIMEOUT = 30
 ADMIN_CERT = 'admin.crt'
@@ -43,7 +42,7 @@ def get_url_path(path, use_client_cert):
     return path
 
 def register_user(host, user, password, use_client_cert=False):
-    base_url = f"https://{host}:{PORT}/"
+    base_url = f"https://{host}/"
 
     session = requests.Session()
 
@@ -71,7 +70,7 @@ def register_user(host, user, password, use_client_cert=False):
             return (MUMBLE, "Unexpected result", "Unexpected HTTP status code when requesting home page without session cookie: '%d'" % r.status_code, None, None)
 
         if r.request.url != urljoin(base_url, get_url_path('/login', use_client_cert)):
-            return (MUMBLE, "Unexpected result", "Unexpected login url when requesting home page without session cookie: '%s'" % r.request.url, None, None)
+            return (MUMBLE, "Unexpected result", f"Unexpected login url '{r.request.url}' when requesting home page without session cookie. Expected url: '{urljoin(base_url, get_url_path('/login', use_client_cert))}'", None, None)
 
         headers = {'Referer': urljoin(base_url, '/login')}
         url = urljoin(base_url, get_url_path('/register', use_client_cert))
@@ -129,7 +128,7 @@ def register_user(host, user, password, use_client_cert=False):
 
 
 def login_user(host, user, password, use_client_cert=False):
-    base_url = f"https://{host}:{PORT}/"
+    base_url = f"https://{host}/"
 
     if use_client_cert:
         cert=(ADMIN_CERT, ADMIN_KEY)
@@ -207,6 +206,9 @@ def get_contact_id_by_name(home_page_html, name):
 
     row_element = doc.xpath("//tbody/tr[td/a[contains(text(), '%s')]]" % name)
 
+    if len(row_element) == 0:
+        return (CORRUPT, "Can't find contact", "Can't find contact", None)
+
     if len(row_element) != 1:
         return (MUMBLE, "Unexpected result", "Can't find contact '%s' in '%s'" % (name, home_page_html), None)
 
@@ -242,7 +244,7 @@ def generate_random_contact(comment = None):
 
 
 def create_contact(host, session, comment, use_client_cert=False):
-    base_url = f"https://{host}:{PORT}/"
+    base_url = f"https://{host}/"
 
     if use_client_cert:
         cert=(ADMIN_CERT, ADMIN_KEY)
@@ -289,6 +291,8 @@ def create_contact(host, session, comment, use_client_cert=False):
     name = "%s %s" % (data["firstName"], data["lastName"])
     (status, out, err, contact_id) = get_contact_id_by_name(r.text, name)
     if status != OK:
+        if status == CORRUPT:
+            status = MUMBLE
         return (status, out, err, None, None)
 
     trace("Contact '%s' successfully created" % name)
@@ -297,7 +301,7 @@ def create_contact(host, session, comment, use_client_cert=False):
 
 
 def get_contact_comment(host, session, id, use_client_cert=False):
-    base_url = f"https://{host}:{PORT}/"
+    base_url = f"https://{host}/"
 
     if use_client_cert:
         cert=(ADMIN_CERT, ADMIN_KEY)

@@ -110,6 +110,9 @@ def get(args):
     }
 
     resp = requests.post(url, form_data)
+    if resp.status_code == 404:
+        verdict(CORRUPT, "Wrong flag", f"Cant find login '{login}' (404)")
+
     resp.raise_for_status()
 
     if flag_data not in resp.text:

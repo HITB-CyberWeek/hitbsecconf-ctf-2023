@@ -44,7 +44,7 @@ function _getUrlPrefix(host) {
     return `https://${host}/api`;
 }
 
-async function _sendRequest(url, options, cookieJar = null, error_status = STATUS_MUMBLE) {
+async function _sendRequest(url, options, cookieJar = null, errorStatus = STATUS_MUMBLE) {
     console.error(`Sending ${options.method || "GET"} request to ${url}`);
 
     cookieJar = cookieJar || new CookieJar("");
@@ -57,7 +57,7 @@ async function _sendRequest(url, options, cookieJar = null, error_status = STATU
     }
     if (response.status >= 400) {
         exitWithStatus(
-            error_status,
+            errorStatus,
             `Received unexpected HTTP status ${response.status} on ${response.url}: ${await response.text()}`,
             `Unexpected HTTP status ${response.status} on ${response.url}`
         );
@@ -67,18 +67,18 @@ async function _sendRequest(url, options, cookieJar = null, error_status = STATU
         return await response.json();
     } catch (e) {
         exitWithStatus(
-            error_status,
+            errorStatus,
             `Receive invalid JSON on ${response.url}: ${e.message ? e.message : e}`,
             `Receive invalid JSON on ${response.url}`,
         )
     }
 }
 
-async function getJSON(url, cookieJar = null) {
-    return await _sendRequest(url, {credentials: "same-origin"}, cookieJar);
+async function getJSON(url, cookieJar = null, errorStatus = STATUS_MUMBLE) {
+    return await _sendRequest(url, {credentials: "same-origin"}, cookieJar, errorStatus);
 }
 
-async function postJSON(url, data, cookieJar = null) {
+async function postJSON(url, data, cookieJar = null, errorStatus = STATUS_MUMBLE) {
     return await _sendRequest(
         url,
         {
@@ -88,6 +88,7 @@ async function postJSON(url, data, cookieJar = null) {
             credentials: "same-origin"
         },
         cookieJar,
+        errorStatus,
     );
 }
 
@@ -274,7 +275,7 @@ function _generateFakeFlag(url) {
 
 async function info() {
     console.log("vulns: 1");
-    console.log("public_flag_description: Flag ID is the project's ID. Flag is an reward for the last baker");
+    console.log("public_flag_description: Flag ID is the project's ID, flag is a reward for the last baker");
     exitWithStatus(STATUS_OK);
 }
 
@@ -311,7 +312,7 @@ async function getFlagForProject(url, project, flag) {
     do {
         if (retry)
             await new Promise(r => setTimeout(r, 1000 * retry));
-        updatedProject = (await getJSON(`${url}/projects/${project.id}`)).project;
+        updatedProject = (await getJSON(`${url}/projects/${project.id}`, null, STATUS_CORRUPT)).project;
         retry++;
     } while (retry < 3 && (!updatedProject || !updatedProject.isFinished || updatedProject.lastBaker !== account.address))
 
@@ -322,7 +323,7 @@ async function getFlagForProject(url, project, flag) {
             `Can not find my donation in your service`,
         );
 
-    const reward = (await getJSON(`${url}/projects/${project.id}/reward/${blockNumber}`, cookieJar)).reward;
+    const reward = (await getJSON(`${url}/projects/${project.id}/reward/${blockNumber}`, cookieJar, STATUS_CORRUPT)).reward;
     if (reward !== flag)
         exitWithStatus(STATUS_CORRUPT, `Received wrong reward from the service: ${reward} instead of ${flag}`, `Can not get reward as the last baker`)
 

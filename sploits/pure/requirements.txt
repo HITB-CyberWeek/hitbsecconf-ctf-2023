@@ -1,0 +1,4 @@
+# Requirements for pure service sploit
+
+requests
+lxml
