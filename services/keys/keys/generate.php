@@ -49,6 +49,8 @@ function try_generate_key() {
         return '<div class="alert alert-danger" role="alert">Such key already exists!</div>';
     }
 
+    $login_encoded = urlencode($login);
+
     return <<< END
 Generated!<br/>
 Save your private key in a safe space!<br/>
@@ -62,7 +64,7 @@ Public key:<br/>
 <pre>
 $public_key_pem
 </pre>
-<a class="btn btn-outline-success" href='check.php?login=$login'>Next</a>
+<a class="btn btn-outline-success" href='check.php?login=$login_encoded'>Next</a>
 END;
 }
 
