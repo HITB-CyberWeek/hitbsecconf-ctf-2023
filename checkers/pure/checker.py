@@ -206,6 +206,9 @@ def get_contact_id_by_name(home_page_html, name):
 
     row_element = doc.xpath("//tbody/tr[td/a[contains(text(), '%s')]]" % name)
 
+    if len(row_element) == 0:
+        return (CORRUPT, "Can't find contact", "Can't find contact", None)
+
     if len(row_element) != 1:
         return (MUMBLE, "Unexpected result", "Can't find contact '%s' in '%s'" % (name, home_page_html), None)
 
@@ -288,6 +291,8 @@ def create_contact(host, session, comment, use_client_cert=False):
     name = "%s %s" % (data["firstName"], data["lastName"])
     (status, out, err, contact_id) = get_contact_id_by_name(r.text, name)
     if status != OK:
+        if status == CORRUPT:
+            status = MUMBLE
         return (status, out, err, None, None)
 
     trace("Contact '%s' successfully created" % name)
