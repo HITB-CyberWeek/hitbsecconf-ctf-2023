@@ -1,20 +1,12 @@
 <?php
 
+require_once "common.php";
+
 $openssl_config = array(
     "digest_alg" => "sha512",
     "private_key_bits" => 2048,
     "private_key_type" => OPENSSL_KEYTYPE_RSA,
 );
-
-function head() {
-echo <<< END
-<html>
-<head>
-    <title>Check saved key!</title>
-</head>
-<body>
-END;
-}
 
 function try_check_key() {
     $login = trim($_POST['login'] ?? '');
@@ -22,8 +14,7 @@ function try_check_key() {
 
     if (!$login || !$private_key) {
         http_response_code(400);
-        echo "No login or private_key!<br/>";
-        return;
+        return '<div class="alert alert-danger" role="alert">No login or private_key!</div>';
     }
 
     if (str_contains($private_key, "\r")) {
@@ -37,7 +28,7 @@ function try_check_key() {
     $data_str = $redis->get($login);
     if (!$data_str) {
         http_response_code(404);
-        return "No such login!<br/>";
+        return '<div class="alert alert-danger" role="alert">No such login!</div>';
     }
 
     $data = json_decode($data_str, TRUE);
@@ -45,7 +36,7 @@ function try_check_key() {
 
     if (!password_verify($private_key, $private_key_hash)) {
         http_response_code(400);
-        return "Bad key!<br/>";
+        return '<div class="alert alert-danger" role="alert">Bad key!</div>';
     }
 
     return "OK, you generated the key with comment: " . $data['comment'] . '<br/>';
@@ -54,22 +45,22 @@ function try_check_key() {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $ret = try_check_key();
-    head();
+    head("Check your key");
     echo $ret;
 } else {
-    head();
+    head("Check your key");
     $login = $_GET['login'];
 ?>
-    Lets check you save your public key:<br/>
+    <p>Lets check you save your public key:</p>
     <form method="POST">
-    Private key:<br/><textarea name="private_key"></textarea><br/>
+    <div class="form-group">
+    Private key:<br/><textarea cols="70" rows="22" name="private_key"></textarea><br/>
     <input type="hidden" name="login" value="<?php echo $login ?>">
     <input type="submit">
+    </div>
     </form>
 
 <?php
 }
-?>
+foot();
 
-</body>
-</html>
