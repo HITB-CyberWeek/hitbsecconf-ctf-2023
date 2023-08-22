@@ -268,7 +268,7 @@ def create_contact(host, session, comment, use_client_cert=False):
         if r.status_code != 200:
             return (MUMBLE, "Unexpected result", "Unexpected HTTP status code when requesting '/add' page: '%d'" % r.status_code, None, None)
 
-        headers = {'Referer': urljoin(base_path, '/add')}
+        headers = {'Referer': urljoin(base_url, '/add')}
     else:
         headers = {}
 
