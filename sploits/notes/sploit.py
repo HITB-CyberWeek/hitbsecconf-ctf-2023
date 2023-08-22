@@ -25,7 +25,7 @@ def get_notes(host, secret, user_id):
         'language': 'en',
         'jwt': encoded
     }
-    response = requests.get(f"http://{host}/notes/", cookies=cookies, allow_redirects=False)
+    response = requests.get(f"http://{host}/notes/", cookies=cookies)
     if response.status_code == 200:
         soup = bs4.BeautifulSoup(response.content, 'html.parser')
         for note in soup.find('div', {'id': 'notes'}).findAll('div'):
