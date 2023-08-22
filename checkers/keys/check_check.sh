@@ -28,7 +28,7 @@ do
     echo "RUN:$i"
 
     random_string
-    flag=${rand_string}
+    flag="TEAM001_"${rand_string}"="
 
     random_string
     flag_id=${rand_string}
