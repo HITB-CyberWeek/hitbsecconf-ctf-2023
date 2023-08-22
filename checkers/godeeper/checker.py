@@ -64,8 +64,8 @@ try:
         logging.info("Successfully registered")
         sess.get(url+"/logout")
         logging.info("Logging out")
-        res = sess.get(url+"search?pattern="+login1[:3])
-        logging.info("Searching company " + login1[:3])
+        res = sess.get(url+"search?pattern="+login1[:2])
+        logging.info("Searching company " + login1[:2])
         if not login1 in res.text:
             print("Cannot find registered company")
             exit(102)
