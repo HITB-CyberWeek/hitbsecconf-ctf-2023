@@ -101,8 +101,25 @@ def get(args):
 
     trace(f"prepare_get : {flag_id}, {flag_data} {vuln}")
 
-    url = f'{_url_prefix}/key.php'
+    url = f'{_url_prefix}/check.php'
     trace(f"get0({url})")
+
+    form_data = {
+        'login': login,
+        'private_key': private_key,
+    }
+
+    resp = requests.post(url, form_data)
+    if resp.status_code == 404:
+        verdict(CORRUPT, "Wrong flag", f"Cant find login '{login}' (404)")
+
+    resp.raise_for_status()
+
+    if flag_data not in resp.text:
+        verdict(CORRUPT, "Wrong flag", f"'{flag_data}' NOT IN '{resp.text}'")
+
+    url = f'{_url_prefix}/key.php'
+    trace(f"get1({url})")
 
     resp = requests.get(url, {'login' : login})
     resp.raise_for_status()
@@ -115,19 +132,6 @@ def get(args):
     if public_key != public_key_from_service:
         verdict(MUMBLE, "Cant find public key", f"Can't find the public key login:{login}, resp:{resp.text}")
 
-    url = f'{_url_prefix}/check.php'
-    trace(f"get1({url})")
-
-    form_data = {
-        'login': login,
-        'private_key': private_key,
-    }
-
-    resp = requests.post(url, form_data)
-    resp.raise_for_status()
-
-    if flag_data not in resp.text:
-        verdict(CORRUPT, "Wrong flag", f"'{flag_data}' NOT IN '{resp.text}'")
     verdict(OK)
 
 

@@ -9,12 +9,17 @@ import string
 import sys
 import time
 import traceback
+import urllib3
+
+from requests.adapters import HTTPAdapter, Retry
 
 logging.basicConfig(format="%(asctime)s [%(process)d] %(levelname)-8s %(message)s",
                     level=logging.DEBUG, handlers=[logging.StreamHandler(sys.stderr)])
 
 OK, CORRUPT, MUMBLE, DOWN, CHECKER_ERROR = 101, 102, 103, 104, 110
-TIMEOUT = 5
+
+TIMEOUT = urllib3.util.Timeout(connect=1.0, read=3.0)
+RETRIES = Retry(total=3, backoff_factor=0.3, status_forcelist=[ 500, 502, 503, 504 ])
 
 
 def verdict(exit_code, public="", private=""):
@@ -34,7 +39,7 @@ def get_base_url(host):
     base_url = f"http://{host}/"
 
     try:
-        r = requests.options(base_url, timeout=3, allow_redirects=False)
+        r = requests.options(base_url, timeout=TIMEOUT, allow_redirects=False)
         if r.status_code > 300 and r.status_code < 400 and r.headers["Location"]:
             base_url = r.headers["Location"]
             if not base_url[-1] == '/':
@@ -64,6 +69,10 @@ def put(host, flag_id, flag, vuln):
     base_url = get_base_url(host)
     session1 = requests.Session()
     session2 = requests.Session()
+    session1.mount('http://', HTTPAdapter(max_retries=RETRIES))
+    session1.mount('https://', HTTPAdapter(max_retries=RETRIES))
+    session2.mount('http://', HTTPAdapter(max_retries=RETRIES))
+    session2.mount('https://', HTTPAdapter(max_retries=RETRIES))
 
     url = f"{base_url}register"
     r = session1.post(url, timeout=TIMEOUT, json=user1)
@@ -138,6 +147,10 @@ def get(host, flag_id, flag, vuln):
     base_url = get_base_url(host)
     session1 = requests.Session()
     session2 = requests.Session()
+    session1.mount('http://', HTTPAdapter(max_retries=RETRIES))
+    session1.mount('https://', HTTPAdapter(max_retries=RETRIES))
+    session2.mount('http://', HTTPAdapter(max_retries=RETRIES))
+    session2.mount('https://', HTTPAdapter(max_retries=RETRIES))
 
     url = f"{base_url}login"
     r = session1.post(url, timeout=TIMEOUT, json=state["user1"])

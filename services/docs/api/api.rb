@@ -57,9 +57,11 @@ get '/docs' do
   begin
     db = db(user_name(request))
     res = db.exec(
-      "select
-        *, (select login || '@' || org as owner_login from users where id = owner) \
-      from docs"
+      "select \
+        *, (select login || '@' || org as owner_login from users where id = owner), \
+        (select array_agg(x) from (select (select login || '@' || org from users as u where u.id = uid) as x from unnest(shares) as tmp(uid)) as xx) as shares_logins \
+      from docs
+      order by id desc"
     )
     {:docs => res.to_a}.to_json
   rescue => e
@@ -94,7 +96,11 @@ get '/contents/:id' do |doc_id|
       from contents
       where doc_id = '#{doc_id}'"
     )
-    res[0]["data"]
+    if res.num_tuples > 0
+      res[0]["data"]
+    else
+      status 403
+    end
   rescue => e
     status 400
     {:error => e.message}.to_json

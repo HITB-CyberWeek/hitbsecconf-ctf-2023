@@ -49,12 +49,12 @@ func (placeId PlaceId) ToString(key []byte) (string, error) {
 
 	err := placeId.putBytes(data)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 	err = Encrypt(data, key)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 	return hex.EncodeToString(data), nil

@@ -20,7 +20,7 @@ namespace checker.places;
 internal class PlacesChecker : IChecker
 {
 	public Task<string> Info()
-		=> Task.FromResult("vulns: 1\npublic_flag_description: Flag ID is the place's ID, flag is inside the secret field in this place\n");
+		=> Task.FromResult("vulns: 1\npublic_flag_description: Flag ID is the place ID, flag is inside the secret field in this place\n");
 
 	public async Task Check(string host)
 	{
@@ -106,6 +106,13 @@ internal class PlacesChecker : IChecker
 		{
 			place.Id = await PutPlaceAsync(client, place).ConfigureAwait(false);
 			await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
+		}
+
+		if(RndUtil.GetDouble() > 0.9)
+		{
+			var place = places[RndUtil.GetInt(0, places.Length)];
+			place.Public = RndPlace.RandomPlaceField();
+			place.Id = await PutPlaceAsync(client, new Place { Secret = place.Secret, Public = place.Public }, place.Id);
 		}
 
 		await Console.Error.WriteLineAsync($"total sleep: {slept} msec").ConfigureAwait(false);
@@ -200,13 +207,13 @@ internal class PlacesChecker : IChecker
 		return id;
 	}
 
-	private static async Task<Place[]> ListAsync(AsyncHttpClient client)
+	private static async Task<List<Place>> ListAsync(AsyncHttpClient client)
 	{
 		var result = await client.DoRequestAsync(HttpMethod.Get, ApiList, null, null, NetworkOpTimeout, MaxHttpBodySize).ConfigureAwait(false);
 		if(result.StatusCode != HttpStatusCode.OK)
 			throw new CheckerException(result.StatusCode.ToExitCode(), $"get {ApiList} failed: {result.StatusCode.ToReadableCode()}");
 
-		var list = DoIt.TryOrDefault(() => result.BodyAsString.Split('\r', '\n').Where(line => line != string.Empty).Select(line => JsonSerializer.Deserialize<Place>(line, JsonOptions)).ToArray());
+		var list = DoIt.TryOrDefault(() => result.BodyAsString.Split('\r', '\n').Where(line => line != string.Empty).Select(line => JsonSerializer.Deserialize<Place>(line, JsonOptions)).ToList());
 		if(list == null || list.Any(place => string.IsNullOrEmpty(place.Id) || !PlaceIdRegex.IsMatch(place.Id)))
 			throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiList} response: invalid places stream returned");
 
@@ -226,23 +233,23 @@ internal class PlacesChecker : IChecker
 		return place;
 	}
 
-	private static async Task<string> PutPlaceAsync(AsyncHttpClient client, Place place)
+	private static async Task<string> PutPlaceAsync(AsyncHttpClient client, Place place, string id = null)
 	{
 		using var buffer = MemoryPool<byte>.Shared.Rent(MaxMessageSize);
 		var data = SerializeMessage(place, buffer.Memory);
 
-		var result = await client.DoRequestAsync(HttpMethod.Put, ApiPutPlace, JsonContentTypeHeaders, data, NetworkOpTimeout, MaxHttpBodySize).ConfigureAwait(false);
+		var result = await client.DoRequestAsync(HttpMethod.Put, id == null ? ApiPutPlace : string.Format(ApiPutPlaceById, id), JsonContentTypeHeaders, data, NetworkOpTimeout, MaxHttpBodySize).ConfigureAwait(false);
 		if(result.StatusCode != HttpStatusCode.OK)
-			throw new CheckerException(result.StatusCode.ToExitCode(), $"put {ApiPutPlace} failed: {result.StatusCode.ToReadableCode()}");
+			throw new CheckerException(result.StatusCode.ToExitCode(), $"put {(id == null ? ApiPutPlace : ApiPutPlaceById)} failed: {result.StatusCode.ToReadableCode()}");
 
-		var id = result.BodyAsString;
-		if(string.IsNullOrEmpty(id) || !PlaceIdRegex.IsMatch(id))
-			throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiPutPlace} response: expected /^[0-9a-f]{{64}}$/i");
+		var placeId = result.BodyAsString;
+		if(string.IsNullOrEmpty(placeId) || !PlaceIdRegex.IsMatch(placeId))
+			throw new CheckerException(ExitCode.MUMBLE, $"invalid {(id == null ? ApiPutPlace : ApiPutPlaceById)} response: expected /^[0-9a-f]{{64}}$/i");
 
-		return id;
+		return placeId;
 	}
 
-	private static async Task<Place[]> RouteAsync(AsyncHttpClient client, IEnumerable<string> ids)
+	private static async Task<List<Place>> RouteAsync(AsyncHttpClient client, IEnumerable<string> ids)
 	{
 		using var buffer = MemoryPool<byte>.Shared.Rent(MaxMessageSize);
 		var data = SerializeMessage(ids, buffer.Memory);
@@ -251,7 +258,7 @@ internal class PlacesChecker : IChecker
 		if(result.StatusCode != HttpStatusCode.OK)
 			throw new CheckerException(result.StatusCode.ToExitCode(), $"post {ApiRoute} failed: {result.StatusCode.ToReadableCode()}");
 
-		var route = DoIt.TryOrDefault(() => result.BodyAsString.Split('\r', '\n').Where(line => line != string.Empty).Select(line => JsonSerializer.Deserialize<Place>(line, JsonOptions)).ToArray());
+		var route = DoIt.TryOrDefault(() => result.BodyAsString.Split('\r', '\n').Where(line => line != string.Empty).Select(line => JsonSerializer.Deserialize<Place>(line, JsonOptions)).ToList());
 		if(route == null)
 			throw new CheckerException(ExitCode.MUMBLE, $"invalid {ApiRoute} response: invalid places stream returned");
 
@@ -272,7 +279,7 @@ internal class PlacesChecker : IChecker
 	private const int MaxHttpBodySize = 16 * 1024;
 	private const int MaxCookieSize = 256;
 
-	private const int MaxOneTimeDelay = 2000;
+	private const int MaxOneTimeDelay = 1500;
 	private const int NetworkOpTimeout = 12000;
 
 	private const double FloatingPointTolerance = 0.000001;

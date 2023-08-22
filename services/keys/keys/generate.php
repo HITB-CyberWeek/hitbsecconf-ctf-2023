@@ -51,7 +51,7 @@ function try_generate_key() {
 
     return <<< END
 Generated!<br/>
-Save your public key in a safe space!<br/>
+Save your private key in a safe space!<br/>
 Private key:<br/>
 <pre>
 $private_key_pem
@@ -62,7 +62,7 @@ Public key:<br/>
 <pre>
 $public_key_pem
 </pre>
-<a href='check.php?login=$login'>Next</a>
+<a class="btn btn-outline-success" href='check.php?login=$login'>Next</a>
 END;
 }
 
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <label for="comment">Comment</label>
         <input type="text" class="form-control" id="comment" name="comment"><br>
     </div>
-    <input type="submit" value="Generate">
+    <input class="btn btn-outline-success" type="submit" value="Generate">
     </form>
 
 <?php
