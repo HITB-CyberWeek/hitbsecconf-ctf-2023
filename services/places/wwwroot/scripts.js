@@ -23,11 +23,18 @@ const handleErrors = response => {
 	return response;
 }
 
-const geolocate = () => new Promise((resolve, reject) => !navigator.permissions
-	? reject(new Error("permission API is not supported"))
-	: navigator.permissions.query({name: 'geolocation'}).then(permission => permission.state !== "denied"
-		? navigator.geolocation.getCurrentPosition(pos => resolve(pos?.coords), err => reject(err))
-		: resolve(null)));
+const geolocate = () => new Promise((resolve, reject) => {
+	if(!navigator.permissions)
+		resolve(null);
+	else {
+		navigator.permissions.query({name: 'geolocation'}).then(permission => {
+			if(permission.state !== "denied")
+				navigator.geolocation.getCurrentPosition(pos => resolve(pos?.coords), err => resolve(null), {maximumAge: Infinity, timeout: 3000});
+			else
+				resolve(null);
+		});
+	}
+});
 
 let geojson = {};
 let state = {
@@ -70,8 +77,7 @@ $route.style.display = 'none';
 $routeAdd.disabled = $routeBuild.disabled = $routeClean.disabled = true;
 $public.onkeyup = $secret.onkeyup = () => $save.disabled = false;
 
-geolocate().then(coords => {
-	const lat = coords?.latitude || 0.0, long = coords?.longitude || 0.0;
+const auth = (lat, long) => {
 	projection.rotate([-lat, - (long / 2.0) - 10.0]);
 	state.selected = {id: null, lat: lat, long: long};
 	fetch(`/api/auth?lat=${encodeURIComponent(lat.toString())}&long=${encodeURIComponent(long.toString())}`)
@@ -90,6 +96,12 @@ geolocate().then(coords => {
 			}).then(() => update());
 		}))
 		.catch(e => alert(e?.toString() ?? 'unknown error'))
+}
+
+$note.textContent = 'waiting for geolocation...';
+geolocate().then(coords => {
+	const lat = coords?.latitude || 0.0, long = coords?.longitude || 0.0;
+	auth(lat, long);
 });
 
 var m0, o0, rotated = false;
@@ -128,7 +140,7 @@ const click = e => {
 	const pos = d3.pointer(e, this)
 	const coords = projection.invert(pos);
 
-	state.selected = state.hovered || {id: null, lat: coords[1], long: coords[0]};
+	state.selected = state.hovered || {id: null, lat: coords[1].toFixed(7), long: coords[0].toFixed(7)};
 
 	update();
 	updateSidePanel();
@@ -144,13 +156,18 @@ const init = () => {
 }
 
 $save.onclick = () => {
+	if(!state.selected) {
+		alert('place not selected');
+		return;
+	}
+
 	let url = `/api/put/place`;
 	let data = {public: $public.value, secret: $secret.value};
 	if(/^[0-9a-f]{64}$/i.test($id.textContent))
 		url += '/' + encodeURIComponent($id.textContent);
 	else {
-		data.lat = Number($lat.textContent);
-		data.long = Number($long.textContent);
+		data.lat = Number(state.selected.lat);
+		data.long = Number(state.selected.long);
 	}
 
 	fetch(url, {method: 'PUT', body: JSON.stringify(data), headers: {'Content-Type': 'application/json;charset=utf-8'}})
@@ -158,7 +175,7 @@ $save.onclick = () => {
 		.then(response => response.text())
 		.then(id => {
 			document.querySelector('#side #id').textContent = id || 'n/a';
-			place = {id: id, lat: data.lat, long: data.long};
+			let place = {id: id, lat: Number(state.selected.lat), long: Number(state.selected.long)};
 			state.selected = place;
 			state.places.push(place);
 			$routeAdd.disabled = state.route.includes(id) || state.route.length >= MAX_ROUTE_LENGTH;
@@ -169,11 +186,15 @@ $save.onclick = () => {
 
 const MAX_ROUTE_LENGTH = 10;
 $routeAdd.onclick = () => {
-	if(!state.selected?.id)
+	if(!state.selected?.id) {
 		alert('place not selected');
+		return;
+	}
 
-	if(state.route.length >= MAX_ROUTE_LENGTH)
+	if(state.route.length >= MAX_ROUTE_LENGTH) {
 		alert(`too many places for route (max == ${MAX_ROUTE_LENGTH})`);
+		return;
+	}
 
 	state.route.push(state.selected.id);
 	$routeBuild.disabled = false;
@@ -255,6 +276,7 @@ const updateSidePanel = () => {
 	if(!id) {
 		$public.disabled = $secret.disabled = $save.disabled = false;
 		$public.value = $secret.value = '';
+		$routeAdd.disabled = true;
 		return;
 	}
 

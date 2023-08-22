@@ -4,7 +4,7 @@ WORKDIR /app
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
-COPY *.go .
+COPY *.go ./
 
 RUN go build -ldflags="-s -w" -o /app/places .
 

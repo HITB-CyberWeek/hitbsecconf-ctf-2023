@@ -170,7 +170,7 @@ func get(c echo.Context) error {
 
 	data := PlaceData{Id: id}
 	if result := db.Find(&data); result.Error != nil {
-		return err
+		return result.Error
 	}
 
 	place := toPlaceInfo(userId, placeId, data)
@@ -209,12 +209,16 @@ func put(c echo.Context) error {
 		return err
 	}
 
-	db.Clauses(clause.OnConflict{UpdateAll: true}).Create(&PlaceData{
+	result := db.Clauses(clause.OnConflict{UpdateAll: true}).Create(&PlaceData{
 		Id:      id,
 		Public:  place.Public,
 		Secret:  place.Secret,
 		Updated: time.Now(),
 	})
+
+	if result.Error != nil {
+		return result.Error
+	}
 
 	return c.String(http.StatusOK, id)
 }
@@ -250,6 +254,10 @@ func route(c echo.Context) error {
 
 	var saved []PlaceData
 	result := db.Order("Id asc").Find(&saved, places)
+	if result.Error != nil {
+		return result.Error
+	}
+
 	if result.RowsAffected != int64(linq.From(places).Distinct().Count()) || len(saved) != len(route) {
 		return c.String(http.StatusBadRequest, ErrorInvalidRoute)
 	}
