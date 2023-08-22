@@ -9,6 +9,7 @@ pg_cs_port: 5432
 pg_max_connections: 100
 pg_shared_buffers: 256MB
 pg_work_mem: 4MB
+pg_random_page_cost: 1.1
 
 cs_limit_nofile: 10000
 
