@@ -303,7 +303,7 @@ export default function ConnectWithMetaMask() {
                         </div>
                   </li>
                   <li>
-                        7. Click on "Add wallet". Your Ethereum address is located on the top of the page.
+                        7. Click "Add wallet". From now, your Ethereum address is located on the top of the page.
                   </li>
                   <li>
                         8. Congratulations! Now you can <b>refresh the page</b> and connect your freshly created wallet to our website. 

@@ -87,7 +87,7 @@ const add = (msg) => {
 function connect() {
   ws = new WebSocket(`${/^https:/i.test(location.href) ? 'wss' : 'ws'}://${location.host}/ws`);
   ws.onmessage = msg => add(JSON.parse(msg.data));
-  ws.onclose = _ => setTimeout(connect, 3000);
+  ws.onclose = _ => setTimeout(connect, 60000);
   ws.onerror = err => {
     console.error('ws error: ', err.message, 'closing socket');
     ws.close();

@@ -29,13 +29,13 @@ proxies:
     limits:
       - source: team
         location: /
-        limit: 30r/m
+        limit: 20r/m
         burst: 10
       - source: team
         location: /ws
         proxy_websockets: true
-        limit: 2r/m
-        burst: 2
+        limit: 1r/m
+        burst: 1
         simultaneous_connections: 2
     dns_records:
       - spaces

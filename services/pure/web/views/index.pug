@@ -5,22 +5,30 @@ block navbar
     ul(class='navbar-nav ms-auto')
       li(class='nav-item')
         a(class='btn btn-outline-dark btn-sm', href='/add') +
-        span
-          |&nbsp;#{user.username} | 
-          a(href='/logout', class='link-dark') Logout
+        if isAdmin
+          |&nbsp;
+          i(class='bi bi-eye')
+        |&nbsp;
+        span(id='username')= user.username
+        |&nbsp;|&nbsp;
+        a(href='/logout', class='link-dark') Logout
 
 block content
   div(class='col-md-10 offset-md-1 mt-3 text-center')
     table(class='table')
       thead
         tr
+          if isAdmin
+            th(scope='col') User
           th(scope='col') Title
           th(scope='col') Updated
           th(scope='col')
       tbody
         each card in cards
           tr
-            td
+            if isAdmin
+              td(class='table-dark')= card.user
+            td(class='js-name')
               a(class='link-dark', href=`/edit/${card._id}`)
                 if card.firstName || card.lastName
                   |#{card.firstName} #{card.lastName}

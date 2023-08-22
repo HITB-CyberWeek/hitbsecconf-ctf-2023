@@ -47,7 +47,9 @@ services:
     image: nginx:1.24
     restart: unless-stopped
     volumes:
-      - "./nginx.conf:/etc/nginx/nginx.conf"
+      - "./nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./static:/data/static:ro"
+      - "./index.html:/data/index.html:ro"
     ports:
       - "80:80"
     depends_on:

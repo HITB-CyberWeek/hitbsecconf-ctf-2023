@@ -13,7 +13,7 @@ echo <<< EOF
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" href="/">Keys</a>
+        <a class="navbar-brand" href="/">Keys!</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -33,9 +33,7 @@ EOF;
 function foot() {
 echo <<< EOF
     </div>
-
     <script src="/static/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <!-- <script src="main.js"></script> -->
   </body>
 </html>
 EOF;

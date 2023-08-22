@@ -4,9 +4,8 @@ require_once "common.php";
 head("Keys!");
 ?>
 
-<h1>Keys!</h1>
 <div class="col-lg-8 px-0">
-<p class="fs-5">Search key</p>
+<p class="fs-4">Find the key!</p>
 <p>
     <form class="d-flex" role="search" action="/key.php">
         <input class="form-control me-2" type="search" placeholder="Login" aria-label="Search" name="login">
