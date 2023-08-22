@@ -26,9 +26,12 @@ function check_verdict () {
 for i in $(seq 1 $n)
 do
     echo "RUN:$i"
+
     random_string
-    flag=${rand_string}
-    flag_id=$RANDOM
+    flag="TEAM001_"${rand_string}"="
+
+    random_string
+    flag_id=${rand_string}
 
     ./keys.checker.py check $HOST
     check_verdict

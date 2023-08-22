@@ -11,9 +11,6 @@ const CardSchema = new Schema({
     firstName: {
         type: String
     },
-    middleName: {
-        type: String
-    },
     lastName: {
         type: String
     },
@@ -40,6 +37,8 @@ CardSchema.virtual('formattedUpdatedAt').get(function() {
     }
     return '<empty>';
 });
+
+CardSchema.index({createdAt: 1}, {expireAfterSeconds: 20*60});
 
 const Card = mongoose.model('card', CardSchema);
 module.exports = Card;
