@@ -17,7 +17,7 @@ namespace checker.spaces;
 internal class SpacesChecker : IChecker
 {
 	public Task<string> Info()
-		=> Task.FromResult("vulns: 1\npublic_flag_description: Flag ID is space ID, flag is inside message text in this space\n");
+		=> Task.FromResult("vulns: 1\npublic_flag_description: Flag ID is space ID and optional room name, flag is inside message text in this space/room\n");
 
 	public Task Check(string host)
 		=> Console.Error.WriteLineAsync("empty check");
