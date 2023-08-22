@@ -1,0 +1,21 @@
+---
+- hosts: cs
+  tasks:
+  - name: login to registry.digitalocean.com
+    docker_login: # export DO_DOCKER_REGISTRY_TOKEN=dop_v1_...
+      registry: registry.digitalocean.com
+      username: "{{ lookup('ansible.builtin.env', 'DO_DOCKER_REGISTRY_TOKEN') }}"
+      password: "{{ lookup('ansible.builtin.env', 'DO_DOCKER_REGISTRY_TOKEN') }}"
+  - name: add routes
+    copy:
+      content: |
+        network:
+          version: 2
+          ethernets:
+            eth1:
+              routes:
+                - to: 10.60.0.0/14
+                  via: 10.10.10.3
+                - to: 10.80.0.0/14
+                  via: 10.10.10.3
+      dest: /etc/netplan/60-ctf-routes.yaml
