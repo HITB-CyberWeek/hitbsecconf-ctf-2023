@@ -24,7 +24,7 @@ def get_random_string(min_len, max_len):
 
 def set_flag(checker_path, host):
     flag_id = get_random_string(10, 10)
-    flag = "TEAM1_" + get_random_string(31, 31) + "="
+    flag = "TEAM001_" + get_random_string(32, 32)
 
     proc = subprocess.run([checker_path, 'put', host, flag_id, flag, "1"], stdout=subprocess.PIPE, env=os.environ, timeout=TIMEOUT, text=True, encoding='utf-8')
     ret = proc.stdout
