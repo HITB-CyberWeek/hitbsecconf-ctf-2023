@@ -4,5 +4,4 @@ services:
         build: .
         volumes:
             - ./container:/home/task
-        ports:
-            - "8080:5555"
+        network_mode: "host"
