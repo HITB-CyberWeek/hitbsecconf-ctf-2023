@@ -120,7 +120,7 @@ router.get('/', ensureAuthenticated, async (req, res) => {
     }
     
     const cards = await Card.find(filter).sort({ firstName: 1, lastName: 1, updatedAt: -1 });
-    res.render('index', { user : req.user, cards: cards });
+    res.render('index', { user : req.user, cards: cards, isAdmin: req.session.isAdmin });
 });
 
 router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
@@ -131,7 +131,7 @@ router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
 
     const card = await Card.findOne(filter);
     // TODO check not null & return not found
-    res.render('edit', { user : req.user, action: `/edit/${req.params.id}`, card: card });
+    res.render('edit', { user : req.user, action: `/edit/${req.params.id}`, card: card, isAdmin: req.session.isAdmin });
 });
 router.post('/edit/:id', ensureAuthenticated, async (req, res) => {
     var filter = { _id: req.params.id };
@@ -146,7 +146,7 @@ router.post('/edit/:id', ensureAuthenticated, async (req, res) => {
 });
 
 router.get('/add', ensureAuthenticated, (req, res) => {
-    res.render('edit', { user: req.user, action: '/add', card: {} });
+    res.render('edit', { user: req.user, action: '/add', card: {}, isAdmin: req.session.isAdmin });
 });
 router.post('/add', ensureAuthenticated, async (req, res) => {
     await Card.create(buildCardModel(req));

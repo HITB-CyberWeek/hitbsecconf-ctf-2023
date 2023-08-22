@@ -116,7 +116,7 @@ def register_user(host, user, password, use_client_cert=False):
     except Exception as e:
         return (MUMBLE, "Unexpected registration result", "Can't parse result html: '%s'" % e, None, None)
 
-    user_element = doc.xpath("//li[contains(@class, 'nav-item')]/span")
+    user_element = doc.xpath("//li[contains(@class, 'nav-item')]/span[@id='username']")
     if len(user_element) != 1:
         return (MUMBLE, "Unexpected registration result", "Can't find username HTML element in '%s'" % r.text, None, None)
 
@@ -185,7 +185,7 @@ def login_user(host, user, password, use_client_cert=False):
     except Exception as e:
         return (MUMBLE, "Unexpected login result", "Can't parse result html: '%s'" % e, None, None)
 
-    user_element = doc.xpath("//li[contains(@class, 'nav-item')]/span")
+    user_element = doc.xpath("//li[contains(@class, 'nav-item')]/span[@id='username']")
     if len(user_element) != 1:
         return (MUMBLE, "Unexpected login result", "Can't find username HTML element in '%s'" % r.text, None, None)
 
