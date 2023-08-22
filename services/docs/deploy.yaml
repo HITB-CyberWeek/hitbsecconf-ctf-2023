@@ -11,8 +11,8 @@ scripts:
     docker compose -f /home/$USERNAME/docker-compose.yaml build
   start_once: |
     echo "REDIS_URI=redis://redis:6379"              > /home/$USERNAME/.env
-    echo "POSTGRES_PASSWORD=$(openssl rand -hex 6)" >> /home/$USERNAME/.env
-    echo "DOCS_SECRET=$(openssl rand -hex 6)"       >> /home/$USERNAME/.env
+    echo "POSTGRES_PASSWORD=$(openssl rand -hex 12)" >> /home/$USERNAME/.env
+    echo "DOCS_SECRET=$(openssl rand -hex 12)"       >> /home/$USERNAME/.env
     docker compose -f /home/$USERNAME/docker-compose.yaml up -d
 
 files:
@@ -32,5 +32,10 @@ proxies:
     upstream:
       host_index: 12
       port: 80
+    limits:
+      - source: team
+        location: /
+        limit: 1r/s
+        burst: 20
     dns_records:
       - docs
