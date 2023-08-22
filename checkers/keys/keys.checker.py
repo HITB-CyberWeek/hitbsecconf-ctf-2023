@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 
 import json
+import logging
 import os
-import random
 import re
 import requests
-import string
 import sys
 import traceback
 
 from checker_helper import *
+
+logging.basicConfig(level=logging.DEBUG)
 
 PORT = 3000
 TIMEOUT = 30
