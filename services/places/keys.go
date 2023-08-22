@@ -16,7 +16,7 @@ func LoadOrCreateKey(file string, size int32) []byte {
 		panic(err)
 	}
 
-	err = os.Mkdir(filepath.Dir(file), 0640)
+	err = os.Mkdir(filepath.Dir(file), 0750)
 	if err != nil && !os.IsExist(err) {
 		panic(err)
 	}
