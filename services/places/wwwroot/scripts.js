@@ -182,9 +182,9 @@ $routeAdd.onclick = () => {
 	$routeCount.textContent = state.route.length;
 }
 
-const gotoPhrases = ['Go to', 'Visit', 'Be a guest of', 'Check in at'];
-const publicPhrases = ['Here you can see', 'The more interesting things here', 'The best features of this place'];
-const secretPhrases = ['Note for yourself', 'NB', 'PS', 'Check the sound', 'The bottom line', 'Small secret'];
+const gotoPhrases = ['Go to', 'Visit', 'Be a guest of', 'Check in at', 'Take a course on'];
+const publicPhrases = ['Here you can see', 'The most interesting things here are', 'The best features of this place are'];
+const secretPhrases = ['Note for yourself', 'NB', 'PS', 'The secret bottom line is', 'Small secret about this place'];
 $routeBuild.onclick = () => {
 	fetch(`/api/route`, {method: 'POST', body: JSON.stringify(state.route), headers: {'Content-Type': 'application/json;charset=utf-8'}})
 		.then(handleErrors)
@@ -197,7 +197,12 @@ $routeBuild.onclick = () => {
 				value?.split('\n').filter(line => !!line.length).forEach(line => {
 					const json = JSON.parse(line);
 					state.builtRoute.push([json.long, json.lat]);
-					text.push(`${randomChoice(gotoPhrases)} φ=${json.lat}°, λ=${json.long}°. ${randomChoice(publicPhrases)}: '${json.public}'. ${randomChoice(secretPhrases)}: '${json.secret}'.`);
+					let info = `${randomChoice(gotoPhrases)} φ=${json.lat}°, λ=${json.long}°.`;
+					if(json.public?.length)
+						info += ` ${randomChoice(publicPhrases)}: '${json.public}'.`;
+					if(json.secret?.length)
+						info += ` ${randomChoice(secretPhrases)}: '${json.secret}'.`;
+					text.push(info);
 				});
 			}).then(() => {
 				$routeText.textContent = text.join("\n    \u21E9\n") + '\n\nNote: the route may be suboptimal, the route construction algorithm still needs to be improved...';

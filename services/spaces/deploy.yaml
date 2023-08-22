@@ -36,6 +36,6 @@ proxies:
         proxy_websockets: true
         limit: 2r/m
         burst: 2
-        simultaneous_connections: 1
+        simultaneous_connections: 2
     dns_records:
       - spaces
