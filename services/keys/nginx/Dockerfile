@@ -4,4 +4,4 @@ RUN rm /etc/nginx/conf.d/*
 ADD keys.conf /etc/nginx/conf.d
 
 RUN mkdir -p /var/www
-ADD index.html /var/www
+ADD static /var/www/static
