@@ -114,12 +114,12 @@ router.get('/logout', (req, res, next) => {
 });
 
 router.get('/', ensureAuthenticated, async (req, res) => {
-    var filter = {};
-    if (!req.session.isAdmin) {
-        filter['user'] = req.user.username;
+    var cards;
+    if (req.session.isAdmin) {
+        cards = await Card.find({}).sort({ user: 1, firstName: 1, lastName: 1, updatedAt: -1 });
+    } else {
+        cards = await Card.find({user: req.user.username}).sort({ firstName: 1, lastName: 1, updatedAt: -1 });
     }
-    
-    const cards = await Card.find(filter).sort({ firstName: 1, lastName: 1, updatedAt: -1 });
     res.render('index', { user : req.user, cards: cards, isAdmin: req.session.isAdmin });
 });
 
