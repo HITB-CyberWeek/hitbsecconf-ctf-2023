@@ -4,9 +4,13 @@ block navbar
   div(class='navbar-collapse collapse')
     ul(class='navbar-nav ms-auto')
       li(class='nav-item')
-        span
-          |&nbsp;#{user.username} | 
-          a(href='/logout', class='link-dark') Logout
+        if isAdmin
+          |&nbsp;
+          i(class='bi bi-eye')
+        |&nbsp;
+        span(id='username')= user.username
+        |&nbsp;|&nbsp;
+        a(href='/logout', class='link-dark') Logout
 
 block content
   div(class='col-md-4 offset-md-4 mt-3 text-center')
