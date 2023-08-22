@@ -53,7 +53,7 @@ internal class SpacesChecker : IChecker
 			throw new CheckerException(ExitCode.MUMBLE, "failed to await random anonymous profile generation");
 
 		WsResult wsSendResult;
-		var messagesCount = RndUtil.GetInt(1, 30);
+		var messagesCount = RndUtil.GetDouble() <= 0.8 ? RndUtil.GetInt(1, 5) : RndUtil.GetDouble() <= 0.75 ? RndUtil.GetInt(10, 20) : RndUtil.GetInt(20, 30);
 		for(int i = 0; i < messagesCount; i++)
 		{
 			wsSendResult = await wsClient.SendAsync(new Command { Type = MsgType.Generate }).ConfigureAwait(false);
