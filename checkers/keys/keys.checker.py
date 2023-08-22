@@ -9,24 +9,17 @@ import string
 import sys
 import traceback
 
-requests.packages.urllib3.disable_warnings()
 from checker_helper import *
 
 PORT = 3000
 TIMEOUT = 30
 CHECKER_DIRECT_CONNECT = os.environ.get("CHECKER_DIRECT_CONNECT")
-# KEYS_COUNT_RE = re.compile(r'Currently stored keys: (\d+)')
 PRIVATE_KEY_RE = re.compile(r'(-----BEGIN PRIVATE KEY-----.*?-----END PRIVATE KEY-----)', re.MULTILINE | re.DOTALL)
 PUBLIC_KEY_RE = re.compile(r'(-----BEGIN PUBLIC KEY-----.*?-----END PUBLIC KEY-----)', re.MULTILINE | re.DOTALL)
 
 
 def info():
     verdict(OK, "vulns: 1\npublic_flag_description: Flag ID is the user's login, flag is the comment")
-
-
-def get_random_string(min_len, max_len):
-    letters = string.ascii_lowercase + string.digits
-    return ''.join(random.choice(letters) for i in range(random.randint(min_len, max_len)))
 
 
 def url_prefix(host):
@@ -58,7 +51,7 @@ def put(args):
     if len(args) != 4:
         verdict(CHECKER_ERROR, "Checker error", "Wrong args count for put()")
     host, flag_id, flag, vuln = args
-    login = get_random_string(10, 20)
+    login = flag_id
 
     url = url_prefix(host)
     url = f'{url}/generate.php'
@@ -88,7 +81,6 @@ def put(args):
         "public_flag_id": login,
         "public_key": public_key,
         "private_key": private_key,
-        "orig_flag_id": flag_id,
     })
 
     verdict(OK, ret)
