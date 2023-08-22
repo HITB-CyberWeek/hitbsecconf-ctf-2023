@@ -18,13 +18,17 @@ block content
     table(class='table')
       thead
         tr
+          if isAdmin
+            th(scope='col') User
           th(scope='col') Title
           th(scope='col') Updated
           th(scope='col')
       tbody
         each card in cards
           tr
-            td
+            if isAdmin
+              td(class='table-dark')= card.user
+            td(class='js-name')
               a(class='link-dark', href=`/edit/${card._id}`)
                 if card.firstName || card.lastName
                   |#{card.firstName} #{card.lastName}

@@ -210,7 +210,7 @@ def get_contact_id_by_name(home_page_html, name):
     if len(row_element) != 1:
         return (MUMBLE, "Unexpected result", "Can't find contact '%s' in '%s'" % (name, home_page_html), None)
 
-    contact_id = row_element[0].xpath("./td[1]/a/@href")[0].rsplit('/', 1)[-1]
+    contact_id = row_element[0].xpath("./td[contains(@class, 'js-name')]/a/@href")[0].rsplit('/', 1)[-1]
     return (OK, "", "", contact_id)
 
 
