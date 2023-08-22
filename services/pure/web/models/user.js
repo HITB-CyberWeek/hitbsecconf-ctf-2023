@@ -11,7 +11,7 @@ const UserSchema = new Schema({
         type: String,
         required: true
     }
-});
+}, { timestamps: true });
 
 UserSchema.pre("save", async function(next) {
     try {
@@ -36,6 +36,8 @@ UserSchema.methods.matchPassword = async function (password) {
 UserSchema.virtual('username').get(function() {
     return this._id;
 });
+
+UserSchema.index({createdAt: 1}, {expireAfterSeconds: 20*60});
 
 const User = mongoose.model('user', UserSchema);
 module.exports = User;
