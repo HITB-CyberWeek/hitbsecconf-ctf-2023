@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -47,27 +47,29 @@ internal class SpacesChecker : IChecker
 
 		WsResult wsSendResult;
 		var messagesCount = RndUtil.GetInt(1, 20);
+		var avatars = new HashSet<string>(StringComparer.Ordinal);
 		for(int i = 0; i < messagesCount; i++)
 		{
 			wsSendResult = await wsClient.SendAsync(new Command { Type = MsgType.Generate }).ConfigureAwait(false);
 			if(wsSendResult != WsResult.Ok)
 				throw new CheckerException(wsSendResult.ToExitCode(), $"ws send failed: {wsSendResult.ToReadableCode()}");
 
+			var wsRecvResult = await wsClient.ReceiveAsync(NetworkOpTimeout).ConfigureAwait(false);
+			if(wsRecvResult.Result != WsResult.Ok)
+				throw new CheckerException(wsRecvResult.Result.ToExitCode(), $"ws recv failed: {wsRecvResult.Result.ToReadableCode()}");
+			if(wsRecvResult.Result != WsResult.Ok || string.IsNullOrEmpty(wsRecvResult.Msg?.Avatar) || !avatars.Add(wsRecvResult.Msg.Avatar))
+				throw new CheckerException(ExitCode.MUMBLE, "failed to await random anonymous profile generation");
+
 			await RndUtil.RndDelay(MaxWsOneTimeDelay, ref slept).ConfigureAwait(false);
 		}
-
-		int count = 0;
-		var avatars = new ConcurrentDictionary<string, bool>();
-		var awaited = await AwaitReceiveMessagesAsync(wsClient, msg => msg.Type == MsgType.Generate && avatars.TryAdd(msg.Avatar ?? string.Empty, true) && Interlocked.Increment(ref count) >= messagesCount).ConfigureAwait(false);
-
-		if(awaited == null)
-			throw new CheckerException(ExitCode.MUMBLE, "failed to await profile generation messages with random anonymous profile");
 
 		wsSendResult = await wsClient.SendAsync(new Command { Type = MsgType.Join }).ConfigureAwait(false);
 		if(wsSendResult != WsResult.Ok)
 			throw new CheckerException(wsSendResult.ToExitCode(), $"ws send failed: {wsSendResult.ToReadableCode()}");
 
 		var joinMsg = await AwaitReceiveMessagesAsync(wsClient, msg => msg.Type == MsgType.Join).ConfigureAwait(false);
+		if(joinMsg == null)
+			throw new CheckerException(ExitCode.MUMBLE, "failed to await join message");
 
 		string author = joinMsg.Author, space = joinMsg.Context?.Split('/')[0];
 		if(string.IsNullOrEmpty(author) || string.IsNullOrEmpty(space))
@@ -91,8 +93,8 @@ internal class SpacesChecker : IChecker
 			await RndUtil.RndDelay(MaxWsOneTimeDelay, ref slept).ConfigureAwait(false);
 		}
 
-		count = 0;
-		awaited = await AwaitReceiveMessagesAsync(wsClient, msg => msg.Author == author && msg.Type == MsgType.Msg && msgs.Contains(msg.Text ?? string.Empty) && Interlocked.Increment(ref count) >= msgs.Count).ConfigureAwait(false);
+		var count = 0;
+		var awaited = await AwaitReceiveMessagesAsync(wsClient, msg => msg.Author == author && msg.Type == MsgType.Msg && msgs.Contains(msg.Text ?? string.Empty) && Interlocked.Increment(ref count) >= msgs.Count).ConfigureAwait(false);
 
 		if(awaited == null)
 			throw new CheckerException(ExitCode.MUMBLE, "failed to await all messages");
@@ -111,7 +113,6 @@ internal class SpacesChecker : IChecker
 
 		return new PutResult
 		{
-			Space = space,
 			Cookie = Convert.ToBase64String(bytes),
 
 			PublicFlagId = space
@@ -122,7 +123,6 @@ internal class SpacesChecker : IChecker
 	{
 		var baseUri = GetBaseUri(host);
 
-		var space = put.Space;
 		var cookie = Encoding.UTF8.GetString(Convert.FromBase64String(put.Cookie));
 
 		int slept = 0;

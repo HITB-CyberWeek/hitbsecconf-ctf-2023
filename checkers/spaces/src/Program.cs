@@ -92,7 +92,7 @@ internal static class Program
 				var deserialized = JsonSerializer.Deserialize<PutResult>(serialized, JsonOptions);
 				await checker.Get(host, deserialized, flag, vuln).ConfigureAwait(false);
 
-				await StderrWriteLineColoredAsync(ExitCode.OK.ToString(), ConsoleColor.Green).ConfigureAwait(false);
+				await StderrWriteLineColoredAsync($"{ExitCode.OK} {i}", ConsoleColor.Green).ConfigureAwait(false);
 			}
 			catch(CheckerException e)
 			{

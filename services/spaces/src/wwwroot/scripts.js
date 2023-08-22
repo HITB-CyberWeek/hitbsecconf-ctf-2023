@@ -17,12 +17,19 @@ var ws;
 
 $gen.onclick = () => ws.send(JSON.stringify({type: 'generate'}));
 $join.onclick = () => {
+  let name = prompt("Enter existing space id or leave blank to generate random space");
+  if(name === null) return;
   $chat.replaceChildren();
-  ws.send(JSON.stringify({type: 'join', data: prompt("Enter space id")}));
+  ws.send(JSON.stringify({type: 'join', data: name}));
 }
 $room.onclick = () => {
+  let name;
+  do {
+    name = prompt("Enter room name /[a-z]+/i, or leave blank to return to space root");
+  } while(name?.length > 0 && !/[a-z]+/i.test(name));
+  if(name === null) return;
   $chat.replaceChildren();
-  ws.send(JSON.stringify({type: 'room', data: prompt("Enter room name /[a-z]+/i")}));
+  ws.send(JSON.stringify({type: 'room', data: name}));
 }
 $msg.onclick = () => {
   if(!!$text.value?.length) {
