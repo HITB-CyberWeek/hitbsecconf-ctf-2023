@@ -6,11 +6,25 @@ async function postJsonRequest(url, data) {
     return await fetch(`${baseUrl}${url}`, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(data), credentials: 'include'});
 }
 
+function showToast(id) {
+    const toast = document.getElementById(id);
+    toast.classList.remove("hidden");
+    setTimeout(() => {toast.classList.add("hidden")}, 1000);
+}
+
 async function processLogin() {
     const login = document.getElementById("loginForm_login").value;
     const password = document.getElementById("loginForm_password").value;
-    const r = await postJsonRequest("/login", {login, password});
+    let r;
+    try {
+        r = await postJsonRequest("/login", {login, password});
+    } catch (e) {
+        console.log(e);
+        showToast("wrongPasswordToast");
+        return false;
+    }
     if (r.status != 204) {
+        showToast("wrongPasswordToast");
         return false;
     }
     await loadDocuments();
@@ -26,6 +40,11 @@ async function processRegistration() {
         r = await postJsonRequest("/register", {login, password, org});
     } catch (e) {
         console.error(e);
+        showToast("wrongRegistrationToast");
+        return false;
+    }
+    if (r.status != 200) {
+        showToast("wrongRegistrationToast");
         return false;
     }
 
@@ -99,7 +118,7 @@ async function openCreateDocumentModal() {
     Array.from(createDocumentModal.getElementsByTagName("button")).forEach(b => {
         if (b.type === "button") {
             b.addEventListener('click', () => {
-                modal.hide();
+                createDocumentModalObject.hide();
             });
         }
     });
