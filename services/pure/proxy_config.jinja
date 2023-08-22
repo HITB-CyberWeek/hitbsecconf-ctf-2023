@@ -121,7 +121,7 @@ server {
         
     }
     
-	location /private/ {
+    location /private/ {
         if ($ssl_client_verify != SUCCESS) {
             return 403;
         }
@@ -130,7 +130,8 @@ server {
         proxy_ssl_server_name on;
         proxy_ssl_name pure.*; 
         proxy_pass https://upstream_pure_main2/;
-	}
+        proxy_redirect https://upstream_pure_main2/ /private/;
+    }
     
 
     location = /---ctf-proxy-too-many-requests---.html {
