@@ -45,7 +45,8 @@ COPY checkers/spaces       /app/checkers/spaces
 COPY --from=build-dotnet-checkers /app/spaces/publish/ /app/checkers/spaces/src/bin/Release/net7.0/publish
 COPY checkers/lockstone    /app/checkers/lockstone
 COPY checkers/godeeper     /app/checkers/godeeper
-# COPY checkers/pure         /app/checkers/pure
+COPY checkers/pure         /app/checkers/pure
+RUN pip install -r /app/checkers/pure/requirements.txt --break-system-packages
 COPY checkers/funding      /app/checkers/funding
 COPY checkers/keys         /app/checkers/keys
 COPY checkers/places       /app/checkers/places
