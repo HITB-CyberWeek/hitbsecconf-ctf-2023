@@ -67,20 +67,20 @@ try:
         res = sess.get(url+"search?pattern="+login1[:2])
         logging.info("Searching company " + login1[:2])
         if not login1 in res.text:
-            print("Cannot find registered company")
+            print("Can not find freshly registered company")
             exit(102)
         logging.info("Company found")
 
         res = sess.post(url+"register",data=dict(login=login1,password=password1))
         logging.info("Trying duplicate register")
         if not "Already exists" in res.text:
-            print("Can register twise")
+            print("Can register twice with the same login")
             exit(102)
 
         res = sess.post(url+"login",data=dict(login=login1,password=password1))
         logging.info("Trying to log in "+ login1 + " "+ password1)
         if not "Logged in as "+login1 in res.text:
-            print("Cannot login")
+            print("Can not login")
             exit(102)
         logging.info("Logged in")
 
@@ -93,14 +93,14 @@ try:
         logging.info("Token received: "+ res1[0])
 
         if not VerifySign(res1[0]):
-            print("Not a correct token")
+            print("Received token is incorrect")
             exit(102)
         logging.info("Token sign has been successfully verified")
 
         res = sess.get(url+"get_token?token="+res1[0])
         logging.info("Getting the license for the token "+res1[0])
         if not testlic in res.text:
-            print("The license retrieve by the token is incorrect")
+            print("The license retrieved by the token is incorrect")
             exit(102)
         logging.info("License got")
         exit(101)
@@ -111,14 +111,14 @@ try:
         logging.info("Registering company " + login1+" "+password1)
         res = sess.post(url+"register",data=dict(login=login1,password=password1))
         if not "Logged in as "+login1 in res.text:
-            print("Cannot register 2")
+            print("Can not register company")
             exit(102)
         logging.info("Registered")
         res = sess.post(url+"make_license",data=dict(license_key=flag))
         logging.info("Adding license "+ flag)
         res1 = re.findall(r'Successfully added. Your token is ([0-9A-Za-z]+)',res.text)
         if len(res1) != 1:
-            print("Cannot find result token")
+            print("Can not find token in the response")
             exit(102)
         logging.info("Successfuly added flag. Token is "+res1[0])
         if not VerifySign(res1[0]):
@@ -133,14 +133,14 @@ try:
 
         res = sess.get(url+"get_token?token="+token)
         logging.info("Getting license for token "+token)
-        if not flag  in res.text:
-            logging.info("Cannot find flag in "+res.text)
-            print("Not a correct license by token")
+        if not flag in res.text:
+            logging.info("Can not find flag in "+res.text)
+            print("Can not receive correct license by the token")
             exit(102)
-        logging.info("Found flag in result")
+        logging.info("Found flag in the result")
         exit(101)
     elif proc == "info":
-        print("vulns: 1\npublic_flag_description: Flag ID is the name of the company. Flag is the license.\n")
+        print("vulns: 1\npublic_flag_description: Flag ID is the name of the company, flag is the license.\n")
         exit(101)
     else:
         print("No command provided")
