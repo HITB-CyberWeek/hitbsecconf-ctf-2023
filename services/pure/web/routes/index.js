@@ -130,8 +130,11 @@ router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
     }
 
     const card = await Card.findOne(filter);
-    // TODO check not null & return not found
-    res.render('edit', { user : req.user, action: `/edit/${req.params.id}`, card: card, isAdmin: req.session.isAdmin });
+    if (!card) {
+        res.status(404).send('Card not found');
+    } else {
+        res.render('edit', { user : req.user, action: `/edit/${req.params.id}`, card: card, isAdmin: req.session.isAdmin });
+    }
 });
 router.post('/edit/:id', ensureAuthenticated, async (req, res) => {
     var filter = { _id: req.params.id };
@@ -139,10 +142,12 @@ router.post('/edit/:id', ensureAuthenticated, async (req, res) => {
         filter['user'] = req.user.username;
     }
 
-    await Card.updateOne(filter, buildCardModel(req));
-    // TODO check permissions
-    // TODO check not null & return not found
-    res.redirect('/');
+    var r = await Card.updateOne(filter, buildCardModel(req));
+    if (r && r.matchedCount == 0) {
+        res.status(404).send('Card not found');
+    } else {
+        res.redirect('/');
+    }
 });
 
 router.get('/add', ensureAuthenticated, (req, res) => {
@@ -159,9 +164,12 @@ router.get('/delete/:id', ensureAuthenticated, async (req, res) => {
         filter['user'] = req.user.username;
     }
 
-    await Card.deleteOne(filter);
-    // TODO check not null & return not found
-    res.redirect('/');
+    var r = await Card.deleteOne(filter);
+    if (r && r.deletedCount == 0) {
+        res.status(404).send('Card not found');
+    } else {
+        res.redirect('/');
+    }
 });
 
 module.exports = router;
