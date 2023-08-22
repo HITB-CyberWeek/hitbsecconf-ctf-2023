@@ -25,3 +25,10 @@ function destroyUser()
     unset($_COOKIE['jwt']);
     setcookie('jwt', '', -1, '/');
 }
+
+function checkLanguage($path)
+{
+    return !str_contains('data:', $path)
+        and !str_contains('..', $path)
+        and !str_starts_with('/', $path);
+}

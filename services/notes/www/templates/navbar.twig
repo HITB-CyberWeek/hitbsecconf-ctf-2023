@@ -34,7 +34,7 @@
                 <option value="en" {% if language_code == 'en' %}selected{% endif %}>EN</option>
                 <option value="ru" {% if language_code == 'ru' %}selected{% endif %}>RU</option>
                 {% for lang in languages %}
-                    <option value="{{ lang.slug }}" {% if language_code == lang.slug %}selected{% endif %}>{{ lang.title }}</option>
+                    <option value="user:{{ user.id }}/{{ lang.slug }}" {% if language_code == lang.slug %}selected{% endif %}>{{ lang.title }}</option>
                 {% endfor %}
             </select>
         </nav>

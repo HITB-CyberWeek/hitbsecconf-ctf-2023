@@ -20,7 +20,7 @@ class LanguageController extends BaseController
     {
         $generator = new SlugGenerator;
         $slug = $generator->generate($title);
-        $count_notes = \R::count('languages', ' slug LIKE ? ', ['%'. $slug . '%']);
+        $count_notes = \R::count('languages', ' slug LIKE ? ', ['%' . $slug . '%']);
         if ($count_notes >= 1) {
             $slug .= "-$count_notes";
         }
@@ -55,14 +55,15 @@ class LanguageController extends BaseController
                 $data .= $key . " = " . $_POST[$key] . "\n";
             }
             $data = str_replace(["{", "}"], "_", $data);
-            file_put_contents($language->slug . ".ini", $data);
-            $this->context['shared_link'] = "http://" . $_SERVER['HTTP_HOST'] . "/language/set/?language=" . $language->slug . "&location=/";
+            if (!is_dir("user:" . $user->id)) {
+                mkdir("user:" . $user->id);
+            }
+            file_put_contents("user:" . $user->id . "/" . $language->slug . ".ini", $data);
+            $this->context['shared_link'] = "http://" . $_SERVER['HTTP_HOST'] . "/language/set/?language=user:" . $user->id . "/" . $language->slug . "&location=/";
             echo $this->twig->render("language/success.twig", $this->context);
             exit();
         }
         $this->get();
 
     }
-
-
 }
