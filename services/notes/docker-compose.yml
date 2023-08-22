@@ -2,12 +2,10 @@ version: "3.9"
 services:
   php:
     build:
-      args:
-        user: php
-        uid: 1000
       context: ./
       dockerfile: ./docker/php/Dockerfile
     restart: unless-stopped
+    user: 1000:1000
     ports:
       - "80:80"
     volumes:

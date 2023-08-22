@@ -4,6 +4,7 @@ import json
 import logging
 import random
 import string
+import html
 import jwt
 import re
 import urllib.parse
@@ -106,9 +107,9 @@ class NoteChecker(checklib.http.HttpChecker):
 
         self.create_user()
         links = re.findall(r'(http:.*)', response.text)
-        set_language_link = urllib.parse.urlparse(links[0])
-        parse_qs = urllib.parse.parse_qs(set_language_link.query)
-        r = self.try_http_get(links[0])
+        set_language_link = html.unescape(links[0])
+        parse_qs = urllib.parse.parse_qs(urllib.parse.urlparse(set_language_link).query)
+        r = self.try_http_get(set_language_link)
 
         self.mumble_if_false(
             parse_qs.get("language")[0] == self.get_cookies()['language'] and data['LANGUAGE_ADD'] in r.text,
