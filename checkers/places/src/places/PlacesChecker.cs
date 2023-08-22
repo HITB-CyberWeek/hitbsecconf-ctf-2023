@@ -150,22 +150,13 @@ internal class PlacesChecker : IChecker
 
 		if(RndUtil.Bool())
 		{
-			var (lat, lon) = RndUtil.Bool() ? (0.0, 0.0) : RndPlace.Coords();
-			var id = await AuthAsync(client, lat, lon).ConfigureAwait(false);
-
-			await Console.Error.WriteLineAsync($"auth place id '{id}' (lat={lat.ToString(NumberFormatInfo.InvariantInfo)}, long={lon.ToString(NumberFormatInfo.InvariantInfo)})").ConfigureAwait(false);
-			await RndUtil.RndDelay(MaxOneTimeDelay, ref slept).ConfigureAwait(false);
-		}
-
-		if(RndUtil.Bool())
-		{
-			var place = await GetPlaceAsync(client, flagId).ConfigureAwait(false);
+			var place = await GetPlaceAsync(client, flagId, corruptOn401: true).ConfigureAwait(false);
 			if(place?.Secret != flag)
 				throw new CheckerException(ExitCode.CORRUPT, $"invalid {ApiGetPlaceById} response: flag not found");
 		}
 		else
 		{
-			var places = await RouteAsync(client, route).ConfigureAwait(false);
+			var places = await RouteAsync(client, route, corruptOn401: true).ConfigureAwait(false);
 			if(places == null || !places.Any(place => place.Secret.Contains(flag)))
 				throw new CheckerException(ExitCode.CORRUPT, $"invalid {ApiRoute} response: flag not found");
 
@@ -220,11 +211,11 @@ internal class PlacesChecker : IChecker
 		return list;
 	}
 
-	private static async Task<Place> GetPlaceAsync(AsyncHttpClient client, string id)
+	private static async Task<Place> GetPlaceAsync(AsyncHttpClient client, string id, bool corruptOn401 = false)
 	{
 		var result = await client.DoRequestAsync(HttpMethod.Get, string.Format(ApiGetPlaceById, id), null, null, NetworkOpTimeout, MaxHttpBodySize).ConfigureAwait(false);
 		if(result.StatusCode != HttpStatusCode.OK)
-			throw new CheckerException(result.StatusCode.ToExitCode(), $"get {ApiGetPlaceById} failed: {result.StatusCode.ToReadableCode()}");
+			throw new CheckerException(corruptOn401 && result.StatusCode == HttpStatusCode.Unauthorized ? ExitCode.CORRUPT : result.StatusCode.ToExitCode(), $"get {ApiGetPlaceById} failed: {result.StatusCode.ToReadableCode()}");
 
 		var place = DoIt.TryOrDefault(() => JsonSerializer.Deserialize<Place>(result.BodyAsString, JsonOptions));
 		if(place == null)
@@ -249,14 +240,14 @@ internal class PlacesChecker : IChecker
 		return placeId;
 	}
 
-	private static async Task<List<Place>> RouteAsync(AsyncHttpClient client, IEnumerable<string> ids)
+	private static async Task<List<Place>> RouteAsync(AsyncHttpClient client, IEnumerable<string> ids, bool corruptOn401 = false)
 	{
 		using var buffer = MemoryPool<byte>.Shared.Rent(MaxMessageSize);
 		var data = SerializeMessage(ids, buffer.Memory);
 
 		var result = await client.DoRequestAsync(HttpMethod.Post, ApiRoute, JsonContentTypeHeaders, data, NetworkOpTimeout, MaxHttpBodySize).ConfigureAwait(false);
 		if(result.StatusCode != HttpStatusCode.OK)
-			throw new CheckerException(result.StatusCode.ToExitCode(), $"post {ApiRoute} failed: {result.StatusCode.ToReadableCode()}");
+			throw new CheckerException(corruptOn401 && result.StatusCode == HttpStatusCode.Unauthorized ? ExitCode.CORRUPT : result.StatusCode.ToExitCode(), $"post {ApiRoute} failed: {result.StatusCode.ToReadableCode()}");
 
 		var route = DoIt.TryOrDefault(() => result.BodyAsString.Split('\r', '\n').Where(line => line != string.Empty).Select(line => JsonSerializer.Deserialize<Place>(line, JsonOptions)).ToList());
 		if(route == null)
