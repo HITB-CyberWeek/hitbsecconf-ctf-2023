@@ -17,7 +17,6 @@ from faker import Faker
 requests.packages.urllib3.disable_warnings()
 from checker_helper import *
 
-PORT = 443
 VERIFY = False
 TIMEOUT = 30
 ADMIN_CERT = 'admin.crt'
@@ -43,7 +42,7 @@ def get_url_path(path, use_client_cert):
     return path
 
 def register_user(host, user, password, use_client_cert=False):
-    base_url = f"https://{host}:{PORT}/"
+    base_url = f"https://{host}/"
 
     session = requests.Session()
 
@@ -129,7 +128,7 @@ def register_user(host, user, password, use_client_cert=False):
 
 
 def login_user(host, user, password, use_client_cert=False):
-    base_url = f"https://{host}:{PORT}/"
+    base_url = f"https://{host}/"
 
     if use_client_cert:
         cert=(ADMIN_CERT, ADMIN_KEY)
@@ -242,7 +241,7 @@ def generate_random_contact(comment = None):
 
 
 def create_contact(host, session, comment, use_client_cert=False):
-    base_url = f"https://{host}:{PORT}/"
+    base_url = f"https://{host}/"
 
     if use_client_cert:
         cert=(ADMIN_CERT, ADMIN_KEY)
@@ -297,7 +296,7 @@ def create_contact(host, session, comment, use_client_cert=False):
 
 
 def get_contact_comment(host, session, id, use_client_cert=False):
-    base_url = f"https://{host}:{PORT}/"
+    base_url = f"https://{host}/"
 
     if use_client_cert:
         cert=(ADMIN_CERT, ADMIN_KEY)
