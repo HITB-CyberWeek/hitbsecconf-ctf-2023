@@ -22,6 +22,8 @@ files:
       - docker-compose.yaml
       - init.sql
       - nginx.conf
+      - index.html
+      - static
     destination: /home/$USERNAME
 
 proxies:
