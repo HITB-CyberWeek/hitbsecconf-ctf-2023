@@ -51,8 +51,11 @@ const $chat = document.getElementById('chat');
 const add = (msg) => {
   if(!msg) return;
 
+  if(msg.type === 'close') {
+    $close.disabled = true;
+  }
+
   if(msg.type === 'join' && msg.context?.length) {
-    //$chat.replaceChildren();
     $space.textContent = msg.context;
     $room.disabled = false;
     $text.disabled = false;

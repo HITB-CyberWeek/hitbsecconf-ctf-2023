@@ -77,7 +77,7 @@ internal static class WsHandler
 
     private static Task ExecuteCommandAsync(this Connection conn, Command cmd, CancellationToken cancel) => cmd.Type switch
     {
-        MsgType.Close => conn.CloseSpace(),
+        MsgType.Close => conn.CloseSpace(cancel),
         MsgType.Join => conn.JoinAsync(cmd.Data, cancel),
         MsgType.Room => conn.JoinRoomAsync(cmd.Data, cancel),
         MsgType.Msg => conn.SendMessage(cmd.Data, cancel),
@@ -85,13 +85,17 @@ internal static class WsHandler
         _ => throw new Exception()
     };
 
-    private static async Task CloseSpace(this Connection conn)
+    private static async Task CloseSpace(this Connection conn, CancellationToken cancel)
     {
-        var space = conn.State?.Context?.Space ?? 0UL;
+        var state = conn.State;
+
+        var space = state?.Context?.Space ?? 0UL;
         if(space == 0UL)
             return;
 
         await Storage.CloseSpace(space.ToBase58());
+
+        await GetSpaceConnections(space).BroadcastAsync(state!, MsgType.Close, $"Closed space '{space.ToBase58()}', new members can no longer join", cancel);
     }
 
     private static User GenUser(this Connection conn)
