@@ -22,8 +22,8 @@ block content
           tr
             td
               a(class='link-dark', href=`/edit/${card._id}`)
-                if card.firstName || card.middleName || card.lastName
-                  |#{card.firstName} #{card.middleName} #{card.lastName}
+                if card.firstName || card.lastName
+                  |#{card.firstName} #{card.lastName}
                 else
                   |&lt;empty&gt;
             td
