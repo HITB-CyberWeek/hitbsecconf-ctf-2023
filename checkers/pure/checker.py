@@ -70,10 +70,10 @@ def register_user(host, user, password, use_client_cert=False):
         if r.status_code != 200:
             return (MUMBLE, "Unexpected result", "Unexpected HTTP status code when requesting home page without session cookie: '%d'" % r.status_code, None, None)
 
-        if r.request.url != urljoin(base_url, '/login'):
+        if r.request.url != urljoin(base_url, get_url_path('/login', use_client_cert)):
             return (MUMBLE, "Unexpected result", "Unexpected login url when requesting home page without session cookie: '%s'" % r.request.url, None, None)
 
-        headers = {'Referer': r.request.url}
+        headers = {'Referer': urljoin(base_url, '/login')}
         url = urljoin(base_url, get_url_path('/register', use_client_cert))
         trace(f"Going to '{url}' from login page")
         try:
@@ -89,7 +89,7 @@ def register_user(host, user, password, use_client_cert=False):
         if r.status_code != 200:
             return (MUMBLE, "Unexpected result", "Unexpected HTTP status code when requesting registration page: '%d'" % r.status_code, None, None)
 
-        headers = {'Referer': r.request.url}
+        headers = {'Referer': urljoin(base_url, '/register')}
     else:
         headers = {}
 
@@ -154,10 +154,10 @@ def login_user(host, user, password, use_client_cert=False):
         if r.status_code != 200:
             return (MUMBLE, "Unexpected result", "Unexpected HTTP status code when requesting home page without session cookie: '%d'" % r.status_code, None, None)
 
-        if r.request.url != urljoin(base_url, '/login'):
+        if r.request.url != urljoin(base_url, get_url_path('/login', use_client_cert)):
             return (MUMBLE, "Unexpected result", "Unexpected login url when requesting home page without session cookie: '%s'" % r.request.url, None, None)
 
-        headers = {'Referer': r.request.url}
+        headers = {'Referer': urljoin(base_url, '/login')}
     else:
         headers = {}
 
@@ -252,7 +252,7 @@ def create_contact(host, session, comment, use_client_cert=False):
     data = generate_random_contact(comment)
 
     if random.choice([0, 1]):
-        headers = {'Referer': f"https://{host}:{PORT}/"}
+        headers = {'Referer': base_url}
         url = urljoin(base_url, get_url_path('/add', use_client_cert))
         trace(f"Going to the '{url}' page from home page")
         try:
@@ -268,7 +268,7 @@ def create_contact(host, session, comment, use_client_cert=False):
         if r.status_code != 200:
             return (MUMBLE, "Unexpected result", "Unexpected HTTP status code when requesting '/add' page: '%d'" % r.status_code, None, None)
 
-        headers = {'Referer': r.request.url}
+        headers = {'Referer': urljoin(base_path, '/add')}
     else:
         headers = {}
 
@@ -305,7 +305,7 @@ def get_contact_comment(host, session, id, use_client_cert=False):
         cert=None
 
     if random.choice([0, 1]):
-        headers = {'Referer': f"https://{host}:{PORT}/"}
+        headers = {'Referer': base_url}
     else:
         headers = {}
 
