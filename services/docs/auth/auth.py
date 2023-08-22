@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Response
 from pydantic import BaseModel
+from typing import Optional
 
 import hmac
 import hashlib
@@ -19,7 +20,7 @@ r = redis.from_url("redis://redis:6379")
 class UserInfo(BaseModel):
     login: str
     password: str
-    org: str
+    org: Optional[str] = None
 
 app = FastAPI()
 
