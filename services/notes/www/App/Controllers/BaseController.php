@@ -35,7 +35,6 @@ class BaseController
 
     private function getLanguage()
     {
-        # TODO check ../
         $language = (isset($_COOKIE['language']) && checkLanguage($_COOKIE['language'])) ? $_COOKIE['language'] : 'en';
         $this->context['language_code'] = $language;
 

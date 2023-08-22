@@ -6,9 +6,13 @@ use Firebase\JWT\Key;
 function getUser()
 {
     if (isset($_COOKIE['jwt'])) {
-        $decoded = JWT::decode($_COOKIE['jwt'], new Key($_ENV["SECRET"], 'HS256'));
-        $user = \R::findOne('users', ' id = ?', [$decoded->user_id]);
-        return $user;
+        try {
+            $decoded = JWT::decode($_COOKIE['jwt'], new Key($_ENV["SECRET"], 'HS256'));
+            $user = \R::findOne('users', ' id = ?', [$decoded->user_id]);
+            return $user;
+        } catch (Exception $e) {
+
+        }
     }
     return null;
 }
