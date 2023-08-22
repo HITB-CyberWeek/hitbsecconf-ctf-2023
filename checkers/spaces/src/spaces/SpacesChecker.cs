@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using checker.net;
 using checker.rnd;
 using checker.utils;
+using CommunityToolkit.HighPerformance;
 using CommunityToolkit.HighPerformance.Buffers;
 
 namespace checker.spaces;
@@ -258,7 +259,7 @@ internal class SpacesChecker : IChecker
 	private static async Task<T> DeserializeMessageAsync<T>(ReadOnlyMemory<byte> memory)
 	{
 		var msg = JsonSerializer.Deserialize<T>(memory.Span, JsonOptions);
-		await Console.Error.WriteLineAsync($"deserialized '{JsonSerializer.Serialize(msg, JsonOptions)}'").ConfigureAwait(false);
+		await Console.Error.WriteLineAsync($"deserialized '{AvatarRegex.Replace(JsonSerializer.Serialize(msg, JsonOptions), match => "zeroes:" + match.ValueSpan.Count('0'))}'").ConfigureAwait(false);
 		return msg;
 	}
 
@@ -286,6 +287,7 @@ internal class SpacesChecker : IChecker
 
 	private const string AuthCookieName = "usr";
 	private static readonly Regex AuthCookieRegex = new(@"^[a-zA-Z0-9\.!$@:+\*=_-]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+	private static readonly Regex AvatarRegex = new(@"\b[A-Z0]{256}\b", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
 	private static readonly JsonSerializerOptions JsonOptions = new()
 	{
