@@ -113,10 +113,10 @@ def get(args):
     if resp.status_code == 404:
         verdict(CORRUPT, "Wrong flag", f"Cant find login '{login}' (404)")
 
+    resp.raise_for_status()
+
     if flag_data not in resp.text:
         verdict(CORRUPT, "Wrong flag", f"'{flag_data}' NOT IN '{resp.text}'")
-
-    resp.raise_for_status()
 
     url = f'{_url_prefix}/key.php'
     trace(f"get1({url})")
