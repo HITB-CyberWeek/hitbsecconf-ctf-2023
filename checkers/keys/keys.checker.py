@@ -99,8 +99,10 @@ def get(args):
 
     _url_prefix = url_prefix(host)
 
+    trace(f"prepare_get : {flag_id}, {flag_data} {vuln}")
+
     url = f'{_url_prefix}/key.php'
-    trace("get0(%s, %s, %s, %s)" % (url, flag_id, flag_data, vuln))
+    trace(f"get0({url})")
 
     resp = requests.get(url, {'login' : login})
     resp.raise_for_status()
@@ -114,7 +116,7 @@ def get(args):
         verdict(MUMBLE, "Cant find public key", f"Can't find the public key login:{login}, resp:{resp.text}")
 
     url = f'{_url_prefix}/check.php'
-    trace("get1(%s, %s, %s, %s)" % (url, flag_id, flag_data, vuln))
+    trace(f"get1({url})")
 
     form_data = {
         'login': login,
