@@ -39,7 +39,8 @@ function try_check_key() {
         return '<div class="alert alert-danger" role="alert">Bad key!</div>';
     }
 
-    return "OK, you generated the key with comment: " . $data['comment'] . '<br/>';
+    return "<p>OK, you have generated the key with the comment: " . $data['comment'] . '</p>'
+           . '<p><a href="/">Home</a>';
 }
 
 
@@ -51,12 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     head("Check your key");
     $login = $_GET['login'];
 ?>
-    <p>Lets check you save your public key:</p>
+    <p>Let`s check you saved your private key:</p>
     <form method="POST">
     <div class="form-group">
     Private key:<br/><textarea cols="70" rows="22" name="private_key"></textarea><br/>
-    <input type="hidden" name="login" value="<?php echo $login ?>">
-    <input type="submit">
+    <input type="hidden" name="login" value="<?php echo $login ?>"><br/>
+    <input class="btn btn-outline-success" type="submit" value="Check">
     </div>
     </form>
 
