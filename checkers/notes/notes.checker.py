@@ -112,7 +112,7 @@ class NoteChecker(checklib.http.HttpChecker):
         r = self.try_http_get(set_language_link)
 
         self.mumble_if_false(
-            parse_qs.get("language")[0] == self.get_cookies()['language'] and data['LANGUAGE_ADD'] in r.text,
+            parse_qs.get("language")[0] == urllib.parse.unquote(self.get_cookies()['language']) and data['LANGUAGE_ADD'] in r.text,
             f"The interface language has not changed at GET {set_language_link}"
         )
         self.logout()

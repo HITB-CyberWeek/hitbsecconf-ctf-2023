@@ -20,6 +20,7 @@ class BaseController
             'post' => $_POST,
             'get' => $_GET,
             'request_uri' => $_SERVER['REQUEST_URI'],
+            'languages' => [],
             'errors' => [],
 
         );
@@ -34,10 +35,11 @@ class BaseController
 
     private function getLanguage()
     {
-        $language = (isset($_COOKIE['language']) && !str_contains('data:', $_COOKIE['language'])) ? $_COOKIE['language']: 'en';
-        $this->context['language_code'] =  $language;
+        # TODO check ../
+        $language = (isset($_COOKIE['language']) && checkLanguage($_COOKIE['language'])) ? $_COOKIE['language'] : 'en';
+        $this->context['language_code'] = $language;
+
         $this->context['language'] = parse_ini_file("$language.ini");
-//        var_dump($this->context['language']);
     }
 
     public function setLanguage()
@@ -45,7 +47,7 @@ class BaseController
         $location = $_GET['location'] ?? '/';
         header("Location: $location");
         $language = $_GET['language'] ?? 'en';
-        setcookie("language", $language, strtotime( '+1 days' ), '/');
+        setcookie("language", $language, strtotime('+1 days'), '/');
 
     }
 
@@ -59,7 +61,7 @@ class BaseController
             header('Location: /signin');
             exit();
         }
-        if(!is_null($user)) {
+        if (!is_null($user)) {
             $this->context['user'] = $user;
             $this->context['languages'] = $user->ownLanguagesList;
         }
