@@ -71,7 +71,7 @@ def register_user(host, user, password, use_client_cert=False):
             return (MUMBLE, "Unexpected result", "Unexpected HTTP status code when requesting home page without session cookie: '%d'" % r.status_code, None, None)
 
         if r.request.url != urljoin(base_url, get_url_path('/login', use_client_cert)):
-            return (MUMBLE, "Unexpected result", "Unexpected login url when requesting home page without session cookie: '%s'" % r.request.url, None, None)
+            return (MUMBLE, "Unexpected result", f"Unexpected login url '{r.request.url}' when requesting home page without session cookie. Expected url: '{urljoin(base_url, get_url_path('/login', use_client_cert))}'", None, None)
 
         headers = {'Referer': urljoin(base_url, '/login')}
         url = urljoin(base_url, get_url_path('/register', use_client_cert))
