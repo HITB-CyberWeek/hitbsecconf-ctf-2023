@@ -155,10 +155,10 @@ def get(host, flag_id, flag, vuln):
     url = f"{base_url}login"
     r = session1.post(url, timeout=TIMEOUT, json=state["user1"])
     if r.status_code != 204:
-        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /login")
+        verdict(CORRUPT, public=f"Wrong HTTP status code ({r.status_code}) on /login")
     r = session2.post(url, timeout=TIMEOUT, json=state["user2"])
     if r.status_code != 204:
-        verdict(MUMBLE, public=f"Wrong HTTP status code ({r.status_code}) on /login")
+        verdict(CORRUPT, public=f"Wrong HTTP status code ({r.status_code}) on /login")
 
     url = f"{base_url}users/{state['user2']['id']}"
     logging.info(f"Update org of user2")
