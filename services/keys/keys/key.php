@@ -1,22 +1,17 @@
 <?php
 
-function head() {
-echo <<< END
-<html>
-<head>
-    <title>Key</title>
-</head>
-<body>
-END;
-}
+require_once "common.php";
 
 function try_get_key() {
     $login = trim($_GET['login'] ?? '');
 
     if (!$login) {
         http_response_code(400);
-        echo "No login!<br/>";
-        return;
+        return '<div class="alert alert-danger" role="alert">No login!</div>';
+    }
+
+    if (!preg_match('/^[-_\w]+$/', $login)) {
+        return '<div class="alert alert-danger" role="alert">Bad login!<div>';
     }
 
     $redis = new Redis();
@@ -25,7 +20,7 @@ function try_get_key() {
     $data_str = $redis->get($login);
     if (!$data_str) {
         http_response_code(404);
-        return "No such login!<br/>";
+        return '<div class="alert alert-danger" role="alert">No such login!</div>';
     }
 
     $data = json_decode($data_str, TRUE);
@@ -35,9 +30,6 @@ function try_get_key() {
 }
 
 $ret = try_get_key();
-head();
+head("Keys");
 echo $ret;
-?>
-
-</body>
-</html>
+foot();

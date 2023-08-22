@@ -1,20 +1,12 @@
 <?php
 
+require_once "common.php";
+
 $openssl_config = array(
     "digest_alg" => "sha512",
     "private_key_bits" => 2048,
     "private_key_type" => OPENSSL_KEYTYPE_RSA,
 );
-
-function head() {
-echo <<< END
-<html>
-<head>
-    <title>Generate new key!</title>
-</head>
-<body>
-END;
-}
 
 function try_generate_key() {
     global $openssl_config;
@@ -24,8 +16,11 @@ function try_generate_key() {
 
     if (!$login || !$comment) {
         http_response_code(400);
-        echo "No login or comment!<br/>";
-        return;
+        return '<div class="alert alert-danger" role="alert">No login or comment!<div>';
+    }
+
+    if (!preg_match('/^[-_\w]+$/', $login)) {
+        return '<div class="alert alert-danger" role="alert">Bad login!<div>';
     }
 
     $redis = new Redis();
@@ -33,7 +28,7 @@ function try_generate_key() {
 
     if ($redis->exists($login)) {
         http_response_code(400);
-        return "Such key already exists!<br/>";
+        return '<div class="alert alert-danger" role="alert">Such key already exists!</div>';
     }
 
     $private_key = openssl_pkey_new($openssl_config);
@@ -51,7 +46,7 @@ function try_generate_key() {
 
     if (!$redis->setNx($login, json_encode($ret))) {
         http_response_code(400);
-        return "Such key already exists!<br/>";
+        return '<div class="alert alert-danger" role="alert">Such key already exists!</div>';
     }
 
     return <<< END
@@ -67,29 +62,28 @@ Public key:<br/>
 <pre>
 $public_key_pem
 </pre>
-<br/>
-<br/>
 <a href='check.php?login=$login'>Next</a>
 END;
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $ret = try_generate_key();
-    head();
+    head("Generate new key");
     echo $ret;
 } else {
-    head();
+    head("Generate new key");
 ?>
+    <h1>Generate key</h1>
     <form method="POST">
-    Login: <input type="text" name="login"><br>
-    Comment: <input type="text" name="comment"><br>
-    <input type="submit">
+    <div class="form-group">
+        <label for="login">Login</label>
+        <input type="text" class="form-control" id="login" name="login"><br>
+        <label for="comment">Comment</label>
+        <input type="text" class="form-control" id="comment" name="comment"><br>
+    </div>
+    <input type="submit" value="Generate">
     </form>
 
 <?php
 }
-?>
-
-</body>
-</html>
+foot();
