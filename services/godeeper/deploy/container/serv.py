@@ -33,10 +33,12 @@ def db_access(fn):
     return wrapper
 
 @db_access
-def Init():
-    db.query("CREATE TABLE IF NOT EXISTS users (id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,login TEXT, password TEXT, reg_date TEXT)")
+def Init(db):
+    db.query("CREATE TABLE IF NOT EXISTS users (id INTEGER NOT NULL PRIMARY KEY,login TEXT, password TEXT, reg_date TEXT)")
+    db.commit()
     db.query("CREATE TABLE  IF NOT EXISTS licences (id INTEGER NOT NULL PRIMARY KEY,user_id INTEGER, token TEXT NOT NULL, licence TEXT NOT NULL, create_date TEXT)")
-
+    db.commit()
+Init()
 @db_access
 def FindUsers(db,pattern):
     res = db.query("SELECT * FROM users where login like '%"+pattern+"%'")
