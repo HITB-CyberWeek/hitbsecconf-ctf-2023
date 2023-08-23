@@ -18,7 +18,8 @@ block content
           div(class='invalid-feedback')= error
 
       div(class='d-inline-flex align-items-baseline')
-        button(type='submit', class='btn btn-outline-dark mt-3') Login
+        button(type='submit', class=`btn btn-outline-${elementMode} mt-3`) Login
+
         span
-          |&nbsp;or 
-          a(href='/register', class='link-dark') Register
+          |&nbsp;or&nbsp;
+          a(href='/register', class=`link-${elementMode}`) Register
