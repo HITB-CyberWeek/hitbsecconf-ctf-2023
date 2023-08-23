@@ -37,6 +37,5 @@ except Exception:
     pass
 
 api.grant_access(hostname, hacker_token_secret, user_token_name, hacker_resource_id)
-input()
 resource_blob = api.get_resource(hostname, token_secret, resource_id)
 print('resource_blob:', resource_blob)
