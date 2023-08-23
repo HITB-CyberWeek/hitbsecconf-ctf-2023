@@ -36,6 +36,8 @@ files:
     destination: /home/$USERNAME/configs/pure/
   - source: ../services/pure/certs/
     destination: /home/services/pure/certs
+  - source: ../services/pure/proxy_config.jinja
+    destination: /home/services/pure
   - source: ../services/funding/deploy.yaml
     destination: /home/$USERNAME/configs/funding/
   - source: ../services/keys/deploy.yaml
