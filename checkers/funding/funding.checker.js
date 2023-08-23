@@ -126,10 +126,19 @@ function findAccountByAddress(address) {
 }
 
 async function makeContractCall(call, contractAddress, sender, value=null) {
-    const gasPrice = await web3.eth.getGasPrice();
-    const gasEstimate = await call.estimateGas({ from: sender.address, value });
-    const tx = await web3.eth.accounts.signTransaction({data: call.encodeABI(), to: contractAddress, from: sender.address, gas: gasEstimate, gasPrice, gasEstimate, value}, sender.privateKey);
-    return await web3.eth.sendSignedTransaction(tx.rawTransaction);
+    let lastException;
+    for (let t = 0; t < 3; t++) {
+        try {
+            const gasPrice = await web3.eth.getGasPrice();
+            const gasEstimate = await call.estimateGas({ from: sender.address, value });
+            const tx = await web3.eth.accounts.signTransaction({data: call.encodeABI(), to: contractAddress, from: sender.address, gas: gasEstimate, gasPrice, gasEstimate, value}, sender.privateKey);
+            return await web3.eth.sendSignedTransaction(tx.rawTransaction);
+        } catch (e) {
+            console.error(`Can not make transaction: ${e}. I will try one more time (it was try #${t + 1}/3)`);
+            lastException = e;
+        }
+    }
+    throw lastException;
 }
 
 async function createNewProjectContract(url, platformAddress, title) {
@@ -156,13 +165,14 @@ async function createNewProjectContract(url, platformAddress, title) {
     }
 
     const log = receipt.logs[0];
-    if (!log || !log.data || !log.topics)
+    if (!log || !log.data || !log.topics) {
         console.error(receipt);
         exitWithStatus(
             STATUS_MUMBLE,
             `Failed to create a new project: empty logs`,
             canNotCreateContractMessage
         );
+    }
 
     const parsedLog = web3.eth.abi.decodeLog(CrowdfundingPlatformContract.abi[0].inputs, log.data, log.topics);
 
