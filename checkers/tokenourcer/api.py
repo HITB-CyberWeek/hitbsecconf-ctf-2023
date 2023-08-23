@@ -1,5 +1,5 @@
-import base64
 import functools
+import hashlib
 import os
 
 import requests
@@ -9,10 +9,15 @@ import schemas
 
 if os.getenv("DIRECT_CONNECT", False):
     PORT = 8080
-    URL_PATTERN = "http://{hostname}:{port}/{method}"
+    URL_SCHEMA = "http"
+
 else:
     PORT = 443
-    URL_PATTERN = "https://{hostname}/{method}"
+    URL_SCHEMA = "https"
+
+
+API_REQUEST_URL_PATTERN = "%s://{hostname}:{port}/{method}" % URL_SCHEMA
+STATIC_REQUEST_URL_PATTERN = "%s://{hostname}:{port}/assets/{category}/{name}" % URL_SCHEMA
 
 
 class ApiValidationError(Exception):
@@ -35,7 +40,7 @@ def with_validator(schema=None):
 
 
 def make_json_request(method, hostname, token_secret=None, result_key=None, params=None):
-    url = URL_PATTERN.format(hostname=hostname, port=PORT, method=method)
+    url = API_REQUEST_URL_PATTERN.format(hostname=hostname, port=PORT, method=method)
     kwargs = {
         'timeout': 10,
         'json': params or {}
@@ -52,8 +57,8 @@ def make_json_request(method, hostname, token_secret=None, result_key=None, para
     return json_res
 
 
-def make_query_request(method, hostname, token_secret, result_key=None, params=None):
-    url_with_method = URL_PATTERN.format(hostname=hostname, port=PORT, method=method)
+def make_query_request(method, hostname, token_secret=None, result_key=None, params=None):
+    url_with_method = API_REQUEST_URL_PATTERN.format(hostname=hostname, port=PORT, method=method)
     if params:
         url_parts = []
         for param_key, param_value in params.items():
@@ -62,15 +67,32 @@ def make_query_request(method, hostname, token_secret, result_key=None, params=N
     else:
         url = url_with_method
 
-    headers = {
-        'Authorization': 'Bearer ' + token_secret
+    kwargs = {
+        'timeout': 10
     }
-    r = requests.get(url, timeout=10, headers=headers)
+    if token_secret:
+        kwargs['headers'] = {
+            'Authorization': 'Bearer ' + token_secret
+        }
+    r = requests.get(url, **kwargs)
     r.raise_for_status()
     json_res = r.json()
     if result_key:
         return json_res[result_key]
     return json_res
+
+
+def get_hex_hash(data):
+    hasher = hashlib.sha1()
+    hasher.update(data)
+    return hasher.hexdigest()
+
+
+def get_static_hash(hostname, category, name):
+    url = STATIC_REQUEST_URL_PATTERN.format(hostname=hostname, port=PORT, category=category, name=name)
+    r = requests.get(url, timeout=10)
+    r.raise_for_status()
+    return get_hex_hash(r.content)
 
 
 @with_validator(schemas.string_schema)
@@ -118,3 +140,10 @@ def revoke_access(hostname, token_secret, token_name, resource_id):
         'resource_id': resource_id,
     }
     return make_json_request("revoke_access", hostname, token_secret, params=params)
+
+
+
+
+
+
+
