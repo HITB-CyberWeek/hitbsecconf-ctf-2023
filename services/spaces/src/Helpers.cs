@@ -35,7 +35,7 @@ internal static class JsonHelper
         Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        DefaultBufferSize = 1024
+        DefaultBufferSize = 2048
     };
 }
 
