@@ -1,9 +1,9 @@
 export const ethereum = {
-    node: "http://104.248.94.168:8545",
+    node: "http://eth.ctf.hitb.org:8545",
     accounts: [
         {
-            address: "0x583D7efd10b585C2e15e8DdaC1d8F341dc97CF9E",
-            // password: "ZzPi9U9wJ3V0Ik9YBB9x88R7J",
+            address: "0x099Eac5B089111020bF19251d714C7ab4Da633b1",
+            privateKey: "189bbe698467cc8b6f5943ca9e836f9e032373bf7077b6e4a80295472e3dd36f",
         },
     ],
 }
