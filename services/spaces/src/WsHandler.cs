@@ -266,7 +266,7 @@ internal static class WsHandler
         => unchecked((ulong)conn.Random.Value.NextInt64());
 
     private static readonly ConcurrentDictionary<WebSocket, Connection> Connections = new();
-    private const int MaxOutputMessageSize = 1024;
+    private const int MaxOutputMessageSize = 2048;
     private const int MaxInputMessageSize = 256;
 }
 
