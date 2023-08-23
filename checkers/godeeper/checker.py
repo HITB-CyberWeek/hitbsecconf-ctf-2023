@@ -10,16 +10,16 @@ def id_gen(size=6, chars=string.ascii_uppercase + string.digits):
 
 sess = requests.Session()
 
-if len(sys.argv) <= 2:
+if len(sys.argv) <= 1:
     print("No command provided")
     exit(110)
 proc = sys.argv[1]
-ip = sys.argv[2]
-if ip == "localhost":
-    port = 8080
-    url = f"http://{ip}:{port}/"
-else:
-    url = f"https://{ip}/"
+
+def get_url(ip):
+    if ip == "localhost":
+        port = 8080
+        return f"http://{ip}:{port}/"
+    return f"https://{ip}/"
 
 def VerifySign(token):
     h = int(token[-8:],16)
@@ -40,6 +40,8 @@ def VerifySign(token):
 
 try:
     if proc == 'check':
+        ip = sys.argv[2]
+        url = get_url(ip)
         res = sess.get(url)
         logging.info("Initial page received")
 
@@ -62,7 +64,7 @@ try:
             print("Can not register a new company")
             exit(102)
         logging.info("Successfully registered")
-        sess.get(url+"/logout")
+        sess.get(url+"logout")
         logging.info("Logging out")
         res = sess.get(url+"search?pattern="+login1[:2])
         logging.info("Searching company " + login1[:2])
@@ -102,9 +104,11 @@ try:
         if not testlic in res.text:
             print("The license retrieved by the token is incorrect")
             exit(102)
-        logging.info("License got")
+        logging.info("License has been received")
         exit(101)
     elif proc == 'put':
+        ip = sys.argv[2]
+        url = get_url(ip)
         login1 = sys.argv[3]
         password1=id_gen(10)
         flag = sys.argv[4]
@@ -128,6 +132,8 @@ try:
         print(login1+","+res1[0])
         exit(101)
     elif proc == 'get':
+        ip = sys.argv[2]
+        url = get_url(ip)
         login1,token = list(sys.argv[3].split(","))
         flag = sys.argv[4]
 
@@ -140,7 +146,7 @@ try:
         logging.info("Found flag in the result")
         exit(101)
     elif proc == "info":
-        print("vulns: 1\npublic_flag_description: Flag ID is the name of the company, flag is the license.\n")
+        print("vulns: 1\npublic_flag_description: Flag ID is the name of the company, flag is the license")
         exit(101)
     else:
         print("No command provided")
