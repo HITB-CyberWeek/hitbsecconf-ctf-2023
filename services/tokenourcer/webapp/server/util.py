@@ -1,6 +1,6 @@
 import base64
 import hashlib
-import random
+import secrets
 import string
 
 
@@ -8,7 +8,7 @@ ALP = string.ascii_letters + string.digits
 
 
 def gen_str(length):
-    return ''.join(random.choice(ALP) for _ in range(length))
+    return ''.join(secrets.choice(ALP) for _ in range(length))
 
 
 def gen_token_secret():
