@@ -118,7 +118,22 @@ paths:
         '401':
           description: Unauthorized
         '404':
-          description: Resource or token not found
+          description: Token not found
+  "/get_stat":
+    get:
+      summary: Get counter statistics
+      operationId: get_stat
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Got counter statistics dictionary
+        '400':
+          description: Invalid params
+        '401':
+          description: Unauthorized
+        '404':
+          description: Token not found
 
 
 components:
