@@ -94,8 +94,8 @@ def grant_access(owner_token_secret):
     resource_id = get_json_param('resource_id')
     token_name = get_json_param('token_name')
 
-    access_tokens = storage_api.get_tokens_by_resource_id
-    if not access_tokens or access_tokens(resource_id)[0] != owner_token_secret:
+    access_tokens = storage_api.get_tokens_by_resource_id(resource_id)
+    if not access_tokens or access_tokens[0] != owner_token_secret:
         return make_response('resource not found', 404)
 
     token_secret = storage_api.get_token_secret(token_name)
