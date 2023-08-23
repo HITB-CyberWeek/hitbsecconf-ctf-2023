@@ -124,7 +124,7 @@ function findAccountByAddress(address) {
 
 async function makeContractCall(call, contractAddress, sender, value=null) {
     //const gasPrice = await web3.eth.getGasPrice();
-    const gasPrice = web3.toWei(5, 'gwei');
+    const gasPrice = web3.utils.toWei(5, 'gwei');
     const gasEstimate = await call.estimateGas({ from: sender.address, value });
     const tx = await web3.eth.accounts.signTransaction({data: call.encodeABI(), to: contractAddress, from: sender.address, gas: gasEstimate, gasPrice, gasEstimate, value}, sender.privateKey);
     return await web3.eth.sendSignedTransaction(tx.rawTransaction);
