@@ -160,6 +160,17 @@ def list_resources(token_secret):
     }
 
 
+@app.get('/get_stat')
+@handler_wrapper
+@with_auth_token
+def get_stat(token_secret):
+    stat = storage_api.get_stat(token_secret)
+
+    return {
+        'stat': stat,
+    }
+
+
 @app.get('/')
 def index_handler():
     return redirect("/index.html")

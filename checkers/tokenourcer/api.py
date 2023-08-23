@@ -133,6 +133,11 @@ def list_resources(hostname, token_secret):
     return make_query_request("list_resources", hostname, token_secret, 'resource_ids')
 
 
+@with_validator(schemas.stat_dict_schema)
+def get_stat(hostname, token_secret):
+    return make_query_request("get_stat", hostname, token_secret, 'stat')
+
+
 @with_validator()
 def revoke_access(hostname, token_secret, token_name, resource_id):
     params = {
@@ -140,10 +145,3 @@ def revoke_access(hostname, token_secret, token_name, resource_id):
         'resource_id': resource_id,
     }
     return make_json_request("revoke_access", hostname, token_secret, params=params)
-
-
-
-
-
-
-
