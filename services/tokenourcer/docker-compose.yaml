@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   nginx:
-    image: nginx:1.25.2-alpine
+    build: ./nginx
     ports:
       - "8080:8080"
     restart: unless-stopped
