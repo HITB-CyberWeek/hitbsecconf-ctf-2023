@@ -12,6 +12,7 @@ files:
       - ./nginx.conf
       - ./webapp
       - ./logrotate.conf
+      - ./nginx
     destination: /home/$USERNAME
   - sources:
       - ./tokenourcer
