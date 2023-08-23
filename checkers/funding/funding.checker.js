@@ -104,13 +104,16 @@ async function getPlatformAddress(url) {
     return address;
 }
 
-function getRandomAccount(except = null) {
+function getRandomAccount(teamId, except = null) {
     if (except != null && ethereumConfig.accounts.length <= 1)
         exitWithStatus(STATUS_CHECKER_ERROR, `You must specify more than 1 account in config.js`)
 
+    let teamAccounts = [ethereumConfig.accounts[(teamId - 1) * 2], ethereumConfig.accounts[(teamId - 1) * 2 + 1]]
+    console.error(`Team accounts: ${teamAccounts.map(a => a.address)}`);
+
     let result;
     do {
-        result = ethereumConfig.accounts.random();
+        result = teamAccounts.random();
     } while (except != null && result.address === except);
     return result;
 }
@@ -123,14 +126,13 @@ function findAccountByAddress(address) {
 }
 
 async function makeContractCall(call, contractAddress, sender, value=null) {
-    //const gasPrice = await web3.eth.getGasPrice();
-    const gasPrice = web3.utils.toWei(5, 'gwei');
+    const gasPrice = await web3.eth.getGasPrice();
     const gasEstimate = await call.estimateGas({ from: sender.address, value });
     const tx = await web3.eth.accounts.signTransaction({data: call.encodeABI(), to: contractAddress, from: sender.address, gas: gasEstimate, gasPrice, gasEstimate, value}, sender.privateKey);
     return await web3.eth.sendSignedTransaction(tx.rawTransaction);
 }
 
-async function createNewProjectContract(platformAddress, title) {
+async function createNewProjectContract(url, platformAddress, title) {
     const platform = new web3.eth.Contract(CrowdfundingPlatformContract.abi, platformAddress);
 
     let canNotCreateContractMessage = (
@@ -138,7 +140,7 @@ async function createNewProjectContract(platformAddress, title) {
         `Check your CrowdfundingPlatform contract located at ${platformAddress}`
     );
 
-    let account = getRandomAccount();
+    let account = getRandomAccount(getTeamIdByUrl(url));
 
     console.error(`Calling CrowdfundingPlatform.createProject("${title}") at address ${platformAddress} using ${account.address}`)
     let receipt;
@@ -155,6 +157,7 @@ async function createNewProjectContract(platformAddress, title) {
 
     const log = receipt.logs[0];
     if (!log || !log.data || !log.topics)
+        console.error(receipt);
         exitWithStatus(
             STATUS_MUMBLE,
             `Failed to create a new project: empty logs`,
@@ -180,7 +183,7 @@ async function createProject(url, reward) {
 
     const projectTitle = faker.commerce.productName();
     console.error(`Creating project with title "${projectTitle}" and reward "${reward}" at ${url}`);
-    const projectAddress = await createNewProjectContract(platformAddress, projectTitle);
+    const projectAddress = await createNewProjectContract(url, platformAddress, projectTitle);
     const result = await postJSON(`${url}/projects`, {address: projectAddress, reward: reward});
     if (!result || !result.project || !result.project.id || !result.project.owner ||
         result.project.address !== projectAddress || result.project.title !== projectTitle)
@@ -260,22 +263,27 @@ function _generateRandomString(length) {
     return result;
 }
 
-function _generateFakeFlag(url) {
-    const randomSuffix = _generateRandomString(32);
-
+function getTeamIdByUrl(url) {
     // Suppose that url contains something like 10.60.23.5, where 23 is a team number
     let matches = url.match(/\d+.(\d+).(\d+).\d+/);
-    let teamId;
     if (matches) {
-        teamId = (parseInt(matches[1]) - 60) * 256 + parseInt(matches[2]);
+        return (parseInt(matches[1]) - 60) * 256 + parseInt(matches[2]);
     } else {
         // If url is not an IP address, then probable it's a domain name like funding.team23.<domain>
         matches = url.match(/\.team(\d+)\./);
         if (!matches) {
-            return randomSuffix;
+            return null;
         }
-        teamId = parseInt(matches[1]);
+        return parseInt(matches[1]);
     }
+}
+
+function _generateFakeFlag(url) {
+    const randomSuffix = _generateRandomString(32);
+
+    let teamId = getTeamIdByUrl(url);
+    if (teamId == null)
+        return randomSuffix;
 
     return "TEAM" + teamId.toString().padStart(3, "0") + "_" + randomSuffix
 }
@@ -308,7 +316,7 @@ async function put(url, _flag_id, flag) {
 }
 
 async function getFlagForProject(url, project, flag) {
-    const account = getRandomAccount(project.owner);
+    const account = getRandomAccount(getTeamIdByUrl(url), project.owner);
     const cookieJar = await createUserOrLogin(url, account.address);
 
     await donate(project, account);
