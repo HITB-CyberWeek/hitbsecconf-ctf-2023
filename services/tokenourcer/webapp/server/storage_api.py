@@ -52,28 +52,29 @@ class StorageApi:
 
     @with_pipe
     def _inc_value(self, pipe, key, field, element):
-        raw_value = pipe.hget(key, field)
-        if raw_value:
-            value = json.loads(raw_value)
-            if element not in value:
-                value[element] = 0
-            value[element] += 1
-        else:
+        full_key = "{}/{}".format(key, field)
+
+        if not pipe.exists(full_key):
             raise KeyError(f'Invalid field {field} for key {key}')
+
+        raw_value = pipe.hget(full_key, element)
+        if raw_value:
+            value = int(raw_value)
+        else:
+            value = 0
+        value += 1
         pipe.multi()
-        pipe.hset(key, field, json.dumps(value))
+        pipe.hset(full_key, element, str(value))
 
     @with_pipe
     def _del_value(self, pipe, key, field, element):
-        raw_value = pipe.hget(key, field)
-        pipe.multi()
-        if raw_value:
-            value = json.loads(raw_value)
-            del value[element]
-            pipe.hset(key, field, json.dumps(value))
-        else:
+        full_key = "{}/{}".format(key, field)
+
+        if not pipe.exists(full_key):
             raise KeyError(f'Invalid field {field} for key {key}')
-        pipe.hset(key, field, json.dumps(value))
+
+        pipe.multi()
+        pipe.hdel(full_key, element)
 
     def add_resource(self, blob):
         resource_id = uuid.uuid4().hex
@@ -123,11 +124,18 @@ class StorageApi:
             return set(json.loads(raw_resource_ids))
         return set()
 
+    @staticmethod
+    def _get_counter_full_key(token_secret):
+        return "counter/{}".format(token_secret)
+
     def get_stat(self, token_secret):
-        return json.loads(self.redis_client.hget("counter", token_secret) or "{}")
+        full_key = self._get_counter_full_key(token_secret)
+        resource_ids = [r_id.decode() for r_id in self.redis_client.hkeys(full_key)]
+        return {resource_id: int(self.redis_client.hget(full_key, resource_id).decode()) for resource_id in resource_ids}
 
     def create_counter(self, token_secret, resource_id):
-        self.redis_client.hset("counter", token_secret, json.dumps({resource_id: 0}))
+        full_key = self._get_counter_full_key(token_secret)
+        self.redis_client.hset(full_key, resource_id, "0")
 
     def inc_counter(self, token_secret, resource_id):
         self._inc_value("counter", token_secret, resource_id)
@@ -137,19 +145,15 @@ class StorageApi:
 
     def remove_token_to_resource(self, token_secret, resource_id):
         with self.redis_client.pipeline() as pipe:
-            pipe.watch("token_to_resources", "counter")
+            pipe.watch("token_to_resources")
             resource_ids = self.get_resource_ids_by_token(token_secret, pipe)
-            raw_counter = pipe.hget("counter", token_secret)
             pipe.multi()
             if len(resource_ids) == 1:
                 pipe.hdel("token_to_resources", token_secret)
-                pipe.hdel("counter", token_secret)
+                pipe.delete(self._get_counter_full_key(token_secret))
             else:
                 resource_ids.remove(resource_id)
                 pipe.hset("token_to_resources", token_secret, json.dumps(list(resource_ids)))
-
-                counter = json.loads(raw_counter)
-                del counter[resource_id]
-                pipe.hset("counter", token_secret, json.dumps(counter))
+                pipe.hdel(self._get_counter_full_key(token_secret), resource_id)
 
             pipe.execute()
