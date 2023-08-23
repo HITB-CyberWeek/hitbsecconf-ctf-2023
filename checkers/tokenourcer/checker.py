@@ -124,6 +124,7 @@ async def check_service(request: CheckRequest) -> Verdict:
             second_resource: 1,
         }
         if actual_stat != expected_stat:
+
             print("Invalid stat: {} != {}".format(actual_stat, expected_stat))
             ec.verdict = Verdict.MUMBLE(f"Invalid stat")
             return ec.verdict
