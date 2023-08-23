@@ -27,10 +27,10 @@ def with_auth_token(handler):
     @functools.wraps(handler)
     def wrapped_handler(*args, **kwargs):
         if not request.authorization:
-            return make_response('', 401)
+            return make_response('bearer token is required for this request', 401)
 
         if not storage_api.is_token_secret_exist(request.authorization.token):
-            return make_response('', 404)
+            return make_response('not found', 404)
 
         return handler(request.authorization.token, *args, **kwargs)
     return wrapped_handler
