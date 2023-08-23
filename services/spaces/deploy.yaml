@@ -34,7 +34,7 @@ proxies:
       - source: team
         location: /ws
         proxy_websockets: true
-        limit: 1r/m
+        limit: 2r/m
         burst: 1
         simultaneous_connections: 2
     dns_records:
