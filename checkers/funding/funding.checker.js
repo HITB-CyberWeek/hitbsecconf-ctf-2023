@@ -2,7 +2,6 @@
 
 import {argv} from "node:process";
 import {readFileSync} from "fs";
-import {join} from "path";
 import crypto from "crypto";
 import {faker} from '@faker-js/faker';
 import consoleStamp from "console-stamp";
