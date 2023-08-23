@@ -17,19 +17,19 @@ type Record struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 
-	User    string `gorm:"index"`
-	Pass    string
-	Site    string
-	UserRef string `gorm:"index"`
+	User    string `gorm:"size:64;index"`
+	Pass    string `gorm:"size:64"`
+	Site    string `gorm:"size:64"`
+	UserRef string `gorm:"size:64;index"`
 }
 
 type Session struct {
-	ID        uint `gorm:"primarykey"`
-	CreatedAt time.Time
+	ID        uint      `gorm:"primarykey"`
+	CreatedAt time.Time `gorm:"index"`
 	UpdatedAt time.Time
 
-	Cookie string `gorm:"index"`
-	User   string
+	Cookie string `gorm:"size:64;index"`
+	User   string `gorm:"size:64"`
 }
 
 func MakeConnectionString() (string, error) {

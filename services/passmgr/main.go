@@ -39,7 +39,14 @@ func handleGet(c *gin.Context) {
 
 	var records []Record
 	var sites []Site
-	db.Where("user_ref = ?", session.User).Find(&records)
+	result = db.Where("user_ref = ?", session.User).Find(&records)
+	if result.Error != nil {
+		c.HTML(http.StatusOK, template, gin.H{
+			"Error": result.Error,
+		})
+		return
+	}
+
 	for _, r := range records {
 		sites = append(sites, Site{
 			Address: r.Site,
