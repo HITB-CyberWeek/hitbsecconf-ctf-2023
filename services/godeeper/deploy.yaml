@@ -19,7 +19,7 @@ proxies:
       protocol: http    
       certificate: wildcard.ctf.hitb.org
     upstream:
-      host_index: 15
+      host_index: 7
       port: 8080
     limits:
       - source: team
