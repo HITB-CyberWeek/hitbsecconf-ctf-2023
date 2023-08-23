@@ -88,7 +88,7 @@ internal static class Storage
     private static string GetMessageFilePath(string space, string? room, string msgId)
         => Path.Combine(DataPath, space, room ?? string.Empty, msgId + MsgFileExt);
 
-    private const int BufferSize = 2048;
+    private const int BufferSize = 4096;
 
     private const string DataPath = "data/";
     private const string SpaceClosed = ".lock";
