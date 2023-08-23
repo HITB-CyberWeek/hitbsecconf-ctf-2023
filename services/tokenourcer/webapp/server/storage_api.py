@@ -135,11 +135,7 @@ class StorageApi:
 
     def create_counter(self, token_secret, resource_id):
         full_key = self._get_counter_full_key(token_secret)
-        with self.redis_client.pipeline() as pipe:
-            if not pipe.hget(full_key, resource_id):
-                pipe.multi()
-                pipe.hset(full_key, resource_id, "0")
-            pipe.execute()
+        self.redis_client.hset(full_key, resource_id, "0")
 
     def inc_counter(self, token_secret, resource_id):
         self._inc_value("counter", token_secret, resource_id)
