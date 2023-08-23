@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import requests,sys,string,random,re,logging
+import requests,sys,string,random,re,logging,json
 
 
 logging.basicConfig(format='%(asctime)-15s [%(levelname)s] %(message)s',
@@ -129,12 +129,14 @@ try:
             print("Token is incorrect")
             exit(102)
         logging.info("Verified sign for token "+ res1[0])
-        print(login1+","+res1[0])
+        print(json.dumps({"public_flag_id": login1, "login": login1,"token":res1[0]}))
+        # print(login1+","+res1[0])
         exit(101)
     elif proc == 'get':
         ip = sys.argv[2]
         url = get_url(ip)
-        login1,token = list(sys.argv[3].split(","))
+        jsn = json.loads(sys.argv[3])#  list(sys.argv[3].split(","))
+        login1,token = jsn['login'],jsn['token']
         flag = sys.argv[4]
 
         res = sess.get(url+"get_token?token="+token)
