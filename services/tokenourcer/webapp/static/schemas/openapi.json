@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Tokenoucer",
+    "title": "Tokenourcer",
     "description": "Simple resource manager with token-based access mamagement"
   },
   "servers": [
