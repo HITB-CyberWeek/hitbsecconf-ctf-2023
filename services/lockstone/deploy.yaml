@@ -24,6 +24,7 @@ files:
       - ./schema.prisma
       - ./start.sh
       - ./tsconfig.json
+      - ./keystone.db
     destination: /home/lockstone
 
 proxies:

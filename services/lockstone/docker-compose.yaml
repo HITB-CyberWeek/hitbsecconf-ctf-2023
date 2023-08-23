@@ -5,7 +5,7 @@ services:
     expose:
       - 3000
     volumes:
-      - ./:/home/lockstone
+      - ./keystone.db:/home/lockstone/keystone.db
     restart: unless-stopped
     mem_limit: 2000m
   nginx:
