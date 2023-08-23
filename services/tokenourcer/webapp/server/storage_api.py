@@ -123,6 +123,9 @@ class StorageApi:
             return set(json.loads(raw_resource_ids))
         return set()
 
+    def get_stat(self, token_secret):
+        return json.loads(self.redis_client.hget("counter", token_secret))
+
     def create_counter(self, token_secret, resource_id):
         self.redis_client.hset("counter", token_secret, json.dumps({resource_id: 0}))
 

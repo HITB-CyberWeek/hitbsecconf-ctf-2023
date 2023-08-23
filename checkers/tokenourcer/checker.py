@@ -92,9 +92,13 @@ async def check_service(request: CheckRequest) -> Verdict:
         another_token_name = generators.gen_token_name()
         another_token_secret = api.issue_token(request.hostname, another_token_name)
 
+        zero_resource = sorted(resources.keys())[0]
+        first_resource = sorted(resources.keys())[1]
+        second_resource = sorted(resources.keys())[2]
+
         def _check_access():
             try:
-                api.get_resource(request.hostname, another_token_secret, sorted(resources.keys())[0])
+                api.get_resource(request.hostname, another_token_secret, zero_resource)
                 print("Get resource without access must raise an error")
                 ec.verdict = Verdict.MUMBLE("Get resource without access must raise an error")
                 return ec.verdict
@@ -125,6 +129,19 @@ async def check_service(request: CheckRequest) -> Verdict:
             if api.get_static_hash(request.hostname, static_category, static_name) != expected_hash:
                 print(f"Invalid static content")
                 ec.verdict = Verdict.MUMBLE(f"Invalid static content")
+
+        for _ in range(2):
+            api.get_resource(request.hostname, token_secret, zero_resource)
+
+        actual_stat = api.get_stat(request.hostname, token_secret)
+        expected_stat = {
+            zero_resource: 3,
+            first_resource: 1,
+            second_resource: 1,
+        }
+        if actual_stat != expected_stat:
+            print("Invalid stat: {} != {}".format(actual_stat, expected_stat))
+            ec.verdict = Verdict.MUMBLE(f"Invalid stat")
 
     return ec.verdict
 

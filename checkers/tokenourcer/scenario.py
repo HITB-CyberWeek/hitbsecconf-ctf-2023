@@ -13,6 +13,9 @@ print('resource_ids:', resource_ids)
 resource_blob = api.get_resource(hostname, token_secret, resource_id)
 print('resource_blob:', resource_blob)
 
+stat = api.get_stat(hostname, token_secret)
+print('stat:', stat)
+
 hacker_token_name = 'hacker_' + generators.gen_token_name()
 print(hacker_token_name)
 hacker_token_secret = api.issue_token(hostname, hacker_token_name)
@@ -34,5 +37,6 @@ except Exception:
     pass
 
 api.grant_access(hostname, hacker_token_secret, user_token_name, hacker_resource_id)
+input()
 resource_blob = api.get_resource(hostname, token_secret, resource_id)
 print('resource_blob:', resource_blob)
