@@ -59,6 +59,8 @@ router.get('/register', (req, res) => {
         delete req.session.username;
     }
 
+    model.darkMode = req.session.darkMode == 1;
+
     res.render('register', model);
 });
 router.post('/register',
@@ -88,6 +90,8 @@ router.get('/login', (req, res) => {
         model.username = req.session.username;
         delete req.session.username;
     }
+
+    model.darkMode = req.session.darkMode == 1;
 
     res.render('login', model);
 });
@@ -120,7 +124,7 @@ router.get('/', ensureAuthenticated, async (req, res) => {
     } else {
         cards = await Card.find({user: req.user.username}).sort({ firstName: 1, lastName: 1, updatedAt: -1 });
     }
-    res.render('index', { user : req.user, cards: cards, isAdmin: req.session.isAdmin });
+    res.render('index', { user : req.user, cards: cards, isAdmin: req.session.isAdmin, darkMode: req.session.darkMode == 1 });
 });
 
 router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
@@ -133,7 +137,7 @@ router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
     if (!card) {
         res.status(404).send('Card not found');
     } else {
-        res.render('edit', { user : req.user, action: `/edit/${req.params.id}`, card: card, isAdmin: req.session.isAdmin });
+        res.render('edit', { user : req.user, action: `/edit/${req.params.id}`, card: card, isAdmin: req.session.isAdmin, darkMode: req.session.darkMode == 1 });
     }
 });
 router.post('/edit/:id', ensureAuthenticated, async (req, res) => {
@@ -151,7 +155,7 @@ router.post('/edit/:id', ensureAuthenticated, async (req, res) => {
 });
 
 router.get('/add', ensureAuthenticated, (req, res) => {
-    res.render('edit', { user: req.user, action: '/add', card: {}, isAdmin: req.session.isAdmin });
+    res.render('edit', { user: req.user, action: '/add', card: {}, isAdmin: req.session.isAdmin, darkMode: req.session.darkMode == 1 });
 });
 router.post('/add', ensureAuthenticated, async (req, res) => {
     await Card.create(buildCardModel(req));
