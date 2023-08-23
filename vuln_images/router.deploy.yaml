@@ -34,6 +34,8 @@ files:
     destination: /home/$USERNAME/configs/godeeper/
   - source: ../services/pure/deploy.yaml
     destination: /home/$USERNAME/configs/pure/
+  - source: ../services/pure/certs/
+    destination: /home/services/pure/certs
   - source: ../services/funding/deploy.yaml
     destination: /home/$USERNAME/configs/funding/
   - source: ../services/keys/deploy.yaml
