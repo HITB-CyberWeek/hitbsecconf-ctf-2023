@@ -43,6 +43,10 @@ try:
         ip = sys.argv[2]
         url = get_url(ip)
         res = sess.get(url)
+        if res.status_code != 200:
+            logging.info("Cannot connect to service")
+            exit(104)
+
         logging.info("Initial page received")
 
         login1=id_gen(10)
