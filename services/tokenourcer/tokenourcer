@@ -1,0 +1,2 @@
+* * * * * root docker exec tokenourcer-nginx-1 /usr/sbin/logrotate /etc/logrotate.conf
+

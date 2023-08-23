@@ -13,6 +13,9 @@ files:
       - ./webapp
       - ./logrotate.conf
     destination: /home/$USERNAME
+  - sources:
+      - ./tokenourcer
+    destination: /etc/cron.d
 
 proxies:
   - name: main
