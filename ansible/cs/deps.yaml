@@ -19,3 +19,9 @@
                 - to: 10.80.0.0/14
                   via: 10.10.10.3
       dest: /etc/netplan/60-ctf-routes.yaml
+  - name: github-runner public key
+    authorized_key:
+      user: root
+      state: present
+      key: |
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDI5WZF738qlritUYydgDVIbg0v1eba1I9C/L0PVjaxBJi0VUhcKSWHC0gMXIJfBAJUpiadTQP+ceHCC+tzdvZI18Ih7zCVGjWe3LmB+2xr2n/dFhHDZ+O2fOgRB/NZu7vWnbPAA7UPPK0PVP1NLjEBNadbgthA72kxhCqX+2obTXkUNMqp6YtWQ95DEo+rzdTrhvWDxb7axee7zMmI1enRl31isetMvz3Flo06VgQ6gbgYqPNMUgLW7vMqY9CSS+VpE6X9CfCH3/GOOG7Qw/f6Pp1rpvhMyjg1pgcfCFZNG1+iiLY6s0r1znnqQ64YfndzbDz3N+VfaIjo54/aeOo7+9kdp6TndOrCFl39PArq98qB/rZfKFdJ/bGzqvFAFkho4LujCYbEj7B0LRtHZE6scfwUaE3k42tW8bYJNU+bE6v2jN6GmSUygsHLBGzELhXAW5W7TY3Pf4GkMf0EpO16yv+ACOxiwh2bWAoSFEJdjK9HwNm9ZWvUqnzQPEayxaU= github-runner
