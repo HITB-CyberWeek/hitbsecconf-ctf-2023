@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   nginx:
-    image: nginx:alpine
+    image: nginx:1.25.2-alpine
     ports:
       - "8080:8080"
     restart: unless-stopped
@@ -27,7 +27,7 @@ services:
       - internal
 
   redis:
-    image: redis
+    image: redis:7.2.0-alpine
     restart: unless-stopped
     networks:
       - internal
