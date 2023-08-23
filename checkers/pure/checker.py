@@ -63,7 +63,7 @@ def register_user(host, user, password, use_client_cert=False):
         except requests.exceptions.Timeout as e:
             return (DOWN, "Timeout", "Timeout during requesting home page: %s" % e, None, None)
 
-        if r.status_code == 502:
+        if r.status_code == 502 or r.status_code == 504:
             return (DOWN, "Connection error", "@andgein forced me to return DOWN for 502 Bad Gateway", None, None)
 
         if r.status_code != 200:
@@ -82,7 +82,7 @@ def register_user(host, user, password, use_client_cert=False):
         except requests.exceptions.Timeout as e:
             return (DOWN, "Timeout", "Timeout during requesting registration page: %s" % e, None, None)
     
-        if r.status_code == 502:
+        if r.status_code == 502 or r.status_code == 504:
             return (DOWN, "Connection error", "@andgein forced me to return DOWN for 502 Bad Gateway", None, None)
     
         if r.status_code != 200:
@@ -102,7 +102,7 @@ def register_user(host, user, password, use_client_cert=False):
     except requests.exceptions.Timeout as e:
         return (DOWN, "Timeout", "Timeout during registration: %s" % e, None, None)
 
-    if r.status_code == 502:
+    if r.status_code == 502 or r.status_code == 504:
         return (DOWN, "Connection error", "@andgein forced me to return DOWN for 502 Bad Gateway", None, None)
 
     if r.status_code != 200:
@@ -147,7 +147,7 @@ def login_user(host, user, password, use_client_cert=False):
         except requests.exceptions.Timeout as e:
             return (DOWN, "Timeout", "Timeout during requesting home page: %s" % e, None, None)
 
-        if r.status_code == 502:
+        if r.status_code == 502 or r.status_code == 504:
             return (DOWN, "Connection error", "@andgein forced me to return DOWN for 502 Bad Gateway", None, None)
 
         if r.status_code != 200:
@@ -171,7 +171,7 @@ def login_user(host, user, password, use_client_cert=False):
     except requests.exceptions.Timeout as e:
         return (DOWN, "Timeout", "Timeout during login: %s" % e, None, None)
 
-    if r.status_code == 502:
+    if r.status_code == 502 or r.status_code == 504:
         return (DOWN, "Connection error", "@andgein forced me to return DOWN for 502 Bad Gateway", None, None)
 
     if r.status_code != 200:
@@ -264,7 +264,7 @@ def create_contact(host, session, comment, use_client_cert=False):
         except requests.exceptions.Timeout as e:
             return (DOWN, "Timeout", "Timeout during requesting '/add' page: %s" % e, None, None)
     
-        if r.status_code == 502:
+        if r.status_code == 502 or r.status_code == 504:
             return (DOWN, "Connection error", "@andgein forced me to return DOWN for 502 Bad Gateway", None, None)
     
         if r.status_code != 200:
@@ -282,7 +282,7 @@ def create_contact(host, session, comment, use_client_cert=False):
     except requests.exceptions.Timeout as e:
         return (DOWN, "Timeout", "Timeout during creating contact: %s" % e, None, None)
 
-    if r.status_code == 502:
+    if r.status_code == 502 or r.status_code == 504:
         return (DOWN, "Connection error", "@andgein forced me to return DOWN for 502 Bad Gateway", None, None)
 
     if r.status_code != 200:
@@ -321,7 +321,7 @@ def get_contact_comment(host, session, id, use_client_cert=False):
     except requests.exceptions.Timeout as e:
         return (DOWN, "Timeout", "Timeout during reading a contact: %s" % e, None)
 
-    if r.status_code == 502:
+    if r.status_code == 502 or r.status_code == 504:
         return (DOWN, "Connection error", "@andgein forced me to return DOWN for 502 Bad Gateway", None)
 
     if r.status_code != 200:
