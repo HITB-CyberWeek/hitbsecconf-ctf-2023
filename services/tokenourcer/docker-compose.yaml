@@ -30,9 +30,18 @@ services:
   redis:
     image: redis:7.2.0-alpine
     restart: unless-stopped
+    volumes:
+      - "redis-data:/data"
+    command:
+      - redis-server
+      - --save 60 1
+      - --loglevel warning
     networks:
       - internal
 
 networks:
   internal:
     driver: bridge
+
+volumes:
+  redis-data: {}
