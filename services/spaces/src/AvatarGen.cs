@@ -25,18 +25,6 @@ internal static class AvatarGen
         { 0, 0, 0, 0, 0, 0, 0, 0 },
     };
 
-    private static readonly byte[,] Mask8 =
-    {
-        { 0, 0, 0, 0 },
-        { 0, 1, 1, 1 },
-        { 0, 2, 2, 1 },
-        { 0, 2, 4, 1 },
-        { 0, 1, 1, 3 },
-        { 0, 1, 1, 1 },
-        { 0, 0, 1, 5 },
-        { 0, 0, 0, 0 },
-    };
-
     private static readonly Dictionary<char, string> ColorNames = new()
     {
         {'0', "White"},
