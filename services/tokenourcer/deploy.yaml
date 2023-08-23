@@ -11,7 +11,6 @@ files:
       - ./docker-compose.yaml
       - ./nginx.conf
       - ./webapp
-      - ./logrotate.conf
       - ./nginx
     destination: /home/$USERNAME
   - sources:
