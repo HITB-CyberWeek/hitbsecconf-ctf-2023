@@ -114,8 +114,28 @@ async def check_service(request: CheckRequest) -> Verdict:
 
         _check_resources(another_token_secret)
 
+        for _ in range(2):
+            api.get_resource(request.hostname, another_token_secret, zero_resource)
+
+        actual_stat = api.get_stat(request.hostname, another_token_secret)
+        expected_stat = {
+            zero_resource: 3,
+            first_resource: 1,
+            second_resource: 1,
+        }
+        if actual_stat != expected_stat:
+            print("Invalid stat: {} != {}".format(actual_stat, expected_stat))
+            ec.verdict = Verdict.MUMBLE(f"Invalid stat")
+            return ec.verdict
+
         for resource_id in resources.keys():
             api.revoke_access(request.hostname, token_secret, another_token_name, resource_id)
+            del expected_stat[resource_id]
+            actual_stat = api.get_stat(request.hostname, another_token_secret)
+            if actual_stat != expected_stat:
+                print("Invalid stat: {} != {}".format(actual_stat, expected_stat))
+                ec.verdict = Verdict.MUMBLE(f"Invalid stat")
+                return ec.verdict
 
         _check_access()
 
@@ -129,19 +149,6 @@ async def check_service(request: CheckRequest) -> Verdict:
             if api.get_static_hash(request.hostname, static_category, static_name) != expected_hash:
                 print(f"Invalid static content")
                 ec.verdict = Verdict.MUMBLE(f"Invalid static content")
-
-        for _ in range(2):
-            api.get_resource(request.hostname, token_secret, zero_resource)
-
-        actual_stat = api.get_stat(request.hostname, token_secret)
-        expected_stat = {
-            zero_resource: 3,
-            first_resource: 1,
-            second_resource: 1,
-        }
-        if actual_stat != expected_stat:
-            print("Invalid stat: {} != {}".format(actual_stat, expected_stat))
-            ec.verdict = Verdict.MUMBLE(f"Invalid stat")
 
     return ec.verdict
 
