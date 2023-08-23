@@ -342,6 +342,55 @@ def get_contact_comment(host, session, id, use_client_cert=False):
     trace("Successfully got contact comment: '%s'" % contact_comment[0].strip())
     return (OK, "", "", contact_comment[0].strip())
 
+def switch_dark_mode(host, dark_mode):
+    base_url = f"https://{host}/"
+
+    session = requests.Session()
+    if not dark_mode is None:
+        if dark_mode:
+            trace("Set settings cookie to 'darkMode:1'")
+            session.cookies.set("settings", "darkMode:1")
+        else:
+            trace("Set settings cookie to 'darkMode:0'")
+            session.cookies.set("settings", "darkMode:0")
+
+    url = urljoin(base_url, '/')
+    trace("Going to '%s' and waiting for a redirect to '/login'" % url)
+    try:
+        r = session.get(url, timeout=TIMEOUT, verify=VERIFY)
+    except (requests.exceptions.ConnectionError, ConnectionRefusedError, http.client.RemoteDisconnected, socket.error) as e:
+        return (DOWN, "Connection error", "Connection error during requesting home page: %s" % e, None)
+    except requests.exceptions.Timeout as e:
+        return (DOWN, "Timeout", "Timeout during requesting home page: %s" % e, None)
+
+    if r.status_code == 502 or r.status_code == 504:
+        return (DOWN, "Connection error", "@andgein forced me to return DOWN for 502 Bad Gateway", None)
+
+    if r.status_code != 200:
+        return (MUMBLE, "Unexpected result", "Unexpected HTTP status code when requesting home page without session cookie: '%d'" % r.status_code, None)
+
+    if r.request.url != urljoin(base_url, '/login'):
+        return (MUMBLE, "Unexpected result", "Unexpected login url when requesting home page without session cookie: '%s'" % r.request.url, None)
+
+    return (OK, "", "", r.text)
+
+def get_theme(html):
+    try:
+        parser = etree.HTMLParser()
+        parser.feed(html)
+        doc = parser.close()
+    except Exception as e:
+        return (MUMBLE, "Unexpected result", "Can't parse html: '%s'" % e, None)
+
+    theme = doc.xpath("/*/@data-bs-theme")
+
+    if len(theme) != 1:
+        return (MUMBLE, "Unexpected result", "Can't find 'data-bs-theme' attribute in '%s'" % r.text, None)
+
+    trace("Successfully got 'data-bs-theme' attribute: '%s'" % theme[0])
+    return (OK, "", "", theme[0])
+
+    return (OK, "", "", "")
 
 def put(args):
     if len(args) != 4:
@@ -420,6 +469,28 @@ def check(args):
         verdict(CHECKER_ERROR, "Checker error", "Wrong args count for check()")
     host = args[0]
     trace("check(%s)" % host)
+
+    choice = random.choice([0, 1, 2])
+    if choice == 0:
+        dark_mode = None
+        expected = 'light'
+    elif choice == 1:
+        dark_mode = True
+        expected = 'dark'
+    else:
+        dark_mode = False
+        expected = 'light'
+
+    (status, out, err, html) = switch_dark_mode(host, dark_mode)
+    if status != OK:
+        verdict(status, out, err)
+
+    (status, out, err, theme) = get_theme(html)
+    if status != OK:
+        verdict(status, out, err)
+
+    if theme != expected:
+        verdict(MUMBLE, 'Unexpected result', f"Unexpected theme '{theme}', expected '{expected}'")
 
     verdict(OK)
 
