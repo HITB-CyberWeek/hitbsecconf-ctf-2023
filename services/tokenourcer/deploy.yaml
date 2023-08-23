@@ -11,6 +11,7 @@ files:
       - ./docker-compose.yaml
       - ./nginx.conf
       - ./webapp
+      - ./logrotate.conf
     destination: /home/$USERNAME
 
 proxies:
