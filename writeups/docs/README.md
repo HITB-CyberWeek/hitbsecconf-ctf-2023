@@ -1,23 +1,22 @@
-# Docs
+# docs
 
-## Description
+## Overview
 
-Docs is a simple web service which allows:
-- register/login new user
-- get list of users with org's information
-- get list of documents
-- create a new document and share it with other users
-- create/get content of documents
+The "Docs" web service is designed to facilitate various functions, including:
+- Registering and logging in new users
+- Retrieving a list of users along with organization information
+- Accessing a list of documents
+- Creating new documents and sharing them with other users
+- Creating and obtaining document content
 
-Docs consists of next services:
-- auth service written in Python
-    - create new user in service and Pg and save connection strings in Redis database
-- api service written in Ruby
-- PostgreSQL
-- Redis
+The system is composed of the following components:
+- An authentication service coded in Python. This service creates new user records within the service and PostgreSQL, while storing connection strings in a Redis storage
+- An API service written in Ruby
+- PostgreSQL as a storage
+- Redis for storing connection strings
 
-## Vuln
+## Vulnerability
 
-There is no any filters or checking input in api [service](../../services/docs/api/api.rb), so we have an SQL injection. But we can't directly get data from `contents` table because of row level security: we can see only own content or content of documents which was shares we us. Firstly we need to share needed documents to us via SQL injection and then just get a content via API.
+The API service, as you can see in the [source code](../../services/docs/api/api.rb), lacks input filters or checks, rendering it susceptible to SQL injection attacks. However, direct access to data in the `contents` table is obstructed by [row-level security](https://www.postgresql.org/docs/current/ddl-rowsecurity.html). This means we can only view our own content or content from documents that have been shared with us. To exploit this, we must initially use SQL injection to share specific documents with us and subsequently retrieve their content via the API.
 
-See details in [sploit](../../sploits/docs/sploit.py).
+For a detailed walkthrough, refer to the [exploit](../../sploits/docs/sploit.py) provided.
