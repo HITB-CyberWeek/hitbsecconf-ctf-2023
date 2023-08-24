@@ -12,6 +12,7 @@ RUN dotnet publish -c release -o ./publish
 FROM ghcr.io/hackerdom/ctf-scoreboard-client:hitbsecconfctf-2023 AS scoreboard
 
 
+
 FROM ghcr.io/hackerdom/checksystem:master
 
 COPY --from=scoreboard /scoreboard/build /scoreboard
