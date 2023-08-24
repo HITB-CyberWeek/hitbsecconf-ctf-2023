@@ -9,7 +9,7 @@ Docs is a simple web service which allows:
 - create a new document and share it with other users
 - create/get content of documents
 
-Docs consits of next services:
+Docs consists of next services:
 - auth service written in Python
     - create new user in service and Pg and save connection strings in Redis database
 - api service written in Ruby
