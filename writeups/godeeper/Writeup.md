@@ -42,7 +42,6 @@ class A2:
     def get(self,a):
         global ua
         return ua
-
     def __iter__(self):
         self.index = 0
         return self
