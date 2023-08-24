@@ -52,11 +52,11 @@ class A2:
         result = self.data[self.index]
         self.index += 1
         return result
-
 class A1:
     def __init__(self):
         self.headers = A2()
 request=A1()`
+
     3. To set hostname you should provide that `socket.gethostname()` return your value. So create file
     socket.py with next code
     `def gethostname():
