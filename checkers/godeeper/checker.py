@@ -164,4 +164,4 @@ except requests.exceptions.ConnectionError as e:
 except ValueError as e:
     logging.error(f"ValueError received: {e}", exc_info=e)
     print("Token is incorrect")
-    print(102)
+    exit(102)
