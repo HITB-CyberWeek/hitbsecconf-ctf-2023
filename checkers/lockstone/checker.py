@@ -253,6 +253,8 @@ def main(args):
         verdict(DOWN, "Connect refused", "Connect refused: %s" % E)
     except ConnectionError as E:
         verdict(MUMBLE, "Connection aborted", "Connection aborted: %s" % E)
+    except AttributeError as E:
+        verdict(MUMBLE, "Bad data format", "Bad data format: %s" % E)
     except OSError as E:
         verdict(DOWN, "Connect error", "Connect error: %s" % E)
     except Exception as E:
