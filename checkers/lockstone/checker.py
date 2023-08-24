@@ -77,7 +77,7 @@ def create_user(s, host, login, password, flag):
     }
 
     resp = call_api(s, host, data=data)
-    return resp.get("item").get("label", "")
+    return resp.get("item", {}).get("label", "")
 
 
 LIST_USER_QUERY = """query ($where: UserWhereInput, $take: Int!, $skip: Int!, $orderBy: [UserOrderByInput!]) {
