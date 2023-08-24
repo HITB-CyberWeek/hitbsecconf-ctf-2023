@@ -32,40 +32,43 @@ So if you found this then you may generate token without anything else.
 
 You may reverse algorithm from pyc file and implement token generator in local computer.
 But it is more simple to use the pyc file like a module. To do this you should have python3.8.
-    1. To set any company name create local variable `company`
-    2. To set any User-Agent create two classes like in next code
-    `ua = "CTF"
-class A2:
-    def __init__(self):
-        index=0
-        self.data=['User-Agent']
-    def get(self,a):
-        global ua
-        return ua
-    def __iter__(self):
-        self.index = 0
-        return self
-    def __next__(self):
-        if self.index >= len(self.data):
-            raise StopIteration
-        result = self.data[self.index]
-        self.index += 1
-        return result
-class A1:
-    def __init__(self):
-        self.headers = A2()
-request=A1()`
 
-    3. To set hostname you should provide that `socket.gethostname()` return your value. So create file
-    socket.py with next code
-    `def gethostname():
-    return "team2-godeeper"`
-
-    After that GetTOK() function will return a correct token
+ 1. To set any company name create local variable `company`
+ 2. To set any User-Agent create two classes like in next code
+    
+   ```ua = "CTF"
+   class A2:
+       def __init__(self):
+           index=0
+           self.data=['User-Agent']
+       def get(self,a):
+           global ua
+           return ua
+       def __iter__(self):
+           self.index = 0
+           return self
+       def __next__(self):
+           if self.index >= len(self.data):
+               raise StopIteration
+           result = self.data[self.index]
+           self.index += 1
+           return result
+   class A1:
+       def __init__(self):
+           self.headers = A2()
+   request=A1()
+```
+ 3. To set hostname you should provide that `socket.gethostname()` return your value. So create file
+ socket.py with next code
+```
+ def gethostname():
+     return "team2-godeeper"
+```
+After that GetTOK() function will return a correct token
 
 ## Way 2
 You may find that the hash function used in GetTOK is very weak. As a result, you can potentially attack the service like a black box.
-Find a company name that is not equal to the flag ID and returns a correct token. For example, add an underscore "_" symbol at the end of the flag ID. If you find a collision, you can register a company with a name like 'flagid_______' and obtain the correct token for a random license. After that, you can find the license associated with the flag using this token.
+Find a company name that is not equal to the flag ID and returns a correct token. For example, add an underscore "\_" symbol at the end of the flag ID. If you found a collision, you can register a company with a name like 'flagid\_\_\_\_\_\_\_' and obtain the correct token for a random license. After that, you can find the license associated with the flag using this token.
 
 
 # Protection
