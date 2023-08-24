@@ -17,14 +17,13 @@ SPLOIT_PATH = "./hack.php"
 TIMEOUT = 30
 
 
-def get_random_string(min_len, max_len):
-    letters = string.ascii_lowercase + string.digits
-    return ''.join(random.choice(letters) for i in range(random.randint(min_len, max_len)))
+def get_random_string(min_len, max_len, alphabet=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(alphabet) for i in range(random.randint(min_len, max_len)))
 
 
 def set_flag(checker_path, host):
     flag_id = get_random_string(10, 10)
-    flag = "TEAM001_" + get_random_string(32, 32)
+    flag = "TEAM001_" + get_random_string(32, 32, alphabet=string.ascii_uppercase + string.digits)
 
     proc = subprocess.run([checker_path, 'put', host, flag_id, flag, "1"], stdout=subprocess.PIPE, env=os.environ, timeout=TIMEOUT, text=True, encoding='utf-8')
     ret = proc.stdout
