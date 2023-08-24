@@ -4,6 +4,8 @@
 
 The service allows to register with passwords and flags. It was written in Node.js with Keystone web interface, which in turn utilizes the Next.js React Framework. Keystone uses GraphQL for communication between the frontend and the backend.
 
+![Overview](./overview.png)
+
 ## Flags
 
 The flag is the a user attribute. Users can access their own flags, but they cannot access others' flags.
@@ -13,6 +15,7 @@ The flag is the a user attribute. Users can access their own flags, but they can
 
 The GraphQL allows to make a conditional requests which is where the vulnerability lies. Even when the attribute is not accessible, conditions are evaluated -- alowing us to make several requests to reveal the flag contents.
 
+![Filter](./filter.png)
 
 ## The Exploitation
 
