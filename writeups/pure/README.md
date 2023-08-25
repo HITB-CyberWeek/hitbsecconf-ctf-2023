@@ -61,7 +61,7 @@ Property `req.session.isAdmin` can be set to `true` by exploiting the [Prototype
 req.session["__proto__"] = {"isAdmin": true, "cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"}};
 ```
 
-### Unintended Way
+### Unintended Way to Exploit
 
 Unfortunately, the following middlewares were added in wrong order:
 
@@ -70,7 +70,7 @@ app.use(middlewares.adminHandler);
 app.use(middlewares.cookieSettingsHandler);
 ```
 
-Because of this, an attacker could exploit the application much easier. The following `settings` cookie could be used to set `req.session.isAdmin` property: `settings=isAdmin:1` 
+Because of this, an attacker could exploit the application much easier. The following `settings` cookie could be used to set `req.session.isAdmin` property to `true`: `settings=isAdmin:1`
 
 
 ## Exploit
