@@ -89,16 +89,18 @@ Putting it all together:
 3. Brute force `NaN` place (awaiting `500 Internal Server Error` status code) with highest ordered auth, also create some random place before `NaN`
 
 In such exploitation places in the route will be ordered as follows:
-|  P1  |  P2  |  P3  |  P4  |  P5  |  P6  |
-|------|------|------|------|------|------|
-| +0.0 | -0.0 | FLAG | Some |  NaN |  NaN |
+
+  P1  |  P2  |  P3  |  P4  |  P5  |  P6  
+------|------|------|------|------|------
+ +0.0 | -0.0 | FLAG | Some |  NaN |  NaN 
 
 And that's how the merge process looks like, note that arrays of places unique by corresponding `float64` representations are the same:
-| Operation       |  P1  |  P2  |  P3  |  P4  |  P5  | Data Type                        |
-|-----------------|------|------|------|------|------|----------------------------------|
-| linq.Distinct() | +0.0 | FLAG | Some |  NaN |  NaN | User ID and coords               |
-| SELECT ... IN   | +0.0 | -0.0 | FLAG | Some |  NaN | Public and Secret fields from DB |
-| HTTP Response   | +0.0 | -0.0 | FLAG |  ERR |  ERR | Resulting merged place info      |
+
+ Operation       |  P1  |  P2  |  P3  |  P4  |  P5  | Data Type                        
+-----------------|------|------|------|------|------|----------------------------------
+ linq.Distinct() | +0.0 | FLAG | Some |  NaN |  NaN | User ID and coords               
+ SELECT ... IN   | +0.0 | -0.0 | FLAG | Some |  NaN | Public and Secret fields from DB 
+ HTTP Response   | +0.0 | -0.0 | FLAG |  ERR |  ERR | Resulting merged place info      
 
 As a result only three places are written to the response and the thrid one contains `Secret` field with FLAG, because access rights are checked against `Some`
 place ID and not the `FLAG` place data from DB. This is only the one example of exploitable places order there are also other route examples usable for exploitation.
