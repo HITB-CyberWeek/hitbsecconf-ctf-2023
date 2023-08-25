@@ -5,6 +5,7 @@
 ![places](places.png)
 
 List of available endpoints:
+
 * `/api/auth?lat=LATITUDE&long=LONGITUDE` - set JWT cookie with random user ID, return place ID with passed coordinates;
 * `/api/get/place/:id` - info about place by place ID;
 * `/api/put/place[/:id]` - create place or update info about place by ID;
@@ -44,8 +45,7 @@ To build a route service sorts place IDs and then merges coordinates decrypted f
 To optimize a number of requests to a database **places** uses `SELECT ... WHERE ... IN` statement with an array of passed place IDs.
 
 
-The most interesting part here is a merging algorithm of the results from a database and the results from decryption process:
-[decryption process](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/afb2458ab7e904e44f481848342290ef002afb27/services/places/main.go#L269)
+The most interesting part here is a [merging algorithm](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/afb2458ab7e904e44f481848342290ef002afb27/services/places/main.go#L269) of the results from a database and the results from the decryption process.
 
 GoLINQ's `ZipT` function is used to merge the results which simply combines elements of two arrays by their index.
 
@@ -67,6 +67,7 @@ The questions are:
 ![IEEE-754](IEEE-754.svg)
 
 Answer:
+
 1. `+0.0 == -0.0`, but `+0.0` is represented as `0000..000` (64 zero bits) zero bits whereas `-0.0` is represented as `1000..000` (63 zero bits);
 2. `NaN` never equals `NaN` even with the same bits;
 

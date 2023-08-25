@@ -41,8 +41,8 @@ fastify.post('/request', async function (req, reply) {
         return;
     }
 
-    if (amount < 0.01 || amount > 100) {
-        reply.send({status: "error", message: "You can request amount between 0.01 and 100 ETH"});
+    if (amount < 1 || amount > 100) {
+        reply.send({status: "error", message: "You can request amount between 1 and 100 ETH"});
         return;
     }
 
