@@ -1,10 +1,11 @@
 # spaces
 
-**spaces** is a service with anonymous chat spaces and subspaces
+**spaces** is the service with anonymous chat spaces and subspaces
 
 ![spaces](spaces.png)
 
 API of the service implemented on websockets, available commands:
+
 * `Generate` - generate random avatar and name before joining space;
 * `Join` - join space with specified ID or generate a new random one;
 * `Room` - enter a room with specified NANE in current space or leave to space root;
@@ -15,7 +16,7 @@ User can regenerate a random profile before joining any space. After joining all
 and from this moment no new members can join the closed space and read messages. Current user's space and room are persisted to
 the disk, after F5 space and room are read from disk by user's auth and the first and last 3 messages are shown.
 
-## Vuln
+## Vulnerability
 
 For generation random profile used a signle instance of thread unsafe PRNG without locks. This instance is also used to 
 generate random space ID. The old seeded .NET PRNG implementation uses an [LCG](https://en.wikipedia.org/wiki/Linear_congruential_generator)
@@ -45,7 +46,8 @@ Yes, because Base58 implementation contains [integer overflow problem](https://g
 By default C# .NET uses unchecked context on operations like '+' and '\*'. So we can pass long Base58 crafted string which
 will contain only lower ASCII leeters and with integer overflows will be decoded to the same Int64 space ID value.
 
-So, the exploitation plan:
+So, the exploitation plan is:
+
 1. Break `Random` instance with large `Generate` requests
 2. Generate new random space, which will be 0 becauses of broken `Random`
 3. Create a room with long Base58 string which leads to integer overflow on space ID decoding

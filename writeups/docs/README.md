@@ -3,6 +3,7 @@
 ## Overview
 
 The "Docs" web service is designed to facilitate various functions, including:
+
 - Registering and logging in new users
 - Retrieving a list of users along with organization information
 - Accessing a list of documents
@@ -10,6 +11,7 @@ The "Docs" web service is designed to facilitate various functions, including:
 - Creating and obtaining document content
 
 The system is composed of the following components:
+
 - An authentication service coded in Python. This service creates new user records within the service and PostgreSQL, while storing connection strings in a Redis storage
 - An API service written in Ruby
 - PostgreSQL as a storage
