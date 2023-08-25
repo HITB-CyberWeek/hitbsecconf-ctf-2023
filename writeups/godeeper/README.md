@@ -15,7 +15,7 @@ The `GetTOK()` function calling by the `/make_license` is the main part of this 
 * Shuffling the order of basic blocks
 * Packing strings
 
-As a result, tools like decompyle3 or uncompyle can not reverse-engineer this file. However, the original Python file, `token_generator.py`, can be found.
+As a result, tools like decompyle3 or uncompyle can not reverse-engineer this file. The original Python file `token_generator.py` can be found [here](./token_generator.py).
 
 The `GetTOK()` function takes no arguments but gets the company's local variables from the caller function using the "inspect" module. It also takes the "User-Agent" header from the global variables of the request and the hostname of the server. These three elements are concatenated into the `myCOMP1` variable. Then, a hash value (referred to as `hash1`) is calculated. Additionally, another hash value is computed using the secret key concatenated with `hash1` (secret key is a hardcoded string). The `hash1` and the sign are concatenated and returned as the token. The checker verifies the validity of the sign for `hash1`. Therefore, it is not possible to simply return a random string instead of the token.
 
