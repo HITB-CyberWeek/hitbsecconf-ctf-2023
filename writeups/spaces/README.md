@@ -20,9 +20,9 @@ the disk, after F5 space and room are read from disk by user's auth and the firs
 
 1. Thread unsafe `Random` instance which can be broken to generate zero space ID
 2. Zero space ID encoded as empty string not `1` (Base58 zero) and serialized values not padded by `1`
-3. Empty encoded space ID leads to traversing path to root `data/` folder, which allows to create space using `Room` command
-4. Base58 implementation is vulnerable to integer overflow on long Base58 strings, which allows to create conflicting space
-5. Space open/closed validation use user passed string not Int64 decoded Base58 value, so conflicting space instead of real can be used to join
+3. Empty encoded space ID leads to traversing path to the root `data/` folder, which allows to create space using `Room` command
+4. Base58 implementation is vulnerable to integer overflow on long Base58 strings, which allows to create conflicting space with the same ID
+5. Space open/closed validation use user passed string not the Int64 decoded Base58 value, so conflicting space instead of real can be used to join
 
 So, the exploitation plan is:
 
