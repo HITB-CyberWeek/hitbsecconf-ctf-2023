@@ -42,8 +42,11 @@ and the 128 bits of the ID is too much to brute force it.
 
 To build a route service sorts place IDs and then merges coordinates decrypted from place ID and information from a database stored by that place ID.
 To optimize a number of requests to a database **places** uses `SELECT ... WHERE ... IN` statement with an array of passed place IDs.
+
+
 The most interesting part here is a merging algorithm of the results from a database and the results from decryption process:
-https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/afb2458ab7e904e44f481848342290ef002afb27/services/places/main.go#L269
+[decryption process](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/afb2458ab7e904e44f481848342290ef002afb27/services/places/main.go#L269)
+
 GoLINQ's `ZipT` function is used to merge the results which simply combines elements of two arrays by their index.
 
 If we somehow shift the elements of the arrays relative to each other, we will be able to get a secret for a others' place.
