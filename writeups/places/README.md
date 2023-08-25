@@ -83,7 +83,8 @@ Howhever `/api/route` uses streaming response, so if the part of the reponse wit
 Also note that arrays before merge are ordered by place ID lexicographically, so we need register user with ID lexicographically after AES-128-ECB large enough
 so created places with `NaN` to be ordered at the end of the route.
 
-Putting it all together:
+## Putting it all together
+
 1. Brute force `/api/auth` to get lowest and highest ordered places in most cases
 2. Create two places with one coordinate set to `+0.0` and `-0.0` with lowest ordered auth
 3. Brute force `NaN` place (awaiting `500 Internal Server Error` status code) with highest ordered auth, also create some random place before `NaN`
