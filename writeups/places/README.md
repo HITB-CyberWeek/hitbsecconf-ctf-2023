@@ -12,14 +12,14 @@ List of available endpoints:
 * `/api/route` - route (places info in some order) with info about up to 9 places, you can use other users' places to make a route;
 
 Place info is a struct contains coords (two `float64` values), public and secret string fields:
-```go
-type PlaceInfo struct {
-	Lat    float64
-	Long   float64
-	Public string
-	Secret string
-}
-```
+
+    :::go
+    type PlaceInfo struct {
+    	Lat    float64
+    	Long   float64
+    	Public string
+    	Secret string
+    }
 
 Each place is identified by a hex string with 64 chars. Checksystem stores flags in the `Secret` field. Service returns `Secret` field value only for an author of the place
 (user ID in JWT token cookie must be the same as a user ID stored in a place ID).
@@ -27,13 +27,13 @@ Each place is identified by a hex string with 64 chars. Checksystem stores flags
 ## Vuln
 
 Place ID is an serialized and AES-128-ECB-encrypted struct with coords (two `float64`) and user ID:
-```go
-type PlaceId struct {
-	UserId uuid.UUID
-	Lat    float64
-	Long   float64
-}
-```
+
+    :::go
+    type PlaceId struct {
+    	UserId uuid.UUID
+    	Lat    float64
+    	Long   float64
+    }
 
 Place ID is not MAC'ed in any way, so it is not protected against bit flipping (changing some bytes of a ciphertext in order to manipulate the plaintext bytes).
 So an attacker can change the 128 bit suffix of the place ID which leads to some random change of the 128 bit block with `float64` coordinates of the place.
@@ -109,3 +109,5 @@ place ID and not the `FLAG` place data from DB. This is only the one example of 
 `+0.0`, `-0.0` and `NaN` places and corresponding cookies can be reused to build multiple routes so no need to brute force places on each round.
 
 You can see full exploit here: [EXPLOIT](../../../../blob/main/sploits/places/Program.cs)
+
+![Exploit](exploitation.png)

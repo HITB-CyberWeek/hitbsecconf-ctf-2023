@@ -43,8 +43,8 @@ else
     var min = values.MinBy(pair => pair.Key, StringComparer.Ordinal);
     var max = values.MaxBy(pair => pair.Key, StringComparer.Ordinal);
 
-    await ColoredWriteLineAsync(Console.Error, "       Last Point: " + max.Key, ConsoleColor.White);
-    await ColoredWriteLineAsync(Console.Error, "Last Point Cookie: " + max.Value, ConsoleColor.Magenta);
+    await ColoredWriteLineAsync(Console.Error, "        Last Point: " + max.Key, ConsoleColor.White);
+    await ColoredWriteLineAsync(Console.Error, " Last Point Cookie: " + max.Value, ConsoleColor.Magenta);
 
     cookies = new CookieContainer();
     cookies.SetCookies(baseUri, min.Value);
