@@ -98,7 +98,7 @@ The second table, `sessions`, contains logged-in users sessions,
 
  id  |              cookie              |   user   
 -----|----------------------------------|----------
- 413 | BhfENBVRQfrqGHSnXvAmfTtBTWQeEcBy | postgres
+ 413 | BhfENBVRQfrqGHSnXvAmfTtBTWQeEcBy | a164u8x3
 
 
 There is a logical error in `func handleAdd()`. This functions adds user/pass/site record for the logged-in user.
