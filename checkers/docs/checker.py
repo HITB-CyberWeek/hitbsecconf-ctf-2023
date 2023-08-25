@@ -218,7 +218,7 @@ def main(args):
 
     try:
         handler(*args)
-    except (requests.Timeout, requests.ConnectionError):
+    except (requests.Timeout, requests.ConnectionError, requests.exceptions.RetryError):
         logging.debug(traceback.format_exc())
         verdict(DOWN, public="Can't get HTTP response")
 
