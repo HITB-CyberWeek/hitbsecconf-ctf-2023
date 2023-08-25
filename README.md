@@ -1,6 +1,6 @@
 # <img src="static/hitb-logo.png" width="30" height="35"> HITB SECCONF CTF 2023
 
-HITB SECCONF CTF is an onsite + online international challenge in information security. Developed by Hackerdom team for HITB SECCONF in Phuket, Thailand. HITB SECCONF CTF 2023 was held on August 24th–25th, 2023.
+HITB SECCONF CTF is an onsite + online international challenge in information security. Developed by Hackerdom team for HITB SECCONF in Phuket, Thailand. [HITB SECCONF CTF 2023](https://ctftime.org/event/2037/) was held on August 24–25th, 2023.
 
 The contest is driven by almost classic rules for Attack-Defense [CTF](https://en.wikipedia.org/wiki/Capture_the_flag_%28cybersecurity%29). Each team is given a set of vulnerable services.
 Organizers regularly fill services with private information — the flags.
@@ -10,21 +10,21 @@ You can read the details on the official contest website: https://ctf.hackerdom.
 
 Official conference website: https://conference.hitb.org/hitbsecconf2023hkt/.
 
-# This repository contains
+# This Repository Contains
 
-* source of all services in folder [services/](services/)
-* checkers for [checksystem](https://github.com/Hackerdom/checksystem) in folder [checkers/](checkers/)
-* ... and config for it in [cs/](cs/)
-* exploits for all services in folder [sploits/](sploits/)
+* sources of all services in the folder [services/](services/)
+* checkers for the [checksystem](https://github.com/Hackerdom/checksystem) in the folder [checkers/](checkers/)
+* ... and configuration for it in [cs/](cs/)
+* exploits for all services in the folder [sploits/](sploits/)
 * writeups with vulnerabilities and exploitation description for all services in folder [writeups/](writeups/)
 
-Also, we share with you some of our internal infrastructure magic:
+Also, we're happy to share with you some of our internal infrastructure magic:
 * CI/CD for Digital Ocean's images services' packing and proxies deploying. See [vuln_images/](vuln_images/) and [.github/workflows/](.github/workflows)
 * our CTF Cloud and VPN Infrastructure in [ansible/](ansible/)
 
-All materials are licensed under [MIT License](LICENSE).
+All materials are licensed under the [MIT License](LICENSE).
 
-# Final scoreboard
+# Final Scoreboard
 
 Congratulations for 🇷🇺 C4T BuT S4D for the first place!
 
@@ -34,7 +34,7 @@ Third place: 🇮🇹 pwnthem0le
 
 ![Final scoreboard](static/scoreboard.jpg)
 
-# First bloods
+# Services
 
 | Service | First Blood Team | Lang / Framework | Checker | Sploit | Writeup | Author |
 | ------- | ---------------- | ---------------- | ------- | ------ | ------- | ------ |
@@ -57,7 +57,7 @@ Third place: 🇮🇹 pwnthem0le
 This CTF is brought to you by these amazing guys:
 
 * [Alexander Bersenev](https://github.com/alexbers) aka `bay`, the author of the service `lockstone`, also our Cloud and VPN master
-* [Andrey Gein](https://github.com/andgein) aka `andgein`, author of the service `funding`, also our teamleader, DevOps and support for teams
+* [Andrey Gein](https://github.com/andgein) aka `andgein`, the author of the service `funding`, also our teamleader, DevOps and support for teams
 * [Andrey Khozov](https://github.com/avkhozov) aka `and`, the author of the service `docs`, also our checksystem master
 * [Artem Deikov](https://github.com/hx0day) aka `hx0day`, the author of the service `notes`
 * [Artem Zinenko](https://github.com/ar7z1) aka `art`, the author of the service `pure`
