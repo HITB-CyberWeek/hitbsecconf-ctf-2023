@@ -39,7 +39,7 @@ generate random space ID. The old seeded .NET PRNG implementation uses an [LCG](
 this implementation has two counters, and unsynced usage of this instance from multiple threads leads to highly likely
 stable state when both counters become equal. In this state `Random` instance generates only zeros.
 
-Web socket messages are processed in [multithreaded manner](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/a039d2104339867be7902a7b4962c4fc37db3780/services/spaces/src/WsHandler.cs#L53):
+Web socket messages are processed in [multithreaded manner](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/main/services/spaces/src/WsHandler.cs#L53):
 
     :::cs
     _ = Task.Run(async () =>
@@ -51,7 +51,7 @@ Web socket messages are processed in [multithreaded manner](https://github.com/H
 So if the attacker send many commands on generating random profile without awaiting response message from server, it is highly likely that `Random` instance will be broken.
 
 Space ID is a Base58-encoded Int64 random number. Broken `Random` instance generates only zeroes, and zero encoded as Base58
-by **spaces** implementation of Base58 becomes an [empty string](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/350cfea92f90658623a1533504a0a160be61e0ff/services/spaces/src/Base58.cs#L17).
+by **spaces** implementation of Base58 becomes an [empty string](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/main/services/spaces/src/Base58.cs#L17).
 **spaces** uses diretory structure and files as a storage, all messages of some space are the files inside the directory with
 Base58-encoded space ID value. But `Path.Combine` which used to form a path to files skips empty segments of the path. So if
 broken `Random` instance is used to generate space ID, the base folder for this space ID is the `data/` forder. This allows
@@ -61,7 +61,7 @@ But the room name validation does not allow us to enter any space as a room from
 because room names can use only ASCII letters (not digits), and name is lowercased before further usage whereas space ID's
 Base58 alphabet contains also digits and uppercase letters.
 
-Luckily the next problem is that space join validation uses [user passed value](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/350cfea92f90658623a1533504a0a160be61e0ff/services/spaces/src/WsHandler.cs#L163)
+Luckily the next problem is that space join validation uses [user passed value](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/main/services/spaces/src/WsHandler.cs#L163)
 instead of converted one to Int64.
 
     :::cs
@@ -78,7 +78,7 @@ instead of converted one to Int64.
 
 Thats allow us to create a space ID folder which will be not closed and can be used to bypass the real space closed or not checks. If that possible to generate Base58 string which will be decoded to the same Int64 value.
 
-Yes, because Base58 implementation contains [integer overflow problem](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/350cfea92f90658623a1533504a0a160be61e0ff/services/spaces/src/Base58.cs#L41).
+Yes, because Base58 implementation contains [integer overflow problem](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/main/services/spaces/src/Base58.cs#L41).
 
     :::cs
     public static bool TryDecodeUInt64(string value, out ulong result)

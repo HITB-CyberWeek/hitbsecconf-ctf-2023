@@ -45,7 +45,7 @@ To build a route service sorts place IDs and then merges coordinates decrypted f
 To optimize a number of requests to a database **places** uses `SELECT ... WHERE ... IN` statement with an array of passed place IDs.
 
 
-The most interesting part here is a [merging algorithm](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/afb2458ab7e904e44f481848342290ef002afb27/services/places/main.go#L269) of the results from a database and the results from the decryption process.
+The most interesting part here is a [merging algorithm](https://github.com/HITB-CyberWeek/hitbsecconf-ctf-2023/blob/main/services/places/main.go#L269) of the results from a database and the results from the decryption process.
 
 GoLINQ's `ZipT` function is used to merge the results which simply combines elements of two arrays by their index.
 
