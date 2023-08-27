@@ -12,7 +12,7 @@ List of available endpoints:
 * `/api/list` - last 30 place IDs with coords;
 * `/api/route` - route (places info in some order) with info about up to 9 places, you can use other users' places to make a route;
 
-Place info is a struct contains coords (two `float64` values), public and secret string fields:
+Place info is a struct that contains coords (two `float64` values), public and secret string fields:
 
     :::go
     type PlaceInfo struct {
@@ -36,7 +36,7 @@ Place ID is an serialized and AES-128-ECB-encrypted struct with coords (two `flo
     	Long   float64
     }
 
-Place ID is not MAC'ed in any way, so it is not protected against bit flipping (changing some bytes of a ciphertext in order to manipulate the plaintext bytes).
+Place ID is not MAC'ed in any way, so it is not protected against bit flipping (changing some bytes of ciphertext in order to manipulate the plaintext bytes).
 So an attacker can change the 128 bit suffix of the place ID which leads to some random change of the 128 bit block with `float64` coordinates of the place.
 Note, that changing the prefix does not lead to any consequences that are interesting from a practical point of view, since the identifier changes unpredictably
 and the 128 bits of the ID is too much to brute force it.
@@ -49,8 +49,8 @@ The most interesting part here is a [merging algorithm](https://github.com/HITB-
 
 GoLINQ's `ZipT` function is used to merge the results which simply combines elements of two arrays by their index.
 
-If we somehow shift the elements of the arrays relative to each other, we will be able to get a secret for a others' place.
-The easiest way to shift the results is to pass a place which is not saved in the database, howhever some checks of lengths of the arrays makes this impossible:
+If we somehow shift the elements of the arrays relative to each other, we will be able to get a secret for others' place.
+The easiest way to shift the results is to pass a place that is not saved in the database, however some checks of lengths of the arrays make this impossible:
 we need arrays of places after processing to be the same size.
 
 Note that when forming arrays which are then merged, different representations of floating point numbers are used.
@@ -74,22 +74,22 @@ Answer:
 So `.Distinct()` must collapse `+0.0` and `-0.0` and must not collapse `NaN` and `NaN` with the same bit representation.
 And distinct by hex string representation must not collapse `+0.0` and `-0.0` and must collapse `NaN`s with the same bit representation.
 
-So we need to create 3 places: `+0.0`, `-0.0`, `NaN`. `+0.0` and `-0.0` are allowed to be passed through JSON encoder, howhever `NaN` - is not allowed.
+So we need to create 3 places: `+0.0`, `-0.0`, `NaN`. `+0.0` and `-0.0` are allowed to be passed through JSON encoder, however `NaN` - is not allowed.
 Luckily place ID is encrypted with AES-128-ECB and not MAC'ed, so we can use `/api/get/place/:id` (which not require place to be saved in DB) to brute force place ID suffix
 in order to get decrypted value representing `NaN` which is `s111..111fff..fff` (any sign bit, 11 bits of exponent set to 1, any fraction bits).
-In average we need 1024 attempts and after brute forcing we can update the non existing point by using `/api/put/place/:id` (which implemented as database upsert)
+On average we need 1024 attempts and after brute forcing we can update the nonexisting point by using `/api/put/place/:id` (which is implemented as database upsert)
 to save `NaN` value in the database.
 
-Also we need to take into account that an attempt to encode a `NaN` value as JSON in standard golang package leads to an error (`500 Internal Server Error` on `/api/get/place/:id`).
-Howhever `/api/route` uses streaming response, so if the part of the reponse with flag is already written then any subsequent errors are not a problem for us.
+Also we need to take into account that an attempt to encode a `NaN` value as JSON in a standard golang package leads to an error (`500 Internal Server Error` on `/api/get/place/:id`).
+However `/api/route` uses streaming response, so if the part of the reponse with the flag is already written then any subsequent errors are not a problem for us.
 
-Also note that arrays before merge are ordered by place ID lexicographically, so we need register user with ID after AES-128-ECB lexicographically large enough
+Also note that arrays before merge are ordered by place ID lexicographically, so we need to register the user with ID after AES-128-ECB lexicographically large enough
 so created places with `NaN` to be ordered at the end of the route.
 
 ## Putting it all together
 
 1. Brute force `/api/auth` to get lowest and highest ordered places in most cases
-2. Create two places with one coordinate set to `+0.0` and `-0.0` with lowest ordered auth
+2. Create two places with one coordinate set to `+0.0` and `-0.0` with the lowest ordered auth
 3. Brute force `NaN` place (awaiting `500 Internal Server Error` status code) with highest ordered auth, also create some random place before `NaN`
 
 In such exploitation places in the route will be ordered as follows:
@@ -98,7 +98,7 @@ In such exploitation places in the route will be ordered as follows:
 ------|------|------|------|------|------
  +0.0 | -0.0 | FLAG | Some |  NaN |  NaN 
 
-And that's how the merge process looks like, note that arrays of places unique by corresponding `float64` representations are the same:
+And that's what the merge process looks like, note that arrays of places unique by corresponding `float64` representations are the same:
 
  Operation       |  P1  |  P2  |  P3  |  P4  |  P5  | Data Type                        
 -----------------|------|------|------|------|------|----------------------------------
@@ -106,8 +106,8 @@ And that's how the merge process looks like, note that arrays of places unique b
  SELECT ... IN   | +0.0 | -0.0 | FLAG | Some |  NaN | Public and Secret fields from DB 
  HTTP Response   | +0.0 | -0.0 | FLAG |  ERR |  ERR | Resulting merged place info      
 
-As a result only three places are written to the response and the thrid one contains `Secret` field with FLAG, because access rights are checked against `Some`
-place ID and not the `FLAG` place data from DB. This is only the one example of exploitable places order there are also other usable route examples.
+As a result, only three places are written to the response and the third one contains `Secret` field with FLAG, because access rights are checked against `Some`
+place ID and not the `FLAG` place data from DB. This is only one example of exploitable places order there are also other usable route examples.
 
 `+0.0`, `-0.0` and `NaN` places and corresponding cookies can be reused to build multiple routes so no need to brute force places on each round.
 
