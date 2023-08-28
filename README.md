@@ -41,7 +41,7 @@ Third place: 🇮🇹 pwnthem0le
 | [docs](/services/docs/) | [SKSD](https://ctftime.org/team/211952) | Ruby, Python, PostgreSQL | [🔗︎](/checkers/docs/) | [🔗︎](/sploits/docs/) | [🔗︎](/writeups/docs/) | [and](https://github.com/avkhozov) |
 | [funding](/services/funding/) | [C4T BuT S4D](https://ctftime.org/team/83435) | Ethereum, Node.js | [🔗︎](/checkers/funding/) | [🔗︎](/sploits/funding/) | [🔗︎](/writeups/funding/) | [andgein](https://github.com/andgein) |
 | [godeeper](/services/godeeper/) | [SKSD](https://ctftime.org/team/211952) | Python | [🔗︎](/checkers/godeeper/) | [🔗︎](/sploits/godeeper/) | [🔗︎](/writeups/godeeper/) | [awengar](https://github.com/awengar) |
-| [keys](/services/keys/) | ECQ-B | PHP | [🔗︎](/checkers/keys/) | [🔗︎](/sploits/keys/) | [🔗︎](/writeups/keys/) | [znick](https://github.com/znick) |
+| [keys](/services/keys/) | [ECQ-B](https://ctftime.org/team/264945) | PHP | [🔗︎](/checkers/keys/) | [🔗︎](/sploits/keys/) | [🔗︎](/writeups/keys/) | [znick](https://github.com/znick) |
 | [lockstone](/services/lockstone/) | [C4T BuT S4D](https://ctftime.org/team/83435) | Javascript, GraphQL, Node.js | [🔗︎](/checkers/lockstone/) | [🔗︎](/sploits/lockstone/) | [🔗︎](/writeups/lockstone/) | [bay](https://github.com/alexbers) |
 | [notes](/services/notes/) | You're all a bunch of fucking skids \* | PHP | [🔗︎](/checkers/notes/) | [🔗︎](/sploits/notes/) | [🔗︎](/writeups/notes/) | [hx0day](https://github.com/hx0day) |
 | [passmgr](/services/passmgr/) | [C4T BuT S4D](https://ctftime.org/team/83435) | Go, PostgreSQL | [🔗︎](/checkers/passmgr/) | [🔗︎](/sploits/passmgr/) | [🔗︎](/writeups/passmgr/) | [dimmo](https://github.com/dimmo) |
