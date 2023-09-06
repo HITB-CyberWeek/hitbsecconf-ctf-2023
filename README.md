@@ -43,12 +43,12 @@ Third place: 🇮🇹 pwnthem0le
 | [godeeper](/services/godeeper/) | [SKSD](https://ctftime.org/team/211952) | Python | [🔗︎](/checkers/godeeper/) | [🔗︎](/sploits/godeeper/) | [🔗︎](/writeups/godeeper/) | [awengar](https://github.com/awengar) |
 | [keys](/services/keys/) | [ECQ-B](https://ctftime.org/team/264945) | PHP | [🔗︎](/checkers/keys/) | [🔗︎](/sploits/keys/) | [🔗︎](/writeups/keys/) | [znick](https://github.com/znick) |
 | [lockstone](/services/lockstone/) | [C4T BuT S4D](https://ctftime.org/team/83435) | Javascript, GraphQL, Node.js | [🔗︎](/checkers/lockstone/) | [🔗︎](/sploits/lockstone/) | [🔗︎](/writeups/lockstone/) | [bay](https://github.com/alexbers) |
-| [notes](/services/notes/) | You're all a bunch of fucking skids \* | PHP | [🔗︎](/checkers/notes/) | [🔗︎](/sploits/notes/) | [🔗︎](/writeups/notes/) | [hx0day](https://github.com/hx0day) |
+| [notes](/services/notes/) | [You're all a bunch of fucking skids](https://ctftime.org/team/264943) \* | PHP | [🔗︎](/checkers/notes/) | [🔗︎](/sploits/notes/) | [🔗︎](/writeups/notes/) | [hx0day](https://github.com/hx0day) |
 | [passmgr](/services/passmgr/) | [C4T BuT S4D](https://ctftime.org/team/83435) | Go, PostgreSQL | [🔗︎](/checkers/passmgr/) | [🔗︎](/sploits/passmgr/) | [🔗︎](/writeups/passmgr/) | [dimmo](https://github.com/dimmo) |
 | [places](/services/places/) | [C4T BuT S4D](https://ctftime.org/team/83435) | Go, SQLite | [🔗︎](/checkers/places/) | [🔗︎](/sploits/places/) | [🔗︎](/writeups/places/) | [dscheg](https://github.com/dscheg) |
 | [pure](/services/pure/) | [pwnthem0le](https://ctftime.org/team/60467) | Javascript, Node.js, Express.js | [🔗︎](/checkers/pure/) | [🔗︎](/sploits/pure/) | [🔗︎](/writeups/pure/) | [art](https://github.com/ar7z1) |
-| [spaces](/services/spaces/) | You're all a bunch of fucking skids \* | C# .NET, websockets | [🔗︎](/checkers/spaces/) | [🔗︎](/sploits/spaces/) | [🔗︎](/writeups/spaces/) | [dscheg](https://github.com/dscheg) |
-| [tokenourcer](/services/tokenourcer/) | You're all a bunch of fucking skids \* | Python, nginx | [🔗︎](/checkers/tokenourcer/) | [🔗︎](/sploits/tokenourcer/) | [🔗︎](/writeups/tokenourcer/) | [werelaxe](https://github.com/werelaxe) |
+| [spaces](/services/spaces/) | [You're all a bunch of fucking skids](https://ctftime.org/team/264943) \* | C# .NET, websockets | [🔗︎](/checkers/spaces/) | [🔗︎](/sploits/spaces/) | [🔗︎](/writeups/spaces/) | [dscheg](https://github.com/dscheg) |
+| [tokenourcer](/services/tokenourcer/) | [You're all a bunch of fucking skids](https://ctftime.org/team/264943) \* | Python, nginx | [🔗︎](/checkers/tokenourcer/) | [🔗︎](/sploits/tokenourcer/) | [🔗︎](/writeups/tokenourcer/) | [werelaxe](https://github.com/werelaxe) |
 
 \* Service vulnerabilities were not used
 
